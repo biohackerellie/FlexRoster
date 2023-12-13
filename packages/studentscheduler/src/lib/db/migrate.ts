@@ -1,9 +1,21 @@
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
-import { migratDB, migrationClient } from './index';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
+import * as schema from './schema';
 
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-await migrate(migratDB, { migrationsFolder: './drizzle' });
+const sql = postgres(process.env.DIRECT_URL!, { max: 1 });
 
-await migrationClient.end();
+const db = drizzle(sql, { schema });
+
+migrate(db, { migrationsFolder: './src/lib/db/drizzle' })
+  .then(() => {
+    console.log('migrations completed');
+    process.exit(0);
+  })
+  .catch((err) => {
+    console.error('migrations failed', err);
+    process.exit(1);
+  });

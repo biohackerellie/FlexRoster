@@ -3,10 +3,7 @@
   "version": "1.0.0",
   "description": "",
 	"packageManager": "pnpm@8.11.0",
-	"engines": {
-		"node": ">=v21.4.0",
-		"pnpm": ">=v8.11.0"
-	},
+
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",

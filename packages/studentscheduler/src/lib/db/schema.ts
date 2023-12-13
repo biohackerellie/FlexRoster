@@ -5,8 +5,17 @@ import {
   text,
   primaryKey,
   integer,
+  pgEnum,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from '@auth/core/adapters';
+
+export const rolesEnum = pgEnum('role', [
+  'admin',
+  'student',
+  'teacher',
+  'secretary',
+]);
+export type Role = (typeof rolesEnum.enumValues)[number];
 
 export const users = pgTable('user', {
   id: text('id').notNull().primaryKey(),
@@ -14,6 +23,7 @@ export const users = pgTable('user', {
   email: text('email').notNull(),
   emailVerified: timestamp('emailVerified', { mode: 'date' }),
   image: text('image'),
+  role: rolesEnum('role').default('student').notNull(),
 });
 
 export const accounts = pgTable(

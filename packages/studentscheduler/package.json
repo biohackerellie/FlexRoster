@@ -2,29 +2,41 @@
   "name": "studentscheduler",
   "version": "0.1.0",
   "private": true,
-
-
   "scripts": {
-		"preinstall": "npx only-allow pnpm",
+    "preinstall": "npx only-allow pnpm",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate:pg --config=drizzle.config.ts",
+    "migrate": "node --loader ts-node/esm src/lib/db/migrate.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.11",
+    "@nextui-org/react": "^2.2.9",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.29.1",
+    "framer-motion": "^10.16.16",
     "geist": "^1.2.0",
+    "lucide-react": "^0.297.0",
     "next": "14.0.4",
-    "next-auth": "5.0.0-beta.4",
+    "next-auth": "^4.24.5",
+    "next-themes": "^0.2.1",
+    "pg": "^8.11.3",
     "postgres": "^3.4.3",
-    "react": "^18",
+    "react": "18.3.0-canary-0cdfef19b-20231211",
     "react-dom": "^18",
-    "tsx": "^4.6.2"
+    "react-toastify": "^9.1.3",
+    "tailwind-merge": "^2.1.0",
+    "tailwindcss-animate": "^1.0.7",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.6.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@student_scheduler/typescript": "0.1.0",
+    "@student_scheduler/typescript": "workspace:0.1.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
