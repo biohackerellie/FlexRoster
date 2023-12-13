@@ -1,0 +1,30 @@
+{
+  "name": "student_scheduler",
+  "version": "1.0.0",
+  "description": "",
+	"packageManager": "pnpm@8.11.0",
+	"engines": {
+		"node": ">=v21.4.0",
+		"pnpm": ">=v8.11.0"
+	},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "common": "pnpm --filter common"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^20",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "prettier": "^3.1.1",
+    "typescript": "^5"
+  }
+}

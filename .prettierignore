@@ -1,0 +1,17 @@
+public
+dist
+pnpm-lock.yaml
+pnpm-workspace.yaml
+node_modules
+.pnp
+.pnp.js
+coverage
+
+.github
+.next/
+**/next-env.d.ts
+out/
+build
+
+dist
+

@@ -1,0 +1,17 @@
+{
+
+	"workbench.preferredDarkColorTheme": "Beautiful Dracula Normal",
+	"workbench.preferredHighContrastColorTheme": "Beautiful Dracula Normal",
+	"workbench.preferredHighContrastLightColorTheme": "Beautiful Dracula Normal",
+	"workbench.preferredLightColorTheme": "Beautiful Dracula Normal",
+	"workbench.iconTheme": "material-icon-theme",
+	"workbench.colorTheme": "Beautiful Dracula Normal" ,
+	"editor.tabSize": 2,
+	"editor.wordWrap": "on",
+	"editor.cursorBlinking": "phase",
+	"editor.cursorSmoothCaretAnimation": "on",
+	"editor.fontFamily": "FiraCode Nerd Font Mono",
+	"editor.formatOnSave": true,
+	"files.autoSave": "onFocusChange",
+	"editor.defaultFormatter": "esbenp.prettier-vscode"
+}
