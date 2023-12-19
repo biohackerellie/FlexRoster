@@ -13,5 +13,8 @@
 	"editor.fontFamily": "FiraCode Nerd Font Mono",
 	"editor.formatOnSave": true,
 	"files.autoSave": "onFocusChange",
-	"editor.defaultFormatter": "esbenp.prettier-vscode"
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"cSpell.words": [
+		"ONEROSTER"
+	]
 }

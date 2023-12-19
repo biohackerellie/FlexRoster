@@ -7,36 +7,12 @@ services:
       - '5432:5432'
     volumes:
       - postgresql_master_data:/bitnami/postgresql
-      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
     environment:
       - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
       - POSTGRESQL_LOG_HOSTNAME=true
-      - POSTGRES_HOST_AUTH_METHOD=md5
-      - POSTGRES_INITDB_ARGS=--auth=md5
-      - POSTGRESQL_REPLICATION_MODE=master
-      - POSTGRESQL_REPLICATION_USER=repl_user
-      - POSTGRESQL_REPLICATION_PASSWORD=repl_user
       - POSTGRESQL_USERNAME=postgres
       - POSTGRESQL_PASSWORD=postgres
       - POSTGRESQL_DATABASE=postgres
-      - ALLOW_EMPTY_PASSWORD=yes
-  postgresql-slave:
-    image: bitnami/postgresql
-    restart: always
-    ports:
-      - '5432'
-    depends_on:
-      - postgresql-master
-    environment:
-      - POSTGRESQL_PASSWORD=postgres
-      - POSTGRESQL_MASTER_HOST=postgresql-master
-      - POSTGRESQL_PGAUDIT_LOG=READ
-      - POSTGRESQL_LOG_HOSTNAME=true
-      - POSTGRESQL_REPLICATION_MODE=slave
-      - POSTGRESQL_REPLICATION_USER=repl_user
-      - POSTGRESQL_REPLICATION_PASSWORD=repl_user
-      - POSTGRESQL_MASTER_PORT_NUMBER=5432
-      - ALLOW_EMPTY_PASSWORD=yes  
   pgbouncer:
     image: bitnami/pgbouncer
     restart: always
@@ -44,7 +20,6 @@ services:
       - '6543:6543'
     depends_on:
       - postgresql-master
-      - postgresql-slave
     environment:
       - POSTGRESQL_USERNAME=postgres
       - POSTGRESQL_PASSWORD=postgres
@@ -54,7 +29,6 @@ services:
       - PGBOUNCER_MAX_CLIENT_CONN=200
       - PGBOUNCER_DEFAULT_POOL_SIZE=20
       - PGBOUNCER_ADMIN_USERS=postgres
-      - PGBOUNCER_AUTH_TYPE=md5
       - PGBOUNCER_MAX_DB_CONNECTIONS=50
   
   pgadmin:

@@ -10,6 +10,6 @@ export const getCurrentUser = cache(async () => {
   if (!session) {
     return null;
   }
-  const user = new CustomSession(session?.user);
+  const user = new CustomSession(session.user);
   return user;
 });
