@@ -11,7 +11,7 @@ export function CustomAdapter(
 ): Adapter {
   return {
     async createUser(user) {
-      const { name, email, image, emailVerified, role } = user;
+      const { name, email, image, role } = user;
       return (await client
         .insert(users)
         .values({
@@ -19,7 +19,6 @@ export function CustomAdapter(
           name,
           email,
           image,
-          emailVerified,
           role: role as Role | undefined,
         })
         .returning()
@@ -103,7 +102,7 @@ export function CustomAdapter(
         return null;
       }
 
-      return dbAccount.user as AdapterUser;
+      return dbAccount.user;
     },
   };
 }
