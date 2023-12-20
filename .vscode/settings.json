@@ -15,6 +15,7 @@
 	"files.autoSave": "onFocusChange",
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"cSpell.words": [
-		"ONEROSTER"
+		"ONEROSTER",
+		"studentscheduler"
 	]
 }

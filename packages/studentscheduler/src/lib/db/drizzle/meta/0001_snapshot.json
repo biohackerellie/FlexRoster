@@ -1,6 +1,6 @@
 {
-  "id": "160f8ab5-9a3a-44df-956a-7dafd15a869d",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "8850804f-2a44-4edd-a8b7-63da10b33792",
+  "prevId": "160f8ab5-9a3a-44df-956a-7dafd15a869d",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -117,10 +117,30 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "classroomId": {
+          "name": "classroomId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "classRoster_classroomId_classroom_id_fk": {
+          "name": "classRoster_classroomId_classroom_id_fk",
+          "tableFrom": "classRoster",
+          "tableTo": "classroom",
+          "columnsFrom": [
+            "classroomId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -169,6 +189,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "classroom_id": {
+          "name": "classroom_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "totalStudents": {
           "name": "totalStudents",
           "type": "integer",
@@ -189,7 +215,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "dailyLog_classroom_id_classroom_id_fk": {
+          "name": "dailyLog_classroom_id_classroom_id_fk",
+          "tableFrom": "dailyLog",
+          "tableTo": "classroom",
+          "columnsFrom": [
+            "classroom_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -202,6 +242,12 @@
           "type": "serial",
           "primaryKey": true,
           "notNull": true
+        },
+        "classroom_id": {
+          "name": "classroom_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "student_id": {
           "name": "student_id",
@@ -224,6 +270,19 @@
       },
       "indexes": {},
       "foreignKeys": {
+        "eventLog_classroom_id_classroom_id_fk": {
+          "name": "eventLog_classroom_id_classroom_id_fk",
+          "tableFrom": "eventLog",
+          "tableTo": "classroom",
+          "columnsFrom": [
+            "classroom_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
         "eventLog_student_id_user_id_fk": {
           "name": "eventLog_student_id_user_id_fk",
           "tableFrom": "eventLog",
@@ -366,6 +425,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "classroomId": {
+          "name": "classroomId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "status": {
           "name": "status",
           "type": "text",
@@ -388,6 +453,19 @@
           "tableTo": "user",
           "columnsFrom": [
             "studentId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transferRequest_classroomId_classroom_id_fk": {
+          "name": "transferRequest_classroomId_classroom_id_fk",
+          "tableFrom": "transferRequest",
+          "tableTo": "classroom",
+          "columnsFrom": [
+            "classroomId"
           ],
           "columnsTo": [
             "id"
@@ -433,6 +511,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'student'"
+        },
+        "classroomID": {
+          "name": "classroomID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "roster_id": {
           "name": "roster_id",

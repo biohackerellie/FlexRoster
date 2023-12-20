@@ -21,21 +21,18 @@ CREATE TABLE IF NOT EXISTS "account" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "classRoster" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"studentId" text,
-	"classroomId" integer
+	"studentId" text
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "classroom" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"roomNumber" text NOT NULL,
 	"teacherName" text NOT NULL,
-	"studentCount" integer DEFAULT 0 NOT NULL,
-	"rosterID" serial NOT NULL
+	"studentCount" integer DEFAULT 0 NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "dailyLog" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"classroom_id" integer,
 	"totalStudents" integer NOT NULL,
 	"studentNames" json,
 	"createdAt" timestamp NOT NULL
@@ -43,7 +40,6 @@ CREATE TABLE IF NOT EXISTS "dailyLog" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "eventLog" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"classroom_id" integer,
 	"student_id" text,
 	"eventType" text NOT NULL,
 	"createdAt" timestamp NOT NULL
@@ -66,7 +62,6 @@ CREATE TABLE IF NOT EXISTS "session" (
 CREATE TABLE IF NOT EXISTS "transferRequest" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"studentId" text,
-	"classroomId" integer,
 	"status" text DEFAULT 'pending' NOT NULL,
 	"createdAt" timestamp NOT NULL
 );
@@ -77,7 +72,6 @@ CREATE TABLE IF NOT EXISTS "user" (
 	"email" text NOT NULL,
 	"image" text,
 	"role" "role" DEFAULT 'student' NOT NULL,
-	"classroomID" integer,
 	"roster_id" integer
 );
 --> statement-breakpoint
@@ -90,24 +84,6 @@ CREATE TABLE IF NOT EXISTS "verificationToken" (
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "account" ADD CONSTRAINT "account_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "classroom" ADD CONSTRAINT "classroom_rosterID_classRoster_id_fk" FOREIGN KEY ("rosterID") REFERENCES "classRoster"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "dailyLog" ADD CONSTRAINT "dailyLog_classroom_id_classroom_id_fk" FOREIGN KEY ("classroom_id") REFERENCES "classroom"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "eventLog" ADD CONSTRAINT "eventLog_classroom_id_classroom_id_fk" FOREIGN KEY ("classroom_id") REFERENCES "classroom"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -138,12 +114,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "transferRequest" ADD CONSTRAINT "transferRequest_studentId_user_id_fk" FOREIGN KEY ("studentId") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "transferRequest" ADD CONSTRAINT "transferRequest_classroomId_classroom_id_fk" FOREIGN KEY ("classroomId") REFERENCES "classroom"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

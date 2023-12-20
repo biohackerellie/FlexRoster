@@ -6,7 +6,7 @@ declare module global {
   let postgresSqlClient: ReturnType<typeof postgres> | undefined;
 }
 
-const connectionString = process.env.DATABASE_URL as string;
+const connectionString = process.env.DIRECT_URL as string;
 
 let postgresSqlClient;
 

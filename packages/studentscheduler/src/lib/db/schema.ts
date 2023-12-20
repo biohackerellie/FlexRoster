@@ -33,7 +33,7 @@ export const users = pgTable('user', {
   email: text('email').notNull(),
   image: text('image'),
   role: rolesEnum('role').default('student').notNull(),
-  classroomID: integer('classroomID'),
+  classroomID: text('classroomID'),
   rosterID: integer('roster_id'),
 });
 
@@ -99,34 +99,26 @@ export const verificationTokens = pgTable(
 export const classRosters = pgTable('classRoster', {
   id: serial('id').primaryKey(),
   studentId: text('studentId'),
-  classroomId: integer('classroomId'),
+  classroomId: text('classroomId').references(() => classrooms.id),
 });
 
 export const ClassRosterRelations = relations(
   classRosters,
   ({ one, many }) => ({
     users: many(users),
-    classrooms: one(classrooms, {
-      fields: [classRosters.classroomId],
-      references: [classrooms.id],
-    }),
   })
 );
 
 export const classrooms = pgTable('classroom', {
-  id: serial('id').primaryKey(),
+  id: text('id').primaryKey(),
   roomNumber: text('roomNumber').notNull(),
   teacherName: text('teacherName').notNull(),
   studentCount: integer('studentCount').notNull().default(0),
-  rosterID: serial('rosterID').references(() => classRosters.id),
 });
 
 export const ClassRoomRelations = relations(classrooms, ({ one, many }) => ({
   users: many(users),
-  classRosters: one(classRosters, {
-    fields: [classrooms.rosterID],
-    references: [classRosters.id],
-  }),
+  classRosters: one(classRosters),
 }));
 
 export type Classroom = typeof classrooms.$inferSelect;
@@ -137,7 +129,7 @@ type requestStatus = 'pending' | 'granted' | 'denied';
 export const transferRequests = pgTable('transferRequest', {
   id: serial('id').primaryKey(),
   studentId: text('studentId').references(() => users.id),
-  classroomId: integer('classroomId').references(() => classrooms.id),
+  classroomId: text('classroomId').references(() => classrooms.id),
   status: text('status').$type<requestStatus>().notNull().default('pending'),
   createdAt: timestamp('createdAt', { mode: 'date' }).notNull(),
 });
@@ -167,7 +159,7 @@ type EventTypes =
 
 export const eventLogs = pgTable('eventLog', {
   id: serial('id').primaryKey(),
-  classroom_id: integer('classroom_id').references(() => classrooms.id),
+  classroom_id: text('classroom_id').references(() => classrooms.id),
   student_id: text('student_id').references(() => users.id),
   eventType: text('eventType').$type<EventTypes>().notNull(),
   createdAt: timestamp('createdAt', { mode: 'date' }).notNull(),
@@ -177,7 +169,7 @@ export type EventLog = typeof eventLogs.$inferSelect;
 
 export const dailyLogs = pgTable('dailyLog', {
   id: serial('id').primaryKey(),
-  classroom_id: integer('classroom_id').references(() => classrooms.id),
+  classroom_id: text('classroom_id').references(() => classrooms.id),
   totalStudents: integer('totalStudents').notNull(),
   studentNames: json('studentNames').$type<[{ name: User['name'] }]>(),
   createdAt: timestamp('createdAt', { mode: 'date' }).notNull(),

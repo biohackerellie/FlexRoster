@@ -20,26 +20,26 @@ export async function middleware(req: NextRequest) {
   /**
    * Set default landing page based on user role
    */
-
-  if (pathname === '/') {
-    const url = req.nextUrl.clone(); // Clone the current URL object
-    switch (role) {
-      case 'student':
-        url.pathname = '/student';
-        break;
-      case 'teacher':
-        url.pathname = '/teacher';
-        break;
-      case 'secretary':
-        url.pathname = '/secretary';
-        break;
-      case 'admin':
-        url.pathname = '/admin';
-        break;
+  if (token) {
+    if (pathname === '/') {
+      const url = req.nextUrl.clone(); // Clone the current URL object
+      switch (role) {
+        case 'student':
+          url.pathname = '/student';
+          break;
+        case 'teacher':
+          url.pathname = '/teacher';
+          break;
+        case 'secretary':
+          url.pathname = '/secretary';
+          break;
+        case 'admin':
+          url.pathname = '/admin';
+          break;
+      }
+      return NextResponse.redirect(url);
     }
-    return NextResponse.redirect(url);
   }
-
   if (pathname.startsWith('/student') && role !== 'student') {
     throw new Error('Unauthorized', { cause: 'Student' });
   } else if (pathname.startsWith('/teacher') && role !== 'teacher') {
