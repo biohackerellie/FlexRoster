@@ -29,7 +29,7 @@ export default function RootLayout({
     >
       <AuthProvider>
         <ThemeProvider>
-          <body className=" h-screen bg-no-repeat blue-dark text-foreground bg-background  ">
+          <body className=" h-screen bg-no-repeat dark text-foreground bg-background  ">
             {children}
           </body>
         </ThemeProvider>

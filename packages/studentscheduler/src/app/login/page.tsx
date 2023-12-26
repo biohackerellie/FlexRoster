@@ -3,9 +3,10 @@ import LoginCard from './card';
 
 export default function LoginPage() {
   return (
-    <div>
-      <h1>Login Page</h1>
-      <LoginCard />
-    </div>
+    <section className="justify-center h-screen items-center ">
+      <div className="container relative h-full   ">
+        <LoginCard />
+      </div>
+    </section>
   );
 }

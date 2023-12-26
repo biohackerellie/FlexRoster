@@ -1,12 +1,6 @@
 'use client';
 import { signIn } from 'next-auth/react';
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Button,
-} from '@nextui-org/react';
+import { Button } from '@/components/ui/buttons/button';
 import React from 'react';
 import { LogIn } from 'lucide-react';
 
@@ -16,19 +10,20 @@ const handleLogin = async () => {
 
 export default function LoginCard() {
   return (
-    <Card
-      isBlurred
-      className="border-none bg-background/60 dark:bg-default-100/50 max-w-[600px] max-h-[780px]"
-      shadow="sm"
-    >
-      <CardHeader>
-        <h2 className="text-2xl text-foreground font-semibold">Login</h2>
-      </CardHeader>
-      <CardBody>
-        <Button endContent={<LogIn />} onPress={() => handleLogin()}>
-          Login
-        </Button>
-      </CardBody>
-    </Card>
+    <>
+      <div className="drop-shadow-md absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 shadow-lg    ">
+        <div>
+          <LogIn />
+          <Button
+            size={'lg'}
+            className=" w-full text-foreground font-bold text-4xl"
+            variant="outline"
+            onClick={() => handleLogin()}
+          >
+            Login
+          </Button>
+        </div>
+      </div>
+    </>
   );
 }

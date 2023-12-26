@@ -68,6 +68,9 @@ importers:
       '@nextui-org/react':
         specifier: ^2.2.9
         version: 2.2.9(@types/react@18.2.45)(framer-motion@10.16.16)(react-dom@18.2.0)(react@18.3.0-canary-0cdfef19b-20231211)(tailwind-variants@0.1.18)(tailwindcss@3.3.6)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.2
+        version: 1.0.2(@types/react@18.2.45)(react@18.3.0-canary-0cdfef19b-20231211)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -2451,6 +2454,35 @@ packages:
       picocolors: 1.0.0
       tslib: 2.6.2
     dev: true
+
+  /@radix-ui/react-compose-refs@1.0.1(@types/react@18.2.45)(react@18.3.0-canary-0cdfef19b-20231211):
+    resolution: {integrity: sha512-fDSBgd44FKHa1FRMU59qBMPFcl2PZE+2nmqunj+BWFyYYjnhIDWL2ItDs3rrbJDQOtzt5nIebLCQc4QRfz6LJw==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.23.6
+      '@types/react': 18.2.45
+      react: 18.3.0-canary-0cdfef19b-20231211
+    dev: false
+
+  /@radix-ui/react-slot@1.0.2(@types/react@18.2.45)(react@18.3.0-canary-0cdfef19b-20231211):
+    resolution: {integrity: sha512-YeTpuq4deV+6DusvVUW4ivBgnkHwECUu0BiN43L5UCDFgdhsRUWAghhTF5MbvNTPzmiFOx90asDSUjWuCNapwg==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.23.6
+      '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.45)(react@18.3.0-canary-0cdfef19b-20231211)
+      '@types/react': 18.2.45
+      react: 18.3.0-canary-0cdfef19b-20231211
+    dev: false
 
   /@react-aria/breadcrumbs@3.5.8(react@18.3.0-canary-0cdfef19b-20231211):
     resolution: {integrity: sha512-jeek23igeqXct7S3ShW2jtFUc5g3fS9ZEBZkF64FWBrwfCiaZwb8TcKkK/xFw36/q5mxEt+seNiqnNzvsICJuQ==}
