@@ -34,7 +34,6 @@ export const users = pgTable('user', {
   image: text('image'),
   role: rolesEnum('role').default('student').notNull(),
   classroomID: text('classroomID'),
-  rosterID: integer('roster_id'),
 });
 
 export type User = typeof users.$inferSelect;
@@ -45,8 +44,8 @@ export const userRelations = relations(users, ({ one, many }) => ({
     references: [classrooms.id],
   }),
   roster: one(classRosters, {
-    fields: [users.rosterID],
-    references: [classRosters.id],
+    fields: [users.email],
+    references: [classRosters.studentEmail],
   }),
 }));
 
@@ -98,7 +97,7 @@ export const verificationTokens = pgTable(
 
 export const classRosters = pgTable('classRoster', {
   id: serial('id').primaryKey(),
-  studentId: text('studentId'),
+  studentEmail: text('studentEmail'),
   classroomId: text('classroomId').references(() => classrooms.id),
 });
 

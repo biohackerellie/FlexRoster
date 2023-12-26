@@ -15,6 +15,13 @@
       "when": 1703105913997,
       "tag": "0001_mean_ikaris",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1703612673348,
+      "tag": "0002_spooky_la_nuit",
+      "breakpoints": true
     }
   ]
 }

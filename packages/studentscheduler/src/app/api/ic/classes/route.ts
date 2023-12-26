@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     const token = await icAuth();
 
     const data = await fetcher<ClassResponse>(
-      process.env.IC_CLASS_QUERY as string,
+      `${process.env.IC_CLASS_QUERY}/classes?filter=${process.env.LHS_SOURCE_ID}&limit=1200`,
       {
         method: 'GET',
         headers: {
