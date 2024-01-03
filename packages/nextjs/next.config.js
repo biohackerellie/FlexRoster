@@ -1,21 +1,24 @@
+import './src/env.js';
+import '@student_scheduler/auth/env';
+
 /** @type {import('next').NextConfig} */
 
-const dns = require('dns');
-dns.setDefaultResultOrder('ipv4first');
-
-const nextConfig = {
+const config = {
   reactStrictMode: true,
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
+  // compiler: {
+  //   removeConsole: process.env.NODE_ENV === 'production',
+  // },
   eslint: {
     ignoreDuringBuilds: true,
   },
+  transpilePackages: [
+    '@student_scheduler/auth',
+    '@student_scheduler/api',
+    '@student_scheduler/db',
+  ],
   experimental: {
     serverComponentsExternalPackages: ['@trpc/server'],
   },
 
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
 };
-
-module.exports = nextConfig;

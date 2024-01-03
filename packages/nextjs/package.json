@@ -5,13 +5,13 @@
   "type": "module",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "dev": "pnpm with-env next dev",
+    "dev": "next dev",
     "clean": "git clean -xdf .next node_modules",
-    "build": "pnpm with-env next build",
-    "start": "pnpm with-env next start",
+    "build": "next build",
+    "start": "next start",
     "typecheck": "tsc --noEmit",
-    "lint": "next lint",
-    "with-env": "dotenv -e ../../.env --"
+    "lint": "next lint"
+
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.11",

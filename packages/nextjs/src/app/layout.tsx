@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { AuthProvider, ThemeProvider } from '@/utils/context';
-import { cache } from 'react';
+import { auth, signIn } from '@student_scheduler/auth';
+import React, { cache } from 'react';
 import { env } from '@/env';
 import { headers } from 'next/headers';
-import Sidebar from '@/components/ui/navigation/sidebar';
 
 import '@/styles/globals.css';
 import { TRPCReactProvider } from '@/trpc/react';
@@ -25,11 +25,27 @@ export const metadata: Metadata = {
 
 const getHeaders = cache(async () => headers());
 
-export default function RootLayout({
-  children,
-}: {
+export default async function RootLayout(props: {
   children: React.ReactNode;
+  admin: React.ReactNode;
+  secretary: React.ReactNode;
+  student: React.ReactNode;
+  teacher: React.ReactNode;
 }) {
+  let children = props.children;
+  const session = await auth();
+  if (session) {
+    if (session.user.role == 'admin') {
+      children = props.admin;
+    } else if (session.user.role == 'secretary') {
+      children = props.secretary;
+    } else if (session.user.role == 'student') {
+      children = props.student;
+    } else if (session.user.role == 'teacher') {
+      children = props.teacher;
+    }
+  }
+
   return (
     <html
       lang="en"

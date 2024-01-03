@@ -19,7 +19,7 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_HOST: z.string(),
     NEXT_PUBLIC_REDIS_HOST: z.string(),
-    NEXT_PUBLIC_REDIS_PORT: z.number(),
+    NEXT_PUBLIC_REDIS_PORT: z.string(),
   },
 
   runtimeEnv: {
