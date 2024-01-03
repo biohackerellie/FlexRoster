@@ -1,0 +1,9 @@
+{
+	"extends": "@student_scheduler/typescript/base.json",
+	"compilerOptions": {
+		"tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+	},
+	"include": ["src", "drizzle.config.ts"],
+	"exclude": ["node_modules"]
+
+}

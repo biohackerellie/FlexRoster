@@ -33,44 +33,145 @@ importers:
         specifier: ^5
         version: 5.3.3
 
-  packages/config/typescript: {}
-
-  packages/server:
+  packages/api:
     dependencies:
-      node-fetch:
-        specifier: ^3.3.2
-        version: 3.3.2
+      '@student_scheduler/auth':
+        specifier: workspace:0.1.0
+        version: link:../auth
+      '@student_scheduler/db':
+        specifier: workspace:0.1.0
+        version: link:../db
+      '@trpc/client':
+        specifier: next
+        version: 11.0.0-next-alpha.149(@trpc/server@11.0.0-next-alpha.149)
+      '@trpc/server':
+        specifier: next
+        version: 11.0.0-next-alpha.149
+      superjson:
+        specifier: ^2.2.1
+        version: 2.2.1
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@student_scheduler/typescript':
-        specifier: 0.1.0
+        specifier: workspace:0.1.0
         version: link:../config/typescript
-      '@types/express':
-        specifier: ^4.17.21
-        version: 4.17.21
-      '@types/node':
-        specifier: ^20
-        version: 20.10.4
-      express:
-        specifier: ^4.18.2
-        version: 4.18.2
-      ts-node:
-        specifier: ^10.9.2
-        version: 10.9.2(@types/node@20.10.4)(typescript@5.3.3)
+
+  packages/auth:
+    dependencies:
+      '@auth/drizzle-adapter':
+        specifier: ^0.3.12
+        version: 0.3.12
+      '@student_scheduler/db':
+        specifier: workspace:0.1.0
+        version: link:../db
+      '@student_scheduler/typescript':
+        specifier: workspace:0.1.0
+        version: link:../config/typescript
+      '@t3-oss/env-nextjs':
+        specifier: ^0.7.1
+        version: 0.7.1(typescript@5.3.3)(zod@3.22.4)
+      next-auth:
+        specifier: 5.0.0-beta.4
+        version: 5.0.0-beta.4(next@14.0.4)(react@18.3.0-canary-1d5667a12-20240102)
+      react:
+        specifier: 18.3.0-canary-1d5667a12-20240102
+        version: 18.3.0-canary-1d5667a12-20240102
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.3.0-canary-1d5667a12-20240102)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
 
-  packages/studentscheduler:
+  packages/config/typescript: {}
+
+  packages/db:
+    dependencies:
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
+      drizzle-orm:
+        specifier: ^0.29.1
+        version: 0.29.1(pg@8.11.3)(postgres@3.4.3)
+      pg:
+        specifier: ^8.11.3
+        version: 8.11.3
+      postgres:
+        specifier: ^3.4.3
+        version: 3.4.3
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@types/node@20.10.4)(typescript@5.3.3)
+      tsx:
+        specifier: ^4.6.2
+        version: 4.6.2
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@student_scheduler/typescript':
+        specifier: workspace:0.1.0
+        version: link:../config/typescript
+      drizzle-kit:
+        specifier: ^0.20.6
+        version: 0.20.6
+
+  packages/nextjs:
     dependencies:
       '@auth/drizzle-adapter':
         specifier: ^0.3.11
-        version: 0.3.11
+        version: 0.3.12
+      '@hookform/resolvers':
+        specifier: ^2.9.11
+        version: 2.9.11(react-hook-form@7.49.2)
       '@nextui-org/react':
         specifier: ^2.2.9
         version: 2.2.9(@types/react@18.2.45)(framer-motion@10.16.16)(react-dom@18.2.0)(react@18.3.0-canary-0cdfef19b-20231211)(tailwind-variants@0.1.18)(tailwindcss@3.3.6)
       '@radix-ui/react-slot':
         specifier: ^1.0.2
         version: 1.0.2(@types/react@18.2.45)(react@18.3.0-canary-0cdfef19b-20231211)
+      '@student_scheduler/api':
+        specifier: workspace:0.1.0
+        version: link:../api
+      '@student_scheduler/auth':
+        specifier: workspace:0.1.0
+        version: link:../auth
+      '@student_scheduler/db':
+        specifier: workspace:0.1.0
+        version: link:../db
+      '@tanstack/react-query':
+        specifier: ^5.8.7
+        version: 5.17.1(react@18.3.0-canary-0cdfef19b-20231211)
+      '@tanstack/react-query-devtools':
+        specifier: ^5.8.7
+        version: 5.17.1(@tanstack/react-query@5.17.1)(react@18.3.0-canary-0cdfef19b-20231211)
+      '@tanstack/react-query-next-experimental':
+        specifier: 5.8.7
+        version: 5.8.7(@tanstack/react-query@5.17.1)(next@14.0.4)(react-dom@18.2.0)(react@18.3.0-canary-0cdfef19b-20231211)
+      '@trpc/client':
+        specifier: next
+        version: 11.0.0-next-alpha.149(@trpc/server@11.0.0-next-alpha.149)
+      '@trpc/next':
+        specifier: next
+        version: 11.0.0-next-alpha.149(@tanstack/react-query@5.17.1)(@trpc/client@11.0.0-next-alpha.149)(@trpc/react-query@11.0.0-next-alpha.149)(@trpc/server@11.0.0-next-alpha.149)(next@14.0.4)(react-dom@18.2.0)(react@18.3.0-canary-0cdfef19b-20231211)
+      '@trpc/react-query':
+        specifier: next
+        version: 11.0.0-next-alpha.149(@tanstack/react-query@5.17.1)(@trpc/client@11.0.0-next-alpha.149)(@trpc/server@11.0.0-next-alpha.149)(react-dom@18.2.0)(react@18.3.0-canary-0cdfef19b-20231211)
+      '@trpc/server':
+        specifier: next
+        version: 11.0.0-next-alpha.149
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -116,6 +217,9 @@ importers:
       react-dom:
         specifier: ^18
         version: 18.2.0(react@18.3.0-canary-0cdfef19b-20231211)
+      react-hook-form:
+        specifier: ^7.43.3
+        version: 7.49.2(react@18.3.0-canary-0cdfef19b-20231211)
       react-toastify:
         specifier: ^9.1.3
         version: 9.1.3(react-dom@18.2.0)(react@18.3.0-canary-0cdfef19b-20231211)
@@ -166,6 +270,31 @@ importers:
         specifier: ^5
         version: 5.3.3
 
+  packages/server:
+    dependencies:
+      node-fetch:
+        specifier: ^3.3.2
+        version: 3.3.2
+    devDependencies:
+      '@student_scheduler/typescript':
+        specifier: 0.1.0
+        version: link:../config/typescript
+      '@types/express':
+        specifier: ^4.17.21
+        version: 4.17.21
+      '@types/node':
+        specifier: ^20
+        version: 20.10.4
+      express:
+        specifier: ^4.18.2
+        version: 4.18.2
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@types/node@20.10.4)(typescript@5.3.3)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
 packages:
 
   /@aashutoshrathi/word-wrap@1.2.6:
@@ -177,8 +306,24 @@ packages:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
 
-  /@auth/core@0.18.6:
-    resolution: {integrity: sha512-AI7tnyNOg5zVS2elA44O03MWS6jyp69S8habJts63IyiCIoSkhqcZX4EcEJ0287m0hxzOltPCV9Zq2aqXbrNSA==}
+  /@auth/core@0.18.4:
+    resolution: {integrity: sha512-GsNhsP1xE/3FoNS3dVkPjqRljLNJ4iyL2OLv3klQGNvw3bMpROFcK4lqhx7+pPHiamnVaYt2vg1xbB+lsNaevg==}
+    peerDependencies:
+      nodemailer: ^6.8.0
+    peerDependenciesMeta:
+      nodemailer:
+        optional: true
+    dependencies:
+      '@panva/hkdf': 1.1.1
+      cookie: 0.6.0
+      jose: 5.1.3
+      oauth4webapi: 2.4.0
+      preact: 10.11.3
+      preact-render-to-string: 5.2.3(preact@10.11.3)
+    dev: false
+
+  /@auth/core@0.19.0:
+    resolution: {integrity: sha512-BkFg2SoNftMN6A2Sn2g1lLFLTO74qMtFKsZmSCEF9d1csqSaEXIv50k6OrfniODWi5tZP8bcfSxGodv75khlOA==}
     peerDependencies:
       nodemailer: ^6.8.0
     peerDependenciesMeta:
@@ -194,10 +339,10 @@ packages:
       preact-render-to-string: 5.2.3(preact@10.11.3)
     dev: false
 
-  /@auth/drizzle-adapter@0.3.11:
-    resolution: {integrity: sha512-pJQiujXjIWENaEHi+j4OcYluoFpjq1WLPVyIPMzbpasothCVeu2p9aH+SiZFPa8TJdKrXo8ItTlq2xJ7xITnHQ==}
+  /@auth/drizzle-adapter@0.3.12:
+    resolution: {integrity: sha512-6+XCHrDXglKPWKRmHuUA6f27WM40v3+MQyUFf2d+JsA0tuBuwOw6IPp1ycxvOODM6milHyKcjowUfqWW9F9f9Q==}
     dependencies:
-      '@auth/core': 0.18.6
+      '@auth/core': 0.19.0
     transitivePeerDependencies:
       - nodemailer
     dev: false
@@ -964,6 +1109,14 @@ packages:
     resolution: {integrity: sha512-txaaE2fiBMagLrR4jYhxzFO6wEdEG4TPMqrzBAcbr4HFUYzH/YC+lg6OIzKCHm8WgDdyQevxbAAV1OgcXctuGw==}
     dependencies:
       tslib: 2.6.2
+    dev: false
+
+  /@hookform/resolvers@2.9.11(react-hook-form@7.49.2):
+    resolution: {integrity: sha512-bA3aZ79UgcHj7tFV7RlgThzwSSHZgvfbt2wprldRkYBcMopdMvHyO17Wwp/twcJasNFischFfS7oz8Katz8DdQ==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.49.2(react@18.3.0-canary-0cdfef19b-20231211)
     dev: false
 
   /@humanwhocodes/config-array@0.11.13:
@@ -3448,6 +3601,123 @@ packages:
       tslib: 2.6.2
     dev: false
 
+  /@t3-oss/env-core@0.7.1(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-3+SQt39OlmSaRLqYVFv8uRm1BpFepM5TIiMytRqO9cjH+wB77o6BIJdeyM5h5U4qLBMEzOJWCY4MBaU/rLwbYw==}
+    peerDependencies:
+      typescript: '>=4.7.2'
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      typescript: 5.3.3
+      zod: 3.22.4
+    dev: false
+
+  /@t3-oss/env-nextjs@0.7.1(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-tQDbNLGCOvKGi+JoGuJ/CJInJI7/kLWJqtgGppAKS7ZFLdVOqZYR/uRjxlXOWPnxmUKF8VswOAsq7fXUpNZDhA==}
+    peerDependencies:
+      typescript: '>=4.7.2'
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@t3-oss/env-core': 0.7.1(typescript@5.3.3)(zod@3.22.4)
+      typescript: 5.3.3
+      zod: 3.22.4
+    dev: false
+
+  /@tanstack/query-core@5.17.1:
+    resolution: {integrity: sha512-kUXozQmU7NBtzX5dM6qfFNZN+YK/9Ct37hnG/ogdgI4mExIx7VH/qRepsPhKfNrJz2w81/JykmM3Uug6sVpUSw==}
+    dev: false
+
+  /@tanstack/query-devtools@5.17.1:
+    resolution: {integrity: sha512-gNdt6PYzYlyjtSAoO8Jt9GIFq5VSLLDV2qq0TCi1t/PGnpAIlIHqNZGYkQTPsy0FyGUTX3pCq4bd7v5z/wzf3A==}
+    dev: false
+
+  /@tanstack/react-query-devtools@5.17.1(@tanstack/react-query@5.17.1)(react@18.3.0-canary-0cdfef19b-20231211):
+    resolution: {integrity: sha512-QWHqdEN2TJpj76r0yzdOJEopmPvdAHOJHAKXaygubRASqCqfcWGkOHGD9pqqHOfTu5eQdV1Csx97EuSjnHMKcA==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.17.1
+      react: ^18.0.0
+    dependencies:
+      '@tanstack/query-devtools': 5.17.1
+      '@tanstack/react-query': 5.17.1(react@18.3.0-canary-0cdfef19b-20231211)
+      react: 18.3.0-canary-0cdfef19b-20231211
+    dev: false
+
+  /@tanstack/react-query-next-experimental@5.8.7(@tanstack/react-query@5.17.1)(next@14.0.4)(react-dom@18.2.0)(react@18.3.0-canary-0cdfef19b-20231211):
+    resolution: {integrity: sha512-ZOhcgG2EsQVI8QLA7xOoYX7rXpVq33lNzgTsDboTD7RTsNQ7Lq7nE/u9YQDf+1bnABTkuZtAjCUDOfm/7BN/qQ==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.8.7
+      next: ^13 || ^14
+      react: ^18.0.0
+      react-dom: ^18.0.0
+    dependencies:
+      '@tanstack/react-query': 5.17.1(react@18.3.0-canary-0cdfef19b-20231211)
+      next: 14.0.4(react-dom@18.2.0)(react@18.3.0-canary-0cdfef19b-20231211)
+      react: 18.3.0-canary-0cdfef19b-20231211
+      react-dom: 18.2.0(react@18.3.0-canary-0cdfef19b-20231211)
+    dev: false
+
+  /@tanstack/react-query@5.17.1(react@18.3.0-canary-0cdfef19b-20231211):
+    resolution: {integrity: sha512-4JYgX0kU+pvwVQi5eRiHGvBK7WnahEl6lmaxd32ZVSKmByAxLgaewoxBR03cdDNse8lUD2zGOe0sx3M/EGRlmA==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      '@tanstack/query-core': 5.17.1
+      react: 18.3.0-canary-0cdfef19b-20231211
+    dev: false
+
+  /@trpc/client@11.0.0-next-alpha.149(@trpc/server@11.0.0-next-alpha.149):
+    resolution: {integrity: sha512-5siTSTzcSt9WBTZ7VHTpyO9NJMh26ExEqSypsbyzkFfnHbqbQxttdEtJ2MTBm/Td87Hm2VpPL2WsjNs7kY0xHA==}
+    peerDependencies:
+      '@trpc/server': 11.0.0-next-alpha.149+11361b82d
+    dependencies:
+      '@trpc/server': 11.0.0-next-alpha.149
+    dev: false
+
+  /@trpc/next@11.0.0-next-alpha.149(@tanstack/react-query@5.17.1)(@trpc/client@11.0.0-next-alpha.149)(@trpc/react-query@11.0.0-next-alpha.149)(@trpc/server@11.0.0-next-alpha.149)(next@14.0.4)(react-dom@18.2.0)(react@18.3.0-canary-0cdfef19b-20231211):
+    resolution: {integrity: sha512-mPd4sH2taIyhh+JZc078QVH6AXTeDflsWJICg/jol/YbZr1QKY54FwZUSwaqeyqbpl/Jmp4ojWUD8J7fROkmZw==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.0.0
+      '@trpc/client': 11.0.0-next-alpha.149+11361b82d
+      '@trpc/react-query': 11.0.0-next-alpha.149+11361b82d
+      '@trpc/server': 11.0.0-next-alpha.149+11361b82d
+      next: '*'
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      '@tanstack/react-query': 5.17.1(react@18.3.0-canary-0cdfef19b-20231211)
+      '@trpc/client': 11.0.0-next-alpha.149(@trpc/server@11.0.0-next-alpha.149)
+      '@trpc/react-query': 11.0.0-next-alpha.149(@tanstack/react-query@5.17.1)(@trpc/client@11.0.0-next-alpha.149)(@trpc/server@11.0.0-next-alpha.149)(react-dom@18.2.0)(react@18.3.0-canary-0cdfef19b-20231211)
+      '@trpc/server': 11.0.0-next-alpha.149
+      next: 14.0.4(react-dom@18.2.0)(react@18.3.0-canary-0cdfef19b-20231211)
+      react: 18.3.0-canary-0cdfef19b-20231211
+      react-dom: 18.2.0(react@18.3.0-canary-0cdfef19b-20231211)
+    dev: false
+
+  /@trpc/react-query@11.0.0-next-alpha.149(@tanstack/react-query@5.17.1)(@trpc/client@11.0.0-next-alpha.149)(@trpc/server@11.0.0-next-alpha.149)(react-dom@18.2.0)(react@18.3.0-canary-0cdfef19b-20231211):
+    resolution: {integrity: sha512-KDikOzoaI6f4DtXVTXnn5d4y4iyEBPh9uRN1z8BVhF1T1nbjcAGSLABk40QfH9xgMW+PousCOO0UlSCDHkdA9A==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.0.0
+      '@trpc/client': 11.0.0-next-alpha.149+11361b82d
+      '@trpc/server': 11.0.0-next-alpha.149+11361b82d
+      react: '>=18.2.0'
+      react-dom: '>=18.2.0'
+    dependencies:
+      '@tanstack/react-query': 5.17.1(react@18.3.0-canary-0cdfef19b-20231211)
+      '@trpc/client': 11.0.0-next-alpha.149(@trpc/server@11.0.0-next-alpha.149)
+      '@trpc/server': 11.0.0-next-alpha.149
+      react: 18.3.0-canary-0cdfef19b-20231211
+      react-dom: 18.2.0(react@18.3.0-canary-0cdfef19b-20231211)
+    dev: false
+
+  /@trpc/server@11.0.0-next-alpha.149:
+    resolution: {integrity: sha512-+zj/pk8vIP1v7K/ntGo3HkB4UT4wHWSYlkUdTQrqk3SawOygk+D0aRYkXvg6D9wgUn3zFEKUyVR1OWbMXD53Gw==}
+    dev: false
+
   /@tsconfig/node10@1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
 
@@ -4071,7 +4341,6 @@ packages:
     engines: {node: '>=12.13'}
     dependencies:
       is-what: 4.1.16
-    dev: true
 
   /create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
@@ -5173,7 +5442,6 @@ packages:
   /is-what@4.1.16:
     resolution: {integrity: sha512-ZhMwEosbFJkA0YhFnNDgTM4ZxDRsS6HqTo7qsZM08fehyRYIYa0yHu5R6mgo1n/8MgaPBXiPimPD77baVFYg+A==}
     engines: {node: '>=12.13'}
-    dev: true
 
   /is-wsl@2.2.0:
     resolution: {integrity: sha512-fKzAra0rGJUUBwGBgNkHZuToZcn+TtXHpeCgmkMJMMYx1sQDYaCSyjJBSCa2nH1DGm7s3n1oBnohoVTBaN7Lww==}
@@ -5514,6 +5782,21 @@ packages:
       uuid: 8.3.2
     dev: false
 
+  /next-auth@5.0.0-beta.4(next@14.0.4)(react@18.3.0-canary-1d5667a12-20240102):
+    resolution: {integrity: sha512-vgocjvwPA8gxd/zrIP/vr9lJ/HeNe+C56lPP1D3sdyenHt8KncQV6ro7q0xCsDp1fcOKx7WAWVZH5o8aMxDzgw==}
+    peerDependencies:
+      next: ^14
+      nodemailer: ^6.6.5
+      react: ^18.2.0
+    peerDependenciesMeta:
+      nodemailer:
+        optional: true
+    dependencies:
+      '@auth/core': 0.18.4
+      next: 14.0.4(react-dom@18.2.0)(react@18.3.0-canary-1d5667a12-20240102)
+      react: 18.3.0-canary-1d5667a12-20240102
+    dev: false
+
   /next-themes@0.2.1(next@14.0.4)(react-dom@18.2.0)(react@18.3.0-canary-0cdfef19b-20231211):
     resolution: {integrity: sha512-B+AKNfYNIzh0vqQQKqQItTS8evEouKD7H5Hj3kmuPERwddR2TxvDSFZuTj6T7Jfn1oyeUyJMydPl1Bkxkh0W7A==}
     peerDependencies:
@@ -5554,6 +5837,46 @@ packages:
       react: 18.3.0-canary-0cdfef19b-20231211
       react-dom: 18.2.0(react@18.3.0-canary-0cdfef19b-20231211)
       styled-jsx: 5.1.1(react@18.3.0-canary-0cdfef19b-20231211)
+      watchpack: 2.4.0
+    optionalDependencies:
+      '@next/swc-darwin-arm64': 14.0.4
+      '@next/swc-darwin-x64': 14.0.4
+      '@next/swc-linux-arm64-gnu': 14.0.4
+      '@next/swc-linux-arm64-musl': 14.0.4
+      '@next/swc-linux-x64-gnu': 14.0.4
+      '@next/swc-linux-x64-musl': 14.0.4
+      '@next/swc-win32-arm64-msvc': 14.0.4
+      '@next/swc-win32-ia32-msvc': 14.0.4
+      '@next/swc-win32-x64-msvc': 14.0.4
+    transitivePeerDependencies:
+      - '@babel/core'
+      - babel-plugin-macros
+    dev: false
+
+  /next@14.0.4(react-dom@18.2.0)(react@18.3.0-canary-1d5667a12-20240102):
+    resolution: {integrity: sha512-qbwypnM7327SadwFtxXnQdGiKpkuhaRLE2uq62/nRul9cj9KhQ5LhHmlziTNqUidZotw/Q1I9OjirBROdUJNgA==}
+    engines: {node: '>=18.17.0'}
+    hasBin: true
+    peerDependencies:
+      '@opentelemetry/api': ^1.1.0
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      sass: ^1.3.0
+    peerDependenciesMeta:
+      '@opentelemetry/api':
+        optional: true
+      sass:
+        optional: true
+    dependencies:
+      '@next/env': 14.0.4
+      '@swc/helpers': 0.5.2
+      busboy: 1.6.0
+      caniuse-lite: 1.0.30001570
+      graceful-fs: 4.2.11
+      postcss: 8.4.31
+      react: 18.3.0-canary-1d5667a12-20240102
+      react-dom: 18.2.0(react@18.3.0-canary-1d5667a12-20240102)
+      styled-jsx: 5.1.1(react@18.3.0-canary-1d5667a12-20240102)
       watchpack: 2.4.0
     optionalDependencies:
       '@next/swc-darwin-arm64': 14.0.4
@@ -6034,6 +6357,25 @@ packages:
       scheduler: 0.23.0
     dev: false
 
+  /react-dom@18.2.0(react@18.3.0-canary-1d5667a12-20240102):
+    resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
+    peerDependencies:
+      react: ^18.2.0
+    dependencies:
+      loose-envify: 1.4.0
+      react: 18.3.0-canary-1d5667a12-20240102
+      scheduler: 0.23.0
+    dev: false
+
+  /react-hook-form@7.49.2(react@18.3.0-canary-0cdfef19b-20231211):
+    resolution: {integrity: sha512-TZcnSc17+LPPVpMRIDNVITY6w20deMdNi6iehTFLV1x8SqThXGwu93HjlUVU09pzFgZH7qZOvLMM7UYf2ShAHA==}
+    engines: {node: '>=18', pnpm: '8'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.3.0-canary-0cdfef19b-20231211
+    dev: false
+
   /react-remove-scroll-bar@2.3.4(@types/react@18.2.45)(react@18.3.0-canary-0cdfef19b-20231211):
     resolution: {integrity: sha512-63C4YQBUt0m6ALadE9XV56hV8BgJWDmmTPY758iIJjfQKt2nYwoUrPk0LXRXcB/yIj82T1/Ixfdpdk68LwIB0A==}
     engines: {node: '>=10'}
@@ -6113,6 +6455,13 @@ packages:
 
   /react@18.3.0-canary-0cdfef19b-20231211:
     resolution: {integrity: sha512-+Pkvj3ukUbbFqfZsuXAYlVvis3shVapv3HvX+QClpJN+O3NT71tHUw43RHyGLkuc/9e2X3R1kvhPBKSGy8p/Wg==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      loose-envify: 1.4.0
+    dev: false
+
+  /react@18.3.0-canary-1d5667a12-20240102:
+    resolution: {integrity: sha512-luErMzExiPt9LGO2xDTdspTCK0PEJIWU5vh9kgXWm3bGQ1WWndLPIyfijrqjvxBIESiGtMPthbuAaYC3LSKdLw==}
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
@@ -6434,6 +6783,23 @@ packages:
       react: 18.3.0-canary-0cdfef19b-20231211
     dev: false
 
+  /styled-jsx@5.1.1(react@18.3.0-canary-1d5667a12-20240102):
+    resolution: {integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==}
+    engines: {node: '>= 12.0.0'}
+    peerDependencies:
+      '@babel/core': '*'
+      babel-plugin-macros: '*'
+      react: '>= 16.8.0 || 17.x.x || ^18.0.0-0'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      babel-plugin-macros:
+        optional: true
+    dependencies:
+      client-only: 0.0.1
+      react: 18.3.0-canary-1d5667a12-20240102
+    dev: false
+
   /sucrase@3.34.0:
     resolution: {integrity: sha512-70/LQEZ07TEcxiU2dz51FKaE6hCTWC6vr7FOk3Gr0U60C3shtAN+H+BFr9XlYe5xqf3RA8nrc+VIwzCfnxuXJw==}
     engines: {node: '>=8'}
@@ -6452,7 +6818,6 @@ packages:
     engines: {node: '>=16'}
     dependencies:
       copy-anything: 3.0.5
-    dev: true
 
   /supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}

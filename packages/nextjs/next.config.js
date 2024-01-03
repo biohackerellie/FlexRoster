@@ -8,9 +8,11 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
-
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   experimental: {
-    optimizePackageImports: ['@nextui-org'],
+    serverComponentsExternalPackages: ['@trpc/server'],
   },
 
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],

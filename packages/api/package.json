@@ -1,0 +1,25 @@
+{
+	"name": "@student_scheduler/api",
+	"version": "0.1.0",
+	"private": "true",
+	"exports": {
+		".": "./src/index.ts"
+		
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"dependencies": {
+		"@student_scheduler/auth": "workspace:0.1.0",
+		"@student_scheduler/db": "workspace:0.1.0",
+		"@trpc/client": "next",
+		"@trpc/server": "next",
+		"superjson": "^2.2.1",
+		"typescript": "^5.3.3",
+		"zod": "^3.22.4"
+	},
+	"devDependencies": {
+		"@student_scheduler/typescript": "workspace:0.1.0"
+	}
+}

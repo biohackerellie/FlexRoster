@@ -1,0 +1,28 @@
+{
+	"name": "@student_scheduler/db",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"db:generate": "drizzle-kit generate:pg --config=drizzle.config.ts",
+		"migrate": "node --loader ts-node/esm src/migrate.ts"
+	},
+	"dependencies": {
+		"dotenv": "^16.3.1",
+		"drizzle-orm": "^0.29.1",
+		"pg": "^8.11.3",
+		"postgres": "^3.4.3",
+		"ts-node": "^10.9.2",
+		"tsx": "^4.6.2",
+		"typescript": "^5.3.3",
+		"zod": "^3.22.4"
+	},
+	"devDependencies": {
+		"@student_scheduler/typescript": "workspace:0.1.0",
+		"drizzle-kit": "^0.20.6"
+	}
+}

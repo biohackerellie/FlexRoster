@@ -1,49 +1,36 @@
 {
+	"extends": "@student_scheduler/typescript/base.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esNext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
+		
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "baseUrl": "src/",
+    "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./*"
+        "./src/*"
       ],
       "@/app/*": [
-        "app/*"
+        "./src/app/*"
       ],
       "@/styles/*": [
-        "styles/*"
+        "./src/styles/*"
       ],
       "@/components/*": [
-        "components/*"
+        "./src/components/*"
       ],
       "@/lib/*": [
-        "lib/*"
+        "./src/lib/*"
       ],
       "@/utils/*": [
-        "utils/*"
+        "./src/utils/*"
       ]
-    }
+    },
+		"tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
   },
+	
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node"

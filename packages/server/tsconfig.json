@@ -26,13 +26,13 @@
 			
 
 			"@/functions/*": [
-				"functions/*"
+				"src/functions/*"
 			],
 			"@/sockets/*": [
-				"sockets/*"
+				"src/sockets/*"
 			],
 			"@/redis/*": [
-				"redis/*"
+				"src/redis/*"
 			],
 		}
 	},

@@ -1,0 +1,8 @@
+{
+	"extends": "@student_scheduler/typescript/base.json",
+	"compilerOptions": {
+		"tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+	},
+	"include": ["src"],
+	"exclude": ["node_modules"]
+}

@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "@student_scheduler/server",
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
@@ -20,4 +20,5 @@
   "dependencies": {
     "node-fetch": "^3.3.2"
   }
+	
 }
