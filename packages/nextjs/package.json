@@ -14,9 +14,8 @@
 
   },
   "dependencies": {
-    "@auth/drizzle-adapter": "^0.3.11",
+
     "@hookform/resolvers": "^2.9.11",
-    "@nextui-org/react": "^2.2.9",
     "@radix-ui/react-slot": "^1.0.2",
     "@student_scheduler/api": "workspace:0.1.0",
     "@student_scheduler/auth": "workspace:0.1.0",
@@ -33,7 +32,7 @@
     "clsx": "^2.0.0",
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.29.1",
-    "framer-motion": "^10.16.16",
+
     "geist": "^1.2.0",
     "ioredis": "^5.3.2",
     "lucide-react": "^0.297.0",
