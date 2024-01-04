@@ -3,9 +3,9 @@ import { Redis, RedisOptions } from 'ioredis';
 export default function createClient() {
   try {
     const options: RedisOptions = {
-      host: process.env.REDIS_HOST as unknown as string,
+      host: process.env.NEXT_PUBLIC_REDIS_HOST as unknown as string,
       lazyConnect: true,
-      port: process.env.REDIS_PORT as unknown as number,
+      port: process.env.NEXT_PUBLIC_REDIS_PORT as unknown as number,
       showFriendlyErrorStack: true,
       enableAutoPipelining: true,
       maxRetriesPerRequest: 0,

@@ -37,14 +37,16 @@ export async function GET(request: NextRequest) {
       const mappedStudents = data.users.map((s) => {
         return {
           studentEmail: s.email,
-          classroomID: id,
+          classroomId: id as string,
         };
       });
+
       for (const s of mappedStudents) {
         rosterData.push(s);
       }
     }
     await db.insert(classRosters).values(rosterData);
+
     return NextResponse.json(
       { message: 'success' },
       { status: 200, statusText: 'OK' }

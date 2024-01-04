@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, classrooms } from '@/lib/db';
 import { getToken } from '@/lib/cache';
+import { api } from '@/trpc/server';
 
 export async function GET(req: NextRequest) {
-  const token = await getToken('icToken');
-  console.log(token);
-  return NextResponse.json({ message: 'success' }, { status: 200 });
+  const users = await api.users.all.query();
+
+  return NextResponse.json(users, { status: 202 });
 }

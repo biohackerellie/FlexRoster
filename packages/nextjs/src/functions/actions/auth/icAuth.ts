@@ -3,7 +3,7 @@
  * @description Authentication with IC database, and regenerates session token if needed
  */
 
-import { getToken, setToken } from 'lib/cache';
+import { getToken, setToken } from '@/lib/cache';
 import { fetcher } from '@/functions/generics';
 
 interface TokenResponse {
