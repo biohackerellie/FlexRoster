@@ -34,14 +34,15 @@ export default async function RootLayout(props: {
 }) {
   let children = props.children;
   const session = await auth();
+
   if (session) {
-    if (session.user.role == 'admin') {
+    if (session.roles == 'admin') {
       children = props.admin;
-    } else if (session.user.role == 'secretary') {
+    } else if (session.roles == 'secretary') {
       children = props.secretary;
-    } else if (session.user.role == 'student') {
+    } else if (session.roles == 'student') {
       children = props.student;
-    } else if (session.user.role == 'teacher') {
+    } else if (session.roles == 'teacher') {
       children = props.teacher;
     }
   }

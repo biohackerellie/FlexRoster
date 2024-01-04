@@ -63,6 +63,9 @@ importers:
 
   packages/auth:
     dependencies:
+      '@auth/core':
+        specifier: ^0.19.0
+        version: 0.19.0
       '@auth/drizzle-adapter':
         specifier: ^0.3.12
         version: 0.3.12

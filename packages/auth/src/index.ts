@@ -4,15 +4,13 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import NextAuth from 'next-auth';
 import { db, eq, users, Role } from '@student_scheduler/db';
 
-export type { Session } from 'next-auth';
-
 declare module 'next-auth' {
-  interface Session extends DefaultSession {
+  interface Session {
     user: {
       id: string;
-      role: Role;
       email: string;
-    } & DefaultSession['user'];
+    };
+    roles: Role;
   }
   interface CustomUser extends User {
     id: string;
@@ -20,7 +18,7 @@ declare module 'next-auth' {
     email: string;
   }
 }
-
+export type { Session } from 'next-auth';
 export const {
   handlers: { GET, POST },
   auth,
@@ -45,7 +43,7 @@ export const {
           console.log('user: ', user);
           return {
             email: user.email,
-            id: user.id,
+
             name: user.name,
             role: user.role,
           };
@@ -53,23 +51,32 @@ export const {
           return null;
         }
       },
+      async profile(profile) {
+        return {
+          ...profile,
+          id: profile.oid,
+          email: profile.email,
+          name: profile.name,
+          role: profile.roles[0] as Role,
+        };
+      },
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        return {
-          ...token,
-          id: user.id,
-          name: user.name,
-          //@ts-expect-error
-          role: user.role,
-          email: user.email,
-        };
+    jwt: async ({ token, account }) => {
+      if (account?.id_token) {
+        const [header, payload, sig] = account.id_token.split('.');
+        const idToken = JSON.parse(
+          Buffer.from(payload, 'base64').toString('utf8')
+        );
+
+        token.roles = idToken.roles;
       }
       return token;
     },
-    async session({ session }) {
+    session: async ({ session, user, token }) => {
+      // @ts-expect-error
+      session.roles = token.roles[0] as Role;
       return session;
     },
 
@@ -81,7 +88,8 @@ export const {
   },
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
   },
   pages: {
     signIn: '/login',
