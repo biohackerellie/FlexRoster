@@ -1,6 +1,6 @@
 {
-  "id": "470d9aef-5687-4e0e-a6f1-610efba7e918",
-  "prevId": "8850804f-2a44-4edd-a8b7-63da10b33792",
+  "id": "e93a3371-d682-4151-bbee-64f2b7f946da",
+  "prevId": "99f1354d-348f-4561-8195-ab2f3dbcf498",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -127,6 +127,19 @@
       },
       "indexes": {},
       "foreignKeys": {
+        "classRoster_studentEmail_user_email_fk": {
+          "name": "classRoster_studentEmail_user_email_fk",
+          "tableFrom": "classRoster",
+          "tableTo": "user",
+          "columnsFrom": [
+            "studentEmail"
+          ],
+          "columnsTo": [
+            "email"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
         "classRoster_classroomId_classroom_id_fk": {
           "name": "classRoster_classroomId_classroom_id_fk",
           "tableFrom": "classRoster",
@@ -499,6 +512,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "emailVerified": {
+          "name": "emailVerified",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
         "image": {
           "name": "image",
           "type": "text",
@@ -522,7 +541,15 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "user_email_unique": {
+          "name": "user_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      }
     },
     "verificationToken": {
       "name": "verificationToken",
@@ -576,8 +603,6 @@
   "_meta": {
     "schemas": {},
     "tables": {},
-    "columns": {
-      "\"classRoster\".\"studentId\"": "\"classRoster\".\"studentEmail\""
-    }
+    "columns": {}
   }
 }

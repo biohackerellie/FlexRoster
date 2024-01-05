@@ -4,37 +4,23 @@
 		"lib": [
 			"esNext"
 		],
+		"allowImportingTsExtensions": true,
 		"allowJs": true,
     "skipLibCheck": true,
+		"moduleDetection": "force",
+		"composite": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "ESNext",
+		"downlevelIteration": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+		"types": ["bun-types"],
     "incremental": true,
 		"baseUrl": "./",
-		"paths": {
-			"@/*": [
-				"./*"
-			],
-			"@/studentscheduler/*": [
-				"../studentscheduler/src/*"
-			],
-			
-
-			"@/functions/*": [
-				"src/functions/*"
-			],
-			"@/sockets/*": [
-				"src/sockets/*"
-			],
-			"@/redis/*": [
-				"src/redis/*"
-			],
-		}
 	},
 	"include": [
 		"**/*.ts",

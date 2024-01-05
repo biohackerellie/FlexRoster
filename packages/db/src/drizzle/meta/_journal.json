@@ -29,6 +29,13 @@
       "when": 1704376054288,
       "tag": "0003_early_revanche",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1704484913301,
+      "tag": "0004_chief_hedge_knight",
+      "breakpoints": true
     }
   ]
 }

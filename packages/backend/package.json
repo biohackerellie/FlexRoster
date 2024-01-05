@@ -1,0 +1,28 @@
+{
+  "name": "@student_scheduler/backend",
+	"private": true,
+  "version": "0.1.0",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+  "scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.ts"
+  },
+
+  "author": "Ellie Kerns",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+		"bun": "^1.0.21",
+    "bun-types": "^1.0.21"
+
+  },
+	"bun-create": {
+		"start": "bun run src/index.ts"
+	}
+}

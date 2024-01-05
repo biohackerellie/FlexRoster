@@ -1,10 +1,10 @@
 /**
  * Retrieves the roster data for all classes from IC and inserts it into the database.
  * @param request - The NextRequest object.
- * @returns A NextResponse object with a success message if the operation is successful, or an error message if there is an error.
+ * @returns A NextResponse object with a success message if the operation is successful, ord an error message if there is an error.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { db, classRosters } from '@/lib/db';
+import { db, classRosters } from '@student_scheduler/db';
 import { fetcher } from '@/functions/generics';
 import { getAllClasses } from '@/functions/queries';
 import { RosterResponse } from '@/lib/types';

@@ -30,7 +30,7 @@ export type Role = (typeof rolesEnum.enumValues)[number];
 export const users = pgTable('user', {
   id: text('id').notNull().primaryKey(),
   name: text('name'),
-  email: text('email').notNull(),
+  email: text('email').notNull().unique(),
   emailVerified: timestamp('emailVerified', { mode: 'date' }),
   image: text('image'),
   role: rolesEnum('role').default('student').notNull(),
@@ -98,14 +98,21 @@ export const verificationTokens = pgTable(
 
 export const classRosters = pgTable('classRoster', {
   id: serial('id').primaryKey(),
-  studentEmail: text('studentEmail'),
+  studentEmail: text('studentEmail').references(() => users.email),
   classroomId: text('classroomId').references(() => classrooms.id),
 });
 
 export const ClassRosterRelations = relations(
   classRosters,
   ({ one, many }) => ({
-    users: many(users),
+    users: one(users, {
+      fields: [classRosters.studentEmail],
+      references: [users.email],
+    }),
+    classroom: one(classrooms, {
+      fields: [classRosters.classroomId],
+      references: [classrooms.id],
+    }),
   })
 );
 
