@@ -1,0 +1,42 @@
+version: "3"
+services:
+  postgresql:
+    image: bitnami/postgresql
+    restart: always
+    ports: 
+      - '5432:5432'
+    volumes:
+      - /srv/pgsql/config:/bitnami/postgresql
+    environment:
+      - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
+      - POSTGRESQL_LOG_HOSTNAME=true
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=postgres
+      - POSTGRESQL_DATABASE=postgres
+  # pgbouncer:
+  #   image: bitnami/pgbouncer
+  #   restart: always
+  #   ports:
+  #     - '6543:6543'
+  #   depends_on:
+  #     - postgresql
+  #   environment:
+  #     - POSTGRESQL_USERNAME=postgres
+  #     - POSTGRESQL_PASSWORD=postgres
+  #     - POSTGRESQL_DATABASE=postgres
+  #     - POSTGRESQL_HOST=postgresql-master
+  #     - POSTGRESQL_PORT=5432
+  #     - PGBOUNCER_MAX_CLIENT_CONN=200
+  #     - PGBOUNCER_DEFAULT_POOL_SIZE=20
+  #     - PGBOUNCER_ADMIN_USERS=postgres
+  #     - PGBOUNCER_AUTH_TYPE=md5
+  #     - PGBOUNCER_MAX_DB_CONNECTIONS=50
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - '5050:80'
+    env_file:
+      - ./pgadmin.env
+
