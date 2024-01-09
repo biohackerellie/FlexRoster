@@ -1,2 +1,7 @@
 node_modules
 **/.env
+apps_Dep/**
+apps_Dep/*
+apps_Dep
+apps_Dep/
+apps_Dep/**/*

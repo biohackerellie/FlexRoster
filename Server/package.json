@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.8.0",
+    "elysia": "latest",
+    "ioredis": "^5.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.8",
+    "bun-types": "latest",
+    "prisma": "^5.8.0"
+  },
+  "module": "src/index.js"
+}
