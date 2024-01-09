@@ -1,5 +1,8 @@
 import { AdapterUser } from 'next-auth/adapters';
-import { Role } from '../../../../Database/schema';
+
+
+
+export type Role = 'admin' | 'teacher' | 'student' | 'secretary';
 
 export interface CustomUser extends AdapterUser {
   role: Role | undefined;

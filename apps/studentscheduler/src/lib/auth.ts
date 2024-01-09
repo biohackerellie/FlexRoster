@@ -1,43 +1,35 @@
+import type { NextAuthOptions } from 'next-auth';
+
 import AzureADProvider from 'next-auth/providers/azure-ad';
-import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import { db } from './db';
-import { PgTable } from 'drizzle-orm/pg-core';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import prisma from './db';
+import { CustomUser, Role } from './types';
+
 import {
-  getServerSession,
-  type DefaultSession,
-  type NextAuthOptions,
-  DefaultUser,
   User,
 } from 'next-auth';
-import { eq } from 'drizzle-orm';
-import { users, Role } from './db/schema';
-import { CustomAdapter } from './db/adapter';
 
-declare module 'next-auth' {
-  interface Session extends DefaultSession {
-    user: {
-      id: string;
-      role: Role;
-      email: string;
-    } & DefaultSession['user'];
-  }
-  interface User extends DefaultUser {
-    id: string;
-    role: Role;
-    email: string;
-  }
-}
 
-declare module 'next-auth/adapters' {
-  export interface AdapterUser {
-    role: Role;
-  }
-}
+// declare module 'next-auth' {
+//   interface Session {
+//     user: {
+//       id: string;
+//       email: string;
+//     };
+//     roles: Role;
+//   }
+//   interface CustomUser extends User {
+//     id: string;
+//     role: Role;
+//     email: string;
+//   }
+// }
 
-export const adapter = CustomAdapter(db);
+// export type { Session } from 'next-auth';
 
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
+	adapter: PrismaAdapter(prisma),
   providers: [
     AzureADProvider({
       clientId: process.env.AZURE_AD_CLIENT_ID as string,
@@ -45,52 +37,57 @@ export const authOptions = {
       tenantId: process.env.AZURE_AD_TENANT_ID,
       //@ts-expect-error
       authorizationUrl: `https://login.microsoftonline.com/${process.env.AZURE_AD_TENANT_ID}/oauth2/v2.0/authorize`,
-      async authorize(credentials: { email: string }) {
-        const user = await db
-          .select()
-          .from(users)
-          .where(eq(users.email, credentials.email))
-          .then((res) => res[0] ?? null);
-        if (user) {
-          console.log('user: ', user);
-          return {
-            email: user.email,
-            id: user.id,
-            name: user.name,
-            role: user.role,
-          };
-        } else {
-          return null;
-        }
-      },
-    }),
+			async authorize(credentials: {email: string}) {
+				const user = await prisma.user.findFirst({
+					where: {
+						email: credentials.email
+					}
+				});
+				if (user) {
+					return {
+						id: user.id,
+						name: user.name,
+						email: user.email,
+						role: user.role,
+						image: user.image
+					}
+				} else {
+				return null;
+			}
+		},
+		async profile(profile){
+			return {
+				...profile,
+				id: profile.oid,
+				email: profile.email,
+				name: profile.name,
+				role: profile.roles[0] as Role
+			}
+		}
+    }
+		),
   ],
-  adapter: adapter,
+	
+
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        return {
-          ...token,
-          id: user.id,
-          name: user.name,
-          role: user.role,
-          email: user.email,
-        };
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id,
-          role: token.role,
-          name: token.name,
-          email: token.email,
-        },
-      };
-    },
+
+		jwt: async ({ token, account}) => {
+			if (account?.id_token) {
+				const [header, payload, sig] = account.id_token.split('.');
+				const idToken = JSON.parse(
+					Buffer.from(payload, 'base64').toString('utf8')
+				);
+
+				token.roles = idToken.roles;
+			}
+			return token
+		},
+
+		session: async ({ session, user, token }) => {
+
+			session.roles = token.roles[0] as Role;
+			return session;
+		},
 
     async redirect({ url, baseUrl }) {
       if (url.startsWith('/')) return `${baseUrl}${url}`;
@@ -105,4 +102,5 @@ export const authOptions = {
   pages: {
     signIn: '/login',
   },
+	debug: true
 } satisfies NextAuthOptions;

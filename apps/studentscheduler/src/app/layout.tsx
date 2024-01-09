@@ -25,15 +25,15 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${GeistSans.variable} ${GeistMono.variable} `}
-      suppressHydrationWarning={true}
+      suppressHydrationWarning
     >
-      <AuthProvider>
+
         <ThemeProvider>
           <body className=" h-screen bg-no-repeat dark text-foreground bg-background  ">
             {children}
           </body>
         </ThemeProvider>
-      </AuthProvider>
+
     </html>
   );
 }

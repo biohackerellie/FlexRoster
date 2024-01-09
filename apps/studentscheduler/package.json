@@ -2,7 +2,6 @@
   "name": "studentscheduler",
   "version": "0.1.0",
   "private": true,
-
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "next dev",
@@ -14,7 +13,9 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.11",
+    "@next-auth/prisma-adapter": "^1.0.7",
     "@nextui-org/react": "^2.2.9",
+    "@prisma/client": "^5.7.1",
     "@radix-ui/react-slot": "^1.0.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
@@ -40,13 +41,13 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@student_scheduler/typescript": "workspace:0.1.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
     "drizzle-kit": "^0.20.6",
     "postcss": "^8",
+    "prisma": "^5.7.1",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }
