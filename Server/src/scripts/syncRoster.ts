@@ -5,19 +5,15 @@ import prisma from '@/lib/prisma';
 async function syncRoster() {
   try {
     const token = await icAuth();
-    const url = `${process.env.IC_CLASS_QUERY}/classes?filter=${process.env.LHS_SOURCE_ID}&limit=1200`;
-    console.log(url);
-    const data = await fetcher<ClassResponse>(
-      `${process.env.IC_CLASS_QUERY}/classes?filter=${process.env.LHS_SOURCE_ID}&limit=1200`,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          'X-XSRF-TOKEN': process.env.XSRF_TOKEN as string,
-          Authorization: `Bearer ${token}` as string,
-        },
-      }
-    );
+
+    const data = await fetcher<ClassResponse>(`${process.env.IC_CLASS_QUERY}`, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        'X-XSRF-TOKEN': process.env.XSRF_TOKEN as string,
+        Authorization: `Bearer ${token}` as string,
+      },
+    });
     console.log(data);
     const filteredClasses = data.classes.filter((cls) =>
       cls.title.includes('STEAM-A')

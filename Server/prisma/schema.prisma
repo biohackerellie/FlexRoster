@@ -33,4 +33,12 @@ model classrooms {
 	roomNumber  String 	   
 	teacherName String
 	users				users[]    
+	classRosters classRosters[]
+}
+
+model classRosters {
+	id					Int		@id @default(autoincrement())
+	studentEmail String
+	classroomId String
+	classroom   classrooms @relation(fields: [classroomId], references: [id])
 }
