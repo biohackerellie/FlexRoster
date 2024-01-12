@@ -1,0 +1,11 @@
+{
+	"name": "workspace",
+	"private": true,
+	"engines": {
+		"bun": ">=1.0.0"
+	},
+	"workspaces": [
+		"react",
+		"server"
+	]
+}

@@ -1,0 +1,30 @@
+
+{
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "composite": true,
+    "strict": true,
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+		"baseUrl": "src/",                                  /* Specify the base directory to resolve non-relative module names. */
+		"paths": {
+			"@/*": ["./*"],
+			"@/types/*": ["lib/types/*"],
+			"@/lib/*":["lib/*"],
+			"@/scripts/*":["scripts/*"],
+	}, 
+    "allowJs": true,
+    "types": [
+      "bun-types" // add Bun global
+    ]
+  }
+}
