@@ -1,6 +1,6 @@
 {
   "name": "client",
-	"type": "module",
+  "type": "module",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,9 +10,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "geist": "^1.2.1",
+    "lucide-react": "^0.311.0",
+    "next": "14.0.4",
+    "next-auth": "beta",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.0.4"
+    "server": "workspace:.server",
+    "tailwind-merge": "^2.2.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "typescript": "^5",
