@@ -1,5 +1,6 @@
 
 {
+	"extends": "../tsconfig.base.json",
   "compilerOptions": {
     "lib": ["ESNext"],
     "module": "esnext",
@@ -14,14 +15,7 @@
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-		"baseUrl": "src/",                                  /* Specify the base directory to resolve non-relative module names. */
-		"paths": {
-			"@/*": ["./*"],
-			"@/types/*": ["lib/types/*"],
-			"@/lib/*":["lib/*"],
-			"@/scripts/*":["scripts/*"],
-	}, 
+    "forceConsistentCasingInFileNames": true,                               
     "allowJs": true,
     "types": [
       "bun-types" // add Bun global

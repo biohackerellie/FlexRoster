@@ -1,0 +1,24 @@
+{
+	"compileOnSave": false,
+	"compilerOptions": {
+		"rootDir": ".",
+		"sourceMap": true,
+		"declaration": false,
+		"moduleResolution": "node",
+		"emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+		"importHelpers": true,
+		"target": "ESNext",
+		"module": "ESNext",
+		"lib": ["ESNext", "DOM"],
+		"skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "importsNotUsedAsValues": "error",
+		"baseUrl": ".",
+		"paths": {
+			"@STEAM/client": ["./client/src/*"],
+			"@STEAM/server": ["./server/src/*"],
+			"@STEAM/shared": ["./shared/*"],
+		}
+	}
+}
