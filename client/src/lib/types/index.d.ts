@@ -1,1 +1,1 @@
-export * from 'server/types';
+export * from '@shared/types';

@@ -1,6 +1,6 @@
 import { Auth, AuthConfig } from '@auth/core';
 import AzureADProvider from '@auth/core/providers/azure-ad';
-import prisma from '@/lib/prisma';
+import prisma from '../../../../shared/prisma';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import cookiesConfig from '@/lib/auth/cookieConfig';
 import { Session } from '@auth/core/types';

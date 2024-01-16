@@ -1,6 +1,6 @@
 import { fetcher, icAuth } from '../lib/utils';
 import { ClassResponse } from '@/lib/types';
-import prisma from '@/lib/prisma';
+import prisma from '../../../shared/prisma';
 
 async function syncRoster() {
   try {

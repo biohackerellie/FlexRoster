@@ -2,7 +2,7 @@
  * Retrieve rosters for each class and insert into database
  */
 
-import prisma from '@/lib/prisma';
+import prisma from '../../../shared/prisma';
 import { fetcher } from '@/lib/utils';
 import { RosterResponse } from '@/lib/types';
 import { icAuth } from '@/lib/utils';
