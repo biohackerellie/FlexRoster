@@ -1,21 +1,35 @@
 {
+  "editor.cursorBlinking": "phase",
 
-	"workbench.preferredDarkColorTheme": "Beautiful Dracula Normal",
-	"workbench.preferredHighContrastColorTheme": "Beautiful Dracula Normal",
-	"workbench.preferredHighContrastLightColorTheme": "Beautiful Dracula Normal",
-	"workbench.preferredLightColorTheme": "Beautiful Dracula Normal",
-	"workbench.iconTheme": "material-icon-theme",
-	"workbench.colorTheme": "Beautiful Dracula Normal" ,
-	"editor.tabSize": 2,
-	"editor.wordWrap": "on",
-	"editor.cursorBlinking": "phase",
-	"editor.cursorSmoothCaretAnimation": "on",
-	"editor.fontFamily": "FiraCode Nerd Font Mono",
-	"editor.formatOnSave": true,
-	"files.autoSave": "onFocusChange",
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"cSpell.words": [
-		"ONEROSTER",
-		"studentscheduler"
-	]
+  "workbench.colorTheme": "Alex's Dark Theme",
+
+  "editor.cursorSmoothCaretAnimation": "on",
+
+  "editor.cursorSurroundingLinesStyle": "all",
+
+  "editor.smoothScrolling": true,
+
+  "workbench.list.smoothScrolling": true,
+
+  "terminal.integrated.smoothScrolling": true,
+
+  "editor.fontFamily": "FiraCode Nerd Font Mono",
+
+  "editor.tabSize": 2,
+
+  "editor.wordWrap": "on",
+
+  "editor.acceptSuggestionOnCommitCharacter": false,
+
+  "editor.linkedEditing": true,
+
+  "editor.mouseWheelZoom": true,
+
+  "editor.fontLigatures": true,
+
+  "[python]": {
+    "editor.insertSpaces": true,
+
+    "editor.tabSize": 4
+  }
 }
