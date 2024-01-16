@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import azureAd from 'next-auth/providers/azure-ad';
-import { env } from '@/env.mjs';
+import { env } from '../env.mjs';
 import prisma from 'shared/prisma';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 

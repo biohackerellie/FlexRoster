@@ -16,9 +16,9 @@
     "importsNotUsedAsValues": "error",
 		"baseUrl": ".",
 		"paths": {
-			"@STEAM/client": ["./client/src/*"],
-			"@STEAM/server": ["./server/src/*"],
-			"@STEAM/shared": ["./shared/*"],
+			"@STEAM/client": ["./client/src/**/*"],
+			"@STEAM/server": ["./server/src/**/*"],
+			"@STEAM/shared": ["./shared/**/*"],
 		}
 	}
 }
