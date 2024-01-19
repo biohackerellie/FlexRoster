@@ -3,8 +3,8 @@ import { z } from 'zod';
 
 export const env = createEnv({
   server: {
-    DIRECT_URL: z.string().url(),
-    DATABASE_URL: z.string().url(),
+    DIRECT_URL: z.string(),
+    DATABASE_URL: z.string(),
     NEXTAUTH_SECRET: z.string().min(1),
     AZURE_AD_CLIENT_ID: z.string().min(1),
     AZURE_AD_CLIENT_SECRET: z.string().min(1),
@@ -12,12 +12,12 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_API_URL: z.string().url(),
-    NEXT_PUBLIC_API_PORT: z.number().min(999).max(65535),
+    NEXT_PUBLIC_API_PORT: z.string(),
     NEXT_PUBLIC_HOST: z.string().url(),
-    NEXT_PUBLIC_PORT: z.number().min(999).max(65535),
+    NEXT_PUBLIC_PORT: z.string(),
     NEXT_PUBLIC_NEXTAUTH_URL: z.string().url(),
-    NEXT_PUBLIC_REDIS_IP: z.string().ip(),
-    NEXT_PUBLIC_REDIS_PORT: z.number().min(999).max(65535),
+    NEXT_PUBLIC_REDIS_IP: z.string(),
+    NEXT_PUBLIC_REDIS_PORT: z.string(),
   },
   runtimeEnv: {
     DIRECT_URL: process.env.DIRECT_URL,
@@ -31,7 +31,7 @@ export const env = createEnv({
     AZURE_AD_CLIENT_ID: process.env.AZURE_AD_CLIENT_ID,
     AZURE_AD_CLIENT_SECRET: process.env.AZURE_AD_CLIENT_SECRET,
     AZURE_AD_TENANT_ID: process.env.AZURE_AD_TENANT_ID,
-    NEXT_PUBLIC_REDIS_HOST: process.env.NEXT_PUBLIC_REDIS_HOST,
+    NEXT_PUBLIC_REDIS_IP: process.env.NEXT_PUBLIC_REDIS_IP,
     NEXT_PUBLIC_REDIS_PORT: process.env.NEXT_PUBLIC_REDIS_PORT,
   },
 });
