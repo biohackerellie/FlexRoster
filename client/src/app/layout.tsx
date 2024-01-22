@@ -5,7 +5,8 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'STEAM',
-  description: 'The Steamiest of piles of shit',
+  description:
+    'Sit down, shut up, and read an unbanned, straight, white, christian mom approved book',
 };
 
 export default function RootLayout({

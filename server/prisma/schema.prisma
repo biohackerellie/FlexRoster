@@ -65,6 +65,7 @@ model classrooms {
   id           String         @id
   roomNumber   String
   teacherName  String
+	available    Boolean        @default(true)
   users        User[]
   classRosters classRosters[]
 }

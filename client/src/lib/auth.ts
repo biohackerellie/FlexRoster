@@ -4,6 +4,12 @@ import { env } from '../env.mjs';
 // import prisma from 'shared/prisma';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 
+declare module 'next-auth' {
+  interface Session {
+    roles: string;
+  }
+}
+
 export const {
   handlers: { GET, POST },
   auth,
@@ -48,7 +54,6 @@ export const {
     },
     // @ts-expect-error
     async session({ session, token }) {
-      // @ts-expect-error
       session.roles = token.roles[0];
       return session;
     },
