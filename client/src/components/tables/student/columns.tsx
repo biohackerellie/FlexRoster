@@ -1,11 +1,11 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
+import { Button } from '@/components/ui/button';
 
 export type StudentTable = {
   roomNumber: string;
   teacherName: string;
-  teacherEmail: string;
-  available: boolean;
+  available: string;
   id: string;
 };
 
@@ -17,10 +17,6 @@ export const columns: ColumnDef<StudentTable>[] = [
   {
     accessorKey: 'teacherName',
     header: 'Teacher Name',
-  },
-  {
-    accessorKey: 'teacherEmail',
-    header: 'Teacher Email',
   },
   {
     accessorKey: 'available',
