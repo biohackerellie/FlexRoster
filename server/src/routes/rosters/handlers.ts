@@ -2,6 +2,8 @@ import { NotFoundError } from 'elysia';
 import prisma from '@/lib/prisma';
 import { getClassRoomKV, setClassRoomKV } from '@/lib/utils';
 
+const today = new Date();
+
 export async function getRosters() {
   try {
     return await prisma.classRosters.findMany();
@@ -61,11 +63,29 @@ export async function setStudentRoster(
   teacherName: string
 ) {
   try {
+    const previousRequest = await prisma.transferLogs.findFirst({
+      where: {
+        studentEmail: email,
+        createdAt: {
+          gte: today,
+        },
+      },
+    });
+    if (previousRequest) {
+      throw new NotFoundError('You have already requested a transfer today');
+    }
     await setClassRoomKV(
       email,
       `Room ${roomNumber} with ${teacherName}`,
       86400
     );
+    const newRequest = await prisma.transferLogs.create({
+      data: {
+        studentEmail: email,
+        roomNumber: roomNumber,
+        teacherName: teacherName,
+      },
+    });
     return new Response('OK', { status: 200 });
   } catch (e) {
     throw new NotFoundError('No roster found with that email');

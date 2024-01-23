@@ -68,6 +68,7 @@ model classrooms {
 	available    Boolean				@default(true)
   users        User[]
   classRosters classRosters[]
+	
 }
 
 model classRosters {
@@ -75,6 +76,15 @@ model classRosters {
   studentEmail String
   classroomId  String
   classroom    classrooms @relation(fields: [classroomId], references: [id])
+}
+
+model transferLogs {
+	id					 Int        @id @default(autoincrement())
+	studentEmail String
+	teacherName  String
+	roomNumber	 String
+	createdAt		DateTime   @default(now())
+	
 }
 
 
