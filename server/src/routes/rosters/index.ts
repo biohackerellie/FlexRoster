@@ -1,5 +1,10 @@
 import { Elysia, t } from 'elysia';
-import { getRosters, getRostersById, getStudentRoster } from './handlers';
+import {
+  getRosters,
+  getRostersById,
+  getStudentRoster,
+  setStudentRoster,
+} from './handlers';
 
 export const rosterRoutes = new Elysia({ prefix: '/rosters' })
   .get('/', () => getRosters())
@@ -12,4 +17,18 @@ export const rosterRoutes = new Elysia({ prefix: '/rosters' })
     params: t.Object({
       email: t.String(),
     }),
-  });
+  })
+  .post(
+    '/student/:email',
+    ({ params: { email }, body: { roomNumber, teacherName } }) =>
+      setStudentRoster(email, roomNumber, teacherName),
+    {
+      params: t.Object({
+        email: t.String(),
+      }),
+      body: t.Object({
+        roomNumber: t.String(),
+        teacherName: t.String(),
+      }),
+    }
+  );

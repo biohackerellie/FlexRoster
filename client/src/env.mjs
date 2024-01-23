@@ -11,6 +11,7 @@ export const env = createEnv({
     AZURE_AD_TENANT_ID: z.string().min(1),
   },
   client: {
+    NEXT_PUBLIC_SOCKET: z.string(),
     NEXT_PUBLIC_API_URL: z.string().url(),
     NEXT_PUBLIC_API_PORT: z.string(),
     NEXT_PUBLIC_HOST: z.string().url(),
@@ -22,6 +23,7 @@ export const env = createEnv({
   runtimeEnv: {
     DIRECT_URL: process.env.DIRECT_URL,
     DATABASE_URL: process.env.DATABASE_URL,
+    NEXT_PUBLIC_SOCKET: process.env.NEXT_PUBLIC_SOCKET,
     NEXT_PUBLIC_HOST: process.env.NEXT_PUBLIC_HOST,
     NEXT_PUBLIC_API_PORT: process.env.NEXT_PUBLIC_API_PORT,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,

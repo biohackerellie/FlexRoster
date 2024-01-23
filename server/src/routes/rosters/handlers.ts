@@ -54,3 +54,20 @@ export async function getStudentRoster(email: string) {
     throw new NotFoundError('No roster found with that email');
   }
 }
+
+export async function setStudentRoster(
+  email: string,
+  roomNumber: string,
+  teacherName: string
+) {
+  try {
+    await setClassRoomKV(
+      email,
+      `Room ${roomNumber} with ${teacherName}`,
+      86400
+    );
+    return new Response('OK', { status: 200 });
+  } catch (e) {
+    throw new NotFoundError('No roster found with that email');
+  }
+}
