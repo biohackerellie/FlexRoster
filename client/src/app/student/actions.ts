@@ -9,13 +9,14 @@ export async function setRoster(
   teacherName: string
 ) {
   try {
-    await fetch(`/api/rosters/student/:email`, {
+    const res = await fetch(`/api/rosters/student/:email`, {
       method: 'POST',
       params: { email: email },
       body: { roomNumber: roomNumber, teacherName: teacherName },
     });
     revalidatePath('/student', 'layout');
-    return 'Roster set successfully';
+    console.log(res.response);
+    return res.response;
   } catch (e) {
     throw new Error('No roster found with that email');
   }

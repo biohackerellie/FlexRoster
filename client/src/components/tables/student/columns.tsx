@@ -41,7 +41,8 @@ export const columns: ColumnDef<StudentTable>[] = [
         column.toggleVisibility(false);
         setTimeout(() => column.toggleVisibility(true), 36000);
         try {
-          await setRoster(email, roomNumber, teacherName);
+          const res = await setRoster(email, roomNumber, teacherName);
+          console.log(res);
         } catch (err) {
           console.error(err);
         }

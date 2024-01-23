@@ -72,7 +72,9 @@ export async function setStudentRoster(
       },
     });
     if (previousRequest) {
-      throw new NotFoundError('You have already requested a transfer today');
+      return new Response('You have already requested a transfer today', {
+        status: 200,
+      });
     }
     await setClassRoomKV(
       email,
