@@ -1,6 +1,12 @@
 import { NotFoundError } from 'elysia';
 import prisma from '@/lib/prisma';
-import { getClassRoomKV, setClassRoomKV } from '@/lib/utils';
+import {
+  getClassRoomKV,
+  setClassRoomKV,
+  getRequestKV,
+  setRequestKV,
+} from '@/lib/utils';
+import { get } from 'http';
 
 const today = new Date();
 
@@ -63,17 +69,13 @@ export async function setStudentRoster(
   teacherName: string
 ) {
   try {
-    const previousRequest = await prisma.transferLogs.findFirst({
-      where: {
-        studentEmail: email,
-        createdAt: {
-          gte: today,
-        },
-      },
-    });
+    console.log('step one');
+    const previousRequest = await getRequestKV(email);
+    console.log('previousRequest', previousRequest);
     if (previousRequest) {
+      console.log('You have already requested a transfer today');
       return new Response('You have already requested a transfer today', {
-        status: 200,
+        status: 301,
       });
     }
     await setClassRoomKV(
@@ -81,7 +83,8 @@ export async function setStudentRoster(
       `Room ${roomNumber} with ${teacherName}`,
       86400
     );
-    const newRequest = await prisma.transferLogs.create({
+    await setRequestKV(email);
+    await prisma.transferLogs.create({
       data: {
         studentEmail: email,
         roomNumber: roomNumber,

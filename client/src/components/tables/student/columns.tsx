@@ -3,7 +3,9 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { setRoster } from '@/app/student/actions';
 import { useState } from 'react';
-import { set } from 'zod';
+
+import { toast } from 'sonner';
+import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
 
 export type StudentTable = {
   roomNumber: string;
@@ -15,15 +17,45 @@ export type StudentTable = {
 export const columns: ColumnDef<StudentTable>[] = [
   {
     accessorKey: 'roomNumber',
-    header: 'Room Number',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Room Number
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: 'teacherName',
-    header: 'Teacher Name',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Teacher Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: 'available',
-    header: 'Available',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Available
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: 'email',
@@ -38,11 +70,18 @@ export const columns: ColumnDef<StudentTable>[] = [
         roomNumber: string,
         teacherName: string
       ) => {
-        column.toggleVisibility(false);
-        setTimeout(() => column.toggleVisibility(true), 36000);
         try {
           const res = await setRoster(email, roomNumber, teacherName);
-          console.log(res);
+          if (res === 200) {
+            toast.info('You have successfully transferred', {
+              position: 'top-center',
+            });
+          } else if (res === 301) {
+            toast.error('You have already transferred today', {
+              position: 'top-center',
+            });
+          }
+          setIsDisabled(true);
         } catch (err) {
           console.error(err);
         }

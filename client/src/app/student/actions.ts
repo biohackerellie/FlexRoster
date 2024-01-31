@@ -15,8 +15,8 @@ export async function setRoster(
       body: { roomNumber: roomNumber, teacherName: teacherName },
     });
     revalidatePath('/student', 'layout');
-    console.log(res.response);
-    return res.response;
+    console.log(res);
+    return res.status;
   } catch (e) {
     throw new Error('No roster found with that email');
   }

@@ -43,15 +43,21 @@ async function allData(email: string) {
 
 export default async function StudentDashboard() {
   const session = await auth();
+  const firstName = session?.user?.name!.split(' ')[0];
   const email = session?.user?.email!;
   const { availableClasses, currentClass } = await allData(email);
 
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-center text-4xl font-semibold pb-2">
-        {currentClass}
+        What's Kickin {firstName}!
       </h1>
-      <DataTable columns={columns} data={availableClasses} />
+      <p className="text-center text-2xl font-medium pb-2">
+        Your STEAM class today is {currentClass}
+      </p>
+      <div className="container max-w-4xl max-h-2xl p-4 justify-center flex flex-col">
+        <DataTable columns={columns} data={availableClasses} />
+      </div>
     </div>
   );
 }

@@ -3,6 +3,8 @@ import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import './globals.css';
 
+import { Toaster } from '@/components/ui/sonner';
+
 export const metadata: Metadata = {
   title: 'STEAM',
   description:
@@ -20,6 +22,7 @@ export default function RootLayout({
         className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );
