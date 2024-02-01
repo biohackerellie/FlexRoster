@@ -5,10 +5,10 @@ export async function setRoomStatus() {
   try {
     const data = await prisma.classrooms.updateMany({
       where: {
-        available: 'true',
+        available: true,
       },
       data: {
-        available: 'Available',
+        available: false,
       },
     });
     if (data) {

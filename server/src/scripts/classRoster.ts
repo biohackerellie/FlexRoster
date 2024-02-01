@@ -43,6 +43,7 @@ export async function RosterSync() {
       skipDuplicates: true,
     });
     console.log(`Completed. ${count} students added to roster.`);
+    process.exit(0);
   } catch (error: any) {
     throw new Error(error);
   }

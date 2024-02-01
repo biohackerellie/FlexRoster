@@ -96,3 +96,5 @@ export async function setStudentRoster(
     throw new NotFoundError('No roster found with that email');
   }
 }
+
+export async function getTeacherRoster(email: string) {}

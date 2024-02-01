@@ -8,51 +8,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
 
-  user User @relation(fields: [userId], references: [id], onUpdate: Cascade)
 
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  username      String?   @unique
-  email         String    @unique
-  emailVerified DateTime?
-  isActive      Boolean   @default(true)
-  image         String?
-  profile       Json?
-  role          Role      @default(student)
-
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime
-  classroomId String      @default("")
-  classroom   classrooms? @relation(fields: [classroomId], references: [id])
-  accounts    Account[]
-  sessions    Session[]
-}
 
 enum Role {
   admin
@@ -66,16 +23,15 @@ model classrooms {
   roomNumber   String
   teacherName  String
 	available    Boolean				@default(true)
-  users        User[]
   classRosters classRosters[]
-	
+
 }
 
 model classRosters {
   id           Int        @id @default(autoincrement())
   studentEmail String
   classroomId  String
-  classroom    classrooms @relation(fields: [classroomId], references: [id])
+  classroom    classrooms @relation(fields: [classroomId], references: [id], onDelete: Cascade)
 }
 
 model transferLogs {
@@ -88,12 +44,3 @@ model transferLogs {
 }
 
 
-model VerificationToken {
-  id                  String            @id @default(cuid())
-  email               String            @unique
-  isVerified          Boolean           @default(false)
-  token               String            @unique @default(cuid())
-  code                String            @default(dbgenerated("FLOOR(RANDOM()*1000000)")) // Postgres
-  expires             DateTime          @default(dbgenerated("CURRENT_DATE + INTERVAL '12 HOUR'")) // Postgres
-  createdAt           DateTime          @default(now())
-}

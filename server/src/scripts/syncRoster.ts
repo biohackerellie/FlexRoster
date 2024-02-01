@@ -16,7 +16,7 @@ async function syncRoster() {
     });
     console.log(data);
     const filteredClasses = data.classes.filter((cls) =>
-      cls.title.includes('STEAM-A')
+      cls.title.includes('STEAM-B')
     );
 
     const classTitles = filteredClasses.map((cls) => {
@@ -45,8 +45,9 @@ async function syncRoster() {
       skipDuplicates: true,
     });
     console.log('Completed');
+    process.exit(0);
   } catch (error) {
-    console.error(error);
+    throw new Error();
   }
 }
 
