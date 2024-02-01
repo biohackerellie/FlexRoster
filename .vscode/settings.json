@@ -22,11 +22,8 @@
   "editor.acceptSuggestionOnCommitCharacter": false,
 
   "editor.linkedEditing": true,
-
   "editor.mouseWheelZoom": true,
-
   "editor.fontLigatures": true,
-
   "[python]": {
     "editor.insertSpaces": true,
 
