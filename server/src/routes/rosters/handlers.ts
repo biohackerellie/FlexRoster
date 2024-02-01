@@ -97,4 +97,25 @@ export async function setStudentRoster(
   }
 }
 
-export async function getTeacherRoster(email: string) {}
+export async function getTeacherRoster(email: string) {
+  const [firstName, lastName] = email
+    .split('@')[0]
+    .split('_')
+    .map((name) => name.charAt(0).toUpperCase() + name.slice(1));
+
+  const formattedName = `${lastName}, ${firstName}`;
+  try {
+    return await prisma.classRosters.findMany({
+      where: {
+        classroom: {
+          teacherName: formattedName,
+        },
+      },
+      include: {
+        classroom: true,
+      },
+    });
+  } catch (e) {
+    throw new NotFoundError('No roster found with that email');
+  }
+}

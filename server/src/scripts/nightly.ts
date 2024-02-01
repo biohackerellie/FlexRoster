@@ -1,4 +1,9 @@
 import { $ } from 'bun';
+import { env } from '@/env';
+
+$.cwd(`${env.WORKING_DIR}/src/scripts`);
+
+await $`pwd`;
 
 await $`echo "Clearing database ..."`;
 

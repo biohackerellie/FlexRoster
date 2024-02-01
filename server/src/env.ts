@@ -5,6 +5,7 @@ const EnvSchema = object({
   HOST: string().default('localhost'),
   CLIENT_HOST: string().default('http://localhost:5173'),
   DATABASE_URL: string(),
+  WORKING_DIR: string().default(''),
 });
 
 export const env = EnvSchema.parse(process.env);

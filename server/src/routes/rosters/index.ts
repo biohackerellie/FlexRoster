@@ -4,6 +4,7 @@ import {
   getRostersById,
   getStudentRoster,
   setStudentRoster,
+  getTeacherRoster,
 } from './handlers';
 
 export const rosterRoutes = new Elysia({ prefix: '/rosters' })
@@ -31,5 +32,13 @@ export const rosterRoutes = new Elysia({ prefix: '/rosters' })
         teacherName: t.String(),
       }),
     }
+  )
+  .get(
+    '/teacher/roster/:email',
+    ({ params: { email } }) => getTeacherRoster(email),
+    {
+      params: t.Object({
+        email: t.String(),
+      }),
+    }
   );
-	
