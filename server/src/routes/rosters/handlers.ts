@@ -6,7 +6,6 @@ import {
   getRequestKV,
   setRequestKV,
 } from '@/lib/utils';
-import { get } from 'http';
 
 const today = new Date();
 
@@ -104,11 +103,14 @@ export async function getTeacherRoster(email: string) {
     .map((name) => name.charAt(0).toUpperCase() + name.slice(1));
 
   const formattedName = `${lastName}, ${firstName}`;
+  console.log('formattedName', formattedName);
   try {
     return await prisma.classRosters.findMany({
       where: {
         classroom: {
-          teacherName: formattedName,
+          teacherName: {
+            contains: formattedName,
+          },
         },
       },
       include: {

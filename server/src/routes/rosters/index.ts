@@ -19,6 +19,16 @@ export const rosterRoutes = new Elysia({ prefix: '/rosters' })
       email: t.String(),
     }),
   })
+  .get(
+    '/teacher/roster/:email',
+    ({ params: { email } }) => getTeacherRoster(email),
+    {
+      params: t.Object({
+        email: t.String(),
+      }),
+    }
+  )
+
   .post(
     '/student/:email',
     ({ params: { email }, body: { roomNumber, teacherName } }) =>
@@ -30,15 +40,6 @@ export const rosterRoutes = new Elysia({ prefix: '/rosters' })
       body: t.Object({
         roomNumber: t.String(),
         teacherName: t.String(),
-      }),
-    }
-  )
-  .get(
-    '/teacher/roster/:email',
-    ({ params: { email } }) => getTeacherRoster(email),
-    {
-      params: t.Object({
-        email: t.String(),
       }),
     }
   );

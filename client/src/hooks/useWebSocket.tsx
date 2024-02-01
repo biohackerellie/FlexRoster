@@ -7,14 +7,21 @@ interface SocketData {
   message: string;
 }
 
+// interface SocketHeaders {
+//   to: string;
+//   from: string;
+// }
+
 export default function useWebSocket() {
   const router = useRouter();
   const ws = useRef<WebSocket>();
+
   const [messages, setMessages] = useState<SocketData[]>([]);
 
   useEffect(() => {
     ws.current = new WebSocket(env.NEXT_PUBLIC_SOCKET);
-    ws.current.onopen = () => {
+
+    ws.current.onopen = (headers) => {
       console.log('socket opened');
     };
     ws.current.onclose = (ev) => {

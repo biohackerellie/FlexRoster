@@ -1,6 +1,7 @@
 import { StudentTable, columns, DataTable } from '@/components/tables/student';
 import fetch from '@/lib/eden';
 import { auth } from '@/lib/auth';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export const dynamic = 'force-dynamic';
 
