@@ -1,4 +1,4 @@
-import { edenFetch } from '@elysiajs/eden';
+import { edenFetch, edenTreaty } from '@elysiajs/eden';
 import type { App } from '../../../server/src/index.ts';
 import { env } from '../env.mjs';
 
@@ -7,3 +7,7 @@ const fetch = edenFetch<App>(
 );
 
 export default fetch;
+
+export const app = edenTreaty<App>(
+  `${env.NEXT_PUBLIC_API_URL}:${env.NEXT_PUBLIC_API_PORT}`
+);

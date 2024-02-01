@@ -1,7 +1,8 @@
 import { StudentTable, columns, DataTable } from '@/components/tables/student';
 import fetch from '@/lib/eden';
 import { auth } from '@/lib/auth';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import { app } from '@/lib/eden';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,6 +45,7 @@ async function allData(email: string) {
 
 export default async function StudentDashboard() {
   const session = await auth();
+  console.log(session);
   const firstName = session?.user?.name!.split(' ')[0];
   const email = session?.user?.email!;
   const { availableClasses, currentClass } = await allData(email);

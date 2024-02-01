@@ -1,7 +1,7 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
-import { setRoster } from '@/app/student/actions';
+import { setRoster } from '@/app/(auth)/student/actions';
 import { useState } from 'react';
 
 import { toast } from 'sonner';
