@@ -35,6 +35,7 @@ export async function getRostersById(id: string) {
 export async function getStudentRoster(email: string) {
   try {
     const classroom = await getClassRoomKV(email);
+    console.log('classroom', classroom);
     if (classroom) {
       return classroom;
     } else {

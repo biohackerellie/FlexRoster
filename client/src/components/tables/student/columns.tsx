@@ -1,7 +1,7 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
-import { setRoster } from '@/app/(auth)/student/actions';
+import { setRoster } from '@/app/student/actions';
 import { useState } from 'react';
 
 import { toast } from 'sonner';
@@ -72,18 +72,18 @@ export const columns: ColumnDef<StudentTable>[] = [
       ) => {
         try {
           const res = await setRoster(email, roomNumber, teacherName);
+          console.log(res);
           if (res === 200) {
             toast.info('You have successfully transferred', {
-              position: 'top-center',
-            });
-          } else if (res === 301) {
-            toast.error('You have already transferred today', {
               position: 'top-center',
             });
           }
           setIsDisabled(true);
         } catch (err) {
           console.error(err);
+          toast.error('You have already transferred today', {
+            position: 'top-center',
+          });
         }
       };
       return (

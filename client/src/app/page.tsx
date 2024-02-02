@@ -1,4 +1,3 @@
-import fetch from '@/lib/eden';
 import { env } from '@/env.mjs';
 import { auth } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
