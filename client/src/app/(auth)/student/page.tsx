@@ -1,8 +1,8 @@
 import { StudentTable, columns, DataTable } from '@/components/tables/student';
-import fetch from '@/lib/eden';
+
 import { auth } from '@/lib/auth';
 
-import { app } from '@/lib/eden';
+import { client, fetch } from '@/lib/eden';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,25 +14,22 @@ type rooms = {
 };
 
 async function getData(email: string): Promise<StudentTable[]> {
-  const data = await fetch('/api/classes/', {});
-  const mappedData: StudentTable[] = data.data.map((rooms: rooms) => {
-    return {
-      roomNumber: rooms.roomNumber,
-      teacherName: rooms.teacherName,
-      available: rooms.available,
-      email: email,
-    };
-  });
-
-  return mappedData;
+  const res = await client.api.classes[''].get();
+  if (res.error) {
+    console.log('something went wrong', res.error);
+    return [];
+  }
+  return res.data;
 }
 
 async function getClass(email: string): Promise<string> {
-  const data = await fetch('/api/rosters/student/:email', {
-    method: 'GET',
-    params: { email: email },
-  });
-  return data.data;
+  // const data = await fetch('/api/rosters/student/:email', {
+  //   method: 'GET',
+  //   params: { email: email },
+  // });
+
+  const res = await client.api.rosters.student[`${email}`].get();
+  return res.data;
 }
 
 async function allData(email: string) {

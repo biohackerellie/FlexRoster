@@ -6,8 +6,8 @@ const fetch = edenFetch<App>(
   `${env.NEXT_PUBLIC_API_URL}:${env.NEXT_PUBLIC_API_PORT}`
 );
 
-export default fetch;
-
-export const app = edenTreaty<App>(
+const client = edenTreaty<App>(
   `${env.NEXT_PUBLIC_API_URL}:${env.NEXT_PUBLIC_API_PORT}`
 );
+
+export { fetch, client };

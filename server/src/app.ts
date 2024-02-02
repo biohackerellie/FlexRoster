@@ -15,6 +15,8 @@ const app = new Elysia()
       credentials: true,
     })
   )
+  .state('version', 1)
+  .get('/', ({ store: { version } }) => version)
   .group('/api', (app) =>
     app.use(classRoutes).use(rosterRoutes).use(socketRoutes)
   );

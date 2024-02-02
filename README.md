@@ -1,1 +1,3 @@
-#Student Scheduler
+#Steam Scheduler
+
+![Steam](./steam.png)
