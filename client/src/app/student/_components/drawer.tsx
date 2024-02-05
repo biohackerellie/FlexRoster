@@ -1,7 +1,8 @@
 'use client';
-
+import { StudentTable } from '@/lib/types';
 import * as React from 'react';
 import { cn } from '@/lib/utils';
+import { DataTable } from '@/components/tables';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -21,15 +22,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { columns } from './columns';
 import useMediaQuery from '@/hooks/useMediaQuery';
 
-interface ClassListProps<TData> {
-  data: TData[];
+
+interface ClassListProps {
+  data: StudentTable[];
 }
 
-export function ClassListComponent<TData>({ data }: ClassListProps<TData>) {
+export function ClassListComponent({ data }: ClassListProps) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
   if (isDesktop) {
@@ -44,9 +45,12 @@ export function ClassListComponent<TData>({ data }: ClassListProps<TData>) {
           <DialogHeader>
             <DialogTitle>Request a different class</DialogTitle>
             <DialogDescription>
-              Please enter the class you would like to switch to today.
+              Please select the class you would like to attend today.
             </DialogDescription>
           </DialogHeader>
+          <div className="p-4">
+            <DataTable columns={columns} data={data} />
+          </div>
         </DialogContent>
       </Dialog>
     );
@@ -60,20 +64,18 @@ export function ClassListComponent<TData>({ data }: ClassListProps<TData>) {
   );
 }
 
-function ClassList<TData>({
-  data,
-  className,
-}: {
-  data: TData[];
-  className: React.ComponentProps<'div'>;
-}) {
-  return (
-    <div className={cn('flex flex-col gap-4', className)}>
-      {data.map((item, index) => (
-        <ClassListItem key={index} {...item} />
-      ))}
-    </div>
-  );
-}
-
-// todo: complete this
+// function ClassList<TData>({
+//   data,
+//   className,
+// }: {
+//   data: TData[];
+//   className: React.ComponentProps<'div'>;
+// }) {
+//   return (
+//     <div className={cn('flex flex-col gap-4', className)}>
+//       {data.map((item, index) => (
+//         <ClassListItem key={index} {...item} />
+//       ))}
+//     </div>
+//   );
+// }

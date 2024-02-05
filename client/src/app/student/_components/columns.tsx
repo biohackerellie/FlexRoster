@@ -6,13 +6,7 @@ import { useState } from 'react';
 
 import { toast } from 'sonner';
 import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
-
-export type StudentTable = {
-  roomNumber: string;
-  teacherName: string;
-  available: string;
-  email: string;
-};
+import { StudentTable } from '@/lib/types';
 
 export const columns: ColumnDef<StudentTable>[] = [
   {

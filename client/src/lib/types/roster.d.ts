@@ -55,3 +55,10 @@ export interface ClassUser {
   agents: [];
   grades: [string];
 }
+
+export type StudentTable = {
+  roomNumber: string;
+  teacherName: string;
+  available: string;
+  email: string;
+};
