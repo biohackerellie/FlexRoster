@@ -31,10 +31,20 @@ import { setRoster } from '@/app/student/actions';
 import { toast } from 'sonner';
 import { ArrowUpDown } from 'lucide-react';
 
+/**
+ * Class List Component
+ */
+
 interface ClassListProps {
   data: StudentTable[];
 }
 
+/**
+ * Primary JSX Component.
+ * @param data - StudentTable[] - Array of classes available to the student.
+ * @useMediaQuery hook to determine if the user is on a desktop or mobile device.
+ * Displays Table Component in a Dialog or Drawer based on the device.
+ */
 export function ClassListComponent({ data }: ClassListProps) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
@@ -90,6 +100,9 @@ export function ClassListComponent({ data }: ClassListProps) {
   );
 }
 
+/**
+ * Mobile Class List Component
+ */
 const ClassList = ({ data }: { data: StudentTable[] }) => {
   const rooms = data.map((room) => {
     return {
@@ -132,6 +145,9 @@ const ClassList = ({ data }: { data: StudentTable[] }) => {
   );
 };
 
+/**
+ * Table Columns
+ */
 const columns: ColumnDef<StudentTable>[] = [
   {
     accessorKey: 'roomNumber',
@@ -194,6 +210,12 @@ const columns: ColumnDef<StudentTable>[] = [
   },
 ];
 
+/**
+ * Handles the transfer of a student to a different class.
+ * @param email - string - The student's email.
+ * @param roomNumber - string - The room number of the class.
+ * @param teacherName - string - The teacher's name.
+ */
 async function handleTransfer({
   email,
   roomNumber,

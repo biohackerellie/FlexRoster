@@ -2,7 +2,7 @@ import { StudentTable } from '@/lib/types';
 import { auth } from '@/lib/auth';
 import { greetings } from '@/lib/constants';
 import { client } from '@/lib/eden';
-import { ClassListComponent } from './_components/drawer';
+import { ClassListComponent } from './_components/ClassList';
 
 type rooms = {
   roomNumber: string;
