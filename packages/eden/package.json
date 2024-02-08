@@ -1,0 +1,19 @@
+{
+	"name": "eden",
+	"version": "0.0.0",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+	"dependencies": {
+		"@elysiajs/eden": "^0.8.1",
+		"@t3-oss/env-nextjs": "^0.7.3",
+		"zod": "^3.22.4"
+	},
+	"devDependencies": {
+		"typescript": "latest",
+		"@types/react": "^18.2.51",
+		"@types/react-dom": "^18.2.18",
+		"eslint": "^8.56.0",
+		"server": "workspace:*",
+		"tsconfig": "workspace:*"
+	}
+}

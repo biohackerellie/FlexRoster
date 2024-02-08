@@ -1,7 +1,7 @@
 import { StudentTable } from '@/lib/types';
 import { auth } from '@/lib/auth';
 import { greetings } from '@/lib/constants';
-import { client } from '@/lib/eden';
+import { client } from 'eden';
 import { ClassListComponent } from './_components/ClassList';
 
 type rooms = {

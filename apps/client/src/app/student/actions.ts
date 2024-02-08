@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { client } from '@/lib/eden';
+import { client } from '../../../../../packages/eden/src/eden';
 
 export async function setRoster(
   email: string,

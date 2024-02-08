@@ -5,3 +5,7 @@ apps_Dep/*
 apps_Dep
 apps_Dep/
 apps_Dep/**/*
+.turbo
+build/**
+dist/**
+.next/**
