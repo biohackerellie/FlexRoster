@@ -1,8 +1,8 @@
-import { StudentTable, columns, DataTable } from '@/components/tables';
-
+import { StudentTable } from '@/lib/types';
 import { auth } from '@/lib/auth';
 import { greetings } from '@/lib/constants';
 import { client } from '@/lib/eden';
+import { ClassListComponent } from './_components/drawer';
 
 type rooms = {
   roomNumber: string;
@@ -68,7 +68,7 @@ export default async function StudentDashboard() {
         Your STEAM class today is {currentClass}
       </p>
       <div className="container max-w-4xl max-h-2xl p-4 justify-center flex flex-col">
-        <DataTable columns={columns} data={availableClasses} />
+        <ClassListComponent data={availableClasses} />
       </div>
     </div>
   );

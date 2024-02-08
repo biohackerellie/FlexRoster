@@ -1,19 +1,19 @@
 'use client';
 import { StudentTable } from '@/lib/types';
 import * as React from 'react';
-import { cn } from '@/lib/utils';
+
 import { DataTable } from '@/components/tables';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 import {
   Dialog,
   DialogContent,
@@ -21,10 +21,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
+  DialogClose,
 } from '@/components/ui/dialog';
-import { columns } from './columns';
-import useMediaQuery from '@/hooks/useMediaQuery';
 
+import useMediaQuery from '@/hooks/useMediaQuery';
+import { ColumnDef } from '@tanstack/react-table';
+import { setRoster } from '@/app/student/actions';
+import { toast } from 'sonner';
+import { ArrowUpDown } from 'lucide-react';
 
 interface ClassListProps {
   data: StudentTable[];
@@ -41,41 +46,175 @@ export function ClassListComponent({ data }: ClassListProps) {
             Change Class
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="flex flex-col max-h-[900px] max-w-[800px]">
           <DialogHeader>
             <DialogTitle>Request a different class</DialogTitle>
             <DialogDescription>
               Please select the class you would like to attend today.
             </DialogDescription>
           </DialogHeader>
-          <div className="p-4">
+          <div className="flex flex-col max-w-[750px] max-h-[700px]">
             <DataTable columns={columns} data={data} />
           </div>
+          <DialogFooter className="sm:justify-start">
+            <DialogClose asChild>
+              <Button type="button" variant="outline">
+                Close
+              </Button>
+            </DialogClose>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     );
   }
   return (
     <>
-      <Drawer>
-        <DrawerTrigger></DrawerTrigger>
+      <Drawer open={open} onOpenChange={setOpen}>
+        <DrawerTrigger asChild>
+          <Button variant="outline" size="lg">
+            Change Class
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Request a different class</DrawerTitle>
+            <DrawerDescription>
+              Please select the class you would like to attend today.
+            </DrawerDescription>
+          </DrawerHeader>
+          <Separator />
+          <ClassList data={data} />
+        </DrawerContent>
       </Drawer>
     </>
   );
 }
 
-// function ClassList<TData>({
-//   data,
-//   className,
-// }: {
-//   data: TData[];
-//   className: React.ComponentProps<'div'>;
-// }) {
-//   return (
-//     <div className={cn('flex flex-col gap-4', className)}>
-//       {data.map((item, index) => (
-//         <ClassListItem key={index} {...item} />
-//       ))}
-//     </div>
-//   );
-// }
+const ClassList = ({ data }: { data: StudentTable[] }) => {
+  const rooms = data.map((room) => {
+    return {
+      room: room.roomNumber,
+      teacher: room.teacherName,
+      available: room.available,
+      email: room.email,
+    };
+  });
+  return (
+    <ScrollArea className="h-72 w-screen">
+      <div className="p-4">
+        {rooms.map((room, index) => (
+          <div key={index} className="flex justify-between items-center">
+            <div>
+              <p className="text-lg font-semibold">{room.room}</p>
+              <p className="text-sm text-gray-500">{room.teacher}</p>
+            </div>
+            <div>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={!room.available}
+                onClick={() =>
+                  handleTransfer({
+                    email: room.email,
+                    roomNumber: room.room,
+                    teacherName: room.teacher,
+                  })
+                }
+              >
+                {room.available ? 'Join' : 'Unavailable'}
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
+      <ScrollBar orientation="vertical" />
+    </ScrollArea>
+  );
+};
+
+const columns: ColumnDef<StudentTable>[] = [
+  {
+    accessorKey: 'roomNumber',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Room Number
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: 'teacherName',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Teacher Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: 'available',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Available
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: 'email',
+    header: 'Transfer',
+    cell: ({ row, column }) => {
+      const email = row.getValue('email') as string;
+      const roomNumber = row.getValue('roomNumber') as string;
+      const teacherName = row.getValue('teacherName') as string;
+
+      return (
+        <Button
+          onClick={() => handleTransfer({ email, roomNumber, teacherName })}
+        >
+          Transfer
+        </Button>
+      );
+    },
+  },
+];
+
+async function handleTransfer({
+  email,
+  roomNumber,
+  teacherName,
+}: {
+  email: string;
+  roomNumber: string;
+  teacherName: string;
+}) {
+  try {
+    const res = await setRoster(email, roomNumber, teacherName);
+    console.log(res);
+    if (res === 200) {
+      toast.info('You have successfully transferred', {
+        position: 'top-center',
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    toast.error('You have already transferred today', {
+      position: 'top-center',
+    });
+  }
+}
