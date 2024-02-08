@@ -20,9 +20,6 @@ importers:
       '@auth/prisma-adapter':
         specifier: ^1.2.0
         version: 1.3.3(@prisma/client@5.9.1)
-      '@elysiajs/eden':
-        specifier: ^0.8.1
-        version: 0.8.1(elysia@0.8.16)
       '@nextui-org/react':
         specifier: ^2.2.9
         version: 2.2.9(@types/react@18.2.55)(framer-motion@11.0.3)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.1.20)(tailwindcss@3.4.1)
@@ -50,15 +47,6 @@ importers:
       '@t3-oss/env-nextjs':
         specifier: ^0.7.3
         version: 0.7.3(typescript@5.3.3)(zod@3.22.4)
-      '@tanstack/react-query':
-        specifier: ^5.18.1
-        version: 5.18.1(react@18.2.0)
-      '@tanstack/react-query-devtools':
-        specifier: ^5.18.1
-        version: 5.18.1(@tanstack/react-query@5.18.1)(react@18.2.0)
-      '@tanstack/react-query-next-experimental':
-        specifier: ^5.18.1
-        version: 5.18.1(@tanstack/react-query@5.18.1)(next@14.1.0)(react@18.2.0)
       '@tanstack/react-table':
         specifier: ^8.11.8
         version: 8.11.8(react-dom@18.2.0)(react@18.2.0)
@@ -87,7 +75,7 @@ importers:
         specifier: 14.1.0
         version: 14.1.0(react-dom@18.2.0)(react@18.2.0)
       next-auth:
-        specifier: beta
+        specifier: 5.0.0-beta.9
         version: 5.0.0-beta.9(next@14.1.0)(react@18.2.0)
       next-themes:
         specifier: ^0.2.1
@@ -138,6 +126,9 @@ importers:
       tailwindcss:
         specifier: ^3.4.1
         version: 3.4.1
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
       typescript:
         specifier: latest
         version: 5.3.3
@@ -218,6 +209,9 @@ importers:
       eslint:
         specifier: ^8.56.0
         version: 8.56.0
+      eslint-config-custom:
+        specifier: workspace:*
+        version: link:../eslint-config-custom
       server:
         specifier: workspace:*
         version: link:../../apps/server
@@ -3423,46 +3417,6 @@ packages:
       '@t3-oss/env-core': 0.7.3(typescript@5.3.3)(zod@3.22.4)
       typescript: 5.3.3
       zod: 3.22.4
-    dev: false
-
-  /@tanstack/query-core@5.18.1:
-    resolution: {integrity: sha512-fYhrG7bHgSNbnkIJF2R4VUXb4lF7EBiQjKkDc5wOlB7usdQOIN4LxxHpDxyE3qjqIst1WBGvDtL48T0sHJGKCw==}
-    dev: false
-
-  /@tanstack/query-devtools@5.18.1:
-    resolution: {integrity: sha512-U8bDnDGuwdVMT4ndegPTcjOHOmX/UOjjB7o7UalRIq3DMHLRf8Ufh4+xoAvk3LNK5GBmUBfFSw4osYe5l9n7Lw==}
-    dev: false
-
-  /@tanstack/react-query-devtools@5.18.1(@tanstack/react-query@5.18.1)(react@18.2.0):
-    resolution: {integrity: sha512-IrzAsodabSkEVBP0DHkuzcmqKFZ0EgG9ocuD/fRIrjYmbqqdHxzNmp2WmAZlkVo7hamA0ZdzvL5sjo1koFzjHA==}
-    peerDependencies:
-      '@tanstack/react-query': ^5.18.1
-      react: ^18.0.0
-    dependencies:
-      '@tanstack/query-devtools': 5.18.1
-      '@tanstack/react-query': 5.18.1(react@18.2.0)
-      react: 18.2.0
-    dev: false
-
-  /@tanstack/react-query-next-experimental@5.18.1(@tanstack/react-query@5.18.1)(next@14.1.0)(react@18.2.0):
-    resolution: {integrity: sha512-vQj0nKwt/3gaCOIgU3Nzo18L5HbvNX3LuNBq8PTwjrwx9wWdCthNZ1TbaB0uQk3lPs/Yt/7TJ8h6EnmZcgeEag==}
-    peerDependencies:
-      '@tanstack/react-query': ^5.18.1
-      next: ^13 || ^14
-      react: ^18.0.0
-    dependencies:
-      '@tanstack/react-query': 5.18.1(react@18.2.0)
-      next: 14.1.0(react-dom@18.2.0)(react@18.2.0)
-      react: 18.2.0
-    dev: false
-
-  /@tanstack/react-query@5.18.1(react@18.2.0):
-    resolution: {integrity: sha512-PdI07BbsahZ+04PxSuDQsQvBWe008eWFk/YYWzt8fvzt2sALUM0TpAJa/DFpqa7+SSo7j1EQR6Jx6znXNHyaXw==}
-    peerDependencies:
-      react: ^18.0.0
-    dependencies:
-      '@tanstack/query-core': 5.18.1
-      react: 18.2.0
     dev: false
 
   /@tanstack/react-table@8.11.8(react-dom@18.2.0)(react@18.2.0):

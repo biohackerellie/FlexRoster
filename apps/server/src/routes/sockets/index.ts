@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import prisma from '@/lib/prisma';
+import prisma from '~/lib/prisma';
 
 export const socketRoutes = new Elysia({
   prefix: '/sockets',

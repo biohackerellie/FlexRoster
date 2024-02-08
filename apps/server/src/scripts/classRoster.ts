@@ -2,10 +2,10 @@
  * Retrieve rosters for each class and insert into database
  */
 
-import prisma from '@/lib/prisma';
-import { fetcher } from '@/lib/utils';
-import { RosterResponse } from '@/lib/types';
-import { icAuth } from '@/lib/utils';
+import prisma from '~/lib/prisma';
+import { fetcher } from '~/lib/utils';
+import { RosterResponse } from '~/lib/types';
+import { icAuth } from '~/lib/utils';
 
 export async function RosterSync() {
   try {

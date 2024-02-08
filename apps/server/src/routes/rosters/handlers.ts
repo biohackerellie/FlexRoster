@@ -1,11 +1,11 @@
 import { NotFoundError } from 'elysia';
-import prisma from '@/lib/prisma';
+import prisma from '~/lib/prisma';
 import {
   getClassRoomKV,
   setClassRoomKV,
   getRequestKV,
   setRequestKV,
-} from '@/lib/utils';
+} from '~/lib/utils';
 
 const today = new Date();
 

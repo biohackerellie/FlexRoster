@@ -59,6 +59,6 @@ export interface ClassUser {
 export type StudentTable = {
   roomNumber: string;
   teacherName: string;
-  available: string;
+  available: boolean;
   email: string;
 };

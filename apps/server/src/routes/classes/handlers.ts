@@ -1,5 +1,5 @@
 import { NotFoundError } from 'elysia';
-import prisma from '@/lib/prisma';
+import prisma from '~/lib/prisma';
 
 export async function getClasses() {
   console.log('hi');

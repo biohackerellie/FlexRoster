@@ -1,11 +1,9 @@
-
 {
-
   "compilerOptions": {
-    "lib": ["ESNext"],
+    "lib": ["DOM"],
     "module": "esnext",
     "target": "esnext",
-    "moduleResolution": "bundler",
+    
     "moduleDetection": "force",
     "allowImportingTsExtensions": true,
     "noEmit": true,
@@ -14,12 +12,14 @@
     "downlevelIteration": true,
     "skipLibCheck": true,
     "jsx": "react-jsx",
+		"moduleResolution": "node", 
     "allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,                               
     "allowJs": true,
 		"baseUrl": ".",
 		"paths": {
-			"@/*": [
+			"~/*": [
 				"./src/*"
 			]
 		},

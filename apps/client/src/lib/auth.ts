@@ -2,7 +2,7 @@ import NextAuth from 'next-auth';
 import azureAd from 'next-auth/providers/azure-ad';
 import { env } from '../env.mjs';
 // import prisma from 'shared/prisma';
-import { PrismaAdapter } from '@auth/prisma-adapter';
+import type { NextAuthConfig } from 'next-auth';
 
 declare module 'next-auth' {
   interface Session {
@@ -15,6 +15,11 @@ export const {
   auth,
   signIn,
   signOut,
+}: {
+  handlers: { GET: any; POST: any };
+  auth: any;
+  signIn: any;
+  signOut: any;
 } = NextAuth({
   secret: env.NEXTAUTH_SECRET,
   // adapter: PrismaAdapter(prisma),
@@ -52,8 +57,9 @@ export const {
       }
       return token;
     },
-    // @ts-expect-error
+
     async session({ session, token }) {
+      // @ts-expect-error
       session.roles = token.roles[0];
       return session;
     },
