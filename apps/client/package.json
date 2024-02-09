@@ -3,14 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+		"clean": "rm -rf .turbo node_modules",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    
-
     "@nextui-org/react": "^2.2.9",
     "@prisma/client": "latest",
     "@radix-ui/react-dialog": "^1.0.5",
@@ -21,6 +20,7 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@t3-oss/env-nextjs": "^0.7.3",
     "@tanstack/react-table": "^8.11.8",
+    "axios": "^1.6.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "eden": "workspace:*",

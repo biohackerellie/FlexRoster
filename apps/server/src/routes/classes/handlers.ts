@@ -7,7 +7,7 @@ export async function getClasses() {
     return await prisma.classrooms.findMany();
   } catch (e) {
     console.log(e);
-    throw new NotFoundError('No classes found', e);
+    throw new NotFoundError('No classes found');
   }
 }
 

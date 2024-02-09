@@ -3,6 +3,9 @@
 	"version": "0.0.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+	"scripts": {
+		"clean": "rm -rf .turbo node_modules"
+	},
 	"dependencies": {
 		"@elysiajs/eden": "^0.8.1",
 		"@t3-oss/env-nextjs": "^0.7.3",
