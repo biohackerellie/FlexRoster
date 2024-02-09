@@ -11,9 +11,7 @@
     "prisma:migrate": "bunx prisma migrate dev --schema ../shared/prisma/schema.prisma"
   },
   "dependencies": {
-    "@auth/core": "^0.20.0",
-    "@auth/prisma-adapter": "^1.0.14",
-    "@azure/msal-node": "^2.6.1",
+
     "@bogeychan/elysia-oauth2": "^0.0.19",
     "@elysiajs/cors": "^0.8.0",
     "@elysiajs/jwt": "^0.8.0",

@@ -1,7 +1,7 @@
 import { auth } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
-export default auth(function middleware(request: any) {
+export default auth(function middleware(request) {
   const response = NextResponse.next();
 
   const token = request.auth;

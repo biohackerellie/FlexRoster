@@ -1,8 +1,7 @@
 import NextAuth from 'next-auth';
+import 'auth/core/types';
 import azureAd from 'next-auth/providers/azure-ad';
-import { env } from '../env.mjs';
-// import prisma from 'shared/prisma';
-import type { NextAuthConfig } from 'next-auth';
+import { env } from '../env';
 
 declare module 'next-auth' {
   interface Session {
@@ -15,14 +14,9 @@ export const {
   auth,
   signIn,
   signOut,
-}: {
-  handlers: { GET: any; POST: any };
-  auth: any;
-  signIn: any;
-  signOut: any;
 } = NextAuth({
   secret: env.NEXTAUTH_SECRET,
-  // adapter: PrismaAdapter(prisma),
+
   providers: [
     azureAd({
       clientId: env.AZURE_AD_CLIENT_ID,
@@ -50,6 +44,9 @@ export const {
     async jwt({ token, account }) {
       if (account?.id_token) {
         const [header, payload, sig] = account.id_token.split('.');
+        if (!payload) {
+          throw new Error('No payload in id_token');
+        }
         const idToken = JSON.parse(
           Buffer.from(payload, 'base64').toString('utf8')
         );
@@ -66,7 +63,7 @@ export const {
   },
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 5 * 24 * 60 * 60, // 5 days
     updateAge: 24 * 60 * 60, // 24 hours
   },
 });

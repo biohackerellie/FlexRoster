@@ -1,4 +1,4 @@
-import { env } from '@/env.mjs';
+import { env } from '@/env.js';
 import { auth } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';

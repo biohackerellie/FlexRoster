@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { env } from '@/env.mjs';
+import { env } from '@/env.js';
 import { useRouter } from 'next/navigation';
 
 interface SocketData {
