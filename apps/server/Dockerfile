@@ -6,8 +6,9 @@ RUN apt update
 WORKDIR /app
 
 COPY ./apps/server/ .
+COPY ./packages/db/prisma/ ./prisma
 COPY ./apps/server/.env .env
-RUN bun install
+RUN bun install --production
 RUN bunx prisma generate
 RUN bun build ./src/index.ts --outdir ./dist --target bun
 
