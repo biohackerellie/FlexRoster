@@ -12,6 +12,9 @@
 		},
 		"clean": {
 			"cache": false
+		},
+		"db":{
+			"cache": false
 		}
 		
 	}

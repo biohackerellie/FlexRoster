@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import 'auth/core/types';
+
 import azureAd from 'next-auth/providers/azure-ad';
 import { env } from '../env';
 

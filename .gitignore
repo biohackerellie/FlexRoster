@@ -12,3 +12,7 @@ dist/**
 out/**
 generated/**
 apps/server/src/generated/**
+**/generated/**
+**/generated
+**/dist
+dist/**

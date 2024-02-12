@@ -29,7 +29,10 @@ async function getData(email: string) {
 }
 
 async function getClass(email: string) {
-  const res = await client.api.rosters.student[`${email}`].get();
+  const res = (await client.api.rosters.student[`${email}`]?.get()) ?? {
+    error: null,
+    data: [],
+  };
   if (res.error) {
     console.log('something went wrong', res.error);
     return [];

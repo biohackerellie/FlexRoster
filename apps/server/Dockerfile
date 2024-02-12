@@ -1,34 +1,24 @@
-FROM node:20-alpine AS installer
+FROM imbios/bun-node:latest-21-slim AS base
 
-
-RUN apk add --no-cache libc6-compat 
-RUN apk update 
+FROM base AS deps
+RUN apt update 
 
 WORKDIR /app
-RUN yarn global add turbo
-COPY . . 
-RUN npx turbo prune server --docker
 
-
-
-# COPY --from=builder /app/out/json/ .
-# COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-# RUN yarn global add pnpm && pnpm i --frozen-lockfile
-
-
-
-
-FROM oven/bun
-WORKDIR /app
-RUN bun install -g openssl
-COPY --from=installer /app/out/full/apps/server .
-
+COPY ./apps/server/ .
+COPY ./apps/server/.env .env
 RUN bun install
 RUN bunx prisma generate
-ENV NODE_ENV=production
-CMD ["bun", "src/index.ts"]
+RUN bun build ./src/index.ts --outdir ./dist --target bun
 
-EXPOSE 3030
 
+
+FROM base AS runner
+WORKDIR /app
+COPY --from=deps /app/dist ./dist
+COPY --from=deps /app/.env .env
+
+
+CMD ["bun", "run", "./dist/index.js"]
 
 
