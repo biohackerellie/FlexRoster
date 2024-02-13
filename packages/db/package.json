@@ -27,6 +27,7 @@
 		"@types/node": "^20.11.17",
 		"dotenv-cli": "^7.3.0",
 		"drizzle-kit": "^0.20.14",
+		"pg": "^8.11.3",
 		"tsx": "^4.7.1",
 		"typescript": "^5.3.3"
 	}

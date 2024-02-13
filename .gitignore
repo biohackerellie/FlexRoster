@@ -16,3 +16,4 @@ apps/server/src/generated/**
 **/generated
 **/dist
 dist/**
+tmp
