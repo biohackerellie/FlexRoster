@@ -1,0 +1,35 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1707772794986,
+      "tag": "0000_shocking_taskmaster",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1707841070626,
+      "tag": "0001_lush_chimera",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1707843231988,
+      "tag": "0002_nebulous_white_queen",
+      "breakpoints": true
+    },
+
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1707843732628,
+      "tag": "0004_public_the_initiative",
+      "breakpoints": true
+    }
+  ]
+}

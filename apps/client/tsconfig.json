@@ -1,7 +1,7 @@
 {
-	"extends": "tsconfig/base.json",
+	"extends": "@local/tsconfig/base.json",
 	"compilerOptions": {
-		"tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+		"baseUrl": ".",
 		"paths": {
 			"@/*": [
 				"./src/*"
@@ -15,6 +15,7 @@
         "name": "next"
       }
     ],
+		"tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
 	},
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": [

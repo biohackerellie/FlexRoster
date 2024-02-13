@@ -1,7 +1,7 @@
 import { StudentTable } from '@/lib/types';
-import { auth } from '@/lib/auth';
+import { auth } from '@local/auth';
 import { greetings } from '@/lib/constants';
-import { client } from 'eden';
+import { client } from '@local/eden';
 import { ClassListComponent } from './_components/ClassList';
 
 type rooms = {
@@ -37,7 +37,6 @@ async function getClass(email: string) {
     console.log('something went wrong', res.error);
     return [];
   }
-
   return res.data;
 }
 

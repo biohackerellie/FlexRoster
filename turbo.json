@@ -2,6 +2,9 @@
 	"$schema": "https://turbo.build/schema.json",
 	"globalDependencies": ["**/.env"],
 	"pipeline": {
+		"topo": {
+			"dependsOn": ["^topo"]
+		},
 		"build": {
 			"dependsOn": ["^build"],
 			"outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
@@ -15,7 +18,23 @@
 		},
 		"db":{
 			"cache": false
-		}
+		},
+		"typecheck": {
+      "dependsOn": ["^topo"],
+      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
+    }
 		
-	}
+	},
+	"globalEnv": [
+		"DIRECT_URL",
+		"DATABASE_URL",
+		"NEXT_PUBLIC_HOST",
+		"NEXT_PUBLIC_PORT",
+		"NEXT_PUBLIC_API_URL",
+		"NEXT_PUBLIC_API_PORT",
+		"NEXTAUTH_SECRET",
+		"AZURE_AD_CLIENT_ID",
+		"AZURE_AD_CLIENT_SECRET",
+		"AZURE_AD_TENANT_ID"
+	]
 }

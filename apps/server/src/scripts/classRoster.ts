@@ -2,15 +2,15 @@
  * Retrieve rosters for each class and insert into database
  */
 
-import prisma from '~/lib/prisma';
 import { fetcher } from '~/lib/utils';
 import { RosterResponse } from '~/lib/types';
 import { icAuth } from '~/lib/utils';
+import { db, schema, eq } from '@local/db';
 
 export async function RosterSync() {
   try {
     const token = await icAuth();
-    const classes = await prisma.classrooms.findMany();
+    const classes = await db.query.classrooms.findMany({});
     const rosterData = [];
 
     let count = 0;
@@ -38,10 +38,7 @@ export async function RosterSync() {
         count++;
       }
     }
-    await prisma.classRosters.createMany({
-      data: rosterData,
-      skipDuplicates: true,
-    });
+    await db.insert(schema.classRosters).values(rosterData);
     console.log(`Completed. ${count} students added to roster.`);
     process.exit(0);
   } catch (error: any) {

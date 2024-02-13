@@ -1,6 +1,7 @@
 import { fetcher, icAuth } from '../lib/utils';
 import { ClassResponse } from '~/lib/types';
-import prisma from '~/lib/prisma';
+
+import { db, schema, eq } from '@local/db';
 
 async function syncRoster() {
   try {
@@ -27,22 +28,17 @@ async function syncRoster() {
       };
     });
 
-    const classroomsToCreate = [];
     let count = 0;
-
-    for (const room of classTitles) {
-      classroomsToCreate.push({
-        id: room.id,
-        roomNumber: room.roomNumber,
-        teacherName: room.teacher,
-      });
-      count++;
-      console.log(count);
-    }
-
-    await prisma.classrooms.createMany({
-      data: classroomsToCreate,
-      skipDuplicates: true,
+    await db.transaction(async (tx) => {
+      for (const room of classTitles) {
+        await tx.insert(schema.classrooms).values({
+          id: room.id,
+          roomNumber: room.roomNumber,
+          teacherName: room.teacher,
+        });
+        count++;
+        console.log(count);
+      }
     });
     console.log('Completed');
     process.exit(0);

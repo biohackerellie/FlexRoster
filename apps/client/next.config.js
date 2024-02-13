@@ -1,14 +1,26 @@
+import { fileURLToPath } from 'url';
+import _jiti from 'jiti';
+
+const jiti = _jiti(fileURLToPath(import.meta.url));
+jiti('./src/env');
+jiti('@local/auth/env');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  typescript: {
-    ignoreBuildErrors: true,
+  reactStrictMode: true,
+  transpilePackages: ['@local/eden', '@local/db', '@local/auth'],
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
+  webpack: (config, { webpack }) => {
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^pg-native$|^cloudflare:sockets$/,
+      })
+    );
+
+    return config;
   },
-  transpilePackages: ['eden'],
-  // experimental: {
-  //   // this includes files from the monorepo base two directories up
-  //   outputFileTracingRoot: path.join(__dirname, '../../'),
-  // },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

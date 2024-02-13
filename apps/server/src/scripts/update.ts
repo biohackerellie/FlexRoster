@@ -1,21 +1,17 @@
-import prisma from '~/lib/prisma';
+import { db, schema, eq } from '@local/db';
 
 export async function setRoomStatus() {
   console.log('Setting room status to available');
   try {
-    const data = await prisma.classrooms.updateMany({
-      where: {
-        available: true,
-      },
-      data: {
-        available: false,
-      },
+    await db.transaction(async (tx) => {
+      await tx
+        .update(schema.classrooms)
+        .set({
+          available: true,
+        })
+        .where(eq(schema.classrooms.available, false));
     });
-    if (data) {
-      console.log('Room status updated');
-      prisma.$disconnect();
-      return 'completed';
-    }
+    process.exit(0);
   } catch (error: any) {
     console.log(error);
     throw new Error(error);

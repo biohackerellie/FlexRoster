@@ -1,15 +1,14 @@
-import prisma from '~/lib/prisma';
-import { $ } from 'bun';
+import { db, schema, eq } from '@local/db';
 
 console.info('Clearing database ...');
-const classroomsToDelete = await prisma.classrooms.findMany({});
+const classroomsToDelete = await db.query.classrooms.findMany({});
 console.info(`Deleting ${classroomsToDelete.length} classrooms ...`);
 let count = 0;
-for (const i of classroomsToDelete) {
-  await prisma.classrooms.delete({
-    where: { id: i.id },
-  });
-  count++;
-  console.info(`Deleted ${count} classrooms`);
-}
+await db.transaction(async (tx) => {
+  for (const i of classroomsToDelete) {
+    await tx.delete(schema.classrooms).where(eq(schema.classrooms.id, i.id));
+    count++;
+    console.info(`Deleted ${count} classrooms`);
+  }
+});
 console.info('Database cleared');

@@ -1,5 +1,6 @@
 import { Elysia, t } from 'elysia';
-import prisma from '~/lib/prisma';
+
+import { db, schema } from '@local/db';
 
 export const socketRoutes = new Elysia({
   prefix: '/sockets',
@@ -16,13 +17,10 @@ export const socketRoutes = new Elysia({
     },
     async message(ws, message) {
       const id = ws.id;
-
-      await prisma.transferLogs.create({
-        data: {
-          studentEmail: message as string,
-          roomNumber: message as string,
-          teacherName: message as string,
-        },
+      await db.insert(schema.transferLogs).values({
+        studentEmail: message as string,
+        roomNumber: message as string,
+        teacherName: message as string,
       });
       ws.publish(ws.data.headers.to, message);
       console.log('Received message: ' + message);

@@ -2,14 +2,21 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+	"type": "module",
   "scripts": {
-		"clean": "rm -rf .turbo node_modules",
-    "dev": "next dev",
+    "clean": "git clean -xdf .next .turbo node_modules",
+    "dev": "pnpm with-env next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+		"with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@local/auth": "workspace:*",
+		"dotenv-cli": "^7.3.0",
+    "@local/db": "workspace:*",
+    "@local/eden": "workspace:*",
     "@nextui-org/react": "^2.2.9",
     "@prisma/client": "latest",
     "@radix-ui/react-dialog": "^1.0.5",
@@ -23,7 +30,6 @@
     "axios": "^1.6.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "eden": "workspace:*",
     "elysia": "^0.8.15",
     "framer-motion": "^11.0.3",
     "geist": "^1.2.1",
@@ -40,15 +46,16 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@local/eslint-config-custom": "workspace:*",
+    "@local/tsconfig": "workspace:*",
     "@types/node": "^20.11.16",
     "@types/react": "^18.2.51",
     "@types/react-dom": "^18.2.18",
     "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
-    "eslint-config-custom": "workspace:*",
+    "jiti": "^1.21.0",
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1",
-    "tsconfig": "workspace:*",
     "typescript": "latest"
   }
 }

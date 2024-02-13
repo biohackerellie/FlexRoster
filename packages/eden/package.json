@@ -1,5 +1,5 @@
 {
-	"name": "eden",
+	"name": "@local/eden",
 	"version": "0.0.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
@@ -15,9 +15,9 @@
 		"typescript": "latest",
 		"@types/react": "^18.2.51",
 		"@types/react-dom": "^18.2.18",
-		"eslint-config-custom": "workspace:*",
+		"@local/eslint-config-custom": "workspace:*",
 		"eslint": "^8.56.0",
 		"server": "workspace:*",
-		"tsconfig": "workspace:*"
+		"@local/tsconfig": "workspace:*"
 	}
 }

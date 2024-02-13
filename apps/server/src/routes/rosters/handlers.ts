@@ -1,17 +1,18 @@
 import { NotFoundError } from 'elysia';
-import prisma from '~/lib/prisma';
+
 import {
   getClassRoomKV,
   setClassRoomKV,
   getRequestKV,
   setRequestKV,
 } from '~/lib/utils';
+import { db, schema, eq } from '@local/db';
 
 const today = new Date();
 
 export async function getRosters() {
   try {
-    return await prisma.classRosters.findMany();
+    return await db.query.classRosters.findMany({});
   } catch (e) {
     throw new NotFoundError('No rosters found');
   }
@@ -19,11 +20,9 @@ export async function getRosters() {
 
 export async function getRostersById(id: string) {
   try {
-    return await prisma.classRosters.findMany({
-      where: {
-        classroomId: id,
-      },
-      include: {
+    return await db.query.classRosters.findMany({
+      where: eq(schema.classRosters.classroomId, id),
+      with: {
         classroom: true,
       },
     });
@@ -39,11 +38,9 @@ export async function getStudentRoster(email: string) {
     if (classroom) {
       return classroom;
     } else {
-      const roster = await prisma.classRosters.findFirst({
-        where: {
-          studentEmail: email,
-        },
-        include: {
+      const roster = await db.query.classRosters.findFirst({
+        where: eq(schema.classRosters.studentEmail, email),
+        with: {
           classroom: true,
         },
       });
@@ -84,12 +81,10 @@ export async function setStudentRoster(
       86400
     );
     await setRequestKV(email);
-    await prisma.transferLogs.create({
-      data: {
-        studentEmail: email,
-        roomNumber: roomNumber,
-        teacherName: teacherName,
-      },
+    await db.insert(schema.transferLogs).values({
+      studentEmail: email,
+      roomNumber: roomNumber,
+      teacherName: teacherName,
     });
     return new Response('OK', { status: 200 });
   } catch (e) {
@@ -98,23 +93,16 @@ export async function setStudentRoster(
 }
 
 export async function getTeacherRoster(email: string) {
-  const [firstName, lastName] = email
-    .split('@')[0]
+  const [firstName, lastName] = (email.split('@')[0] ?? '')
     .split('_')
     .map((name) => name.charAt(0).toUpperCase() + name.slice(1));
 
   const formattedName = `${lastName}, ${firstName}`;
   console.log('formattedName', formattedName);
   try {
-    return await prisma.classRosters.findMany({
-      where: {
-        classroom: {
-          teacherName: {
-            contains: formattedName,
-          },
-        },
-      },
-      include: {
+    return await db.query.classRosters.findMany({
+      where: eq(schema.classrooms.teacherName, formattedName),
+      with: {
         classroom: true,
       },
     });

@@ -1,17 +1,33 @@
 {
-	"name": "db",
+	"name": "@local/db",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"clean": "rm -rf .turbo node_modules",
+		"push": "pnpm with-env drizzle-kit push:pg",
+		"studio": "pnpm with-env drizzle-kit studio",
+		"gen": "pnpm drizzle-kit generate:pg",
+		"migrate": "pnpm with-env tsx src/migrate.ts",
+		"typecheck": "tsc --noEmit",
+		"with-env": "dotenv -e ../../.env --"
+	},
 	"dependencies": {
+		"@auth/core": "^0.26.3",
+		"@t3-oss/env-nextjs": "^0.7.3",
 		"drizzle-orm": "^0.29.3",
-		"postgres": "^3.4.3"
+		"postgres": "^3.4.3",
+		"zod": "^3.22.4"
 	},
 	"devDependencies": {
+		"@local/tsconfig": "workspace:*",
 		"@types/node": "^20.11.17",
 		"dotenv-cli": "^7.3.0",
 		"drizzle-kit": "^0.20.14",
-		"typescript": "^5.3.3",
-		"tsconfig": "workspace:*"
+		"tsx": "^4.7.1",
+		"typescript": "^5.3.3"
 	}
 }

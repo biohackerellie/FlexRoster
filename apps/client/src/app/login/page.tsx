@@ -1,4 +1,4 @@
-import { signIn } from '@/lib/auth';
+import { signIn } from '@local/auth';
 import { Button } from '@/components/ui/button';
 
 export default function SignIn() {

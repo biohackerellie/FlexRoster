@@ -18,9 +18,13 @@
   "editor.tabSize": 2,
 
   "editor.wordWrap": "on",
-
+	"typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.acceptSuggestionOnCommitCharacter": false,
-
+  "typescript.preferences.autoImportFileExcludePatterns": [
+    "next/router.d.ts",
+    "next/dist/client/router.d.ts"
+  ],
+	"typescript.tsdk": "node_modules/typescript/lib",
   "editor.linkedEditing": true,
   "editor.mouseWheelZoom": true,
   "editor.fontLigatures": true,
@@ -30,6 +34,7 @@
     "editor.tabSize": 4
 	},
 	"cSpell.words": [
-		"elysia"
+		"elysia",
+		"jiti"
 	]
 }

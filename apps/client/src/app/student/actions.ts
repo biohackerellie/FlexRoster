@@ -1,13 +1,16 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { client } from '../../../../../packages/eden/src/eden';
+import { client } from '@local/eden';
 
 export async function setRoster(
   email: string,
   roomNumber: string,
   teacherName: string
 ) {
+  if (!email) {
+    return;
+  }
   const res = await client.api.rosters.student[`${email}`].post({
     roomNumber,
     teacherName,

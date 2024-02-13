@@ -11,10 +11,17 @@
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-	  "clean": "rm -rf .turbo node_modules bun.lockb"
+	  "clean": "git clean -xdf node_modules",
+		"db:push": "pnpm -F db push",
+    "db:studio": "pnpm -F db studio",
+		"db:migrate": "pnpm -F db migrate",
+		"db:gen": "pnpm -F db gen",
+		"typecheck": "turbo typecheck"
   },
 	"devDependencies": {
-		"turbo": "^1.12.3"
+		"turbo": "^1.12.3",
+		"typescript": "^5.3.3",
+		"prettier": "^3.2.5"
 	},
-	"packageManager": "pnpm@8.15.0"
+	"packageManager": "pnpm@8.15.2"
 }

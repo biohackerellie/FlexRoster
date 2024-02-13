@@ -15,4 +15,3 @@ build
 
 dist
 
-packages/db/src/schema/schema.ts

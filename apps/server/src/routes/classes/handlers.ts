@@ -1,10 +1,11 @@
 import { NotFoundError } from 'elysia';
-import prisma from '~/lib/prisma';
+
+import { db, schema, eq } from '@local/db';
 
 export async function getClasses() {
   console.log('hi');
   try {
-    return await prisma.classrooms.findMany();
+    return await db.query.classrooms.findMany({});
   } catch (e) {
     console.log(e);
     throw new NotFoundError('No classes found');
@@ -13,10 +14,8 @@ export async function getClasses() {
 
 export async function getClassById(id: string) {
   try {
-    return await prisma.classrooms.findUnique({
-      where: {
-        id: id,
-      },
+    return await db.query.classrooms.findMany({
+      where: eq(schema.classrooms.id, id),
     });
   } catch (e) {
     throw new NotFoundError('No class found with that ID');
