@@ -35,6 +35,9 @@ importers:
       '@local/eden':
         specifier: workspace:*
         version: link:../../packages/eden
+      '@local/validators':
+        specifier: workspace:*
+        version: link:../../packages/validators
       '@nextui-org/react':
         specifier: ^2.2.9
         version: 2.2.9(@types/react@18.2.55)(framer-motion@11.0.5)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.2.0)(tailwindcss@3.4.1)
@@ -74,6 +77,9 @@ importers:
       clsx:
         specifier: ^2.1.0
         version: 2.1.0
+      date-fns:
+        specifier: ^3.3.1
+        version: 3.3.1
       elysia:
         specifier: ^0.8.15
         version: 0.8.17(@sinclair/typebox@0.32.14)(typescript@5.3.3)
@@ -435,6 +441,31 @@ importers:
       bun-types:
         specifier: ^1.0.25
         version: 1.0.25
+
+  packages/validators:
+    dependencies:
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@local/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@local/prettier-config':
+        specifier: workspace:*
+        version: link:../prettier-config
+      '@local/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+      eslint:
+        specifier: ^8.56.0
+        version: 8.56.0
+      prettier:
+        specifier: ^3.2.5
+        version: 3.2.5
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
 
 packages:
 
@@ -5131,6 +5162,10 @@ packages:
     resolution: {integrity: sha512-7hvf7/GW8e86rW0ptuwS3OcBGDjIi6SZva7hCyWC0yYry2cOPmLIjXAUHI6DK2HsnwJd9ifmt57i8eV2n4YNpw==}
     engines: {node: '>= 14'}
     dev: true
+
+  /date-fns@3.3.1:
+    resolution: {integrity: sha512-y8e109LYGgoQDveiEBD3DYXKba1jWf5BA8YU1FL5Tvm0BTdEfy54WLCwnuYWZNnzzvALy/QQ4Hov+Q9RVRv+Zw==}
+    dev: false
 
   /debug@3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}

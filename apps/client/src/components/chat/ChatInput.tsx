@@ -4,33 +4,30 @@ import * as React from "react";
 import axios from "axios";
 import { toast } from "sonner";
 
+import { client } from "@local/eden";
+
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "../ui/button";
 
 interface ChatInputProps {
-  chatPartner: string;
+  to: string;
+  from: string;
   chatId: string;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ chatPartner, chatId }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ to, from, chatId }) => {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [input, setInput] = React.useState<string>("");
-
-  const sendMessage = async () => {
-    if (!input) return;
-    setIsLoading(true);
-
-    try {
-      await axios.post("/api/message/send", { text: input, chatId });
-      setInput("");
-    } catch (error) {
-      toast.error("Something went wrong");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  const chat = client.api.sockets.chat.subscribe();
+  function sendMessage() {
+    const payload = {
+      to: to,
+      from: from,
+      content: input,
+    };
+    chat.send(JSON.stringify(payload));
+  }
   return (
     <div className="mb-2 border-t px-4 pt-4 sm:mb-0">
       <div className="relative flex-1 overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
@@ -38,7 +35,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatPartner, chatId }) => {
           ref={textareaRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder={`Message ${chatPartner}`}
+          placeholder={`Message ${to}`}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();

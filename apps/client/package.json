@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@local/auth": "workspace:*",
+    "@local/validators": "workspace:*",
     "@local/db": "workspace:*",
     "@local/eden": "workspace:*",
     "@nextui-org/react": "^2.2.9",
@@ -30,6 +31,7 @@
     "axios": "^1.6.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "date-fns": "^3.3.1",
     "elysia": "^0.8.15",
     "framer-motion": "^11.0.3",
     "geist": "^1.2.1",
@@ -47,7 +49,6 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "dotenv-cli": "^7.3.0",
     "@local/eslint-config": "workspace:*",
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
@@ -55,11 +56,12 @@
     "@types/react": "^18.2.51",
     "@types/react-dom": "^18.2.18",
     "autoprefixer": "^10.4.17",
+    "dotenv-cli": "^7.3.0",
     "eslint": "^8.56.0",
     "jiti": "^1.21.0",
     "postcss": "^8.4.33",
-    "tailwindcss": "^3.4.1",
     "prettier": "^3.2.5",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
   },
   "eslintConfig": {

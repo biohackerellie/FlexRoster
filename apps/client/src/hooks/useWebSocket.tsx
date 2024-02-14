@@ -1,7 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import * as React from "react";
 import { useRouter } from "next/navigation";
+
+import { client } from "@local/eden";
+import { Message } from "@local/validators";
 
 import { env } from "@/env.js";
 
@@ -9,38 +12,22 @@ interface SocketData {
   message: string;
 }
 
-// interface SocketHeaders {
-//   to: string;
-//   from: string;
-// }
-
 export default function useWebSocket() {
   const router = useRouter();
-  const ws = useRef<WebSocket>();
+  const chat = client.api.sockets.chat.subscribe();
+  const ws = React.useRef<typeof chat>();
 
-  const [messages, setMessages] = useState<SocketData[]>([]);
+  const [messages, setMessages] = React.useState<SocketData[]>([]);
 
-  useEffect(() => {
-    ws.current = new WebSocket(env.NEXT_PUBLIC_SOCKET);
-
-    ws.current.onopen = (headers) => {
-      console.log("socket opened");
-    };
-    ws.current.onclose = (ev) => {
-      console.log(ev.code);
-      if (ev.code === 4001) {
-        router.push("/login");
-      }
-      console.log("socket closed");
-    };
-    ws.current.onmessage = (ev: MessageEvent<string>) => {
-      const data: SocketData = JSON.parse(ev.data);
+  React.useEffect(() => {
+    chat.subscribe((message) => {
+      const data: Message = JSON.parse(message.data);
       setMessages((prev) => [...(prev ?? []), data]);
-    };
+    });
     return () => {
-      ws.current?.close();
+      chat.close();
     };
-  }, []);
+  }, [chat, email]);
 
   return {
     ws: ws.current,
