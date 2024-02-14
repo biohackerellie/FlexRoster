@@ -2,10 +2,10 @@
  * Retrieve rosters for each class and insert into database
  */
 
-import { fetcher } from '~/lib/utils';
-import { RosterResponse } from '~/lib/types';
-import { icAuth } from '~/lib/utils';
-import { db, schema, eq } from '@local/db';
+import { db, eq, schema } from "@local/db";
+
+import { RosterResponse } from "~/lib/types";
+import { fetcher, icAuth } from "~/lib/utils";
 
 export async function RosterSync() {
   try {
@@ -19,13 +19,13 @@ export async function RosterSync() {
       const data = await fetcher<RosterResponse>(
         `${process.env.IC_BASE_QUERY}/classes/${id}/students?limit=100&ext_basic=true`,
         {
-          method: 'GET',
+          method: "GET",
           headers: {
-            accept: 'application/json',
-            'X-XSRF-TOKEN': process.env.XSRF_TOKEN as string,
+            accept: "application/json",
+            "X-XSRF-TOKEN": process.env.XSRF_TOKEN as string,
             Authorization: `Bearer ${token}` as string,
           },
-        }
+        },
       );
       const mappedStudents = data.users.map((s) => {
         return {

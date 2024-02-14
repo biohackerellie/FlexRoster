@@ -1,5 +1,6 @@
-import { $ } from 'bun';
-import { env } from '~/env';
+import { $ } from "bun";
+
+import { env } from "~/env";
 
 $.cwd(`${env.WORKING_DIR}/src/scripts`);
 
@@ -28,4 +29,4 @@ if (studentSync.exitCode === 1) {
 }
 await $`echo "Student roster synced"`;
 
-console.log('Nightly script completed');
+console.log("Nightly script completed");

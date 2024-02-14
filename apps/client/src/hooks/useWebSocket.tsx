@@ -1,7 +1,9 @@
-'use client';
-import { useEffect, useRef, useState } from 'react';
-import { env } from '@/env.js';
-import { useRouter } from 'next/navigation';
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { env } from "@/env.js";
 
 interface SocketData {
   message: string;
@@ -22,14 +24,14 @@ export default function useWebSocket() {
     ws.current = new WebSocket(env.NEXT_PUBLIC_SOCKET);
 
     ws.current.onopen = (headers) => {
-      console.log('socket opened');
+      console.log("socket opened");
     };
     ws.current.onclose = (ev) => {
       console.log(ev.code);
       if (ev.code === 4001) {
-        router.push('/login');
+        router.push("/login");
       }
-      console.log('socket closed');
+      console.log("socket closed");
     };
     ws.current.onmessage = (ev: MessageEvent<string>) => {
       const data: SocketData = JSON.parse(ev.data);

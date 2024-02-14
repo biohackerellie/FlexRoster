@@ -1,12 +1,12 @@
-import { createClient } from './redis';
+import { createClient } from "./redis";
 
 export async function setClassRoomKV(
   key: string,
   value: string,
-  expires: number | 86400 // 1 day
+  expires: number | 86400, // 1 day
 ): Promise<string | Error> {
   const client = createClient();
-  const result = await client.set(`studentEmail:${key}`, value, 'EX', expires);
+  const result = await client.set(`studentEmail:${key}`, value, "EX", expires);
   return result;
 }
 
@@ -20,10 +20,10 @@ export async function getClassRoomKV(key: string): Promise<string | null> {
 export async function setRequestKV(key: string): Promise<string | Error> {
   const client = createClient();
   const value = JSON.stringify({
-    status: 'pending',
+    status: "pending",
     time: new Date().toISOString(),
   });
-  const result = await client.set(`request:${key}`, value, 'EX', 43200);
+  const result = await client.set(`request:${key}`, value, "EX", 43200);
   return result;
 }
 

@@ -1,2 +1,2 @@
-export * from './useMediaQuery';
-export * from './useWebSocket';
+export * from "./useMediaQuery";
+export * from "./useWebSocket";

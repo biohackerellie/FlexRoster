@@ -1,36 +1,37 @@
-import { Elysia, t } from 'elysia';
+import { Elysia, t } from "elysia";
+
 import {
   getRosters,
   getRostersById,
   getStudentRoster,
-  setStudentRoster,
   getTeacherRoster,
-} from './handlers';
+  setStudentRoster,
+} from "./handlers";
 
-export const rosterRoutes = new Elysia({ prefix: '/rosters' })
-  .get('/', () => getRosters())
-  .get('/:id', ({ params: { id } }) => getRostersById(id), {
+export const rosterRoutes = new Elysia({ prefix: "/rosters" })
+  .get("/", () => getRosters())
+  .get("/:id", ({ params: { id } }) => getRostersById(id), {
     params: t.Object({
       id: t.String(),
     }),
   })
-  .get('/student/:email', ({ params: { email } }) => getStudentRoster(email), {
+  .get("/student/:email", ({ params: { email } }) => getStudentRoster(email), {
     params: t.Object({
       email: t.String(),
     }),
   })
   .get(
-    '/teacher/roster/:email',
+    "/teacher/roster/:email",
     ({ params: { email } }) => getTeacherRoster(email),
     {
       params: t.Object({
         email: t.String(),
       }),
-    }
+    },
   )
 
   .post(
-    '/student/:email',
+    "/student/:email",
     ({ params: { email }, body: { roomNumber, teacherName } }) =>
       setStudentRoster(email, roomNumber, teacherName),
     {
@@ -41,5 +42,5 @@ export const rosterRoutes = new Elysia({ prefix: '/rosters' })
         roomNumber: t.String(),
         teacherName: t.String(),
       }),
-    }
+    },
   );

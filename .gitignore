@@ -17,3 +17,6 @@ apps/server/src/generated/**
 **/dist
 dist/**
 tmp
+*.pem
+.env
+*.tsbuildinfo

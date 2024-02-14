@@ -4,13 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./index.js"
   },
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
@@ -26,6 +25,8 @@
   },
   "prettier": "@local/prettier-config",
   "dependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.1.1"
+    "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11"
   }
 }

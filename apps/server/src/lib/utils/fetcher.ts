@@ -11,12 +11,12 @@ async function fetcher<T>(url: string, options?: RequestInit): Promise<T> {
   try {
     const response = await fetch(url, options);
     if (!response.ok) {
-      throw new Error('Error: ', { cause: Error });
+      throw new Error("Error: ", { cause: Error });
     }
     const data: T = await response.json();
     return data;
   } catch (e) {
-    throw new Error('Error: ', { cause: Error });
+    throw new Error("Error: ", { cause: Error });
   }
 }
 

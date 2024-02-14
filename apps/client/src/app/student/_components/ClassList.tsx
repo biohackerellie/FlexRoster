@@ -1,9 +1,23 @@
-'use client';
-import { StudentTable } from '@/lib/types';
-import * as React from 'react';
+"use client";
 
-import { DataTable } from '@/components/tables';
-import { Button } from '@/components/ui/button';
+import * as React from "react";
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown } from "lucide-react";
+import { toast } from "sonner";
+
+import { setRoster } from "@/app/student/actions";
+import { DataTable } from "@/components/tables";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerContent,
@@ -11,25 +25,11 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '@/components/ui/drawer';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-  DialogClose,
-} from '@/components/ui/dialog';
-
-import useMediaQuery from '@/hooks/useMediaQuery';
-import { ColumnDef } from '@tanstack/react-table';
-import { setRoster } from '@/app/student/actions';
-import { toast } from 'sonner';
-import { ArrowUpDown } from 'lucide-react';
+} from "@/components/ui/drawer";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import { StudentTable } from "@/lib/types";
 
 /**
  * Class List Component
@@ -47,7 +47,7 @@ interface ClassListProps {
  */
 export function ClassListComponent({ data }: ClassListProps) {
   const [open, setOpen] = React.useState(false);
-  const isDesktop = useMediaQuery('(min-width: 768px)');
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
@@ -56,14 +56,14 @@ export function ClassListComponent({ data }: ClassListProps) {
             Change Class
           </Button>
         </DialogTrigger>
-        <DialogContent className="flex flex-col max-h-[900px] max-w-[800px]">
+        <DialogContent className="flex max-h-[900px] max-w-[800px] flex-col">
           <DialogHeader>
             <DialogTitle>Request a different class</DialogTitle>
             <DialogDescription>
               Please select the class you would like to attend today.
             </DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col max-w-[750px] max-h-[700px]">
+          <div className="flex max-h-[700px] max-w-[750px] flex-col">
             <DataTable columns={columns} data={data} />
           </div>
           <DialogFooter className="sm:justify-start">
@@ -116,7 +116,7 @@ const ClassList = ({ data }: { data: StudentTable[] }) => {
     <ScrollArea className="h-72 w-screen">
       <div className="p-4">
         {rooms.map((room, index) => (
-          <div key={index} className="flex justify-between items-center">
+          <div key={index} className="flex items-center justify-between">
             <div>
               <p className="text-lg font-semibold">{room.room}</p>
               <p className="text-sm text-gray-500">{room.teacher}</p>
@@ -134,7 +134,7 @@ const ClassList = ({ data }: { data: StudentTable[] }) => {
                   })
                 }
               >
-                {room.available ? 'Join' : 'Unavailable'}
+                {room.available ? "Join" : "Unavailable"}
               </Button>
             </div>
           </div>
@@ -150,12 +150,12 @@ const ClassList = ({ data }: { data: StudentTable[] }) => {
  */
 const columns: ColumnDef<StudentTable>[] = [
   {
-    accessorKey: 'roomNumber',
+    accessorKey: "roomNumber",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Room Number
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -164,12 +164,12 @@ const columns: ColumnDef<StudentTable>[] = [
     },
   },
   {
-    accessorKey: 'teacherName',
+    accessorKey: "teacherName",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Teacher Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -178,12 +178,12 @@ const columns: ColumnDef<StudentTable>[] = [
     },
   },
   {
-    accessorKey: 'available',
+    accessorKey: "available",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Available
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -192,12 +192,12 @@ const columns: ColumnDef<StudentTable>[] = [
     },
   },
   {
-    accessorKey: 'email',
-    header: 'Transfer',
+    accessorKey: "email",
+    header: "Transfer",
     cell: ({ row, column }) => {
-      const email = row.getValue('email') as string;
-      const roomNumber = row.getValue('roomNumber') as string;
-      const teacherName = row.getValue('teacherName') as string;
+      const email = row.getValue("email") as string;
+      const roomNumber = row.getValue("roomNumber") as string;
+      const teacherName = row.getValue("teacherName") as string;
 
       return (
         <Button
@@ -229,14 +229,14 @@ async function handleTransfer({
     const res = await setRoster(email, roomNumber, teacherName);
     console.log(res);
     if (res === 200) {
-      toast.info('You have successfully transferred', {
-        position: 'top-center',
+      toast.info("You have successfully transferred", {
+        position: "top-center",
       });
     }
   } catch (err) {
     console.error(err);
-    toast.error('You have already transferred today', {
-      position: 'top-center',
+    toast.error("You have already transferred today", {
+      position: "top-center",
     });
   }
 }

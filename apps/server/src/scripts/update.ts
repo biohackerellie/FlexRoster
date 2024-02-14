@@ -1,7 +1,7 @@
-import { db, schema, eq } from '@local/db';
+import { db, eq, schema } from "@local/db";
 
 export async function setRoomStatus() {
-  console.log('Setting room status to available');
+  console.log("Setting room status to available");
   try {
     await db.transaction(async (tx) => {
       await tx

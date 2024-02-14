@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo } from 'react';
+import { createContext, useContext, useEffect, useMemo } from "react";
 
 export const WebSocketContext = createContext<WebSocket | null>(null);
 
@@ -21,7 +21,7 @@ export function WebSocketProvider({
   protocols,
   binaryType,
 }: WebSocketProviderProps) {
-  const isBrowser = typeof window !== 'undefined';
+  const isBrowser = typeof window !== "undefined";
   const instance = useMemo(() => {
     if (!isBrowser) return null;
     const client = new WebSocket(url, protocols);
@@ -50,6 +50,6 @@ export const WebSocketConsumer = WebSocketContext.Consumer;
 export function useWebSocket() {
   const context = useContext(WebSocketContext);
   if (context === undefined)
-    throw new Error('useWebSocket must be used within a WebSocketProvider');
+    throw new Error("useWebSocket must be used within a WebSocketProvider");
   return context;
 }

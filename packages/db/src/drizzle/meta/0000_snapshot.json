@@ -34,12 +34,8 @@
           "tableFrom": "classRosters",
           "tableTo": "classrooms",
           "schemaTo": "public",
-          "columnsFrom": [
-            "classroomId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["classroomId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }

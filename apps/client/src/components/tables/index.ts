@@ -1,1 +1,1 @@
-export * from './shared/data-table';
+export * from "./shared/data-table";

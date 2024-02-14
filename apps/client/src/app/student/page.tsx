@@ -1,8 +1,9 @@
-import { StudentTable } from '@/lib/types';
-import { auth } from '@local/auth';
-import { greetings } from '@/lib/constants';
-import { client } from '@local/eden';
-import { ClassListComponent } from './_components/ClassList';
+import { auth } from "@local/auth";
+import { client } from "@local/eden";
+
+import { greetings } from "@/lib/constants";
+import { StudentTable } from "@/lib/types";
+import { ClassListComponent } from "./_components/ClassList";
 
 type rooms = {
   roomNumber: string;
@@ -12,9 +13,9 @@ type rooms = {
 };
 
 async function getData(email: string) {
-  const { data: data, error } = await client.api.classes[''].get();
+  const { data: data, error } = await client.api.classes[""].get();
   if (error) {
-    console.log('something went wrong', error);
+    console.log("something went wrong", error);
     return [];
   }
   const mappedData: StudentTable[] = data.map((rooms: rooms) => {
@@ -34,7 +35,7 @@ async function getClass(email: string) {
     data: [],
   };
   if (res.error) {
-    console.log('something went wrong', res.error);
+    console.log("something went wrong", res.error);
     return [];
   }
   return res.data;
@@ -51,7 +52,7 @@ async function allData(email: string) {
 export default async function StudentDashboard() {
   const session = await auth();
 
-  const firstName = session?.user?.name!.split(' ')[0];
+  const firstName = session?.user?.name!.split(" ")[0];
   const email = session?.user?.email!;
 
   const { availableClasses, currentClass } = await allData(email);
@@ -63,13 +64,13 @@ export default async function StudentDashboard() {
   const greeting = getRandomGreeting();
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-center text-4xl font-semibold pb-2">
+      <h1 className="pb-2 text-center text-4xl font-semibold">
         {greeting} {firstName}!
       </h1>
-      <p className="text-center text-2xl font-medium pb-2">
+      <p className="pb-2 text-center text-2xl font-medium">
         Your STEAM class today is {currentClass}
       </p>
-      <div className="container max-w-4xl max-h-2xl p-4 justify-center flex flex-col">
+      <div className="max-h-2xl container flex max-w-4xl flex-col justify-center p-4">
         <ClassListComponent data={availableClasses} />
       </div>
     </div>

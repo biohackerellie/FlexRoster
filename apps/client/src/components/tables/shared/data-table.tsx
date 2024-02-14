@@ -1,15 +1,17 @@
-'use client';
-import * as React from 'react';
+"use client";
+
+import * as React from "react";
 import {
   ColumnDef,
   flexRender,
-  SortingState,
-  getSortedRowModel,
   getCoreRowModel,
-  useReactTable,
   getPaginationRowModel,
-} from '@tanstack/react-table';
-import { Button } from '@/components/ui/button';
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+} from "@tanstack/react-table";
+
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -17,7 +19,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -48,7 +50,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="rounded-md border shadow-2xl shadow-cyan-400 font-thin">
+      <div className="rounded-md border font-thin shadow-2xl shadow-cyan-400">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -60,7 +62,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -73,13 +75,13 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
+                  data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

@@ -1,7 +1,12 @@
-import { createEnv } from '@t3-oss/env-nextjs';
-import { z } from 'zod';
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const env = createEnv({
+  shared: {
+    NODE_ENV: z
+      .enum(["development", "production", "test"])
+      .default("development"),
+  },
   server: {
     DIRECT_URL: z.string(),
     DATABASE_URL: z.string(),
@@ -21,6 +26,7 @@ export const env = createEnv({
     NEXT_PUBLIC_REDIS_PORT: z.string(),
   },
   runtimeEnv: {
+    NODE_ENV: process.env.NODE_ENV,
     DIRECT_URL: process.env.DIRECT_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     NEXT_PUBLIC_SOCKET: process.env.NEXT_PUBLIC_SOCKET,
@@ -36,4 +42,8 @@ export const env = createEnv({
     NEXT_PUBLIC_REDIS_IP: process.env.NEXT_PUBLIC_REDIS_IP,
     NEXT_PUBLIC_REDIS_PORT: process.env.NEXT_PUBLIC_REDIS_PORT,
   },
+  skipValidation:
+    !!process.env.CI ||
+    !!process.env.SKIP_ENV_VALIDATION ||
+    process.env.npm_lifecycle_event === "lint",
 });

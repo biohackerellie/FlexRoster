@@ -1,19 +1,13 @@
 {
-	"extends": "@local/tsconfig/base.json",
+  "extends": "@local/tsconfig/base.json",
   "compilerOptions": {
-		"paths": {
-			"~/*": [
-				"./src/*"
-			]
-		},
+    "paths": {
+      "~/*": ["./src/*"]
+    },
     "types": [
       "bun-types" // add Bun global
     ],
-		"tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-	"exclude": [
-		"node_modules",
-		"dist",
-		"src/scripts/nightly.ts"
-	],
+  "exclude": ["node_modules", "dist", "src/scripts/nightly.ts"]
 }

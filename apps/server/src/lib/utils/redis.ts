@@ -1,4 +1,4 @@
-import Redis from 'ioredis';
+import Redis from "ioredis";
 
 export function createClient() {
   try {
@@ -16,8 +16,8 @@ export function createClient() {
       },
     });
 
-    redis.on('error', (error: unknown) => {
-      console.warn('[Redis] Error', error);
+    redis.on("error", (error: unknown) => {
+      console.warn("[Redis] Error", error);
     });
     return redis;
   } catch (e) {

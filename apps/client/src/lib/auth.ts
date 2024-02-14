@@ -1,9 +1,9 @@
-import NextAuth from 'next-auth';
+import NextAuth from "next-auth";
+import azureAd from "next-auth/providers/azure-ad";
 
-import azureAd from 'next-auth/providers/azure-ad';
-import { env } from '../env';
+import { env } from "../env";
 
-declare module 'next-auth' {
+declare module "next-auth" {
   interface Session {
     roles: string;
   }
@@ -34,21 +34,21 @@ export const {
     }),
   ],
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   callbacks: {
     async redirect({ url, baseUrl }) {
-      baseUrl ?? (baseUrl = '/');
+      baseUrl ?? (baseUrl = "/");
       return baseUrl;
     },
     async jwt({ token, account }) {
       if (account?.id_token) {
-        const [header, payload, sig] = account.id_token.split('.');
+        const [header, payload, sig] = account.id_token.split(".");
         if (!payload) {
-          throw new Error('No payload in id_token');
+          throw new Error("No payload in id_token");
         }
         const idToken = JSON.parse(
-          Buffer.from(payload, 'base64').toString('utf8')
+          Buffer.from(payload, "base64").toString("utf8"),
         );
         token.roles = idToken.roles;
       }
@@ -62,7 +62,7 @@ export const {
     },
   },
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
     maxAge: 5 * 24 * 60 * 60, // 5 days
     updateAge: 24 * 60 * 60, // 24 hours
   },

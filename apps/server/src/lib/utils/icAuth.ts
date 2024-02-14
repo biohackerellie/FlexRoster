@@ -3,8 +3,8 @@
  * @description Authentication with IC database, and regenerates session token if needed
  */
 
-import { getToken, setToken } from './token';
-import { fetcher } from './fetcher';
+import { fetcher } from "./fetcher";
+import { getToken, setToken } from "./token";
 
 interface TokenResponse {
   access_token: string;
@@ -12,11 +12,11 @@ interface TokenResponse {
 }
 
 export async function icAuth(): Promise<string> {
-  const token = await getToken('icToken');
+  const token = await getToken("icToken");
 
   if (token === null) {
     const newToken = await fetchNewToken();
-    await setToken('icToken', newToken.access_token, newToken.expires_in);
+    await setToken("icToken", newToken.access_token, newToken.expires_in);
     return newToken.access_token;
   } else {
     return token;
@@ -25,20 +25,20 @@ export async function icAuth(): Promise<string> {
 
 async function fetchNewToken(): Promise<TokenResponse> {
   const body = new URLSearchParams({
-    grant_type: 'client_credentials',
+    grant_type: "client_credentials",
     client_id: process.env.ONEROSTER_CLIENT_ID as string,
     client_secret: process.env.ONEROSTER_CLIENT_SECRET as string,
   });
   const data = await fetcher<TokenResponse>(
-    'https://mtdecloud2.infinitecampus.org/campus/oauth2/token?appName=laurel',
+    "https://mtdecloud2.infinitecampus.org/campus/oauth2/token?appName=laurel",
     {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        "Content-Type": "application/x-www-form-urlencoded",
       },
       body: body.toString(),
-    }
+    },
   );
-  console.log('data: ', data);
+  console.log("data: ", data);
   return data;
 }

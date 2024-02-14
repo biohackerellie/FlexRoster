@@ -1,15 +1,17 @@
-import type { Metadata } from 'next';
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
-import { Providers } from './providers';
-import './globals.css';
+import type { Metadata } from "next";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 
-import { Toaster } from '@/components/ui/sonner';
+import { Providers } from "./providers";
+
+import "./globals.css";
+
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: 'STEAM',
+  title: "STEAM",
   description:
-    'Sit down, shut up, and read an unbanned, straight, white, christian mom approved book',
+    "Sit down, shut up, and read an unbanned, straight, white, christian mom approved book",
 };
 
 export default function RootLayout({

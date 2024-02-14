@@ -1,4 +1,4 @@
-export * from './auth';
-export * from './roster';
+export * from "./auth";
+export * from "./roster";
 
-export * from './prisma';
+export * from "./prisma";

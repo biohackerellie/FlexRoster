@@ -1,33 +1,33 @@
+import { relations, sql } from "drizzle-orm";
 import {
-  pgTable,
+  boolean,
   foreignKey,
-  primaryKey,
+  integer,
   pgEnum,
-  text,
+  pgTable,
+  primaryKey,
   serial,
+  text,
   timestamp,
   varchar,
-  integer,
-  boolean,
-} from 'drizzle-orm/pg-core';
-import { relations, sql } from 'drizzle-orm';
+} from "drizzle-orm/pg-core";
 
-export const role = pgEnum('Role', [
-  'secretary',
-  'teacher',
-  'student',
-  'admin',
+export const role = pgEnum("Role", [
+  "secretary",
+  "teacher",
+  "student",
+  "admin",
 ]);
 
-export const classRosters = pgTable('classRosters', {
-  studentEmail: text('studentEmail').notNull(),
-  classroomId: text('classroomId')
+export const classRosters = pgTable("classRosters", {
+  studentEmail: text("studentEmail").notNull(),
+  classroomId: text("classroomId")
     .notNull()
     .references(() => classrooms.id, {
-      onDelete: 'cascade',
-      onUpdate: 'cascade',
+      onDelete: "cascade",
+      onUpdate: "cascade",
     }),
-  id: serial('id').primaryKey().notNull(),
+  id: serial("id").primaryKey().notNull(),
 });
 
 export const rosterRelations = relations(classRosters, ({ one }) => ({
@@ -37,97 +37,97 @@ export const rosterRelations = relations(classRosters, ({ one }) => ({
   }),
 }));
 
-export const transferLogs = pgTable('transferLogs', {
-  id: serial('id').primaryKey().notNull(),
-  studentEmail: text('studentEmail').notNull(),
-  createdAt: timestamp('createdAt', { precision: 3, mode: 'string' })
+export const transferLogs = pgTable("transferLogs", {
+  id: serial("id").primaryKey().notNull(),
+  studentEmail: text("studentEmail").notNull(),
+  createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
     .defaultNow()
     .notNull(),
-  roomNumber: text('roomNumber').notNull(),
-  teacherName: text('teacherName').notNull(),
+  roomNumber: text("roomNumber").notNull(),
+  teacherName: text("teacherName").notNull(),
 });
 
-export const prismaMigrations = pgTable('_prisma_migrations', {
-  id: varchar('id', { length: 36 }).primaryKey().notNull(),
-  checksum: varchar('checksum', { length: 64 }).notNull(),
-  finishedAt: timestamp('finished_at', { withTimezone: true, mode: 'string' }),
-  migrationName: varchar('migration_name', { length: 255 }).notNull(),
-  logs: text('logs'),
-  rolledBackAt: timestamp('rolled_back_at', {
+export const prismaMigrations = pgTable("_prisma_migrations", {
+  id: varchar("id", { length: 36 }).primaryKey().notNull(),
+  checksum: varchar("checksum", { length: 64 }).notNull(),
+  finishedAt: timestamp("finished_at", { withTimezone: true, mode: "string" }),
+  migrationName: varchar("migration_name", { length: 255 }).notNull(),
+  logs: text("logs"),
+  rolledBackAt: timestamp("rolled_back_at", {
     withTimezone: true,
-    mode: 'string',
+    mode: "string",
   }),
-  startedAt: timestamp('started_at', { withTimezone: true, mode: 'string' })
+  startedAt: timestamp("started_at", { withTimezone: true, mode: "string" })
     .defaultNow()
     .notNull(),
-  appliedStepsCount: integer('applied_steps_count').default(0).notNull(),
+  appliedStepsCount: integer("applied_steps_count").default(0).notNull(),
 });
 
-export const classrooms = pgTable('classrooms', {
-  id: text('id').primaryKey().notNull(),
-  roomNumber: text('roomNumber').notNull(),
-  teacherName: text('teacherName').notNull(),
-  available: boolean('available').default(true).notNull(),
+export const classrooms = pgTable("classrooms", {
+  id: text("id").primaryKey().notNull(),
+  roomNumber: text("roomNumber").notNull(),
+  teacherName: text("teacherName").notNull(),
+  available: boolean("available").default(true).notNull(),
 });
 
 export const classroomRelations = relations(classrooms, ({ many }) => ({
   classRosters: many(classRosters),
 }));
 
-export const users = pgTable('user', {
-  id: varchar('id', { length: 255 }).notNull().primaryKey(),
-  name: text('name'),
-  email: text('email').notNull(),
-  emailVerified: timestamp('emailVerified', { mode: 'date' }),
-  image: text('image'),
-  role: text('role')
-    .$type<'student' | 'teacher' | 'admin' | 'secretary'>()
-    .default('student')
+export const users = pgTable("user", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  name: text("name"),
+  email: text("email").notNull(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: text("image"),
+  role: text("role")
+    .$type<"student" | "teacher" | "admin" | "secretary">()
+    .default("student")
     .notNull(),
 });
 
 export const accounts = pgTable(
-  'account',
+  "account",
   {
-    userId: text('userId')
+    userId: text("userId")
       .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
-    type: varchar('type', { length: 255 })
-      .$type<'oauth' | 'oidc' | 'email'>()
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: varchar("type", { length: 255 })
+      .$type<"oauth" | "oidc" | "email">()
       .notNull(),
-    provider: text('provider').notNull(),
-    providerAccountId: text('providerAccountId').notNull(),
-    refresh_token: text('refresh_token'),
-    access_token: text('access_token'),
-    expires_at: integer('expires_at'),
-    token_type: text('token_type'),
-    scope: text('scope'),
-    id_token: text('id_token'),
-    session_state: text('session_state'),
+    provider: text("provider").notNull(),
+    providerAccountId: text("providerAccountId").notNull(),
+    refresh_token: text("refresh_token"),
+    access_token: text("access_token"),
+    expires_at: integer("expires_at"),
+    token_type: text("token_type"),
+    scope: text("scope"),
+    id_token: text("id_token"),
+    session_state: text("session_state"),
   },
   (account) => ({
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  })
+  }),
 );
 
-export const sessions = pgTable('session', {
-  sessionToken: text('sessionToken').notNull().primaryKey(),
-  userId: text('userId')
+export const sessions = pgTable("session", {
+  sessionToken: text("sessionToken").notNull().primaryKey(),
+  userId: text("userId")
     .notNull()
-    .references(() => users.id, { onDelete: 'cascade' }),
-  expires: timestamp('expires', { mode: 'date' }).notNull(),
+    .references(() => users.id, { onDelete: "cascade" }),
+  expires: timestamp("expires", { mode: "date" }).notNull(),
 });
 
 export const verificationTokens = pgTable(
-  'verificationToken',
+  "verificationToken",
   {
-    identifier: text('identifier').notNull(),
-    token: text('token').notNull(),
-    expires: timestamp('expires', { mode: 'date' }).notNull(),
+    identifier: text("identifier").notNull(),
+    token: text("token").notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );

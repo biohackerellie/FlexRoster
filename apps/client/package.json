@@ -2,19 +2,19 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-	"type": "module",
+  "type": "module",
   "scripts": {
     "clean": "git clean -xdf .next .turbo node_modules",
     "dev": "pnpm with-env next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
+    "build": "pnpm with-env next build",
+    "start": "pnpm with-env next start",
+    "lint": "dotenv -v SKIP_ENV_VALIDATION=1 next lint",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit",
-		"with-env": "dotenv -e ../../.env --"
+    "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
     "@local/auth": "workspace:*",
-		"dotenv-cli": "^7.3.0",
     "@local/db": "workspace:*",
     "@local/eden": "workspace:*",
     "@nextui-org/react": "^2.2.9",
@@ -34,21 +34,24 @@
     "framer-motion": "^11.0.3",
     "geist": "^1.2.1",
     "lucide-react": "^0.311.0",
-    "next": "14.1.0",
+    "next": "^14.1.0",
     "next-auth": "5.0.0-beta.9",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sonner": "^1.4.0",
+    "superjson": "^2.2.1",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@local/eslint-config-custom": "workspace:*",
+    "dotenv-cli": "^7.3.0",
+    "@local/eslint-config": "workspace:*",
+    "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
-    "@types/node": "^20.11.16",
+    "@types/node": "^20.11.17",
     "@types/react": "^18.2.51",
     "@types/react-dom": "^18.2.18",
     "autoprefixer": "^10.4.17",
@@ -56,6 +59,16 @@
     "jiti": "^1.21.0",
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1",
-    "typescript": "latest"
-  }
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@local/eslint-config/base",
+      "@local/eslint-config/nextjs",
+      "@local/eslint-config/react"
+    ]
+  },
+  "prettier": "@local/prettier-config"
 }

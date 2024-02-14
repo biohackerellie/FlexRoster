@@ -1,5 +1,5 @@
 // import { auth } from '@local/auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 // export default auth(function middleware(request) {
 //   const response = NextResponse.next();

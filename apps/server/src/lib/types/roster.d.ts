@@ -42,10 +42,10 @@ export interface ClassUser {
   sourcedId: string;
   status: string;
   dateLastModified: string;
-  metadata: { 'ic.legacySourceId': string };
+  metadata: { "ic.legacySourceId": string };
   userMasterIdentifier: string;
   identifier: string;
-  enabledUser: 'true' | 'false';
+  enabledUser: "true" | "false";
   givenName: string;
   familyName: string;
   middleName: string;

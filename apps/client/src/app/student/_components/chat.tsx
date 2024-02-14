@@ -1,1 +1,1 @@
-import { client } from '@local/eden';
+import { client } from "@local/eden";

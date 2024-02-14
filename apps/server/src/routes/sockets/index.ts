@@ -1,18 +1,22 @@
-import { Elysia, t } from 'elysia';
+import { Elysia, t } from "elysia";
 
-import { db, schema } from '@local/db';
+import { db, schema } from "@local/db";
+
+type User = typeof schema.users.$inferSelect;
+
+const users = new Map<User["email"], string>();
 
 export const socketRoutes = new Elysia({
-  prefix: '/sockets',
+  prefix: "/sockets",
   websocket: {},
 })
-  .ws('/request', {
+  .ws("/request", {
     headers: t.Object({
       to: t.String(),
       from: t.String(),
     }),
     open(ws) {
-      console.log('Connected to request socket');
+      console.log("Connected to request socket");
       ws.subscribe(ws.data.headers.to);
     },
     async message(ws, message) {
@@ -23,18 +27,23 @@ export const socketRoutes = new Elysia({
         teacherName: message as string,
       });
       ws.publish(ws.data.headers.to, message);
-      console.log('Received message: ' + message);
+      console.log("Received message: " + message);
     },
 
     close(ws) {
       ws.unsubscribe(ws.data.headers.to);
-      console.log('Closed socket');
+      console.log("Closed socket");
     },
   })
-  .ws('/chat', {
+  .ws("/chat", {
     message(ws, message) {
-      ws.send(message);
+      const { to, from, content } = JSON.parse(message as string);
+      if (!users.has(from)) {
+        users.set(from, ws.id);
+      }
+      if (users.has(to)) {
+        const toId = users.get(to);
+        toId.send;
+      }
     },
-    body: t.String(),
-    response: t.String(),
   });

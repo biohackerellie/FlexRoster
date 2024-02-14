@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import * as React from 'react';
+import * as React from "react";
 
 /**
  * useMediaQuery
@@ -18,8 +18,8 @@ export default function useMediaQuery(query: string) {
       setMatches(media.matches);
     }
     const listener = () => setMatches(media.matches);
-    window.addEventListener('resize', listener);
-    return () => window.removeEventListener('resize', listener);
+    window.addEventListener("resize", listener);
+    return () => window.removeEventListener("resize", listener);
   }, [matches, query]);
   return matches;
 }

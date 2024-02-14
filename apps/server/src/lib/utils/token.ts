@@ -1,12 +1,12 @@
-import { createClient } from './redis';
+import { createClient } from "./redis";
 
 async function setToken(
   key: string,
   value: string,
-  expires: number | 3600
+  expires: number | 3600,
 ): Promise<string | Error> {
   const client = createClient();
-  const result = await client.set(key, value, 'EX', expires);
+  const result = await client.set(key, value, "EX", expires);
   return result;
 }
 
