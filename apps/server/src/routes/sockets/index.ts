@@ -64,7 +64,7 @@ export const socketRoutes = new Elysia({
     },
     async message(ws, message) {
       console.log("Received message: " + message);
-      const { sender, content, recipient } = JSON.parse(message);
+      const { sender, content, recipient } = message;
       console.log("Received message: " + sender, content, recipient);
       const recipientChannel = `notify:${recipient}`;
       await client.publish(
@@ -81,6 +81,11 @@ export const socketRoutes = new Elysia({
       client.unsubscribe(`notify:${ws.data.params.user}`);
       users.delete(ws.data.params.user);
     },
+    body: t.Object({
+      sender: t.String(),
+      content: t.String(),
+      recipient: t.String(),
+    }),
 
     response: t.String(),
   });
