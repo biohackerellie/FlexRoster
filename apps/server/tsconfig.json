@@ -1,6 +1,7 @@
 {
   "extends": "@local/tsconfig/base.json",
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
     "paths": {
       "~/*": ["./src/*"]
     },
@@ -9,5 +10,5 @@
     ],
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-  "exclude": ["node_modules", "dist", "src/scripts/nightly.ts"]
+  "exclude": ["node_modules", "dist"]
 }

@@ -3,3 +3,4 @@ export * from "./token";
 export * from "./icAuth";
 export * from "./redis";
 export * from "./classRoomKV";
+export * from "./chatInbox";

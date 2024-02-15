@@ -1,6 +1,7 @@
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
 
+import { ChatInput, Messages } from "@/components/chat";
 import { greetings } from "@/lib/constants";
 import { StudentTable } from "@/lib/types";
 import { ClassListComponent } from "./_components/ClassList";
@@ -72,6 +73,11 @@ export default async function StudentDashboard() {
       </p>
       <div className="max-h-2xl container flex max-w-4xl flex-col justify-center p-4">
         <ClassListComponent data={availableClasses} />
+        <Messages email="elliana_kerns@laurel.k12.mt.us" />
+        <ChatInput
+          to="elliana_kerns@laurel.k12.mt.us"
+          from="elliana_kerns@laurel.k12.mt.us"
+        />
       </div>
     </div>
   );

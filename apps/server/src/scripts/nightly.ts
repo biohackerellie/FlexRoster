@@ -1,9 +1,11 @@
 import { $ } from "bun";
 
-import { env } from "~/env";
+import { env } from "../env.ts";
 
-$.cwd(`${env.WORKING_DIR}/src/scripts`);
+await $`echo "Running nightly script ..."`;
 
+$.cwd(`src/scripts`);
+console.log("Working directory: ");
 await $`pwd`;
 
 await $`echo "Clearing database ..."`;
