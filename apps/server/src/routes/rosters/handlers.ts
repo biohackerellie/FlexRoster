@@ -7,7 +7,7 @@ import {
   getRequestKV,
   setClassRoomKV,
   setRequestKV,
-} from "~/lib/utils";
+} from "~/lib/redis";
 
 const today = new Date();
 

@@ -1,31 +1,55 @@
 "use client";
 
+import { text } from "stream/consumers";
 import * as React from "react";
 import axios from "axios";
+import { nanoid } from "nanoid";
 import { toast } from "sonner";
 
 import { client } from "@local/eden";
+import { Message, messageValidator } from "@local/validators";
 
+import { sendMessage } from "@/app/student/actions";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "../ui/button";
 
 interface ChatInputProps {
-  to: string;
-  from: string;
+  chatPartner: string;
+  chatId: string;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ to, from }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ chatPartner, chatId }) => {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [input, setInput] = React.useState<string>("");
-  const chat = client.api.sockets.chat.subscribe();
+  const [studentId, teacherName] = chatId.split("--");
+  const chat = client.api.inbox[`${chatId}`]?.subscribe();
   const sendMessage = async () => {
-    const payload = {
-      to: to,
-      from: from,
-      content: input,
-    };
-    await chat.send(JSON.stringify(payload));
+    if (!input) return;
+    setIsLoading(true);
+    try {
+      const timestamp = Date.now();
+      const messageData: Message = {
+        id: nanoid(),
+        senderId: studentId!,
+        text: input,
+        timestamp,
+      };
+      const message = messageValidator.parse(messageData);
+      chat?.send(message);
+      client.api.inbox[`${chatId}`]?.post({
+        timestamp: timestamp,
+        message: input,
+      });
+      setInput("");
+      textareaRef.current?.focus();
+      chat?.close();
+    } catch (error) {
+      toast.error("Failed to send message");
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <div className="mb-2 border-t px-4 pt-4 sm:mb-0">
@@ -34,7 +58,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ to, from }) => {
           ref={textareaRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder={`Message ${to}`}
+          placeholder={`Message ${chatPartner}`}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();

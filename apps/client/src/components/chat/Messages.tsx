@@ -5,27 +5,37 @@ import Image from "next/image";
 import { format, set } from "date-fns";
 
 import { client } from "@local/eden";
-import { Message } from "@local/validators";
+import { Message, messageValidator } from "@local/validators";
 
 import { cn } from "@/lib/utils";
 
 interface MessagesProps {
-  email: string;
+  initialMessages: Message[];
+  sessionId: string;
+  chatId: string;
+  teacherName: string;
 }
 
-const Messages: React.FC<MessagesProps> = ({ email }) => {
-  const [messages, setMessages] = React.useState<Message[] | null>(null);
-  const chat = client.api.sockets.chat.subscribe();
-
+const Messages: React.FC<MessagesProps> = ({
+  initialMessages,
+  sessionId,
+  chatId,
+  teacherName,
+}) => {
+  const [messages, setMessages] = React.useState<Message[]>(initialMessages);
   React.useEffect(() => {
-    chat.subscribe((message) => {
-      const data: Message = JSON.parse(message.data);
-      setMessages((prev) => [...(prev ?? []), data]);
-    });
-    return () => {
-      chat.close();
+    const chat = client.api.inbox[`${chatId}`]?.subscribe();
+    const messageHandler = (message: Message) => {
+      setMessages((prev) => [message, ...prev]);
     };
-  }, [chat, email]);
+    chat?.subscribe((message) => {
+      messageHandler(message.data as Message);
+    });
+
+    return () => {
+      chat?.close();
+    };
+  }, [chatId]);
 
   const scrollDownRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -41,9 +51,10 @@ const Messages: React.FC<MessagesProps> = ({ email }) => {
       <div ref={scrollDownRef} />
       {messages &&
         messages.map((message, index) => {
-          const isCurrentUser = message.from === email;
+          const isCurrentUser = message.senderId === sessionId;
+
           const hasNextMessageFromSameUser =
-            messages[index - 1]?.from === messages[index]?.from;
+            messages[index - 1]?.senderId === messages[index]?.senderId;
           return (
             <div
               className="chat-message"
@@ -73,7 +84,7 @@ const Messages: React.FC<MessagesProps> = ({ email }) => {
                         !hasNextMessageFromSameUser && !isCurrentUser,
                     })}
                   >
-                    {message.message}{" "}
+                    {message.text}{" "}
                     <span className="ml-2 text-xs text-gray-400">
                       {formatTimestamp(message.timestamp)}
                     </span>

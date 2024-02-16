@@ -3,6 +3,7 @@ import swagger from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 
 import { classRoutes } from "./routes/classes";
+import { inboxRoutes } from "./routes/inbox";
 import { rosterRoutes } from "./routes/rosters";
 import { socketRoutes } from "./routes/sockets";
 
@@ -18,7 +19,7 @@ const app = new Elysia()
   .state("version", 1)
   .get("/", ({ store: { version } }) => version)
   .group("/api", (app) =>
-    app.use(classRoutes).use(rosterRoutes).use(socketRoutes),
+    app.use(classRoutes).use(rosterRoutes).use(socketRoutes).use(inboxRoutes),
   );
 
 export default app;

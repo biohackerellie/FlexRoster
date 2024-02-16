@@ -1,4 +1,4 @@
-import { createClient } from "./redis";
+import { createClient } from ".";
 
 async function setToken(
   key: string,

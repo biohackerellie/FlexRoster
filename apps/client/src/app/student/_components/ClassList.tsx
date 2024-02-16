@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { toast } from "sonner";
@@ -204,6 +205,19 @@ const columns: ColumnDef<StudentTable>[] = [
           onClick={() => handleTransfer({ email, roomNumber, teacherName })}
         >
           Transfer
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "userId",
+    header: "Message",
+    cell: ({ row, column }) => {
+      const userId = row.getValue("userId") as string;
+      const teacherName = row.getValue("teacherName") as string;
+      return (
+        <Button asChild variant="outline">
+          <Link href={`/student/chat/${userId}--${teacherName}`}>chat</Link>
         </Button>
       );
     },

@@ -1,4 +1,4 @@
-import { createClient } from "./redis";
+import { createClient } from ".";
 
 export async function setClassRoomKV(
   key: string,

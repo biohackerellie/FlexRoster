@@ -15,9 +15,9 @@
   },
   "dependencies": {
     "@local/auth": "workspace:*",
-    "@local/validators": "workspace:*",
     "@local/db": "workspace:*",
     "@local/eden": "workspace:*",
+    "@local/validators": "workspace:*",
     "@nextui-org/react": "^2.2.9",
     "@prisma/client": "latest",
     "@radix-ui/react-dialog": "^1.0.5",
@@ -36,6 +36,7 @@
     "framer-motion": "^11.0.3",
     "geist": "^1.2.1",
     "lucide-react": "^0.311.0",
+    "nanoid": "^5.0.5",
     "next": "^14.1.0",
     "next-auth": "5.0.0-beta.9",
     "next-themes": "^0.2.1",

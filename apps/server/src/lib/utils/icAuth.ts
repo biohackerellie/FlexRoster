@@ -3,8 +3,8 @@
  * @description Authentication with IC database, and regenerates session token if needed
  */
 
+import { getToken, setToken } from "../redis/";
 import { fetcher } from "./fetcher";
-import { getToken, setToken } from "./token";
 
 interface TokenResponse {
   access_token: string;

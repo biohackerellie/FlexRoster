@@ -4,6 +4,7 @@ import { client } from "@local/eden";
 import { ChatInput, Messages } from "@/components/chat";
 import { greetings } from "@/lib/constants";
 import { StudentTable } from "@/lib/types";
+import { formatTeacherNames } from "@/lib/utils";
 import { ClassListComponent } from "./_components/ClassList";
 
 type rooms = {
@@ -13,18 +14,20 @@ type rooms = {
   id: string;
 };
 
-async function getData(email: string) {
+async function getData(email: string, userid: string) {
   const { data: data, error } = await client.api.classes[""].get();
   if (error) {
     console.log("something went wrong", error);
     return [];
   }
   const mappedData: StudentTable[] = data.map((rooms: rooms) => {
+    const formattedTeacherName = formatTeacherNames(rooms.teacherName);
     return {
       roomNumber: rooms.roomNumber,
-      teacherName: rooms.teacherName,
+      teacherName: formattedTeacherName,
       available: rooms.available,
       email: email,
+      userId: userid,
     };
   });
   return mappedData as StudentTable[];
@@ -42,9 +45,9 @@ async function getClass(email: string) {
   return res.data;
 }
 
-async function allData(email: string) {
+async function allData(email: string, userid: string) {
   const [availableClasses, currentClass] = await Promise.all([
-    getData(email),
+    getData(email, userid),
     getClass(email),
   ]);
   return { availableClasses, currentClass };
@@ -54,9 +57,10 @@ export default async function StudentDashboard() {
   const session = await auth();
 
   const firstName = session?.user?.name!.split(" ")[0];
+  const userId = session?.user?.id!;
   const email = session?.user?.email!;
 
-  const { availableClasses, currentClass } = await allData(email);
+  const { availableClasses, currentClass } = await allData(email, userId);
 
   const getRandomGreeting = () => {
     return greetings[Math.floor(Math.random() * greetings.length)];
@@ -73,11 +77,6 @@ export default async function StudentDashboard() {
       </p>
       <div className="max-h-2xl container flex max-w-4xl flex-col justify-center p-4">
         <ClassListComponent data={availableClasses} />
-        <Messages email="elliana_kerns@laurel.k12.mt.us" />
-        <ChatInput
-          to="elliana_kerns@laurel.k12.mt.us"
-          from="elliana_kerns@laurel.k12.mt.us"
-        />
       </div>
     </div>
   );
