@@ -20,7 +20,7 @@ export const role = pgEnum("Role", [
 ]);
 
 export const classRosters = pgTable("classRosters", {
-  studentEmail: text("studentEmail").notNull(),
+  studentEmail: text("studentEmail").notNull().unique(),
   classroomId: text("classroomId")
     .notNull()
     .references(() => classrooms.id, {
@@ -34,6 +34,10 @@ export const rosterRelations = relations(classRosters, ({ one }) => ({
   classroom: one(classrooms, {
     fields: [classRosters.classroomId],
     references: [classrooms.id],
+  }),
+  users: one(users, {
+    fields: [classRosters.studentEmail],
+    references: [users.email],
   }),
 }));
 
@@ -77,7 +81,7 @@ export const classroomRelations = relations(classrooms, ({ many }) => ({
 export const users = pgTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: text("name"),
-  email: text("email").notNull(),
+  email: text("email").notNull().unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
   role: text("role")
@@ -85,6 +89,13 @@ export const users = pgTable("user", {
     .default("student")
     .notNull(),
 });
+
+export const userRelations = relations(users, ({ one }) => ({
+  classRosters: one(classRosters, {
+    fields: [users.email],
+    references: [classRosters.studentEmail],
+  }),
+}));
 
 export const accounts = pgTable(
   "account",

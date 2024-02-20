@@ -1,20 +1,21 @@
 "use client";
 
-import { text } from "stream/consumers";
 import * as React from "react";
-import axios from "axios";
 import { nanoid } from "nanoid";
 import { toast } from "sonner";
 
 import { client } from "@local/eden";
 import { Message, messageValidator } from "@local/validators";
 
-import { sendMessage } from "@/app/student/actions";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "../ui/button";
 
+type cacheUser = {
+  name: string;
+  role: string;
+};
 interface ChatInputProps {
-  chatPartner: string;
+  chatPartner: cacheUser;
   chatId: string;
 }
 
@@ -58,7 +59,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatPartner, chatId }) => {
           ref={textareaRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder={`Message ${chatPartner}`}
+          placeholder={`Message ${chatPartner.name}`}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();

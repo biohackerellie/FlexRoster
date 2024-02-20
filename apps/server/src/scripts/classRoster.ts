@@ -3,6 +3,7 @@
  */
 
 import { db, eq, schema } from "@local/db";
+import { env } from "~/env";
 
 import { RosterResponse } from "~/lib/types";
 import { fetcher, icAuth } from "~/lib/utils";
@@ -17,12 +18,12 @@ export async function RosterSync() {
     for (const c of classes) {
       const id = c.id;
       const data = await fetcher<RosterResponse>(
-        `${process.env.IC_BASE_QUERY}/classes/${id}/students?limit=100&ext_basic=true`,
+        `${env.IC_BASE_QUERY}/classes/${id}/students?limit=100&ext_basic=true`,
         {
           method: "GET",
           headers: {
             accept: "application/json",
-            "X-XSRF-TOKEN": process.env.XSRF_TOKEN as string,
+            "X-XSRF-TOKEN": env.XSRF_TOKEN,
             Authorization: `Bearer ${token}` as string,
           },
         },

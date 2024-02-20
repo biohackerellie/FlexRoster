@@ -9,18 +9,23 @@ import { Message, messageValidator } from "@local/validators";
 
 import { cn } from "@/lib/utils";
 
+type cacheUser = {
+  name: string;
+  role: string;
+};
+
 interface MessagesProps {
   initialMessages: Message[];
   sessionId: string;
   chatId: string;
-  teacherName: string;
+  chatPartner: cacheUser;
 }
 
 const Messages: React.FC<MessagesProps> = ({
   initialMessages,
   sessionId,
   chatId,
-  teacherName,
+  chatPartner,
 }) => {
   const [messages, setMessages] = React.useState<Message[]>(initialMessages);
   React.useEffect(() => {

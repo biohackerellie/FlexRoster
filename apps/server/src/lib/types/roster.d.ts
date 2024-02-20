@@ -55,3 +55,15 @@ export interface ClassUser {
   agents: [];
   grades: [string];
 }
+
+export interface AzureResponse<T> {
+  "@odata.context": string;
+  "@odata.nextLink"?: string; // response may be paginated
+  value: T[];
+}
+
+export interface AzureUser {
+  id: string;
+  displayName: string;
+  userPrincipalName: string;
+}

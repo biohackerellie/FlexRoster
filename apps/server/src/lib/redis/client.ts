@@ -1,10 +1,12 @@
 import Redis from "ioredis";
 
+import { env } from "~/env";
+
 export function createClient() {
   try {
     const redis = new Redis({
-      host: process.env.REDIS_HOST as unknown as string,
-      port: process.env.REDIS_PORT as unknown as number,
+      host: env.REDIS_HOST as unknown as string,
+      port: env.REDIS_PORT as unknown as number,
       showFriendlyErrorStack: true,
       enableAutoPipelining: true,
       maxRetriesPerRequest: 0,
