@@ -2,7 +2,7 @@ import { db, eq, schema } from "@local/db";
 
 import { env } from "~/env";
 import { ClassResponse } from "~/lib/types";
-import { fetcher, icAuth } from "../lib/utils";
+import { fetcher, icAuth } from "../../lib/utils";
 
 async function syncRoster() {
   try {
