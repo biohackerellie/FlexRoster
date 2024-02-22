@@ -12,11 +12,15 @@ export async function POST(req: Request) {
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
 
-    const [studentId, teacherName] = chatId.split("--");
+    const [userId1, userId2] = chatId.split("--");
     if (!session) {
       throw new Error("You are not logged in");
     }
     const timestamp = Date.now();
+    if (session.user.id !== userId1 && session.user.id !== userId2) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+    const friendId = session.user.id === userId1 ? userId2 : userId1;
 
     const messageData: Message = {
       id: nanoid(),
@@ -27,8 +31,12 @@ export async function POST(req: Request) {
     const message = messageValidator.parse(messageData);
 
     const chat = await client.api.inbox[`${chatId}`]?.subscribe();
-
     chat?.send(message);
+
+    const friendchat = await client.api.users[`${friendId}`]?.subscribe();
+
+    friendchat?.send(message);
+
     console.log("sent message");
     await client.api.inbox[`${chatId}`]?.post({
       timestamp: timestamp,

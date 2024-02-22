@@ -1,8 +1,17 @@
-import { db, eq, schema } from "@local/db";
+/**
+ * Synchronizes the roster by fetching class data from the server and inserting it into the database.
+ * Only classes with titles containing "STEAM-B" are considered.
+ * Teacher names containing "Brandi Fox" are skipped.
+ * The teacher names are formatted and stored in the database.
+ */
+import { db, eq, like, schema } from "@local/db";
+import { findUserIdByName, formatTeacherNames } from "@local/validators";
 
 import { env } from "~/env";
 import { ClassResponse } from "~/lib/types";
 import { fetcher, icAuth } from "../../lib/utils";
+
+type SelectUser = typeof schema.users.$inferSelect;
 
 async function syncRoster() {
   try {
@@ -17,6 +26,8 @@ async function syncRoster() {
       },
     });
 
+    // Swap out STEAM value either STEAM-A for first semester or STEAM-B for second semester
+
     const filteredClasses = data.classes.filter((cls) =>
       cls.title.includes("STEAM-B"),
     );
@@ -27,6 +38,9 @@ async function syncRoster() {
         teacher: cls.classCode,
         roomNumber: cls.location || "unknown",
       };
+    });
+    const allTeachers = await db.query.users.findMany({
+      where: eq(schema.users.role, "teacher"),
     });
 
     let count = 0;
@@ -39,10 +53,19 @@ async function syncRoster() {
         ) {
           continue;
         }
+        let teacherName = formatTeacherNames(room.teacher);
+        let user = null;
+        if (teacherName) {
+          user = findUserIdByName(teacherName, allTeachers);
+        }
+
+        // get teacher id from users table for corresponding teacher name
+
         await tx.insert(schema.classrooms).values({
           id: room.id,
           roomNumber: room.roomNumber,
-          teacherName: formatTeacherNames(room.teacher),
+          teacherName: teacherName,
+          teacherId: user,
         });
         count++;
         console.log(count);
@@ -56,15 +79,3 @@ async function syncRoster() {
 }
 
 syncRoster();
-
-function formatTeacherNames(teacherName: string) {
-  const formattedTeacherName = teacherName?.split(", ").reverse().join(" ");
-  console.log("formattedTeacherName", formattedTeacherName);
-  //remove the middle initial from 'firstname middleinitial lastname'
-  const teacher = formattedTeacherName
-    ?.split(" ")
-    .filter((name) => name.length > 1)
-    .join("-");
-
-  return teacher;
-}

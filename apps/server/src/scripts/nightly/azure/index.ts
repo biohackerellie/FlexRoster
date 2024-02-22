@@ -2,7 +2,7 @@
  * This script is used to fetch all students and teachers from Azure AD and store them in the database.
  */
 
-import { db, eq, schema } from "@local/db";
+import { db, eq, like, schema } from "@local/db";
 
 import { env } from "~/env";
 import azureAuth from "~/lib/azure";
@@ -39,34 +39,32 @@ async function fetchAllUsers(
  * Main function to fetch all students and teachers from Azure AD and store them in the database.
  */
 
-async function azureStudents(): Promise<AzureUser[]> {
+async function azureTeachers(): Promise<AzureUser[]> {
   try {
     const token = await azureAuth();
-    let studentLink: string | undefined = env.AZURE_STUDENT_QUERY;
+
     let staffLink: string | undefined = env.AZURE_TEACHER_QUERY;
-
-    // Use promise.all with the helper function to fetch all users from Azure AD at the same time
-    const studentPromise = fetchAllUsers(studentLink, token);
+    let helpdeskLink: string | undefined = env.AZURE_HELPDESK_QUERY;
     const staffPromise = fetchAllUsers(staffLink, token);
-    const [studentData, staffData] = await Promise.all([
-      studentPromise,
+    const helpdeskPromise = fetchAllUsers(helpdeskLink, token);
+    const [staffData, helpdeskData] = await Promise.all([
       staffPromise,
+      helpdeskPromise,
     ]);
-
     // Fetch all classrooms from the database
-    const dbClassRooms = await db.query.classrooms.findMany();
-
-    // reduce the classrooms to an array of teacher names
-    const classrooms = dbClassRooms.map((room) => room.teacherName);
 
     let teacherCount = 0;
-    let studentCount = 0;
+    let helpdeskCount = 0;
     // Use a transaction to insert all the users into the database at the same time
     await db.transaction(async (tx) => {
       for (const teacher of staffData) {
-        // if classrooms does not include teacher.displayName, skip entry to filter out people who may have been in the teacher group but are not actually teachers
-        if (!classrooms.includes(teacher.displayName)) {
-          continue;
+        let role: "teacher" | "secretary" = "teacher";
+        if (
+          secretaries.includes(
+            teacher.userPrincipalName as (typeof secretaries)[number],
+          )
+        ) {
+          role = "secretary";
         }
         await tx
           .insert(schema.users)
@@ -74,25 +72,37 @@ async function azureStudents(): Promise<AzureUser[]> {
             id: teacher.id,
             name: teacher.displayName,
             email: teacher.userPrincipalName,
-            role: "teacher",
+            role: role,
           })
+          .returning({ newID: schema.users.id })
           .onConflictDoNothing();
+        const dbClassRooms = await db.query.classrooms.findFirst({
+          where: like(schema.classrooms.teacherName, teacher.displayName),
+        });
+        if (dbClassRooms) {
+          await tx.update(schema.classrooms).set({
+            teacherId: teacher.id,
+          });
+        }
         teacherCount++;
       }
-      for (const student of studentData) {
+
+      for (const helpdesk of helpdeskData) {
         await tx
           .insert(schema.users)
           .values({
-            id: student.id,
-            name: student.displayName,
-            email: student.userPrincipalName,
-            role: "student",
+            id: helpdesk.id,
+            name: helpdesk.displayName,
+            email: helpdesk.userPrincipalName,
+            role: "admin",
           })
           .onConflictDoNothing();
-        studentCount++;
+        helpdeskCount++;
       }
     });
-    console.log(`Added ${teacherCount} teachers and ${studentCount} students`);
+    console.log(
+      `Added ${teacherCount} teachers and ${helpdeskCount} helpdesk users to the database.`,
+    );
     process.exit(0);
   } catch (error) {
     console.log(error);
@@ -100,4 +110,15 @@ async function azureStudents(): Promise<AzureUser[]> {
   }
 }
 
-azureStudents();
+azureTeachers();
+
+const secretaries = [
+  "rachel_gappa@laurel.k12.mt.us",
+  "marita_grammar@laurel.k12.mt.us",
+  "brandi_fox@laurel.k12.mt.us",
+  "hsmessage@laurel.k12.mt.us",
+
+  "admin@laurel.k12.mt.us",
+  "stacy_hall@laurel.k12.mt.us",
+  "john_stilson@laurel.k12.mt.us",
+] as const;

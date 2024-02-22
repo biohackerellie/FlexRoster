@@ -34,6 +34,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@local/validators": "workspace:*",
     "@local/eslint-config": "workspace:*",
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",

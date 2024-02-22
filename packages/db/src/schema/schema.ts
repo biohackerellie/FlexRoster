@@ -71,11 +71,16 @@ export const classrooms = pgTable("classrooms", {
   id: text("id").primaryKey().notNull(),
   roomNumber: text("roomNumber").notNull(),
   teacherName: text("teacherName").notNull(),
+  teacherId: text("teacherId"),
   available: boolean("available").default(true).notNull(),
 });
 
-export const classroomRelations = relations(classrooms, ({ many }) => ({
+export const classroomRelations = relations(classrooms, ({ many, one }) => ({
   classRosters: many(classRosters),
+  users: one(users, {
+    fields: [classrooms.teacherId],
+    references: [users.id],
+  }),
 }));
 
 export const users = pgTable("user", {
@@ -95,6 +100,7 @@ export const userRelations = relations(users, ({ one }) => ({
     fields: [users.email],
     references: [classRosters.studentEmail],
   }),
+  classrooms: one(classrooms),
 }));
 
 export const accounts = pgTable(

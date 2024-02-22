@@ -30,6 +30,7 @@ export const env = createEnv({
     WORKING_DIR: z.string().default("./"),
     AZURE_STUDENT_QUERY: z.string(),
     AZURE_TEACHER_QUERY: z.string(),
+    AZURE_HELPDESK_QUERY: z.string(),
   },
 
   runtimeEnv: {
@@ -56,6 +57,7 @@ export const env = createEnv({
     WORKING_DIR: process.env.WORKING_DIR,
     AZURE_STUDENT_QUERY: process.env.AZURE_STUDENT_QUERY,
     AZURE_TEACHER_QUERY: process.env.AZURE_TEACHER_QUERY,
+    AZURE_HELPDESK_QUERY: process.env.AZURE_HELPDESK_QUERY,
   },
   skipValidation:
     !!process.env.CI ||

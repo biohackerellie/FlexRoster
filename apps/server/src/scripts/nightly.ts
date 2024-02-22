@@ -6,14 +6,21 @@ $.cwd(`src/scripts`);
 console.log("Working directory: ");
 await $`pwd`;
 
-await $`echo "Clearing database ..."`;
+const azure = await $`bun ./nightly/azure/index.ts`;
+if (azure.exitCode === 1) {
+  console.error(azure.stderr);
+  process.exit(1);
+}
+await $`echo "Azure users synced"`;
+
+await $`echo "Clearing database IC tables..."`;
 
 const clearDB = await $`bun ./nightly/clearDB.ts`;
 if (clearDB.exitCode === 1) {
   console.error(clearDB.stderr);
   process.exit(1);
 }
-await $`echo "Database cleared"`;
+await $`echo "Database cleared of IC tables"`;
 
 const rosterSync = await $`bun ./nightly/syncRoster.ts`;
 if (rosterSync.exitCode === 1) {
@@ -35,12 +42,5 @@ if (removeDuplicates.exitCode === 1) {
   process.exit(1);
 }
 await $`echo "Duplicates removed"`;
-
-const azure = await $`bun ./nightly/azure/index.ts`;
-if (azure.exitCode === 1) {
-  console.error(azure.stderr);
-  process.exit(1);
-}
-await $`echo "Azure users synced"`;
 
 console.log("Nightly script completed");

@@ -1,25 +1,28 @@
-import NextAuth from 'next-auth';
-import type { DefaultSession } from 'next-auth';
-import azureAd from 'next-auth/providers/azure-ad';
-import { env } from '../env';
-import { db, InferSelectModel, pgTable, PgTableFn, schema } from '@local/db';
-import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import { Adapter } from '@auth/core/adapters';
-export type { Session } from 'next-auth';
+import type { DefaultSession } from "next-auth";
+import { Adapter } from "@auth/core/adapters";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import NextAuth from "next-auth";
+import azureAd from "next-auth/providers/azure-ad";
+
+import { db, InferSelectModel, pgTable, PgTableFn, schema } from "@local/db";
+
+import { env } from "../env";
+
+export type { Session } from "next-auth";
 
 const { users, accounts, sessions, verificationTokens } = schema;
-declare module 'next-auth' {
+declare module "next-auth" {
   interface Session {
     user: {
       id: string;
       roles: string;
-    } & DefaultSession['user'];
+    } & DefaultSession["user"];
   }
 }
 
-declare module '@auth/core/adapters' {
+declare module "@auth/core/adapters" {
   export interface AdapterUser extends InferSelectModel<typeof users> {
-    role: 'student' | 'teacher' | 'admin' | 'secretary';
+    role: "student" | "teacher" | "admin" | "secretary";
   }
 }
 
@@ -28,16 +31,16 @@ type TableFnParams = Parameters<PgTableFn>;
 function dumbAdapter(
   name: TableFnParams[0],
   columns: TableFnParams[1],
-  extraConfig: TableFnParams[2]
+  extraConfig: TableFnParams[2],
 ) {
   switch (name) {
-    case 'user':
+    case "user":
       return users;
-    case 'account':
+    case "account":
       return accounts;
-    case 'session':
+    case "session":
       return sessions;
-    case 'verificationToken':
+    case "verificationToken":
       return verificationTokens;
     default:
       return pgTable(name, columns, extraConfig);
@@ -45,7 +48,7 @@ function dumbAdapter(
 }
 export const adapter = DrizzleAdapter(
   db,
-  dumbAdapter as PgTableFn<undefined>
+  dumbAdapter as PgTableFn<undefined>,
 ) as Adapter;
 
 export const {
@@ -69,15 +72,16 @@ export const {
           role: profile.roles[0],
         };
       },
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
 
   callbacks: {
     async redirect({ url, baseUrl }) {
-      baseUrl ?? (baseUrl = '/');
+      baseUrl ?? (baseUrl = "/");
       return baseUrl;
     },
 

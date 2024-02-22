@@ -7,27 +7,20 @@ import { StudentTable } from "@/lib/types";
 import { formatTeacherNames } from "@/lib/utils";
 import { ClassListComponent } from "./_components/ClassList";
 
-type rooms = {
-  roomNumber: string;
-  teacherName: string;
-  available: boolean;
-  id: string;
-};
-
 async function getData(email: string, userid: string) {
   const { data: data, error } = await client.api.classes[""].get();
   if (error) {
     console.log("something went wrong", error);
     return [];
   }
-  const mappedData: StudentTable[] = data.map((rooms: rooms) => {
+  const mappedData: StudentTable[] = data.map((rooms) => {
     const formattedTeacherName = formatTeacherNames(rooms.teacherName);
     return {
       roomNumber: rooms.roomNumber,
       teacherName: formattedTeacherName,
       available: rooms.available,
       email: email,
-      userId: userid,
+      chatId: `${userid}--${rooms.users?.id}`,
     };
   });
   return mappedData as StudentTable[];

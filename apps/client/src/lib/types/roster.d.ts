@@ -61,5 +61,5 @@ export type StudentTable = {
   teacherName: string;
   available: boolean;
   email: string;
-  userId: string;
+  chatId: string;
 };

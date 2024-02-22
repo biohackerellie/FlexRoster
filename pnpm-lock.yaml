@@ -232,6 +232,9 @@ importers:
       '@local/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
+      '@local/validators':
+        specifier: workspace:*
+        version: link:../../packages/validators
       '@types/node':
         specifier: ^20.11.17
         version: 20.11.17

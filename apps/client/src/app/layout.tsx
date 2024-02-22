@@ -9,7 +9,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "STEAM",
+  title: "STEAM | Home",
   description:
     "Sit down, shut up, and read an unbanned, straight, white, christian mom approved book",
 };

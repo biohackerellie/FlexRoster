@@ -6,7 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { toast } from "sonner";
 
-import { setRoster } from "@/app/student/actions";
+import { setRoster } from "@/app/(dashboard)/dashboard/@student/actions";
 import { DataTable } from "@/components/tables";
 import { Button } from "@/components/ui/button";
 import {
@@ -210,14 +210,13 @@ const columns: ColumnDef<StudentTable>[] = [
     },
   },
   {
-    accessorKey: "userId",
+    accessorKey: "chatId",
     header: "Message",
     cell: ({ row, column }) => {
-      const userId = row.getValue("userId") as string;
-      const teacherName = row.getValue("teacherName") as string;
+      const chatId = row.getValue("chatId") as string;
       return (
         <Button asChild variant="outline">
-          <Link href={`/student/chat/${userId}--${teacherName}`}>chat</Link>
+          <Link href={`/chat/${chatId}`}>chat</Link>
         </Button>
       );
     },
