@@ -95,6 +95,8 @@ export const users = pgTable("user", {
     .notNull(),
 });
 
+export type SelectUser = typeof users.$inferSelect;
+
 export const userRelations = relations(users, ({ one }) => ({
   classRosters: one(classRosters, {
     fields: [users.email],

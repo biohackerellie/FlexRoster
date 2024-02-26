@@ -1,11 +1,12 @@
 import { Elysia, t } from "elysia";
 
-import { cachedUsers, setCachedUser } from "./handlers";
+import { cachedTeachers, cachedUsers, setCachedUser } from "./handlers";
 
 export const userRoutes = new Elysia({ prefix: "/users" })
   .onError(({ code, error }) => {
     return new Response(error.toString());
   })
+  .get("/teachers", () => cachedTeachers())
   .get("/cached/:id", ({ params: { id } }) => cachedUsers(id))
   .post("/cached", ({ body }) => setCachedUser(body), {
     body: t.Object({
@@ -16,15 +17,15 @@ export const userRoutes = new Elysia({ prefix: "/users" })
       }),
     }),
   })
-  .ws("/:friendId", {
-    params: t.Object({ friendId: t.String() }),
+  .ws("/:userId", {
+    params: t.Object({ userId: t.String() }),
     open(ws) {
-      ws.subscribe(`user:${ws.data.params.friendId}:chats`);
+      ws.subscribe(`user:${ws.data.params.userId}:chats`);
     },
     message(ws, message) {
-      ws.publish(`user:${ws.data.params.friendId}:chats`, message);
+      ws.publish(`user:${ws.data.params.userId}:chats`, message);
     },
     close(ws) {
-      ws.unsubscribe(`user:${ws.data.params.friendId}:chats`);
+      ws.unsubscribe(`user:${ws.data.params.userId}:chats`);
     },
   });

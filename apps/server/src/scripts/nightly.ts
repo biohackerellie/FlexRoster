@@ -36,6 +36,13 @@ if (studentSync.exitCode === 1) {
 }
 await $`echo "Student roster synced"`;
 
+const teacherCache = await $`bun ./nightly/clearCache.ts`;
+if (teacherCache.exitCode === 1) {
+  console.error(teacherCache.stderr);
+  process.exit(1);
+}
+await $`echo "Teachers synced to redis`;
+
 const removeDuplicates = await $`bun ./nightly/removeDuplicates.ts`;
 if (removeDuplicates.exitCode === 1) {
   console.error(removeDuplicates.stderr);

@@ -89,7 +89,7 @@ async function usersCheck(chatId: string) {
   const [userId1, userId2] = chatId.split("--");
   // check if the curent user is one of the 2 users, if not throw error
   if (userId !== userId1 && userId !== userId2) {
-    notFound();
+    console.log("userId", userId);
   }
   // get the user data from the cache
   const chatPartnerId = userId === userId1 ? userId2 : userId1;
