@@ -1,8 +1,10 @@
 import { join } from "path";
 import type { ClassValue } from "clsx";
+import { NextRequest } from "next/server";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+import { auth } from "@local/auth";
 import { schema } from "@local/db";
 import { client } from "@local/eden";
 
@@ -17,7 +19,7 @@ export function chatHrefConstructor(id1: string, id2: string) {
 
 export function formatTeacherNames(teacherName: string) {
   const formattedTeacherName = teacherName?.split(", ").reverse().join(" ");
-  console.log("formattedTeacherName", formattedTeacherName);
+
   //remove the middle initial from 'firstname middleinitial lastname'
   const teacher = formattedTeacherName
     ?.split(" ")

@@ -1,5 +1,6 @@
+import { auth } from "@local/auth";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { auth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 

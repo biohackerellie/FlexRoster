@@ -216,7 +216,7 @@ const columns: ColumnDef<StudentTable>[] = [
       const chatId = row.getValue("chatId") as string;
       return (
         <Button asChild variant="outline">
-          <Link href={`/chat/${chatId}`}>chat</Link>
+          <Link href={chatId}>chat</Link>
         </Button>
       );
     },
@@ -240,7 +240,7 @@ async function handleTransfer({
 }) {
   try {
     const res = await setRoster(email, roomNumber, teacherName);
-    console.log(res);
+    
     if (res === 200) {
       toast.info("You have successfully transferred", {
         position: "top-center",

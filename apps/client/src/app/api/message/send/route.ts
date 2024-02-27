@@ -8,7 +8,7 @@ import { Message, messageValidator } from "@local/validators";
 export async function POST(req: Request) {
   try {
     const { chatId, text } = await req.json();
-    console.log(chatId, text);
+
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
 
@@ -16,6 +16,7 @@ export async function POST(req: Request) {
     if (!session) {
       throw new Error("You are not logged in");
     }
+
     const timestamp = Date.now();
     if (session.user.id !== userId1 && session.user.id !== userId2) {
       return new Response("Unauthorized", { status: 401 });
@@ -37,16 +38,14 @@ export async function POST(req: Request) {
 
     friendchat?.send(message);
 
-    console.log("sent message");
     await client.api.inbox[`${chatId}`]?.post({
       timestamp: timestamp,
       message: text,
     });
-    console.log("posted message to redis");
+
     return new Response("success", { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-      console.log(error);
       return new Response(error.message, { status: 400 });
     }
     return new Response("Internal Server Error", { status: 500 });

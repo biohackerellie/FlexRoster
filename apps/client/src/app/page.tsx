@@ -11,7 +11,7 @@ export default async function Home() {
 
       <div>
         <Button asChild>
-          <Link href="/student">Open Dashboard</Link>
+          <Link href="/dashboard">Open Dashboard</Link>
         </Button>
       </div>
     </main>

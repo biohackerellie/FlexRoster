@@ -38,7 +38,7 @@ const SidebarChatList: React.FC<SidebarChatListProps> = ({
     const chatHandler = (message: ExtendedMessage) => {
       const shouldNotify =
         pathname !==
-        `/dashboard/chat/${chatHrefConstructor(sessionId, message.senderId)}`;
+        `/chat/${chatHrefConstructor(sessionId, message.senderId)}`;
 
       if (!shouldNotify) return;
       toast(`new message from ${message.senderName}`, {
@@ -46,7 +46,7 @@ const SidebarChatList: React.FC<SidebarChatListProps> = ({
           label: "Open",
           onClick: () => {
             router.push(
-              `/dashboard/chat/${chatHrefConstructor(sessionId, message.senderId)}`,
+              `/chat/${chatHrefConstructor(sessionId, message.senderId)}`,
             );
             toast.dismiss();
           },
@@ -85,7 +85,7 @@ const SidebarChatList: React.FC<SidebarChatListProps> = ({
         return (
           <li key={friend.id}>
             <a
-              href={`/dashboard/chat/${chatHrefConstructor(sessionId, friend.id)}`}
+              href={`/chat/${chatHrefConstructor(sessionId, friend.id)}`}
               className="group flex items-center gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
             >
               {friend.name}

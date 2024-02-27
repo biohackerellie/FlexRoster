@@ -3,6 +3,7 @@ import { Adapter } from "@auth/core/adapters";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
 import azureAd from "next-auth/providers/azure-ad";
+import { useSession } from "next-auth/react";
 
 import { db, InferSelectModel, pgTable, PgTableFn, schema } from "@local/db";
 
@@ -89,11 +90,13 @@ export const {
       ...session,
       user: {
         ...session.user,
-        id: session.user.id,
-        roles: session.user.role,
+        id: user.id,
+        roles: user.role,
         email: session.user.email,
         name: session.user.name,
       },
     }),
   },
 });
+
+export { useSession };

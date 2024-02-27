@@ -4,7 +4,7 @@ import { cachedTeachers, cachedUsers, setCachedUser } from "./handlers";
 
 export const userRoutes = new Elysia({ prefix: "/users" })
   .onError(({ code, error }) => {
-    return new Response(error.toString());
+    return error;
   })
   .get("/teachers", () => cachedTeachers())
   .get("/cached/:id", ({ params: { id } }) => cachedUsers(id))

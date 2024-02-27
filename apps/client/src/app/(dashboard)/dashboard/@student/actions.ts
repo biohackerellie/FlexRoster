@@ -30,7 +30,7 @@ export async function sendMessage(chatId: string, formData: FormData) {
   const text = formData.get("text") as string;
 
   try {
-    console.log("chatId", chatId);
+    
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
 
@@ -50,14 +50,14 @@ export async function sendMessage(chatId: string, formData: FormData) {
 
     const chat = client.api.inbox[`${chatId}`]?.subscribe();
 		
-    console.log("connected to socket", chat);
+    
     chat?.send((message))
-    console.log("sent message");
+    
     await client.api.inbox[`${chatId}`]?.post({
       timestamp: timestamp,
       message: text,
     });
-    console.log("posted message to redis");
+    
     return "success";
   } catch (error) {
     if (error instanceof Error) {

@@ -40,13 +40,12 @@ type cachedUser = {
 async function getCachedUsers(key?: string): Promise<cachedUser | undefined> {
   const client = createClient();
   try {
-    console.log("key", key);
     if (!key) {
       const userKeys = [];
       for await (const key of client.scanStream({ match: "user:*" })) {
         userKeys.push(...key);
       }
-      console.log("userKeys", userKeys);
+
       const users: cachedUser = {};
       for (const userKey of userKeys) {
         const userDetails = await client.hgetall(userKey);
@@ -63,7 +62,7 @@ async function getCachedUsers(key?: string): Promise<cachedUser | undefined> {
       return users;
     } else {
       const user = await client.hgetall(`user:${key}`);
-      console.log(user);
+
       if (!user || Object.keys(user).length === 0) {
         return undefined;
       }

@@ -4,7 +4,11 @@ import { getCachedUsers, setCachedUsers } from "~/lib/redis";
 
 export async function cachedUsers(id: string) {
   try {
-    return await getCachedUsers(id);
+    const res = await getCachedUsers(id);
+    if (!res) {
+      throw new Error("Unable to get chat messages");
+    }
+    return res;
   } catch (e) {
     throw new NotFoundError("No user found with that ID");
   }

@@ -28,6 +28,7 @@ const Messages: React.FC<MessagesProps> = ({
   chatPartner,
 }) => {
   const [messages, setMessages] = React.useState<Message[]>(initialMessages);
+  console.log("messages: ", messages);
   React.useEffect(() => {
     const chat = client.api.inbox[`${chatId}`]?.subscribe();
     const messageHandler = (message: Message) => {

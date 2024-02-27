@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import axios from "axios";
 import { nanoid } from "nanoid";
 import { toast } from "sonner";
 
@@ -17,37 +18,43 @@ type cacheUser = {
 interface ChatInputProps {
   chatPartner: cacheUser;
   chatId: string;
+  userId: string;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ chatPartner, chatId }) => {
+const ChatInput: React.FC<ChatInputProps> = ({
+  chatPartner,
+  chatId,
+  userId,
+}) => {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [input, setInput] = React.useState<string>("");
-  const [studentId, teacherName] = chatId.split("--");
+  const [userId1, userId2] = chatId.split("--");
+  const senderId = userId === userId1 ? userId1 : userId2;
+  const friendId = userId === userId1 ? userId2 : userId1;
   const chat = client.api.inbox[`${chatId}`]?.subscribe();
+  const friendChat = client.api.users[`${friendId}`]?.subscribe();
+
   const sendMessage = async () => {
     if (!input) return;
     setIsLoading(true);
+
     try {
       const timestamp = Date.now();
       const messageData: Message = {
         id: nanoid(),
-        senderId: studentId!,
+        senderId: senderId!,
         text: input,
-        timestamp,
+        timestamp: timestamp,
       };
       const message = messageValidator.parse(messageData);
       chat?.send(message);
-      client.api.inbox[`${chatId}`]?.post({
-        timestamp: timestamp,
-        message: input,
-      });
+      friendChat?.send(message);
+      client.api.inbox[`${chatId}`]?.post({ message: message });
       setInput("");
       textareaRef.current?.focus();
-      chat?.close();
     } catch (error) {
       toast.error("Failed to send message");
-      console.log(error);
     } finally {
       setIsLoading(false);
     }

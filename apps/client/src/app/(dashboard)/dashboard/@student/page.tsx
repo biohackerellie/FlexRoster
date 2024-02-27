@@ -4,13 +4,12 @@ import { client } from "@local/eden";
 import { ChatInput, Messages } from "@/components/chat";
 import { greetings } from "@/lib/constants";
 import { StudentTable } from "@/lib/types";
-import { formatTeacherNames } from "@/lib/utils";
+import { chatHrefConstructor, formatTeacherNames } from "@/lib/utils";
 import { ClassListComponent } from "./_components/ClassList";
 
 async function getData(email: string, userid: string) {
   const { data: data, error } = await client.api.classes[""].get();
   if (error) {
-    console.log("something went wrong", error);
     return [];
   }
   const mappedData: StudentTable[] = data.map((rooms) => {
@@ -20,7 +19,7 @@ async function getData(email: string, userid: string) {
       teacherName: formattedTeacherName,
       available: rooms.available,
       email: email,
-      chatId: `${userid}--${rooms.users?.id}`,
+      chatId: `/chat/${chatHrefConstructor(userid, rooms.teacherId!)}`,
     };
   });
   return mappedData as StudentTable[];
@@ -32,7 +31,6 @@ async function getClass(email: string) {
     data: [],
   };
   if (res.error) {
-    console.log("something went wrong", res.error);
     return [];
   }
   return res.data;

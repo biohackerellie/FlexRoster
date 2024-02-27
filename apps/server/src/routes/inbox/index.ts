@@ -10,15 +10,18 @@ export const inboxRoutes = new Elysia({ prefix: "/inbox" })
   })
   .post(
     "/:chatId",
-    ({ params: { chatId }, body: { timestamp, message } }) =>
-      sendToInbox(chatId, timestamp, message),
+    ({ params: { chatId }, body: { message } }) => sendToInbox(chatId, message),
     {
       params: t.Object({
         chatId: t.String(),
       }),
       body: t.Object({
-        timestamp: t.Number(),
-        message: t.String(),
+        message: t.Object({
+          id: t.String(),
+          senderId: t.String(),
+          text: t.String(),
+          timestamp: t.Number(),
+        }),
       }),
     },
   )
