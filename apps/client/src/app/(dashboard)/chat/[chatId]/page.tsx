@@ -1,10 +1,9 @@
 import { notFound } from "next/navigation";
-
 import { auth } from "@local/auth";
-import { client } from "@local/eden";
 import { Message, messageArrayValidator } from "@local/validators";
-
+import { getInbox, getCachedUsers, setCachedUsers } from "@/lib/redis/actions";
 import { ChatInput, Messages } from "@/components/chat";
+
 
 type cacheUser = {
   name: string;
@@ -17,14 +16,16 @@ interface PageProps {
   };
 }
 
+const dynamic = "force-dynamic";
+
 export async function generateMetadata() {
   return { title: `Chat` };
 }
 
 export default async function ChatPage({ params }: PageProps) {
   const { chatId } = params;
-  const initialMessages = await getChatMessages(chatId);
-  const { chatPartner, userId } = await usersCheck(chatId);
+	const {chat, initialMessages} = await allData(chatId);
+	const { chatPartner, userId } = chat;
   console.log("chatPartner: ", chatPartner.name);
   console.log("initialMessages: ", initialMessages);
   return (
@@ -52,21 +53,22 @@ export default async function ChatPage({ params }: PageProps) {
 }
 
 async function getChatMessages(chatId: string) {
-  const res = await client.api.inbox[`${chatId}`]?.get();
-
+	try {
+  const res = await getInbox(chatId);
+	console.log("res: ", res);
   if (!res) {
     throw new Error("Unable to get chat messages");
   }
-  if (res.error) {
-    console.error("Error getting chat messages", res.error);
-    throw new Error("Unable to get chat messages");
-  }
-  const dbMessages = res.data.map((message) => JSON.parse(message) as Message);
+
+  const dbMessages = res.map((message) => JSON.parse(message) as Message);
   const reversedMessages = dbMessages.reverse();
-  console.log("reversedMessages: ", reversedMessages);
+
   const messages = messageArrayValidator.parse(reversedMessages);
-  console.log("messages: ", messages);
+
   return messages;
+} catch (e) {
+	throw new Error("Unable to get chat messages");
+}
 }
 
 /**
@@ -77,52 +79,51 @@ async function getChatMessages(chatId: string) {
  */
 
 async function usersCheck(chatId: string) {
-  // get user session
+	try{
   const session = await auth();
 
   if (!session) notFound();
   const { user } = session;
   const userId = user.id!;
 
-  // get the 2 users from the chat id
+
   const [userId1, userId2] = chatId.split("--");
 
-  // check if the curent user is one of the 2 users, if not throw error
   if (userId !== userId1 && userId !== userId2) {
     notFound();
   }
 
-  // get the user data from the cache
+
   const chatPartnerId = userId === userId1 ? userId2 : userId1;
-  const chatPartnerRaw =
-    await client.api.users.cached[`${chatPartnerId}`]?.get()!;
+  const chatPartnerRaw = await getCachedUsers(chatPartnerId);
 
-  // if the current user is not found in the cache, set the user in the cache
-  let userIdRaw = await client.api.users.cached[`${userId}`]?.get()!;
 
-  if (userIdRaw.error) {
+  let userIdRaw = await getCachedUsers(userId);
+
+  if (!userIdRaw) {
     console.log("userIdRaw error");
-    await client.api.users.cached.post({
+    await setCachedUsers({
       key: `user:${userId}`,
       object: { name: user.name!, role: user.roles },
     });
-    userIdRaw = await client.api.users.cached[`${userId}`]?.get()!;
+    userIdRaw = await getCachedUsers(userId);
   }
 
-  if (chatPartnerRaw.error || userIdRaw.error) {
-    console.log("Error getting chat partner", chatPartnerRaw.error);
-    return notFound();
-  }
 
-  // get the user data from the cache and validate the role
-  const chatPartner = Object.values(chatPartnerRaw.data)[0] as cacheUser;
 
-  const primaryUser = Object.values(userIdRaw.data)[0] as cacheUser;
+
+  const chatPartner = Object.values(chatPartnerRaw!)[0] as cacheUser;
+
+  const primaryUser = Object.values(userIdRaw!)[0] as cacheUser;
   if (primaryUser.role === "student" && chatPartner.role === "student") {
     return notFound();
   }
 
   return { chatPartner, userId };
+}catch(e){
+	console.log(e);
+	throw new Error("Error getting chat messages");
+}
 }
 
 async function allData(chatId: string) {

@@ -29,28 +29,14 @@ const ChatInput: React.FC<ChatInputProps> = ({
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [input, setInput] = React.useState<string>("");
-  const [userId1, userId2] = chatId.split("--");
-  const senderId = userId === userId1 ? userId1 : userId2;
-  const friendId = userId === userId1 ? userId2 : userId1;
-  const chat = client.api.inbox[`${chatId}`]?.subscribe();
-  const friendChat = client.api.users[`${friendId}`]?.subscribe();
+
 
   const sendMessage = async () => {
     if (!input) return;
     setIsLoading(true);
 
     try {
-      const timestamp = Date.now();
-      const messageData: Message = {
-        id: nanoid(),
-        senderId: senderId!,
-        text: input,
-        timestamp: timestamp,
-      };
-      const message = messageValidator.parse(messageData);
-      chat?.send(message);
-      friendChat?.send(message);
-      client.api.inbox[`${chatId}`]?.post({ message: message });
+      await axios.post('/api/message/send', {text: input, chatId})
       setInput("");
       textareaRef.current?.focus();
     } catch (error) {

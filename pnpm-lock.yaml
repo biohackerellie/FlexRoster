@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@local/prettier-config':
         specifier: workspace:*
-        version: link:packages/prettier-config
+        version: link:tooling/prettier-config
       '@turbo/gen':
         specifier: ^1.12.3
         version: 1.12.3(@types/node@20.11.19)(typescript@5.3.3)
@@ -89,6 +89,9 @@ importers:
       geist:
         specifier: ^1.2.1
         version: 1.2.2(next@14.1.0)
+      ioredis:
+        specifier: ^5.3.2
+        version: 5.3.2
       lucide-react:
         specifier: ^0.311.0
         version: 0.311.0(react@18.2.0)
@@ -131,13 +134,13 @@ importers:
     devDependencies:
       '@local/eslint-config':
         specifier: workspace:*
-        version: link:../../packages/eslint-config
+        version: link:../../tooling/eslint-config
       '@local/prettier-config':
         specifier: workspace:*
-        version: link:../../packages/prettier-config
+        version: link:../../tooling/prettier-config
       '@local/tsconfig':
         specifier: workspace:*
-        version: link:../../packages/tsconfig
+        version: link:../../tooling/tsconfig
       '@types/node':
         specifier: ^20.11.17
         version: 20.11.17
@@ -225,13 +228,13 @@ importers:
     devDependencies:
       '@local/eslint-config':
         specifier: workspace:*
-        version: link:../../packages/eslint-config
+        version: link:../../tooling/eslint-config
       '@local/prettier-config':
         specifier: workspace:*
-        version: link:../../packages/prettier-config
+        version: link:../../tooling/prettier-config
       '@local/tsconfig':
         specifier: workspace:*
-        version: link:../../packages/tsconfig
+        version: link:../../tooling/tsconfig
       '@local/validators':
         specifier: workspace:*
         version: link:../../packages/validators
@@ -267,7 +270,7 @@ importers:
         version: link:../db
       '@local/tsconfig':
         specifier: workspace:*
-        version: link:../tsconfig
+        version: link:../../tooling/tsconfig
       '@t3-oss/env-nextjs':
         specifier: ^0.7.3
         version: 0.7.3(typescript@5.3.3)(zod@3.22.4)
@@ -275,8 +278,8 @@ importers:
         specifier: ^14.1.0
         version: 14.1.0(react-dom@18.2.0)(react@18.2.0)
       next-auth:
-        specifier: 5.0.0-beta.9
-        version: 5.0.0-beta.9(next@14.1.0)(react@18.2.0)
+        specifier: beta
+        version: 5.0.0-beta.13(next@14.1.0)(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -287,6 +290,9 @@ importers:
         specifier: ^3.22.4
         version: 3.22.4
     devDependencies:
+      '@types/node':
+        specifier: ^20.11.17
+        version: 20.11.19
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -311,13 +317,13 @@ importers:
     devDependencies:
       '@local/eslint-config':
         specifier: workspace:*
-        version: link:../eslint-config
+        version: link:../../tooling/eslint-config
       '@local/prettier-config':
         specifier: workspace:*
-        version: link:../prettier-config
+        version: link:../../tooling/prettier-config
       '@local/tsconfig':
         specifier: workspace:*
-        version: link:../tsconfig
+        version: link:../../tooling/tsconfig
       '@types/node':
         specifier: ^20.11.17
         version: 20.11.17
@@ -357,13 +363,13 @@ importers:
     devDependencies:
       '@local/eslint-config':
         specifier: workspace:*
-        version: link:../eslint-config
+        version: link:../../tooling/eslint-config
       '@local/prettier-config':
         specifier: workspace:*
-        version: link:../prettier-config
+        version: link:../../tooling/prettier-config
       '@local/tsconfig':
         specifier: workspace:*
-        version: link:../tsconfig
+        version: link:../../tooling/tsconfig
       '@types/react':
         specifier: ^18.2.51
         version: 18.2.55
@@ -383,7 +389,32 @@ importers:
         specifier: latest
         version: 5.3.3
 
-  packages/eslint-config:
+  packages/validators:
+    dependencies:
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@local/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint-config
+      '@local/prettier-config':
+        specifier: workspace:*
+        version: link:../../tooling/prettier-config
+      '@local/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      eslint:
+        specifier: ^8.56.0
+        version: 8.56.0
+      prettier:
+        specifier: ^3.2.5
+        version: 3.2.5
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
+  tooling/eslint-config:
     dependencies:
       '@next/eslint-plugin-next':
         specifier: ^14.1.0
@@ -429,7 +460,7 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
-  packages/prettier-config:
+  tooling/prettier-config:
     dependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.1.1
@@ -451,36 +482,11 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
-  packages/tsconfig:
+  tooling/tsconfig:
     dependencies:
       bun-types:
         specifier: ^1.0.25
         version: 1.0.25
-
-  packages/validators:
-    dependencies:
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
-    devDependencies:
-      '@local/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@local/prettier-config':
-        specifier: workspace:*
-        version: link:../prettier-config
-      '@local/tsconfig':
-        specifier: workspace:*
-        version: link:../tsconfig
-      eslint:
-        specifier: ^8.56.0
-        version: 8.56.0
-      prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
-      typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
 
 packages:
 
@@ -505,6 +511,29 @@ packages:
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.1
+      nodemailer: ^6.8.0
+    peerDependenciesMeta:
+      '@simplewebauthn/browser':
+        optional: true
+      '@simplewebauthn/server':
+        optional: true
+      nodemailer:
+        optional: true
+    dependencies:
+      '@panva/hkdf': 1.1.1
+      '@types/cookie': 0.6.0
+      cookie: 0.6.0
+      jose: 5.2.2
+      oauth4webapi: 2.10.3
+      preact: 10.11.3
+      preact-render-to-string: 5.2.3(preact@10.11.3)
+    dev: false
+
+  /@auth/core@0.27.0:
+    resolution: {integrity: sha512-3bydnRJIM/Al6mkYmb53MsC+6G8ojw3lLPzwgVnX4dCo6N2lrib6Wq6r0vxZIhuHGjLObqqtUfpeaEj5aeTHFg==}
+    peerDependencies:
+      '@simplewebauthn/browser': ^9.0.1
+      '@simplewebauthn/server': ^9.0.2
       nodemailer: ^6.8.0
     peerDependenciesMeta:
       '@simplewebauthn/browser':
@@ -4485,7 +4514,7 @@ packages:
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.11.17
+      '@types/node': 20.11.19
     dev: true
 
   /@types/inquirer@6.5.0:
@@ -4515,7 +4544,6 @@ packages:
     resolution: {integrity: sha512-7xMnVEcZFu0DikYjWOlRq7NTPETrm7teqUT2WkQjrTIkEgUyyGdWsj/Zg8bEJt5TNklzbPD1X3fqfsHw3SpapQ==}
     dependencies:
       undici-types: 5.26.5
-    dev: true
 
   /@types/prop-types@15.7.11:
     resolution: {integrity: sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==}
@@ -4542,7 +4570,7 @@ packages:
   /@types/through@0.0.33:
     resolution: {integrity: sha512-HsJ+z3QuETzP3cswwtzt2vEIiHBk/dCcHGhbmG5X3ecnwFD/lPrMpliGXxSCg03L9AhrdwA4Oz/qfspkDW+xGQ==}
     dependencies:
-      '@types/node': 20.11.17
+      '@types/node': 20.11.19
     dev: true
 
   /@types/tinycolor2@1.4.6:
@@ -4552,7 +4580,7 @@ packages:
   /@types/ws@8.5.10:
     resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
     dependencies:
-      '@types/node': 20.11.17
+      '@types/node': 20.11.19
 
   /@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.56.0)(typescript@5.3.3):
     resolution: {integrity: sha512-oy9+hTPCUFpngkEZUSzbf9MxI65wbKFoQYsgPdILTfbUldp5ovUuphZVe4i30emU9M/kP+T64Di0mxl7dSw3MA==}
@@ -7478,6 +7506,27 @@ packages:
     resolution: {integrity: sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==}
     engines: {node: '>= 0.4.0'}
     dev: true
+
+  /next-auth@5.0.0-beta.13(next@14.1.0)(react@18.2.0):
+    resolution: {integrity: sha512-2m2Gq69WQ0YXcHCCpHn2y5z1bxSlqD/XOuAgrdtz49/VIAdTFFeYZz97RYqf6xMF8VGmoG32VUnJ6LzaHk6Fwg==}
+    peerDependencies:
+      '@simplewebauthn/browser': ^9.0.1
+      '@simplewebauthn/server': ^9.0.2
+      next: ^14
+      nodemailer: ^6.6.5
+      react: ^18.2.0
+    peerDependenciesMeta:
+      '@simplewebauthn/browser':
+        optional: true
+      '@simplewebauthn/server':
+        optional: true
+      nodemailer:
+        optional: true
+    dependencies:
+      '@auth/core': 0.27.0
+      next: 14.1.0(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
+    dev: false
 
   /next-auth@5.0.0-beta.9(next@14.1.0)(react@18.2.0):
     resolution: {integrity: sha512-BWFiwJ/wzfxWpHnGpAoFsXHSlVofWgFns6tjtIGeDrXfEf3D+afnBpmzCNyek2RNYDVgMHi8Q5uXzFoNBd2l5g==}

@@ -6,11 +6,9 @@ import { auth } from "@local/auth";
 
 export async function isAuthenticated() {
   const session = await auth();
-	const 
+
   if (session) {
-  return {
-		
-	}
+    return {};
   } else {
     cookies().set("isAuthenticated", "false");
   }

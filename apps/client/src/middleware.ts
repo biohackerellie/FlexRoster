@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export default function middleware(request: NextRequest) {
-  const cookies = request.cookies.getAll();
+// import { auth } from "@local/auth";
 
+// export default auth((req) => {
+//   console.log("middleware", req.auth);
+
+//   const response = NextResponse.next();
+//   return response;
+// });
+
+export default function middleware(req: NextRequest) {
   const response = NextResponse.next();
   return response;
 }

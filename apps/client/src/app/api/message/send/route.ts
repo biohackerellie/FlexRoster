@@ -1,9 +1,13 @@
-import { revalidatePath } from "next/cache";
-import { nanoid } from "nanoid";
 
+import { nanoid } from "nanoid";
+import { Publisher } from "@/lib/redis/actions";
 import { auth } from "@local/auth";
-import { client } from "@local/eden";
+import { sendToInbox} from "@/lib/redis/actions";
+
+
+
 import { Message, messageValidator } from "@local/validators";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: Request) {
   try {
@@ -31,18 +35,14 @@ export async function POST(req: Request) {
     };
     const message = messageValidator.parse(messageData);
 
-    const chat = await client.api.inbox[`${chatId}`]?.subscribe();
-    chat?.send(message);
+    Publisher(`chat:${chatId}`, message);
+		Publisher(`user:${friendId}:chats`,{ 
+			...message,
+			senderName: session.user.name,
+		});
 
-    const friendchat = await client.api.users[`${friendId}`]?.subscribe();
-
-    friendchat?.send(message);
-
-    await client.api.inbox[`${chatId}`]?.post({
-      timestamp: timestamp,
-      message: text,
-    });
-
+		sendToInbox(chatId, message);
+		revalidatePath(`/chat/${chatId}`, 'page')
     return new Response("success", { status: 200 });
   } catch (error) {
     if (error instanceof Error) {

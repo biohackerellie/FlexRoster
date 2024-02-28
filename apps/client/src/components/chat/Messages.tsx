@@ -1,12 +1,11 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
+import { useOptimistic } from "react";
 import { format, set } from "date-fns";
 
-import { client } from "@local/eden";
 import { Message, messageValidator } from "@local/validators";
-
+import {client} from '@local/eden'
 import { cn } from "@/lib/utils";
 
 type cacheUser = {
@@ -27,14 +26,17 @@ const Messages: React.FC<MessagesProps> = ({
   chatId,
   chatPartner,
 }) => {
-  const [messages, setMessages] = React.useState<Message[]>(initialMessages);
+  const [messages, setMessages] = React.useState<Message[]>(initialMessages, (state: Message[], newMessage: Message) => [...state, {message: newMessage}]);
+	
   console.log("messages: ", messages);
   React.useEffect(() => {
-    const chat = client.api.inbox[`${chatId}`]?.subscribe();
+
+    const chat = client.api.sockets[`chat:${chatId}`]?.subscribe();
     const messageHandler = (message: Message) => {
       setMessages((prev) => [message, ...prev]);
     };
-    chat?.subscribe((message) => {
+
+		chat?.subscribe((message) => {
       messageHandler(message.data as Message);
     });
 

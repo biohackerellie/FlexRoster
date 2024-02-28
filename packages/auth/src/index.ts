@@ -1,4 +1,4 @@
-import type { DefaultSession } from "next-auth";
+import type { DefaultSession, NextAuthConfig } from "next-auth";
 import { Adapter } from "@auth/core/adapters";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
@@ -98,5 +98,3 @@ export const {
     }),
   },
 });
-
-export { useSession };

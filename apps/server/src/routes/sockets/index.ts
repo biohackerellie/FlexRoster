@@ -4,6 +4,7 @@ import { Elysia, t } from "elysia";
 import { db, schema } from "@local/db";
 
 import { createClient, getInbox, sendToInbox } from "~/lib/redis";
+import { Subscriber } from "~/lib/redis/pubsub";
 
 type User = typeof schema.users.$inferSelect;
 interface WebSocketConnection {
@@ -11,55 +12,28 @@ interface WebSocketConnection {
   id: string;
 }
 
-const users = new Map<User["email"], WebSocketConnection>();
 const client = createClient();
-const subscriberClient = client.duplicate();
 
 export const socketRoutes = new Elysia({
   prefix: "/sockets",
   websocket: {},
-}).ws("/chat/:user", {
+}).ws("/:channel", {
   params: t.Object({
-    user: t.String(),
+    channel: t.String(),
   }),
-  async open(ws) {
-    console.log(ws.data.params.user + " " + "Connected to chat socket");
-    const channelName = `notify:${ws.data.params.user}`;
-    subscriberClient.subscribe(channelName);
-    subscriberClient.on("message", (channel, message) => {
-      if (channel === channelName) {
-        ws.send(message);
-      }
+
+  open(ws) {
+    ws.subscribe(ws.data.params.channel);
+    client.subscribe(ws.data.params.channel);
+    client.on("message", (channel, message) => {
+      ws.send(message);
     });
-
-    const inbox = await getInbox(ws.data.params.user);
-    ws.send(JSON.stringify({ type: "history", messages: inbox }));
-    users.set(ws.data.params.user, { ws, id: ws.id });
   },
-  async message(ws, message) {
-    console.log("Received message: " + message);
-    const { sender, content, recipient } = message;
-    console.log("Received message: " + sender, content, recipient);
-    const recipientChannel = `notify:${recipient}`;
-    await client.publish(
-      recipientChannel,
-      JSON.stringify({ type: "chat", sender, content }),
-    );
-
-    const result = await sendToInbox(recipient, content, sender);
-    if (result !== "OK") {
-      console.error("Failed to send message");
-    }
+  message(ws, message) {
+    ws.publish(ws.data.params.channel, message);
   },
   close(ws) {
-    client.unsubscribe(`notify:${ws.data.params.user}`);
-    users.delete(ws.data.params.user);
+    ws.unsubscribe(ws.data.params.channel);
+    client.unsubscribe(ws.data.params.channel);
   },
-  body: t.Object({
-    sender: t.String(),
-    content: t.String(),
-    recipient: t.String(),
-  }),
-
-  response: t.String(),
 });
