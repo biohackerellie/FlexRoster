@@ -27,7 +27,7 @@ const app = new Elysia()
       .use(socketRoutes)
       .use(inboxRoutes)
       .use(scriptRoutes)
-			.use(userRoutes)
+      .use(userRoutes),
   );
 
 export default app;

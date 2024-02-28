@@ -83,9 +83,8 @@ async function azureTeachers(): Promise<AzureUser[]> {
           await tx.update(schema.classrooms).set({
             teacherId: teacher.id,
           });
-				if (role !== "secretary") {
-					
-				}
+          if (role !== "secretary") {
+          }
         }
         teacherCount++;
       }

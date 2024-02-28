@@ -30,7 +30,6 @@ export async function sendMessage(chatId: string, formData: FormData) {
   const text = formData.get("text") as string;
 
   try {
-    
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
 
@@ -49,15 +48,14 @@ export async function sendMessage(chatId: string, formData: FormData) {
     const message = messageValidator.parse(messageData);
 
     const chat = client.api.inbox[`${chatId}`]?.subscribe();
-		
-    
-    chat?.send((message))
-    
+
+    chat?.send(message);
+
     await client.api.inbox[`${chatId}`]?.post({
       timestamp: timestamp,
       message: text,
     });
-    
+
     return "success";
   } catch (error) {
     if (error instanceof Error) {

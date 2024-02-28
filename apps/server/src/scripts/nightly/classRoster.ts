@@ -3,8 +3,8 @@
  */
 
 import { db, eq, schema } from "@local/db";
-import { env } from "~/env";
 
+import { env } from "~/env";
 import { RosterResponse } from "~/lib/types";
 import { fetcher, icAuth } from "~/lib/utils";
 

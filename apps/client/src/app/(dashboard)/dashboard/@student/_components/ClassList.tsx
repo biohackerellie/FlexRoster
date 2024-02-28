@@ -240,7 +240,7 @@ async function handleTransfer({
 }) {
   try {
     const res = await setRoster(email, roomNumber, teacherName);
-    
+
     if (res === 200) {
       toast.info("You have successfully transferred", {
         position: "top-center",
