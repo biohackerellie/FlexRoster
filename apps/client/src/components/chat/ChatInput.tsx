@@ -2,11 +2,7 @@
 
 import * as React from "react";
 import axios from "axios";
-import { nanoid } from "nanoid";
 import { toast } from "sonner";
-
-import { client } from "@local/eden";
-import { Message, messageValidator } from "@local/validators";
 
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "../ui/button";
@@ -30,16 +26,20 @@ const ChatInput: React.FC<ChatInputProps> = ({
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [input, setInput] = React.useState<string>("");
 
-
   const sendMessage = async () => {
     if (!input) return;
     setIsLoading(true);
 
     try {
-      await axios.post('/api/message/send', {text: input, chatId})
+      await axios.post("/api/message/send", {
+        userId: userId,
+        text: input,
+        chatId,
+      });
       setInput("");
       textareaRef.current?.focus();
     } catch (error) {
+      console.error(error);
       toast.error("Failed to send message");
     } finally {
       setIsLoading(false);

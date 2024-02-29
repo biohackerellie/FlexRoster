@@ -41,7 +41,14 @@ export async function chatUsersByRole(
 
     return data;
   } else if (role === "teacher") {
-    return;
+    const { data, error } = await client.api.users.teachers.get();
+    if (error) {
+      throw new Error("Error fetching teachers");
+    }
+    return data;
   }
-  return;
+}
+
+export function toPusherKey(key: string) {
+  return key.replace(/:/g, "__");
 }

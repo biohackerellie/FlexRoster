@@ -7,6 +7,8 @@ import { auth } from "@local/auth";
 import { client } from "@local/eden";
 import { Message, messageValidator } from "@local/validators";
 
+import { Publisher, sendToInbox } from "@/lib/redis/actions";
+
 export async function setRoster(
   email: string,
   roomNumber: string,
@@ -26,18 +28,21 @@ export async function setRoster(
   return 200;
 }
 
-export async function sendMessage(chatId: string, formData: FormData) {
-  const text = formData.get("text") as string;
-
+export async function sendMessage(chatId: string, text: string) {
   try {
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
 
-    const [studentId, teacherName] = chatId.split("--");
+    const [userId1, userId2] = chatId.split("--");
     if (!session) {
       throw new Error("You are not logged in");
     }
+
     const timestamp = Date.now();
+    if (session.user.id !== userId1 && session.user.id !== userId2) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+    const friendId = session.user.id === userId1 ? userId2 : userId1;
 
     const messageData: Message = {
       id: nanoid(),
@@ -46,17 +51,17 @@ export async function sendMessage(chatId: string, formData: FormData) {
       timestamp,
     };
     const message = messageValidator.parse(messageData);
-
-    const chat = client.api.inbox[`${chatId}`]?.subscribe();
+    const chat = client.api.inbox[chatId]?.subscribe();
 
     chat?.send(message);
+    chat?.close();
+    // Publisher(`chat:${chatId}`, message);
+    // Publisher(`user:${friendId}:chats`, {
+    //   ...message,
+    //   senderName: session.user.name,
+    // });
 
-    await client.api.inbox[`${chatId}`]?.post({
-      timestamp: timestamp,
-      message: text,
-    });
-
-    return "success";
+    sendToInbox(chatId, message);
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);

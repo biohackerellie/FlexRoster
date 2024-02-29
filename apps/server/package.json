@@ -16,6 +16,7 @@
     "with-env": "bun --env-file=../../.env --"
   },
   "dependencies": {
+    "@local/pusher": "workspace:*",
     "@azure/identity": "^4.0.1",
     "@elysiajs/cors": "^0.8.0",
     "@elysiajs/jwt": "^0.8.0",

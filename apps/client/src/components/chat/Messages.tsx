@@ -1,12 +1,13 @@
 "use client";
 
-import * as React from "react";
-import { useOptimistic } from "react";
+import React, { useEffect, useOptimistic, useRef, useState } from "react";
 import { format, set } from "date-fns";
 
+import { client } from "@local/eden";
+import { pusherClient } from "@local/pusher";
 import { Message, messageValidator } from "@local/validators";
-import {client} from '@local/eden'
-import { cn } from "@/lib/utils";
+
+import { cn, toPusherKey } from "@/lib/utils";
 
 type cacheUser = {
   name: string;
@@ -26,30 +27,27 @@ const Messages: React.FC<MessagesProps> = ({
   chatId,
   chatPartner,
 }) => {
-  const [messages, setMessages] = React.useState<Message[]>(initialMessages, (state: Message[], newMessage: Message) => [...state, {message: newMessage}]);
-	
-  console.log("messages: ", messages);
-  React.useEffect(() => {
-
-    const chat = client.api.sockets[`chat:${chatId}`]?.subscribe();
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  useEffect(() => {
+    console.log("subscribed to chat", chatId);
     const messageHandler = (message: Message) => {
-      setMessages((prev) => [message, ...prev]);
+      setMessages((prev) => [...prev, message]);
     };
 
-		chat?.subscribe((message) => {
-      messageHandler(message.data as Message);
-    });
+    const channel = pusherClient
+      .subscribe(toPusherKey(`chat:${chatId}`))
+      .bind("incoming-message", messageHandler);
 
     return () => {
-      chat?.close();
+      // pusherClient.unsubscribe(toPusherKey(`chat:${chatId}`));
+      channel.unbind();
     };
-  }, [chatId]);
-
-  const scrollDownRef = React.useRef<HTMLDivElement | null>(null);
-
+  }, []);
   const formatTimestamp = (timestamp: number) => {
-    return format(timestamp, "HH:mm");
+    return format(timestamp, "h:mm a");
   };
+
+  const scrollDownRef = useRef<HTMLDivElement>(null);
 
   return (
     <div

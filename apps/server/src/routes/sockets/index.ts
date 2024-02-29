@@ -24,16 +24,12 @@ export const socketRoutes = new Elysia({
 
   open(ws) {
     ws.subscribe(ws.data.params.channel);
-    client.subscribe(ws.data.params.channel);
-    client.on("message", (channel, message) => {
-      ws.send(message);
-    });
   },
   message(ws, message) {
+    ws.send(message);
     ws.publish(ws.data.params.channel, message);
   },
   close(ws) {
     ws.unsubscribe(ws.data.params.channel);
-    client.unsubscribe(ws.data.params.channel);
   },
 });

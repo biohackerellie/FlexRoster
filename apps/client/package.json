@@ -14,7 +14,8 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-		"ioredis": "^5.3.2",
+    "@local/pusher": "workspace:*",
+    "ioredis": "^5.3.2",
     "@local/auth": "workspace:*",
     "@local/db": "workspace:*",
     "@local/eden": "workspace:*",

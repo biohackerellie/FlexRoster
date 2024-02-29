@@ -1,18 +1,16 @@
-
 import { nanoid } from "nanoid";
-import { Publisher } from "@/lib/redis/actions";
+
 import { auth } from "@local/auth";
-import { sendToInbox} from "@/lib/redis/actions";
-
-
-
+import { pusherServer } from "@local/pusher";
 import { Message, messageValidator } from "@local/validators";
-import { revalidatePath } from "next/cache";
+
+import { sendToInbox } from "@/lib/redis/actions";
+import { toPusherKey } from "@/lib/utils";
 
 export async function POST(req: Request) {
   try {
     const { chatId, text } = await req.json();
-
+    console.log("hi");
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
 
@@ -35,17 +33,19 @@ export async function POST(req: Request) {
     };
     const message = messageValidator.parse(messageData);
 
-    Publisher(`chat:${chatId}`, message);
-		Publisher(`user:${friendId}:chats`,{ 
-			...message,
-			senderName: session.user.name,
-		});
+    await pusherServer.trigger(
+      toPusherKey(`chat:${chatId}`),
+      "incoming-message",
+      message,
+    );
+    console.log("sending message", message);
 
-		sendToInbox(chatId, message);
-		revalidatePath(`/chat/${chatId}`, 'page')
+    await sendToInbox(chatId, message);
+
     return new Response("success", { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
+      console.log(error.message);
       return new Response(error.message, { status: 400 });
     }
     return new Response("Internal Server Error", { status: 500 });
