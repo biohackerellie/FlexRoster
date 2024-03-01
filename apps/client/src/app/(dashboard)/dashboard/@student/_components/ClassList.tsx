@@ -51,31 +51,15 @@ export function ClassListComponent({ data }: ClassListProps) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button variant="outline" size="lg">
-            Change Class
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="flex max-h-[900px] max-w-[800px] flex-col">
-          <DialogHeader>
-            <DialogTitle>Request a different class</DialogTitle>
-            <DialogDescription>
-              Please select the class you would like to attend today.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex max-h-[700px] max-w-[750px] flex-col">
-            <DataTable columns={columns} data={data} />
-          </div>
-          <DialogFooter className="sm:justify-start">
-            <DialogClose asChild>
-              <Button type="button" variant="outline">
-                Close
-              </Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <div className="flex flex-col leading-tight">
+        <div className="flex items-center text-xl">
+          <span className="mr-3 font-semibold text-gray-700">
+            Steam Classes
+          </span>
+        </div>
+
+        <DataTable columns={columns} data={data} />
+      </div>
     );
   }
   return (

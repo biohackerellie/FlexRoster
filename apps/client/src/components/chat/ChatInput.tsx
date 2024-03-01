@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -17,11 +18,7 @@ interface ChatInputProps {
   userId: string;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({
-  chatPartner,
-  chatId,
-  userId,
-}) => {
+const ChatInput: React.FC<ChatInputProps> = ({ chatPartner, chatId }) => {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [input, setInput] = React.useState<string>("");
@@ -32,7 +29,6 @@ const ChatInput: React.FC<ChatInputProps> = ({
 
     try {
       await axios.post("/api/message/send", {
-        userId: userId,
         text: input,
         chatId,
       });

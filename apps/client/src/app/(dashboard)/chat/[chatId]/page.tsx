@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { auth } from "@local/auth";
+import { client } from "@local/eden";
 import { Message, messageArrayValidator } from "@local/validators";
 
 import { ChatInput, Messages } from "@/components/chat";
@@ -17,7 +18,7 @@ interface PageProps {
   };
 }
 
-const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   return { title: `Chat` };
@@ -26,6 +27,7 @@ export async function generateMetadata() {
 export default async function ChatPage({ params }: PageProps) {
   const { chatId } = params;
   const { chat, initialMessages } = await allData(chatId);
+
   const { chatPartner, userId } = chat;
   console.log("chatPartner: ", chatPartner.name);
 
@@ -55,13 +57,15 @@ export default async function ChatPage({ params }: PageProps) {
 
 async function getChatMessages(chatId: string) {
   try {
-    const res = await getInbox(chatId);
+    const res = await client.api.inbox[`${chatId}`]?.get();
 
-    if (!res) {
+    if (!res || res.error) {
       throw new Error("Unable to get chat messages");
     }
 
-    const dbMessages = res.map((message) => JSON.parse(message) as Message);
+    const dbMessages = res.data.map(
+      (message) => JSON.parse(message) as Message,
+    );
     const reversedMessages = dbMessages.reverse();
 
     const messages = messageArrayValidator.parse(reversedMessages);
@@ -95,22 +99,26 @@ async function usersCheck(chatId: string) {
     }
 
     const chatPartnerId = userId === userId1 ? userId2 : userId1;
-    const chatPartnerRaw = await getCachedUsers(chatPartnerId);
+    const chatPartnerRaw =
+      await client.api.users.cached[`${chatPartnerId}`]?.get()!;
 
-    let userIdRaw = await getCachedUsers(userId);
-
-    if (!userIdRaw) {
-      console.log("userIdRaw error");
-      await setCachedUsers({
-        key: `user:${userId}`,
+    // if the current user is not found in the cache, set the user in the cache
+    let userIdRaw = await client.api.users.cached[`${userId}`]?.get()!;
+    if (userIdRaw === undefined) {
+      await client.api.users.cached.post({
+        key: userId,
         object: { name: user.name!, role: user.roles },
       });
-      userIdRaw = await getCachedUsers(userId);
+      userIdRaw = await client.api.users.cached[`${userId}`]?.get()!;
     }
 
-    const chatPartner = Object.values(chatPartnerRaw!)[0] as cacheUser;
+    if (chatPartnerRaw.error || userIdRaw.error) {
+      return notFound();
+    }
 
-    const primaryUser = Object.values(userIdRaw!)[0] as cacheUser;
+    const chatPartner = Object.values(chatPartnerRaw.data!)[0] as cacheUser;
+
+    const primaryUser = Object.values(userIdRaw.data!)[0] as cacheUser;
     if (primaryUser.role === "student" && chatPartner.role === "student") {
       return notFound();
     }

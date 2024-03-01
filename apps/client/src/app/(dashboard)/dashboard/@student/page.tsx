@@ -59,7 +59,7 @@ export default async function StudentDashboard() {
 
   const greeting = getRandomGreeting();
   return (
-    <div className="container mx-auto py-10">
+    <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between">
       <h1 className="pb-2 text-center text-4xl font-semibold">
         {greeting} {firstName}!
       </h1>

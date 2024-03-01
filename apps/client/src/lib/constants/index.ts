@@ -1,3 +1,5 @@
+import { Home } from "lucide-react";
+
 export const greetings = [
   "What's Kickin",
   "Howdy Doody",
@@ -17,3 +19,12 @@ export const greetings = [
   "What's Poppin",
   "Yo Yo Yo",
 ] as const;
+
+export const sidebarOptions = [
+  {
+    id: 1,
+    name: "Dashboard",
+    href: "/dashboard",
+    icon: Home,
+  },
+];

@@ -35,9 +35,6 @@ importers:
       '@local/eden':
         specifier: workspace:*
         version: link:../../packages/eden
-      '@local/pusher':
-        specifier: workspace:*
-        version: link:../../packages/pusher
       '@local/validators':
         specifier: workspace:*
         version: link:../../packages/validators
@@ -110,6 +107,12 @@ importers:
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
+      pusher:
+        specifier: ^5.2.0
+        version: 5.2.0
+      pusher-js:
+        specifier: ^8.0.2
+        version: 8.3.0
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -198,9 +201,6 @@ importers:
       '@local/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@local/pusher':
-        specifier: workspace:*
-        version: link:../../packages/pusher
       '@microsoft/microsoft-graph-client':
         specifier: ^3.0.7
         version: 3.0.7(@azure/identity@4.0.1)
@@ -393,37 +393,6 @@ importers:
         version: link:../../apps/server
       typescript:
         specifier: latest
-        version: 5.3.3
-
-  packages/pusher:
-    dependencies:
-      pusher:
-        specifier: ^5.2.0
-        version: 5.2.0
-      pusher-js:
-        specifier: ^8.4.0-rc2
-        version: 8.4.0-rc2
-    devDependencies:
-      '@local/eslint-config':
-        specifier: workspace:*
-        version: link:../../tooling/eslint-config
-      '@local/prettier-config':
-        specifier: workspace:*
-        version: link:../../tooling/prettier-config
-      '@local/tsconfig':
-        specifier: workspace:*
-        version: link:../../tooling/tsconfig
-      dotenv-cli:
-        specifier: ^7.3.0
-        version: 7.3.0
-      eslint:
-        specifier: ^8.56.0
-        version: 8.56.0
-      prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
-      typescript:
-        specifier: ^5.3.3
         version: 5.3.3
 
   packages/validators:
@@ -8237,8 +8206,8 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  /pusher-js@8.4.0-rc2:
-    resolution: {integrity: sha512-d87GjOEEl9QgO5BWmViSqW0LOzPvybvX6WA9zLUstNdB57jVJuR27zHkRnrav2a3+zAMlHbP2Og8wug+rG8T+g==}
+  /pusher-js@8.3.0:
+    resolution: {integrity: sha512-6GohP06WlVeomAQQe9qWh1IDzd3+InluWt+ZUOcecVK1SEQkg6a8uYVsvxSJm7cbccfmHhE0jDkmhKIhue8vmA==}
     dependencies:
       tweetnacl: 1.0.3
     dev: false

@@ -1,9 +1,9 @@
 import { nanoid } from "nanoid";
 
 import { auth } from "@local/auth";
-import { pusherServer } from "@local/pusher";
 import { Message, messageValidator } from "@local/validators";
 
+import { pusherServer } from "@/lib/pusher";
 import { sendToInbox } from "@/lib/redis/actions";
 import { toPusherKey } from "@/lib/utils";
 
@@ -37,6 +37,14 @@ export async function POST(req: Request) {
       toPusherKey(`chat:${chatId}`),
       "incoming-message",
       message,
+    );
+    await pusherServer.trigger(
+      toPusherKey(`user:${friendId}:chats`),
+      "new-message",
+      {
+        ...message,
+        senderName: session.user.name,
+      },
     );
     console.log("sending message", message);
 

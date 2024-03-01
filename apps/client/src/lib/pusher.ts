@@ -13,8 +13,7 @@ export const pusherServer = new PusherServer({
 
 export const pusherClient = new PusherClient("app-key", {
   cluster: "",
-  httpHost: "10.50.99.84",
-  httpPort: 6001,
+
   wsHost: "10.50.99.84",
   wsPort: 6001,
   wssPort: 6001,
