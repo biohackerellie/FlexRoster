@@ -6,17 +6,15 @@ import { format, set } from "date-fns";
 import { Message, messageValidator } from "@local/validators";
 import { pusherClient } from "@/lib/pusher";
 import { cn, toPusherKey } from "@/lib/utils";
+import {SelectUser} from "@local/db/types"
 
-type cacheUser = {
-  name: string;
-  role: string;
-};
+
 
 interface MessagesProps {
   initialMessages: Message[];
   sessionId: string;
   chatId: string;
-  chatPartner: cacheUser;
+  chatPartner: SelectUser
 }
 
 const Messages: React.FC<MessagesProps> = ({

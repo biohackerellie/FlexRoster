@@ -5,15 +5,13 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
 
+import { SelectUser } from "@local/db/types";
+
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "../ui/button";
 
-type cacheUser = {
-  name: string;
-  role: string;
-};
 interface ChatInputProps {
-  chatPartner: cacheUser;
+  chatPartner: SelectUser;
   chatId: string;
   userId: string;
 }

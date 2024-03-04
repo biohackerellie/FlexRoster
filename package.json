@@ -26,10 +26,10 @@
 	},
 	"devDependencies": {
 		"@local/prettier-config": "workspace:*",
-		"turbo": "^1.12.3",
-		"@turbo/gen": "^1.12.3",
-		"typescript": "^5.3.3",
-		"prettier": "^3.2.5"
+		"@turbo/gen": "^1.12.4",
+		"prettier": "^3.2.5",
+		"turbo": "^1.12.4",
+		"typescript": "^5.3.3"
 	},
 	"prettier": "@local/prettier-config",
 	"packageManager": "pnpm@8.15.2"

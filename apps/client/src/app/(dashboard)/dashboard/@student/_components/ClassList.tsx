@@ -6,19 +6,12 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { toast } from "sonner";
 
-import { setRoster } from "@/app/(dashboard)/dashboard/@student/actions";
+import {
+  RequestRoom,
+  setRoster,
+} from "@/app/(dashboard)/dashboard/@student/actions";
 import { DataTable } from "@/components/tables";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerContent,
@@ -111,13 +104,7 @@ const ClassList = ({ data }: { data: StudentTable[] }) => {
                 variant="outline"
                 size="sm"
                 disabled={!room.available}
-                onClick={() =>
-                  handleTransfer({
-                    email: room.email,
-                    roomNumber: room.room,
-                    teacherName: room.teacher,
-                  })
-                }
+                onClick={() => handleTransfer(room.email)}
               >
                 {room.available ? "Join" : "Unavailable"}
               </Button>
@@ -180,16 +167,10 @@ const columns: ColumnDef<StudentTable>[] = [
     accessorKey: "email",
     header: "Transfer",
     cell: ({ row, column }) => {
-      const email = row.getValue("email") as string;
-      const roomNumber = row.getValue("roomNumber") as string;
-      const teacherName = row.getValue("teacherName") as string;
+      const teacherId = row.getValue("email") as string;
 
       return (
-        <Button
-          onClick={() => handleTransfer({ email, roomNumber, teacherName })}
-        >
-          Transfer
-        </Button>
+        <Button onClick={() => handleTransfer(teacherId)}>Transfer</Button>
       );
     },
   },
@@ -213,17 +194,9 @@ const columns: ColumnDef<StudentTable>[] = [
  * @param roomNumber - string - The room number of the class.
  * @param teacherName - string - The teacher's name.
  */
-async function handleTransfer({
-  email,
-  roomNumber,
-  teacherName,
-}: {
-  email: string;
-  roomNumber: string;
-  teacherName: string;
-}) {
+async function handleTransfer(teacherId: string) {
   try {
-    const res = await setRoster(email, roomNumber, teacherName);
+    const res = await RequestRoom(teacherId);
 
     if (res === 200) {
       toast.info("You have successfully transferred", {

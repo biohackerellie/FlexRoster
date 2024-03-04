@@ -5,9 +5,56 @@ import { nanoid } from "nanoid";
 
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
-import { Message, messageValidator } from "@local/validators";
+import {
+  Message,
+  messageValidator,
+  Request,
+  requestValidator,
+} from "@local/validators";
 
+import { pusherServer } from "@/lib/pusher";
 import { Publisher, sendToInbox } from "@/lib/redis/actions";
+import { requestIDConstructor, toPusherKey } from "@/lib/utils";
+
+export async function RequestRoom(teacherId: string) {
+  const session = await auth();
+  const studentId = session?.user?.id!;
+  const { data: data, error } =
+    await client.api.users.student[`${studentId}`]?.get()!;
+
+  if (error) return;
+
+  const currentTeacher = data?.classRosters.classroom.teacherId!;
+  const timestamp = Date.now();
+  const requestData: Request = {
+    id: nanoid(),
+    status: "pending",
+    timestamp,
+    studentId,
+    currentTeacher,
+    newTeacher: teacherId,
+  };
+
+  const request = requestValidator.parse(requestData);
+  const requestId = requestIDConstructor(studentId, teacherId, currentTeacher);
+  await pusherServer.trigger(
+    toPusherKey(`request:${teacherId}`),
+    "new-request",
+    request,
+  );
+  await pusherServer.trigger(
+    toPusherKey(`request:${currentTeacher}`),
+    "new-request",
+    request,
+  );
+  const res = await client.api.rosters.request[`${requestId}`]?.post({
+    request,
+  });
+  if (res?.error) {
+    throw new Error("You have already made a request today.", res.error);
+  }
+  return 200;
+}
 
 export async function setRoster(
   email: string,
@@ -21,6 +68,7 @@ export async function setRoster(
     roomNumber,
     teacherName,
   });
+
   revalidatePath("/student", "layout");
   if (res?.error) {
     throw new Error("You have already made a request today.", res.error);

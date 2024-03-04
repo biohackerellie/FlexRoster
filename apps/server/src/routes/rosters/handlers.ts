@@ -1,8 +1,10 @@
 import { NotFoundError } from "elysia";
 
-import { db, eq, schema } from "@local/db";
+import { db, eq, schema, sql } from "@local/db";
+import { Request, requestValidator } from "@local/validators";
 
 import {
+  createClient,
   getClassRoomKV,
   getRequestKV,
   setClassRoomKV,
@@ -32,30 +34,20 @@ export async function getRostersById(id: string) {
   }
 }
 
+const rosterQuery = db.query.classRosters
+  .findFirst({
+    where: eq(schema.classRosters.studentEmail, sql.placeholder("email")),
+    with: {
+      classroom: true,
+    },
+  })
+  .prepare("roster");
+
 export async function getStudentRoster(email: string) {
   try {
-    const classroom = await getClassRoomKV(email);
-    console.log("classroom", classroom);
-    if (classroom) {
-      return classroom;
-    } else {
-      const roster = await db.query.classRosters.findFirst({
-        where: eq(schema.classRosters.studentEmail, email),
-        with: {
-          classroom: true,
-        },
-      });
-      if (roster) {
-        await setClassRoomKV(
-          email,
-          `Room ${roster.classroom.roomNumber} with ${roster.classroom.teacherName}`,
-          86400,
-        );
-        return `Room ${roster.classroom.roomNumber} with ${roster.classroom.teacherName}`;
-      } else {
-        throw new NotFoundError("No roster found with that email");
-      }
-    }
+    const roster = await rosterQuery.execute({ email });
+
+    return roster;
   } catch (e) {
     throw new NotFoundError("No roster found with that email");
   }
@@ -109,5 +101,30 @@ export async function getTeacherRoster(email: string) {
     });
   } catch (e) {
     throw new NotFoundError("No roster found with that email");
+  }
+}
+
+export async function newRequest(requestId: string, request: Request) {
+  const requestData = requestValidator.parse(request);
+  const client = createClient();
+  const parsedRequest = JSON.stringify(requestData);
+  const res = await client.hset(`request:${requestId}`, requestData);
+  return res;
+}
+
+export async function approveRequest(requestId: string, approved: boolean) {
+  const client = createClient();
+  if (!approved) {
+    const request = await client.hset(
+      `request:${requestId}`,
+      "status",
+      "denied",
+    );
+  } else {
+    const request = await client.hset(
+      `request:${requestId}`,
+      "status",
+      "approved",
+    );
   }
 }

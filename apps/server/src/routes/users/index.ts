@@ -1,6 +1,13 @@
 import { Elysia, t } from "elysia";
 
-import { cachedTeachers, cachedUsers, setCachedUser } from "./handlers";
+import {
+  cachedTeachers,
+  cachedUsers,
+  getDBUser,
+  getStudent,
+  setCachedUser,
+	
+} from "./handlers";
 
 export const userRoutes = new Elysia({ prefix: "/users" })
   .onError(({ code, error }) => {
@@ -17,15 +24,9 @@ export const userRoutes = new Elysia({ prefix: "/users" })
       }),
     }),
   })
-  .ws("/:userId", {
-    params: t.Object({ userId: t.String() }),
-    open(ws) {
-      ws.subscribe(`user:${ws.data.params.userId}:chats`);
-    },
-    message(ws, message) {
-      ws.publish(`user:${ws.data.params.userId}:chats`, message);
-    },
-    close(ws) {
-      ws.unsubscribe(`user:${ws.data.params.userId}:chats`);
-    },
+  .get("/:id", ({ params: { id } }) => getDBUser(id), {
+    params: t.Object({ id: t.String() }),
+  })
+  .get("/student/:id", ({ params: { id } }) => getStudent(id), {
+    params: t.Object({ id: t.String() }),
   });

@@ -5,6 +5,7 @@ import {
   getRostersById,
   getStudentRoster,
   getTeacherRoster,
+  newRequest,
   setStudentRoster,
 } from "./handlers";
 
@@ -29,7 +30,27 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
       }),
     },
   )
+  .post(
+    "/request/:requestId",
+    ({ params: { requestId }, body: { request } }) =>
+      newRequest(requestId, request),
 
+    {
+      params: t.Object({
+        requestId: t.String(),
+      }),
+      body: t.Object({
+        request: t.Object({
+          id: t.String(),
+          status: t.String(),
+          timestamp: t.Number(),
+          studentId: t.String(),
+          currentTeacher: t.String(),
+          newTeacher: t.String(),
+        }),
+      }),
+    },
+  )
   .post(
     "/student/:email",
     ({ params: { email }, body: { roomNumber, teacherName } }) =>

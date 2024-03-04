@@ -99,26 +99,18 @@ async function usersCheck(chatId: string) {
     }
 
     const chatPartnerId = userId === userId1 ? userId2 : userId1;
-    const chatPartnerRaw =
-      await client.api.users.cached[`${chatPartnerId}`]?.get()!;
+    const chatPartnerRaw = await client.api.users[`${chatPartnerId}`]?.get()!;
 
     // if the current user is not found in the cache, set the user in the cache
-    let userIdRaw = await client.api.users.cached[`${userId}`]?.get()!;
-    if (userIdRaw === undefined) {
-      await client.api.users.cached.post({
-        key: userId,
-        object: { name: user.name!, role: user.roles },
-      });
-      userIdRaw = await client.api.users.cached[`${userId}`]?.get()!;
-    }
+    let userIdRaw = await client.api.users[`${userId}`]?.get()!;
 
     if (chatPartnerRaw.error || userIdRaw.error) {
       return notFound();
     }
 
-    const chatPartner = Object.values(chatPartnerRaw.data!)[0] as cacheUser;
+    const chatPartner = chatPartnerRaw.data!;
 
-    const primaryUser = Object.values(userIdRaw.data!)[0] as cacheUser;
+    const primaryUser = userIdRaw.data!;
     if (primaryUser.role === "student" && chatPartner.role === "student") {
       return notFound();
     }

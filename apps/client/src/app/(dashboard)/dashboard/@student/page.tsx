@@ -18,20 +18,18 @@ async function getData(email: string, userid: string) {
       roomNumber: rooms.roomNumber,
       teacherName: formattedTeacherName,
       available: rooms.available,
-      email: email,
+      email: rooms.teacherId,
       chatId: `/chat/${chatHrefConstructor(userid, rooms.teacherId!)}`,
     };
   });
+
   return mappedData as StudentTable[];
 }
 
 async function getClass(email: string) {
-  const res = (await client.api.rosters.student[`${email}`]?.get()) ?? {
-    error: null,
-    data: [],
-  };
-  if (res.error) {
-    return [];
+  const res = await client.api.rosters.student[`${email}`]?.get();
+  if (!res || res.error) {
+    throw new Error("Unable to get class");
   }
   return res.data;
 }
@@ -53,6 +51,8 @@ export default async function StudentDashboard() {
 
   const { availableClasses, currentClass } = await allData(email, userId);
 
+  if (!currentClass) return <div>loading...</div>;
+
   const getRandomGreeting = () => {
     return greetings[Math.floor(Math.random() * greetings.length)];
   };
@@ -64,7 +64,8 @@ export default async function StudentDashboard() {
         {greeting} {firstName}!
       </h1>
       <p className="pb-2 text-center text-2xl font-medium">
-        Your STEAM class today is {currentClass}
+        Your STEAM class today is room {currentClass.classroom.roomNumber} with{" "}
+        {currentClass.classroom.teacherName}.
       </p>
       <div className="max-h-2xl container flex max-w-4xl flex-col justify-center p-4">
         <ClassListComponent data={availableClasses} />
