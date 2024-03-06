@@ -64,4 +64,8 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
         teacherName: t.String(),
       }),
     },
-  );
+  )
+  .onError(({ error, set }) => {
+    set.status = 500;
+    return error.message;
+  });

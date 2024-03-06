@@ -17,13 +17,9 @@ export function chatHrefConstructor(id1: string, id2: string) {
   return `${sortedIds[0]}--${sortedIds[1]}`;
 }
 
-export function requestIDConstructor(
-  studentId: string,
-  toTeacherId: string,
-  currentTeacherId: string,
-) {
-  const sortedIds = [studentId, toTeacherId, currentTeacherId].sort();
-  return `${sortedIds[0]}--${sortedIds[1]}--${sortedIds[2]}`;
+export function requestIDConstructor(studentId: string, toTeacherId: string) {
+  const sortedIds = [studentId, toTeacherId].sort();
+  return `request:${sortedIds[0]}--${sortedIds[1]}`;
 }
 
 export function formatTeacherNames(teacherName: string) {

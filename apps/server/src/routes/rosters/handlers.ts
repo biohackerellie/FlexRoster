@@ -107,9 +107,20 @@ export async function getTeacherRoster(email: string) {
 export async function newRequest(requestId: string, request: Request) {
   const requestData = requestValidator.parse(request);
   const client = createClient();
-  const parsedRequest = JSON.stringify(requestData);
-  const res = await client.hset(`request:${requestId}`, requestData);
-  return res;
+  const parsedData = JSON.stringify(requestData);
+  const res = await client.hgetall(requestId);
+
+  if (Object.keys(res).length > 0) {
+    throw new Error("You have already made a request today");
+  } else {
+    await client.hset(requestId, requestData);
+    await client.zadd(
+      `request:${requestData.newTeacher}`,
+      requestData.timestamp,
+      parsedData,
+    );
+    return Response.json({ message: "Request sent" }, { status: 200 });
+  }
 }
 
 export async function approveRequest(requestId: string, approved: boolean) {

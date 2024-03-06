@@ -87,7 +87,7 @@ const ClassList = ({ data }: { data: StudentTable[] }) => {
       room: room.roomNumber,
       teacher: room.teacherName,
       available: room.available,
-      email: room.email,
+      teacherId: room.teacherId,
     };
   });
   return (
@@ -104,7 +104,7 @@ const ClassList = ({ data }: { data: StudentTable[] }) => {
                 variant="outline"
                 size="sm"
                 disabled={!room.available}
-                onClick={() => handleTransfer(room.email)}
+                onClick={() => handleTransfer(room.teacherId)}
               >
                 {room.available ? "Join" : "Unavailable"}
               </Button>
@@ -164,13 +164,15 @@ const columns: ColumnDef<StudentTable>[] = [
     },
   },
   {
-    accessorKey: "email",
+    accessorKey: "teacherId",
     header: "Transfer",
     cell: ({ row, column }) => {
-      const teacherId = row.getValue("email") as string;
-
+      const teacherId = row.getValue("teacherId") as string;
+      const available = row.getValue("available") as boolean;
       return (
-        <Button onClick={() => handleTransfer(teacherId)}>Transfer</Button>
+        <Button disabled={!available} onClick={() => handleTransfer(teacherId)}>
+          Transfer
+        </Button>
       );
     },
   },
@@ -199,7 +201,7 @@ async function handleTransfer(teacherId: string) {
     const res = await RequestRoom(teacherId);
 
     if (res === 200) {
-      toast.info("You have successfully transferred", {
+      toast.info("Your request has been sent", {
         position: "top-center",
       });
     }

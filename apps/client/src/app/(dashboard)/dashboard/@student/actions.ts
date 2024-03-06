@@ -36,24 +36,25 @@ export async function RequestRoom(teacherId: string) {
   };
 
   const request = requestValidator.parse(requestData);
-  const requestId = requestIDConstructor(studentId, teacherId, currentTeacher);
-  await pusherServer.trigger(
-    toPusherKey(`request:${teacherId}`),
-    "new-request",
-    request,
-  );
-  await pusherServer.trigger(
-    toPusherKey(`request:${currentTeacher}`),
-    "new-request",
-    request,
-  );
+  const requestId = `request:${studentId}`;
   const res = await client.api.rosters.request[`${requestId}`]?.post({
     request,
   });
   if (res?.error) {
     throw new Error("You have already made a request today.", res.error);
+  } else {
+    await pusherServer.trigger(
+      toPusherKey(`request:${teacherId}`),
+      "new-request",
+      request,
+    );
+    await pusherServer.trigger(
+      toPusherKey(`request:${currentTeacher}`),
+      "new-request",
+      request,
+    );
+    return 200;
   }
-  return 200;
 }
 
 export async function setRoster(

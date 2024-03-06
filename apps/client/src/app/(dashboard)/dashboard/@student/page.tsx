@@ -1,4 +1,5 @@
 import { auth } from "@local/auth";
+import { ClassRoomWithUsers } from "@local/db/types";
 import { client } from "@local/eden";
 
 import { ChatInput, Messages } from "@/components/chat";
@@ -12,13 +13,13 @@ async function getData(email: string, userid: string) {
   if (error) {
     return [];
   }
-  const mappedData: StudentTable[] = data.map((rooms) => {
+  const mappedData = data.map((rooms: any) => {
     const formattedTeacherName = formatTeacherNames(rooms.teacherName);
     return {
       roomNumber: rooms.roomNumber,
       teacherName: formattedTeacherName,
       available: rooms.available,
-      email: rooms.teacherId,
+      teacherId: rooms.teacherId!,
       chatId: `/chat/${chatHrefConstructor(userid, rooms.teacherId!)}`,
     };
   });

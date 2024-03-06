@@ -60,6 +60,6 @@ export type StudentTable = {
   roomNumber: string;
   teacherName: string;
   available: boolean;
-  email: string;
+  teacherId: string;
   chatId: string;
 };
