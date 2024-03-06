@@ -7,7 +7,7 @@ interface User {
   role: "secretary" | "teacher" | "student" | "admin";
 }
 
-const nicknameMap: { [key: string]: string } = {
+const nicknameMap: Record<string, string> = {
   matt: "matthew",
   mike: "michael",
   steve: "steven",
@@ -37,7 +37,7 @@ export function findUserIdByName(
 ): string | null {
   const searchWords = normalizeName(searchName);
 
-  for (let user of userObjects) {
+  for (const user of userObjects) {
     if (user.name) {
       const baseWords = normalizeName(user.name);
       if (searchWords.every((word) => baseWords.includes(word))) {

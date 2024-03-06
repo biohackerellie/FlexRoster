@@ -1,7 +1,8 @@
 import { get } from "http";
 import { Elysia, t } from "elysia";
 
-import { db, schema } from "@local/db";
+import type { schema } from "@local/db";
+import { db } from "@local/db";
 
 import { createClient, getInbox, sendToInbox } from "~/lib/redis";
 import { Subscriber } from "~/lib/redis/pubsub";

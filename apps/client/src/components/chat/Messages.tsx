@@ -3,18 +3,18 @@
 import React, { useEffect, useOptimistic, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { format, set } from "date-fns";
+
+import { SelectUser } from "@local/db/types";
 import { Message, messageValidator } from "@local/validators";
+
 import { pusherClient } from "@/lib/pusher";
 import { cn, toPusherKey } from "@/lib/utils";
-import {SelectUser} from "@local/db/types"
-
-
 
 interface MessagesProps {
   initialMessages: Message[];
   sessionId: string;
   chatId: string;
-  chatPartner: SelectUser
+  chatPartner: SelectUser;
 }
 
 const Messages: React.FC<MessagesProps> = ({

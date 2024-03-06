@@ -1,14 +1,12 @@
 import { auth } from "@local/auth";
-import { ClassRoomWithUsers } from "@local/db/types";
 import { client } from "@local/eden";
 
-import { ChatInput, Messages } from "@/components/chat";
 import { greetings } from "@/lib/constants";
 import { StudentTable } from "@/lib/types";
 import { chatHrefConstructor, formatTeacherNames } from "@/lib/utils";
 import { ClassListComponent } from "./_components/ClassList";
 
-async function getData(email: string, userid: string) {
+async function getData(email: string, userId: string) {
   const { data: data, error } = await client.api.classes[""].get();
   if (error) {
     return [];
@@ -20,25 +18,25 @@ async function getData(email: string, userid: string) {
       teacherName: formattedTeacherName,
       available: rooms.available,
       teacherId: rooms.teacherId!,
-      chatId: `/chat/${chatHrefConstructor(userid, rooms.teacherId!)}`,
+      chatId: `/chat/${chatHrefConstructor(userId, rooms.teacherId!)}`,
     };
   });
 
   return mappedData as StudentTable[];
 }
 
-async function getClass(email: string) {
-  const res = await client.api.rosters.student[`${email}`]?.get();
+async function getClass(userId: string) {
+  const res = await client.api.rosters.student[`${userId}`]?.get();
   if (!res || res.error) {
-    throw new Error("Unable to get class");
+    throw new Error(res?.error?.message || "Error fetching class");
   }
   return res.data;
 }
 
-async function allData(email: string, userid: string) {
+async function allData(email: string, userId: string) {
   const [availableClasses, currentClass] = await Promise.all([
-    getData(email, userid),
-    getClass(email),
+    getData(email, userId),
+    getClass(userId),
   ]);
   return { availableClasses, currentClass };
 }
@@ -64,10 +62,7 @@ export default async function StudentDashboard() {
       <h1 className="pb-2 text-center text-4xl font-semibold">
         {greeting} {firstName}!
       </h1>
-      <p className="pb-2 text-center text-2xl font-medium">
-        Your STEAM class today is room {currentClass.classroom.roomNumber} with{" "}
-        {currentClass.classroom.teacherName}.
-      </p>
+      <p className="pb-2 text-center text-2xl font-medium">{currentClass}</p>
       <div className="max-h-2xl container flex max-w-4xl flex-col justify-center p-4">
         <ClassListComponent data={availableClasses} />
       </div>

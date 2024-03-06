@@ -1,4 +1,4 @@
-import { Message } from "@local/validators";
+import type { Message } from "@local/validators";
 
 import { createClient } from "./client";
 

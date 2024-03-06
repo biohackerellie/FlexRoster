@@ -1,7 +1,8 @@
 import { NotFoundError } from "elysia";
 
+import type { Request } from "@local/validators";
 import { db, eq, schema, sql } from "@local/db";
-import { Request, requestValidator } from "@local/validators";
+import { requestValidator } from "@local/validators";
 
 import {
   createClient,
@@ -10,6 +11,7 @@ import {
   setClassRoomKV,
   setRequestKV,
 } from "~/lib/redis";
+import { teacherQuery } from "../users/handlers";
 
 const today = new Date();
 
@@ -34,21 +36,43 @@ export async function getRostersById(id: string) {
   }
 }
 
-const rosterQuery = db.query.classRosters
+const rosterQuery = db.query.users
   .findFirst({
-    where: eq(schema.classRosters.studentEmail, sql.placeholder("email")),
+    where: eq(schema.users.id, sql.placeholder("id")),
     with: {
-      classroom: true,
+      classRosters: {
+        with: {
+          classroom: true,
+        },
+      },
     },
   })
   .prepare("roster");
 
-export async function getStudentRoster(email: string) {
+export async function getStudentRoster(userId: string) {
   try {
-    const roster = await rosterQuery.execute({ email });
+    let teacherName = "";
+    let roomNumber = "";
+    let message = "";
+    const client = createClient();
 
-    return roster;
+    const request = await client.hgetall(`request:${userId}`);
+
+    if (Object.keys(request).length > 0) {
+      const teacherID = request.newTeacher!;
+      const teacher = await teacherQuery.execute({ id: teacherID });
+      teacherName = teacher?.name!;
+      roomNumber = teacher?.classrooms?.roomNumber!;
+      message = `You transfered to FLEX room ${roomNumber} with ${teacherName}`;
+    } else {
+      const roster = await rosterQuery.execute({ id: userId });
+      teacherName = roster?.classRosters.classroom.teacherName!;
+      roomNumber = roster?.classRosters.classroom?.roomNumber!;
+      message = `Your FLEX class today is with ${teacherName} in room ${roomNumber}`;
+    }
+    return message;
   } catch (e) {
+    console.log(e);
     throw new NotFoundError("No roster found with that email");
   }
 }
@@ -114,10 +138,16 @@ export async function newRequest(requestId: string, request: Request) {
     throw new Error("You have already made a request today");
   } else {
     await client.hset(requestId, requestData);
-    await client.zadd(
-      `request:${requestData.newTeacher}`,
-      requestData.timestamp,
-      parsedData,
+
+    await client.xadd(
+      "transfers",
+      "*",
+      "student",
+      requestData.studentId,
+      "teacher",
+      requestData.newTeacher,
+      "status",
+      "pending",
     );
     return Response.json({ message: "Request sent" }, { status: 200 });
   }

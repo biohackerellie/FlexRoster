@@ -91,6 +91,7 @@ export const {
       user: {
         ...session.user,
         id: user.id,
+        //@ts-expect-error
         roles: user.role,
         email: session.user.email,
         name: session.user.name,

@@ -1,10 +1,10 @@
-'use server'
-import { createClient } from "../"
+"use server";
 
+import { createClient } from "../";
 
 interface userHash {
-	key: string;
-	object: { [key: string]: string };
+  key: string;
+  object: { [key: string]: string };
 }
 type UserId = string;
 type UserData = {
@@ -17,7 +17,6 @@ type UserData = {
 type cachedUser = {
   [key in `user:${UserId}`]: UserData;
 };
-
 
 async function setCachedUsers({
   key,
@@ -80,9 +79,5 @@ async function getCachedUsers(key?: string): Promise<cachedUser | undefined> {
     client.quit();
   }
 }
-
-
-
-
 
 export { setCachedUsers, getCachedUsers };

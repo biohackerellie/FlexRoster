@@ -1,9 +1,9 @@
 import { createClient } from ".";
 
-type userHash = {
+interface userHash {
   key: string;
   object: { name: string; role: string };
-};
+}
 
 async function setCachedUsers({
   key,
@@ -26,13 +26,13 @@ interface returnType {
 }
 
 type UserId = string;
-type UserData = {
+interface UserData {
   name: string;
   role: string;
   available: boolean;
   roomNumber: string;
   email: string;
-};
+}
 
 type cachedUser = {
   [key in `user:${UserId}`]: UserData;

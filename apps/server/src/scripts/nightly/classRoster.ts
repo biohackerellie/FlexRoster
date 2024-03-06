@@ -4,8 +4,8 @@
 
 import { db, eq, schema } from "@local/db";
 
+import type { RosterResponse } from "~/lib/types";
 import { env } from "~/env";
-import { RosterResponse } from "~/lib/types";
 import { fetcher, icAuth } from "~/lib/utils";
 
 export async function RosterSync() {
@@ -24,7 +24,7 @@ export async function RosterSync() {
           headers: {
             accept: "application/json",
             "X-XSRF-TOKEN": env.XSRF_TOKEN,
-            Authorization: `Bearer ${token}` as string,
+            Authorization: `Bearer ${token}`,
           },
         },
       );

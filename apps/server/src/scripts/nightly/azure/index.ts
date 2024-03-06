@@ -4,9 +4,9 @@
 
 import { db, eq, like, schema } from "@local/db";
 
+import type { AzureResponse, AzureUser } from "~/lib/types";
 import { env } from "~/env";
 import azureAuth from "~/lib/azure";
-import { AzureResponse, AzureUser } from "~/lib/types";
 import { fetcher } from "~/lib/utils";
 
 /**
@@ -43,8 +43,8 @@ async function azureTeachers(): Promise<AzureUser[]> {
   try {
     const token = await azureAuth();
 
-    let staffLink: string | undefined = env.AZURE_TEACHER_QUERY;
-    let helpdeskLink: string | undefined = env.AZURE_HELPDESK_QUERY;
+    const staffLink: string | undefined = env.AZURE_TEACHER_QUERY;
+    const helpdeskLink: string | undefined = env.AZURE_HELPDESK_QUERY;
     const staffPromise = fetchAllUsers(staffLink, token);
     const helpdeskPromise = fetchAllUsers(helpdeskLink, token);
     const [staffData, helpdeskData] = await Promise.all([

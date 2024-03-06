@@ -1,4 +1,4 @@
-import { classrooms, classRosters, users } from "./schema/schema";
+import type { classrooms, classRosters, users } from "./schema/schema";
 
 export type SelectUser = typeof users.$inferSelect;
 

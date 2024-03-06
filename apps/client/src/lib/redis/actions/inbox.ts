@@ -1,12 +1,13 @@
-'use server'
+"use server";
+
 import { Message, messageValidator } from "@local/validators";
+
 import { createClient } from "../";
 
 export async function getInbox(chatId: string) {
-	const client = createClient();
-	console.log("chatId", chatId);
-	return await client.zrange(`chat:${chatId}:messages`, "0", "-1");
-
+  const client = createClient();
+  console.log("chatId", chatId);
+  return await client.zrange(`chat:${chatId}:messages`, "0", "-1");
 }
 export async function sendToInbox(
   chatId: string,
@@ -23,4 +24,3 @@ export async function sendToInbox(
     parsedMessage,
   );
 }
-

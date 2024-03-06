@@ -37,12 +37,16 @@ export async function RequestRoom(teacherId: string) {
 
   const request = requestValidator.parse(requestData);
   const requestId = `request:${studentId}`;
+  const toTeacher = `request:${teacherId}:${studentId}`;
   const res = await client.api.rosters.request[`${requestId}`]?.post({
     request,
   });
   if (res?.error) {
     throw new Error("You have already made a request today.", res.error);
   } else {
+    await client.api.rosters.request[`${toTeacher}`]?.post({
+      request,
+    });
     await pusherServer.trigger(
       toPusherKey(`request:${teacherId}`),
       "new-request",

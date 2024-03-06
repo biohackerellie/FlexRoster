@@ -16,10 +16,10 @@
   },
   "devDependencies": {
     "typescript": "latest",
-    "@types/react": "^18.2.51",
-    "@types/react-dom": "^18.2.18",
+    "@types/react": "^18.2.61",
+    "@types/react-dom": "^18.2.19",
     "@local/eslint-config": "workspace:*",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "server": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "prettier": "^3.2.5",

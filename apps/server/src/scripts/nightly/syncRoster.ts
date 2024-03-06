@@ -7,8 +7,8 @@
 import { db, eq, like, schema } from "@local/db";
 import { findUserIdByName, formatTeacherNames } from "@local/validators";
 
+import type { ClassResponse } from "~/lib/types";
 import { env } from "~/env";
-import { ClassResponse } from "~/lib/types";
 import { fetcher, icAuth } from "../../lib/utils";
 
 type SelectUser = typeof schema.users.$inferSelect;
@@ -22,7 +22,7 @@ async function syncRoster() {
       headers: {
         accept: "application/json",
         "X-XSRF-TOKEN": env.XSRF_TOKEN,
-        Authorization: `Bearer ${token}` as string,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -54,6 +54,14 @@ async function syncRoster() {
           continue;
         }
         let teacherName = formatTeacherNames(room.teacher);
+
+        // if teacherName is givenName in prefferedNames, replace teacherName with prefferedName
+        const prefferedName = prefferedNames.find(
+          (name) => name.givenName === teacherName,
+        );
+        if (prefferedName) {
+          teacherName = prefferedName.prefferedName;
+        }
         let user = null;
         if (teacherName) {
           user = findUserIdByName(teacherName, allTeachers);
@@ -79,3 +87,8 @@ async function syncRoster() {
 }
 
 syncRoster();
+
+const prefferedNames = [
+  { givenName: "Carol Leinwand", prefferedName: "Jeannie Leinwand" },
+  { givenName: "Donna Kegel", prefferedName: "Evawn Kegel" },
+];
