@@ -6,7 +6,7 @@ import { auth } from "@local/auth";
 import { sidebarOptions } from "@/lib/constants";
 import { chatUsersByRole } from "@/lib/utils";
 
-export default async function AuthWrapper({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;

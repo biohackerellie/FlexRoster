@@ -9,12 +9,37 @@ export default async function middleware(req: NextRequest) {
     req,
     secret: env.NEXTAUTH_SECRET,
   });
-  console.log(token);
+
   if (token && token.exp! < Date.now() / 1000) {
     token = null;
   }
   if (!token) {
-    return NextResponse.redirect("/login");
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  let role = token.roles || "student";
+  let path = req.nextUrl.pathname;
+  console.log("path", path);
+
+  switch (role) {
+    case "student":
+      if (path === "/dashboard") {
+        return NextResponse.redirect(new URL("/dashboard/student", req.url));
+      }
+      if (path === "/dashboard/teacher") {
+        return NextResponse.redirect(new URL("/dashboard/student", req.url));
+      }
+      break;
+    case "teacher":
+      if (path === "/dashboard") {
+        return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
+      }
+      break;
+    case "admin":
+      if (path === "/dashboard") {
+        return NextResponse.redirect(new URL("/dashboard/student", req.url));
+      }
+      break;
   }
 
   return NextResponse.next();
