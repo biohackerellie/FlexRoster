@@ -1,10 +1,8 @@
-import { nanoid } from "nanoid";
-
 import { auth } from "@local/auth";
+import { client } from "@local/eden";
 import { Message, messageValidator } from "@local/validators";
 
 import { pusherServer } from "@/lib/pusher";
-import { sendToInbox } from "@/lib/redis/actions";
 import { toPusherKey } from "@/lib/utils";
 
 export async function POST(req: Request) {
@@ -24,12 +22,11 @@ export async function POST(req: Request) {
       return new Response("Unauthorized", { status: 401 });
     }
     const friendId = session.user.id === userId1 ? userId2 : userId1;
-
+    const idNumber = Math.random().toString(16).slice(2);
     const messageData: Message = {
-      id: nanoid(),
       senderId: session.user.id,
       text,
-      timestamp,
+      timestamp: timestamp,
     };
     const message = messageValidator.parse(messageData);
 
@@ -47,8 +44,7 @@ export async function POST(req: Request) {
       },
     );
     console.log("sending message", message);
-
-    await sendToInbox(chatId, message);
+    await client.api.inbox[`${chatId}`]?.post({ message });
 
     return new Response("success", { status: 200 });
   } catch (error) {

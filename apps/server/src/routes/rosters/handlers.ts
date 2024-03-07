@@ -149,6 +149,7 @@ export async function newRequest(requestId: string, request: Request) {
       "status",
       "pending",
     );
+    client.quit();
     return Response.json({ message: "Request sent" }, { status: 200 });
   }
 }

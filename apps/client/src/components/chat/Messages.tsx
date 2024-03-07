@@ -39,8 +39,12 @@ const Messages: React.FC<MessagesProps> = ({
       pusherClient.unbind("incoming-message", messageHandler);
     };
   }, [chatId]);
-  const formatTimestamp = (timestamp: number) => {
-    return format(timestamp, "h:mm a");
+  const formatTimestamp = (timestamp: string | number) => {
+    let time = timestamp;
+    if (typeof timestamp === "string") {
+      time = parseInt(timestamp);
+    }
+    return format(time, "h:mm a");
   };
 
   const scrollDownRef = useRef<HTMLDivElement>(null);
@@ -87,7 +91,7 @@ const Messages: React.FC<MessagesProps> = ({
                 >
                   {message.text}{" "}
                   <span className="ml-2 text-xs text-gray-400">
-                    {formatTimestamp(message.timestamp)}
+                    {formatTimestamp(message.timestamp!)}
                   </span>
                 </span>
               </div>

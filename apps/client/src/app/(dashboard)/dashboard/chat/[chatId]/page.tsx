@@ -2,15 +2,9 @@ import { notFound } from "next/navigation";
 
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
-import { Message, messageArrayValidator } from "@local/validators";
+import { messageArrayValidator } from "@local/validators";
 
 import { ChatInput, Messages } from "@/components/chat";
-import { getCachedUsers, getInbox, setCachedUsers } from "@/lib/redis/actions";
-
-type cacheUser = {
-  name: string;
-  role: string;
-};
 
 interface PageProps {
   params: {
@@ -58,21 +52,17 @@ export default async function ChatPage({ params }: PageProps) {
 async function getChatMessages(chatId: string) {
   try {
     const res = await client.api.inbox[`${chatId}`]?.get();
-
     if (!res || res.error) {
       throw new Error("Unable to get chat messages");
     }
 
-    const dbMessages = res.data.map(
-      (message) => JSON.parse(message) as Message,
-    );
-    const reversedMessages = dbMessages.reverse();
+    const messages = messageArrayValidator.parse(res.data!);
+    const reversedMessages = messages.reverse();
 
-    const messages = messageArrayValidator.parse(reversedMessages);
-
-    return messages;
+    return reversedMessages;
   } catch (e) {
-    throw new Error("Unable to get chat messages");
+    console.log(e);
+    throw new Error();
   }
 }
 

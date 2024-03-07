@@ -15,15 +15,15 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "typescript": "latest",
-    "@types/react": "^18.2.61",
-    "@types/react-dom": "^18.2.19",
     "@local/eslint-config": "workspace:*",
-    "eslint": "^8.57.0",
-    "server": "workspace:*",
+    "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
+    "eslint": "^8.57.0",
     "prettier": "^3.2.5",
-    "@local/prettier-config": "workspace:*"
+    "server": "workspace:*",
+    "typescript": "latest"
   },
   "eslintConfig": {
     "root": true,

@@ -29,10 +29,8 @@ export const inboxRoutes = new Elysia({ prefix: "/inbox" })
       }),
       body: t.Object({
         message: t.Object({
-          id: t.String(),
           senderId: t.String(),
           text: t.String(),
-          timestamp: t.Number(),
         }),
       }),
     },

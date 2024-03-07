@@ -2,12 +2,13 @@ import type { DefaultSession, NextAuthConfig } from "next-auth";
 import { Adapter } from "@auth/core/adapters";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
-import azureAd from "next-auth/providers/azure-ad";
+import { decode, getToken } from "next-auth/jwt";
 import { useSession } from "next-auth/react";
 
 import { db, InferSelectModel, pgTable, PgTableFn, schema } from "@local/db";
 
 import { env } from "../env";
+import authConfig from "./auth.config";
 
 export type { Session } from "next-auth";
 
@@ -18,6 +19,10 @@ declare module "next-auth" {
       id: string;
       roles: "student" | "teacher" | "admin" | "secretary";
     } & DefaultSession["user"];
+  }
+  interface JWT {
+    id: string;
+    roles: "student" | "teacher" | "admin" | "secretary";
   }
 }
 
@@ -60,42 +65,13 @@ export const {
 } = NextAuth({
   secret: env.NEXTAUTH_SECRET,
   adapter: adapter,
-  providers: [
-    azureAd({
-      clientId: env.AZURE_AD_CLIENT_ID,
-      clientSecret: env.AZURE_AD_CLIENT_SECRET,
-      tenantId: env.AZURE_AD_TENANT_ID,
-      profile(profile) {
-        return {
-          id: profile.oid,
-          name: profile.name,
-          email: profile.email,
-          role: profile.roles[0],
-        };
-      },
-      allowDangerousEmailAccountLinking: true,
-    }),
-  ],
-  pages: {
-    signIn: "/login",
-  },
 
-  callbacks: {
-    async redirect({ url, baseUrl }) {
-      baseUrl ?? (baseUrl = "/");
-      return baseUrl;
-    },
-
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-        //@ts-expect-error
-        roles: user.role,
-        email: session.user.email,
-        name: session.user.name,
-      },
-    }),
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
   },
+  ...authConfig,
 });
+
+export { decode, getToken, authConfig };

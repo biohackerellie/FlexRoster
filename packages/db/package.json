@@ -21,22 +21,23 @@
   "dependencies": {
     "@auth/core": "^0.26.3",
     "@t3-oss/env-nextjs": "^0.7.3",
-    "drizzle-orm": "^0.29.3",
+    "drizzle-orm": "^0.29.5",
     "postgres": "^3.4.3",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@local/tsconfig": "workspace:*",
-    "@types/node": "^20.11.24",
-    "dotenv-cli": "^7.3.0",
-    "drizzle-kit": "^0.20.14",
-    "pg": "^8.11.3",
-    "tsx": "^4.7.1",
-    "typescript": "^5.3.3",
-    "eslint": "^8.57.0",
-    "prettier": "^3.2.5",
     "@local/eslint-config": "workspace:*",
-    "@local/prettier-config": "workspace:*"
+    "@local/prettier-config": "workspace:*",
+    "@local/tsconfig": "workspace:*",
+    "@types/node": "^20.11.25",
+    "@types/pg": "^8.11.2",
+    "dotenv-cli": "^7.4.0",
+    "drizzle-kit": "^0.20.14",
+    "eslint": "^8.57.0",
+    "pg": "^8.11.3",
+    "prettier": "^3.2.5",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.2"
   },
   "eslintConfig": {
     "root": true,

@@ -6,6 +6,8 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "production", "test"])
       .default("development"),
+
+    RUNTIME: z.enum(["bun", "edge"]).default("bun"),
   },
   server: {
     DIRECT_URL: z.string(),
