@@ -4,7 +4,7 @@ import { decode, getToken } from "next-auth/jwt";
 import { env } from "./env";
 
 export default async function middleware(req: NextRequest) {
-  // @ts-expect-error
+  // @ts-expect-error - token is not defined
   let token = await getToken({
     req,
     secret: env.NEXTAUTH_SECRET,
@@ -17,8 +17,8 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  let role = token.roles || "student";
-  let path = req.nextUrl.pathname;
+  const role = token.roles || "student";
+  const path = req.nextUrl.pathname;
   console.log("path", path);
 
   switch (role) {

@@ -91,7 +91,7 @@ const Messages: React.FC<MessagesProps> = ({
                 >
                   {message.text}{" "}
                   <span className="ml-2 text-xs text-gray-400">
-                    {formatTimestamp(message.timestamp!)}
+                    {formatTimestamp(message.timestamp)}
                   </span>
                 </span>
               </div>

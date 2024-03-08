@@ -84,7 +84,6 @@ export async function setStudentRoster(
     await setClassRoomKV(
       email,
       `Room ${roomNumber} with ${teacherName}`,
-      86400,
     );
     await setRequestKV(email);
     await db.insert(schema.transferLogs).values({

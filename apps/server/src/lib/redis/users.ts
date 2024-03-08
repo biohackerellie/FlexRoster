@@ -36,7 +36,9 @@ async function getCachedUsers(key?: string): Promise<cachedUser | undefined> {
   try {
     if (!key) {
       const userKeys = [];
-      for await (const key of client.scanStream({ match: "user:*" })) {
+      for await (const key of client.scanStream({
+        match: "user:*",
+      }) as AsyncIterable<string[]>) {
         userKeys.push(...key);
       }
 
@@ -44,7 +46,7 @@ async function getCachedUsers(key?: string): Promise<cachedUser | undefined> {
       for (const userKey of userKeys) {
         const userDetails = await client.hgetall(userKey);
         if (userDetails && Object.keys(userDetails).length > 0) {
-          users[userKey] = {
+          users[userKey as `user:${UserId}`] = {
             name: userDetails.name!,
             role: userDetails.role!,
             available: userDetails.available === "true" ? true : false,

@@ -5,22 +5,11 @@ import * as main from "./schema/schema";
 
 export * from "drizzle-orm";
 export { pgTable, PgDatabase, type PgTableFn } from "drizzle-orm/pg-core";
-declare namespace global {
-  let postgresSqlClient: ReturnType<typeof postgres> | undefined;
-}
 
 const connectionString = process.env.DATABASE_URL!;
 
-let postgresSqlClient;
+const postgresSqlClient = postgres(connectionString);
 
-if (process.env.NODE_ENV !== "production") {
-  if (!global.postgresSqlClient) {
-    global.postgresSqlClient = postgres(connectionString);
-  }
-  postgresSqlClient = global.postgresSqlClient;
-} else {
-  postgresSqlClient = postgres(connectionString);
-}
 export const schema = { ...main };
 
 export const db = drizzle(postgresSqlClient, { schema });

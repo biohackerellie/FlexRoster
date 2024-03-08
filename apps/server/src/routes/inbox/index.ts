@@ -42,7 +42,6 @@ export const inboxRoutes = new Elysia({ prefix: "/inbox" })
       // ws.subscribe(`chat:${ws.data.params.chatId}`);
     },
     message(ws, message) {
-      console.log("Received message: " + message);
       ws.send(message);
     },
     close(ws) {

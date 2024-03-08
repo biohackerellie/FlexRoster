@@ -7,7 +7,7 @@ import { toPusherKey } from "@/lib/utils";
 
 export async function POST(req: Request) {
   try {
-    const { chatId, text } = await req.json();
+    const { chatId, text }: { chatId: string; text: string } = await req.json();
     console.log("hi");
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
