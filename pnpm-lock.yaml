@@ -184,8 +184,8 @@ importers:
   apps/server:
     dependencies:
       '@auth/core':
-        specifier: ^0.26.3
-        version: 0.26.3
+        specifier: ^0.28.0
+        version: 0.28.0
       '@auth/drizzle-adapter':
         specifier: ^0.6.3
         version: 0.6.3
@@ -266,8 +266,8 @@ importers:
   packages/auth:
     dependencies:
       '@auth/core':
-        specifier: ^0.26.3
-        version: 0.26.3
+        specifier: ^0.28.0
+        version: 0.28.0
       '@auth/drizzle-adapter':
         specifier: ^0.6.3
         version: 0.6.3
@@ -306,8 +306,8 @@ importers:
   packages/db:
     dependencies:
       '@auth/core':
-        specifier: ^0.26.3
-        version: 0.26.3
+        specifier: ^0.28.0
+        version: 0.28.0
       '@t3-oss/env-nextjs':
         specifier: ^0.7.3
         version: 0.7.3(typescript@5.4.2)(zod@3.22.4)
