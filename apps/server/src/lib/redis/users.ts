@@ -19,12 +19,6 @@ async function setCachedUsers({
   }
 }
 
-interface returnType {
-  user: {
-    name: string;
-  };
-}
-
 type UserId = string;
 interface UserData {
   name: string;
@@ -81,7 +75,7 @@ async function getCachedUsers(key?: string): Promise<cachedUser | undefined> {
     console.error("Error getting user from cache", error);
     throw new Error("Error getting user from cache");
   } finally {
-    client.quit();
+    await client.quit();
   }
 }
 

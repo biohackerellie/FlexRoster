@@ -1,4 +1,4 @@
-import { Message, messageValidator } from "@local/validators";
+import { messageValidator } from "@local/validators";
 
 import { createClient } from ".";
 
@@ -6,7 +6,7 @@ export async function getInbox(chatId: string) {
   const client = createClient();
 
   const messages = await client.xrange(`chat:${chatId}:messages`, "0", "+");
-  client.quit();
+  await client.quit();
   const transformedMessages = messages.map(
     ([id, fieldsArray]: [string, string[]]) => {
       const messageObject: Record<string, any> = {};
@@ -36,6 +36,6 @@ export async function sendToInbox(chatId: string, message: any) {
     "timestamp",
     messageData.timestamp,
   );
-  client.quit();
+  await client.quit();
   return messageId;
 }

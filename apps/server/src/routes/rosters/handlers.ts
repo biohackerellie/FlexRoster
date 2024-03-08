@@ -120,7 +120,7 @@ export async function newRequest(requestId: string, request: Request) {
     }
   } else {
     await client.hset(requestId, requestData);
-    client.quit();
+    await client.quit();
     return Response.json({ message: "Request sent" }, { status: 200 });
   }
 }
