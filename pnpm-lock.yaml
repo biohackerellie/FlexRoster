@@ -469,6 +469,8 @@ importers:
         specifier: ^5.4.2
         version: 5.4.2
 
+  tooling/github: {}
+
   tooling/prettier-config:
     dependencies:
       '@ianvs/prettier-plugin-sort-imports':
