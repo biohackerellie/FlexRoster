@@ -1,11 +1,11 @@
 import { NotFoundError } from "elysia";
 
-import { db, eq, schema, sql } from "@local/db";
+import { classroomsQuery, roomByIdQuery } from "~/lib/sql";
 
 export async function getClasses() {
   console.log("hi");
   try {
-    const res = await classQuery.execute();
+    const res = await classroomsQuery.execute();
     return res;
   } catch (e) {
     console.log(e);
@@ -15,18 +15,9 @@ export async function getClasses() {
 
 export async function getClassById(id: string) {
   try {
-    return await db.query.classrooms.findMany({
-      where: eq(schema.classrooms.id, id),
-    });
+    const result = await roomByIdQuery.execute({ id });
+    return result[0];
   } catch (e) {
     throw new NotFoundError("No class found with that ID");
   }
 }
-
-const classQuery = await db.query.classrooms
-  .findMany({
-    with: {
-      users: true,
-    },
-  })
-  .prepare("class");

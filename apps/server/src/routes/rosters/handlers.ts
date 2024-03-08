@@ -11,13 +11,17 @@ import {
   setClassRoomKV,
   setRequestKV,
 } from "~/lib/redis";
-import { teacherQuery } from "../users/handlers";
-
-const today = new Date();
+import {
+  rosterByClassroomId,
+  rosterByTeacherId,
+  rosterQuery,
+  teacherQuery,
+  userRosterQuery,
+} from "~/lib/sql";
 
 export async function getRosters() {
   try {
-    return await db.query.classRosters.findMany({});
+    return await rosterQuery.execute();
   } catch (e) {
     throw new NotFoundError("No rosters found");
   }
@@ -25,29 +29,12 @@ export async function getRosters() {
 
 export async function getRostersById(id: string) {
   try {
-    return await db.query.classRosters.findMany({
-      where: eq(schema.classRosters.classroomId, id),
-      with: {
-        classroom: true,
-      },
-    });
+    const results = await rosterByClassroomId.execute({ classroomId: id });
+    return results;
   } catch (e) {
     throw new NotFoundError("No roster found with that ID");
   }
 }
-
-const rosterQuery = db.query.users
-  .findFirst({
-    where: eq(schema.users.id, sql.placeholder("id")),
-    with: {
-      classRosters: {
-        with: {
-          classroom: true,
-        },
-      },
-    },
-  })
-  .prepare("roster");
 
 export async function getStudentRoster(userId: string) {
   try {
@@ -60,20 +47,22 @@ export async function getStudentRoster(userId: string) {
 
     if (Object.keys(request).length > 0) {
       const teacherID = request.newTeacher!;
-      const teacher = await teacherQuery.execute({ id: teacherID });
-      teacherName = teacher?.name!;
+      const result = await teacherQuery.execute({ id: teacherID });
+      const teacher = result[0];
+      teacherName = teacher?.user?.name!;
       roomNumber = teacher?.classrooms?.roomNumber!;
       message = `You transfered to FLEX room ${roomNumber} with ${teacherName}`;
     } else {
-      const roster = await rosterQuery.execute({ id: userId });
-      teacherName = roster?.classRosters.classroom.teacherName!;
-      roomNumber = roster?.classRosters.classroom?.roomNumber!;
+      const result = await userRosterQuery.execute({ id: userId });
+      const roster = result[0];
+      teacherName = roster?.classrooms?.teacherName!;
+      roomNumber = roster?.classrooms?.roomNumber!;
       message = `Your FLEX class today is with ${teacherName} in room ${roomNumber}`;
     }
     return message;
   } catch (e) {
     console.log(e);
-    throw new NotFoundError("No roster found with that email");
+    throw new NotFoundError("No roster found with that userId");
   }
 }
 
@@ -109,20 +98,10 @@ export async function setStudentRoster(
   }
 }
 
-export async function getTeacherRoster(email: string) {
-  const [firstName, lastName] = (email.split("@")[0] ?? "")
-    .split("_")
-    .map((name) => name.charAt(0).toUpperCase() + name.slice(1));
-
-  const formattedName = `${lastName}, ${firstName}`;
-  console.log("formattedName", formattedName);
+export async function getTeacherRoster(userId: string) {
   try {
-    return await db.query.classRosters.findMany({
-      where: eq(schema.classrooms.teacherName, formattedName),
-      with: {
-        classroom: true,
-      },
-    });
+    const rosters = await rosterByTeacherId.execute({ id: userId });
+    return rosters;
   } catch (e) {
     throw new NotFoundError("No roster found with that email");
   }
@@ -135,20 +114,12 @@ export async function newRequest(requestId: string, request: Request) {
   const res = await client.hgetall(requestId);
 
   if (Object.keys(res).length > 0) {
-    throw new Error("You have already made a request today");
+    const status = res.status!;
+    if (status !== "denied") {
+      throw new Error("You have already made a request today");
+    }
   } else {
     await client.hset(requestId, requestData);
-
-    await client.xadd(
-      "transfers",
-      "*",
-      "student",
-      requestData.studentId,
-      "teacher",
-      requestData.newTeacher,
-      "status",
-      "pending",
-    );
     client.quit();
     return Response.json({ message: "Request sent" }, { status: 200 });
   }

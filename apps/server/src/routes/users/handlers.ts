@@ -2,7 +2,7 @@ import { NotFoundError } from "elysia";
 
 import { db, eq, schema, sql } from "@local/db";
 
-import { getCachedUsers, setCachedUsers } from "~/lib/redis";
+import { userQuery, userRosterQuery } from "~/lib/sql";
 
 export async function getDBUser(id: string) {
   try {
@@ -13,37 +13,16 @@ export async function getDBUser(id: string) {
   }
 }
 
-export const userQuery = db.query.users
-  .findFirst({
-    where: eq(schema.users.id, sql.placeholder("id")),
-  })
-  .prepare("user");
-
-export const studentQuery = db.query.users
-  .findFirst({
-    where: eq(schema.users.id, sql.placeholder("id")),
-    with: {
-      classRosters: {
-        with: {
-          classroom: true,
-        },
-      },
-    },
-  })
-  .prepare("student");
-
-export const teacherQuery = db.query.users
-  .findFirst({
-    where: eq(schema.users.id, sql.placeholder("id")),
-    with: {
-      classrooms: true,
-    },
-  })
-  .prepare("teacher");
-
 export async function getStudent(id: string) {
   try {
-    const student = await studentQuery.execute({ id: id });
+    const results = await userRosterQuery.execute({ id: id });
+    if (results.length === 0) {
+      throw new NotFoundError("No student found with that ID");
+    }
+    const student = results[0];
+    if (student?.classrooms === null) {
+      throw new NotFoundError("No Classroom found for student");
+    }
     return student;
   } catch (e) {
     throw new NotFoundError("No student found with that ID");

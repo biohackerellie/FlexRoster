@@ -18,9 +18,13 @@ export const requestValidator = z.object({
   newTeacher: z.string(),
   status: z
     .string()
-    .refine((value) => ["pending", "approved", "denied"].includes(value), {
-      message: "Invalid status value",
-    }),
+    .refine(
+      (value) =>
+        ["pending", "approved", "denied", "checked in"].includes(value),
+      {
+        message: "Invalid status value",
+      },
+    ),
   timestamp: z.number(),
 });
 

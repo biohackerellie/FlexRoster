@@ -19,6 +19,10 @@ export const role = pgEnum("Role", [
   "admin",
 ]);
 
+/**
+ * should have gone with classStudents instead of classRosters
+ * @description classRosters is a table that holds the relationship between a student and a classroom
+ */
 export const classRosters = pgTable("classRosters", {
   studentEmail: text("studentEmail").notNull().unique(),
   classroomId: text("classroomId")

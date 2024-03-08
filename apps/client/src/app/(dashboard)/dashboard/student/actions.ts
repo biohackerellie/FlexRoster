@@ -23,7 +23,7 @@ export async function RequestRoom(teacherId: string) {
 
   if (error) return;
 
-  const currentTeacher = data?.classRosters.classroom.teacherId!;
+  const currentTeacher = data?.classrooms?.teacherName!;
   const timestamp = Date.now();
   const requestData: Request = {
     id: nanoid(),
@@ -35,7 +35,7 @@ export async function RequestRoom(teacherId: string) {
   };
 
   const request = requestValidator.parse(requestData);
-  const requestId = `request:${studentId}`;
+  const requestId = `request:${currentTeacher}:${studentId}`;
   const toTeacher = `request:${teacherId}:${studentId}`;
   const res = await client.api.rosters.request[`${requestId}`]?.post({
     request,
