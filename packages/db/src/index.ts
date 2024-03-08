@@ -1,5 +1,4 @@
 import { drizzle } from "drizzle-orm/postgres-js";
-import { Client } from "pg";
 import postgres from "postgres";
 
 import * as main from "./schema/schema";
@@ -23,8 +22,5 @@ if (process.env.NODE_ENV !== "production") {
   postgresSqlClient = postgres(connectionString);
 }
 export const schema = { ...main };
-const client = new Client({
-  connectionString: connectionString,
-});
 
 export const db = drizzle(postgresSqlClient, { schema });

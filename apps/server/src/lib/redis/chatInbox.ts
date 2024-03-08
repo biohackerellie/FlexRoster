@@ -9,9 +9,9 @@ export async function getInbox(chatId: string) {
   client.quit();
   const transformedMessages = messages.map(
     ([id, fieldsArray]: [string, string[]]) => {
-      const messageObject: { [key: string]: any } = {};
+      const messageObject: Record<string, any> = {};
       for (let i = 0; i < fieldsArray.length; i += 2) {
-        messageObject[fieldsArray[i] as string] = fieldsArray[i + 1];
+        messageObject[fieldsArray[i]!] = fieldsArray[i + 1];
       }
       return {
         id,

@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "../ui/button";
 
 interface ChatInputProps {
-  chatPartner: SelectUser;
+  chatPartner: Partial<SelectUser>;
   chatId: string;
   userId: string;
 }

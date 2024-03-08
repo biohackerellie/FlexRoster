@@ -1,8 +1,6 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { env } from "@/env.js";
-import { auth } from "@/lib/auth";
 
 export default async function Home() {
   return (

@@ -94,12 +94,15 @@ async function usersCheck(chatId: string) {
     // if the current user is not found in the cache, set the user in the cache
     let userIdRaw = await client.api.users[`${userId}`]?.get()!;
 
-    if (chatPartnerRaw.error || userIdRaw.error) {
+    if (!chatPartnerRaw || chatPartnerRaw.error || userIdRaw.error) {
       return notFound();
     }
 
     const chatPartner = chatPartnerRaw.data!;
 
+    if (!userIdRaw || userIdRaw.error) {
+      return notFound();
+    }
     const primaryUser = userIdRaw.data!;
     if (primaryUser.role === "student" && chatPartner.role === "student") {
       return notFound();

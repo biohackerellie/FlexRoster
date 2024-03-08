@@ -11,7 +11,12 @@ jiti("@local/auth/env");
 const nextConfig = {
   output: "standalone",
   reactStrictMode: true,
-  transpilePackages: ["@local/eden", "@local/db", "@local/auth"],
+  transpilePackages: [
+    "@local/eden",
+    "@local/db",
+    "@local/auth",
+    "@local/validators",
+  ],
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
 

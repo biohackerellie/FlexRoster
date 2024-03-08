@@ -7,7 +7,7 @@ import { userQuery, userRosterQuery } from "~/lib/sql";
 export async function getDBUser(id: string) {
   try {
     const user = await userQuery.execute({ id: id });
-    return user;
+    return user[0];
   } catch (e) {
     throw new NotFoundError("No user found with that ID");
   }

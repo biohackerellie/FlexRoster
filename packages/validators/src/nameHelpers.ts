@@ -28,7 +28,7 @@ export function normalizeName(name: string): string[] {
     .toLowerCase()
     .split(/\s+|,|\./)
     .filter((word) => word.length)
-    .map((word) => nicknameMap[word] || word);
+    .map((word) => nicknameMap[word] ?? word);
 }
 
 export function findUserIdByName(

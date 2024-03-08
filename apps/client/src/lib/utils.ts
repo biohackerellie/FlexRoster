@@ -35,22 +35,22 @@ export function formatTeacherNames(teacherName: string) {
 }
 
 export async function chatUsersByRole(
-  userID?: string,
   role: "student" | "teacher" | "admin" | "secretary" = "student",
 ) {
   if (role === "student") {
-    const { data, error } = await client.api.users.teachers.get();
-    if (error) {
+    const data = await client.api.users.teachers?.get();
+
+    if (!data || data?.error) {
       throw new Error("Error fetching teachers");
     }
 
-    return data;
+    return data.data;
   } else if (role === "teacher") {
-    const { data, error } = await client.api.users.teachers.get();
-    if (error) {
+    const data = await client.api.users.teachers?.get();
+    if (!data || data.error) {
       throw new Error("Error fetching teachers");
     }
-    return data;
+    return data.data;
   }
 }
 

@@ -14,7 +14,7 @@ interface MessagesProps {
   initialMessages: Message[];
   sessionId: string;
   chatId: string;
-  chatPartner: SelectUser;
+  chatPartner: Partial<SelectUser>;
 }
 
 const Messages: React.FC<MessagesProps> = ({
