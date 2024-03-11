@@ -42,9 +42,9 @@ export default async function ChatPage({ params }: PageProps) {
         chatId={chatId}
         initialMessages={initialMessages}
         sessionId={userId}
-        chatPartner={chatPartner!}
+        chatPartner={chatPartner}
       />
-      <ChatInput userId={userId} chatId={chatId} chatPartner={chatPartner!} />
+      <ChatInput userId={userId} chatId={chatId} chatPartner={chatPartner} />
     </div>
   );
 }
@@ -56,7 +56,7 @@ async function getChatMessages(chatId: string) {
       throw new Error("Unable to get chat messages");
     }
 
-    const messages = messageArrayValidator.parse(res.data!);
+    const messages = messageArrayValidator.parse(res.data);
     const reversedMessages = messages.reverse();
 
     return reversedMessages;
@@ -80,7 +80,7 @@ async function usersCheck(chatId: string) {
     if (!session) notFound();
     const { user } = session;
 
-    const userId = user.id!;
+    const userId = user.id;
 
     const [userId1, userId2] = chatId.split("--");
 
@@ -89,21 +89,20 @@ async function usersCheck(chatId: string) {
     }
 
     const chatPartnerId = userId === userId1 ? userId2 : userId1;
-    const chatPartnerRaw = await client.api.users[`${chatPartnerId}`]?.get()!;
+    const chatPartnerRaw = await client.api.users[`${chatPartnerId}`]?.get();
 
     // if the current user is not found in the cache, set the user in the cache
-    let userIdRaw = await client.api.users[`${userId}`]?.get()!;
+    const userIdRaw = await client.api.users[`${userId}`]?.get();
 
-    if (!chatPartnerRaw || chatPartnerRaw.error || userIdRaw.error) {
+    if (!chatPartnerRaw || !userIdRaw) {
       return notFound();
     }
 
-    const chatPartner = chatPartnerRaw.data!;
-
-    if (!userIdRaw || userIdRaw.error) {
+    if (chatPartnerRaw.error || userIdRaw.error) {
       return notFound();
     }
-    const primaryUser = userIdRaw.data!;
+    const chatPartner = chatPartnerRaw.data;
+    const primaryUser = userIdRaw.data;
     if (primaryUser.role === "student" && chatPartner.role === "student") {
       return notFound();
     }

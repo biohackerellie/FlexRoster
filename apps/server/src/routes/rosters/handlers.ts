@@ -81,10 +81,7 @@ export async function setStudentRoster(
         status: 301,
       });
     }
-    await setClassRoomKV(
-      email,
-      `Room ${roomNumber} with ${teacherName}`,
-    );
+    await setClassRoomKV(email, `Room ${roomNumber} with ${teacherName}`);
     await setRequestKV(email);
     await db.insert(schema.transferLogs).values({
       studentEmail: email,

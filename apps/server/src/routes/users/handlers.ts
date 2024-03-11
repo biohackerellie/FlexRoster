@@ -1,13 +1,15 @@
 import { NotFoundError } from "elysia";
 
-import { db, eq, schema, sql } from "@local/db";
-
 import { userQuery, userRosterQuery } from "~/lib/sql";
 
 export async function getDBUser(id: string) {
   try {
     const user = await userQuery.execute({ id: id });
-    return user[0];
+    const result = user[0] ?? null;
+    if (result === null) {
+      throw new NotFoundError("No user found with that ID");
+    }
+    return result;
   } catch (e) {
     throw new NotFoundError("No user found with that ID");
   }

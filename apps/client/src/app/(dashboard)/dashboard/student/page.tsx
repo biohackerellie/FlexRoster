@@ -11,14 +11,16 @@ async function getData(email: string, userId: string) {
   if (error) {
     return [];
   }
-  const mappedData = data.map((rooms: any) => {
-    const formattedTeacherName = formatTeacherNames(rooms.teacherName);
+  const mappedData = data.map((rooms) => {
+    const formattedTeacherName = formatTeacherNames(
+      rooms.classrooms.teacherName,
+    );
     return {
-      roomNumber: rooms.roomNumber,
+      roomNumber: rooms.classrooms.roomNumber,
       teacherName: formattedTeacherName,
-      available: rooms.available,
-      teacherId: rooms.teacherId!,
-      chatId: `/chat/${chatHrefConstructor(userId, rooms.teacherId!)}`,
+      available: rooms.classrooms.available,
+      teacherId: rooms.classrooms.teacherId ?? "",
+      chatId: `/chat/${chatHrefConstructor(userId, rooms.classrooms.teacherId!)}`,
     };
   });
 

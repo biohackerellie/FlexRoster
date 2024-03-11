@@ -1,20 +1,9 @@
 import { Elysia, t } from "elysia";
 
 import { getInbox, sendToInbox } from "~/lib/redis";
-import { toInbox } from "./handlers";
 
 export const inboxRoutes = new Elysia({ prefix: "/inbox" })
-  .post(
-    "/",
-    ({ body: { userId, chatId, text } }) => toInbox(userId, chatId, text),
-    {
-      body: t.Object({
-        userId: t.String(),
-        chatId: t.String(),
-        text: t.String(),
-      }),
-    },
-  )
+
   .get("/:chatId", ({ params: { chatId } }) => getInbox(chatId), {
     params: t.Object({
       chatId: t.String(),

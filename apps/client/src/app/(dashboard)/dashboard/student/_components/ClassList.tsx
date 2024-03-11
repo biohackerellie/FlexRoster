@@ -167,6 +167,7 @@ const columns: ColumnDef<StudentTable>[] = [
     accessorKey: "teacherId",
     header: "Transfer",
     cell: ({ row, column }) => {
+      // eslint-disable-next-line
       const teacherId = row.getValue("teacherId") as string;
       const available = row.getValue("available") as boolean;
       return (
@@ -180,6 +181,7 @@ const columns: ColumnDef<StudentTable>[] = [
     accessorKey: "chatId",
     header: "Message",
     cell: ({ row, column }) => {
+      // eslint-disable-next-line
       const chatId = row.getValue("chatId") as string;
       return (
         <Button asChild variant="outline">
