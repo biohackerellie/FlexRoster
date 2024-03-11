@@ -160,8 +160,8 @@ importers:
         specifier: ^10.4.18
         version: 10.4.18(postcss@8.4.35)
       dotenv-cli:
-        specifier: ^7.4.0
-        version: 7.4.0
+        specifier: ^7.4.1
+        version: 7.4.1
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -251,8 +251,8 @@ importers:
         specifier: ^1.0.30
         version: 1.0.30
       dotenv-cli:
-        specifier: ^7.4.0
-        version: 7.4.0
+        specifier: ^7.4.1
+        version: 7.4.1
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -337,8 +337,8 @@ importers:
         specifier: ^8.11.2
         version: 8.11.2
       dotenv-cli:
-        specifier: ^7.4.0
-        version: 7.4.0
+        specifier: ^7.4.1
+        version: 7.4.1
       drizzle-kit:
         specifier: ^0.20.14
         version: 0.20.14
@@ -5541,8 +5541,8 @@ packages:
       no-case: 2.3.2
     dev: true
 
-  /dotenv-cli@7.4.0:
-    resolution: {integrity: sha512-fZGFOGCC5rEz1OJ0Pp+1LN8y78ClMcyXDmBEmjvJwqCqZVsPHcQ85bLCh5hZ4Bqotw4dptXOLvvw0vxm2MD30g==}
+  /dotenv-cli@7.4.1:
+    resolution: {integrity: sha512-fE1aywjRrWGxV3miaiUr3d2zC/VAiuzEGghi+QzgIA9fEf/M5hLMaRSXb4IxbUAwGmaLi0IozdZddnVU96acag==}
     hasBin: true
     dependencies:
       cross-spawn: 7.0.3
