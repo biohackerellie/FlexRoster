@@ -13,7 +13,7 @@
   },
   "dependencies": {
 
-    "@auth/core": "^0.26.3",
+    "@auth/core": "^0.28.0",
     "@auth/drizzle-adapter": "^0.8.0",
 
     "@local/db": "workspace:*",
