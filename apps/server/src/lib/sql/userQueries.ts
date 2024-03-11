@@ -25,6 +25,10 @@ export const userQuery = db
   .prepare("user");
 
 /**
+ * single user by email
+ */
+
+/**
  * Query single user by id and return the user with their classroom and classRoster
  * @param id - user id
  * @returns User with Classroom

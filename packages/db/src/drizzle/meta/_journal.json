@@ -43,6 +43,20 @@
       "when": 1708618116600,
       "tag": "0006_abnormal_phil_sheldon",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1710172758515,
+      "tag": "0007_safe_viper",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1710175018406,
+      "tag": "0008_lethal_odin",
+      "breakpoints": true
     }
   ]
 }

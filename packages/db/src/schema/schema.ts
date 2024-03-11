@@ -24,6 +24,7 @@ export const role = pgEnum("Role", [
  */
 export const classRosters = pgTable("classRosters", {
   studentEmail: text("studentEmail").notNull().unique(),
+  studentName: text("studentName").notNull(),
   classroomId: text("classroomId")
     .notNull()
     .references(() => classrooms.id, {

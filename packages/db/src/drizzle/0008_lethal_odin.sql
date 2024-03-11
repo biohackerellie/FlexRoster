@@ -1,0 +1,1 @@
+ALTER TABLE "classRosters" ALTER COLUMN "studentName" SET NOT NULL;

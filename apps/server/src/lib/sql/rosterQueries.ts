@@ -11,11 +11,25 @@ export const rosterQuery = db
   .prepare("roster");
 
 export const rosterByTeacherId = db
-  .select()
+  .select({
+    rosterId: schema.classRosters.id,
+    studentEmail: schema.classRosters.studentEmail,
+    studentName: schema.classRosters.studentName,
+    studentId: schema.users.id,
+    classroomId: schema.classrooms.id,
+    roomNumber: schema.classrooms.roomNumber,
+    teacherName: schema.classrooms.teacherName,
+    teacherId: schema.classrooms.teacherId,
+    available: schema.classrooms.available,
+  })
   .from(schema.classRosters)
-  .leftJoin(
+  .innerJoin(
     schema.classrooms,
     eq(schema.classRosters.classroomId, schema.classrooms.id),
+  )
+  .leftJoin(
+    schema.users,
+    eq(schema.classRosters.studentEmail, schema.users.email),
   )
   .where(eq(schema.classrooms.teacherId, sql.placeholder("teacherId")))
   .prepare("rosterByTeacherId");

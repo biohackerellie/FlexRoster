@@ -4,14 +4,12 @@
  * Teacher names containing "Brandi Fox" are skipped.
  * The teacher names are formatted and stored in the database.
  */
-import { db, eq, like, schema } from "@local/db";
+import { db, eq, schema } from "@local/db";
 import { findUserIdByName, formatTeacherNames } from "@local/validators";
 
 import type { ClassResponse } from "~/lib/types";
 import { env } from "~/env";
 import { fetcher, icAuth } from "../../lib/utils";
-
-type SelectUser = typeof schema.users.$inferSelect;
 
 async function syncRoster() {
   try {

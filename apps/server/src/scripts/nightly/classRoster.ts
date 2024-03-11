@@ -2,7 +2,7 @@
  * Retrieve rosters for each class and insert into database
  */
 
-import { db, eq, schema } from "@local/db";
+import { db, schema } from "@local/db";
 
 import type { RosterResponse } from "~/lib/types";
 import { env } from "~/env";
@@ -29,8 +29,10 @@ export async function RosterSync() {
         },
       );
       const mappedStudents = data.users.map((s) => {
+        const fullName = `${s.givenName} ${s.familyName}`;
         return {
           studentEmail: s.email,
+          studentName: fullName,
           classroomId: id,
         };
       });

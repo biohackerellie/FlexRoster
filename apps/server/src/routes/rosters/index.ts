@@ -26,11 +26,11 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
     },
   )
   .get(
-    "/teacher/roster/:email",
-    ({ params: { email } }) => getTeacherRoster(email),
+    "/teacher/roster/:userId",
+    ({ params: { userId } }) => getTeacherRoster(userId),
     {
       params: t.Object({
-        email: t.String(),
+        userId: t.String(),
       }),
     },
   )

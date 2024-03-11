@@ -63,3 +63,10 @@ export type StudentTable = {
   teacherId: string;
   chatId: string;
 };
+
+export type TeacherTable = {
+  studentName: string;
+  studentEmail: string;
+  studentId: string | null;
+  chatId: string | null;
+};

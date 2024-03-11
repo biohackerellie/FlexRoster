@@ -1,0 +1,1 @@
+ALTER TABLE "classRosters" ADD COLUMN "studentName" text;

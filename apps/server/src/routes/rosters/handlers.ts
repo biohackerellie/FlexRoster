@@ -29,7 +29,9 @@ export async function getRosters() {
 
 export async function getRostersById(id: string) {
   try {
-    const results = await rosterByClassroomId.execute({ classroomId: id });
+    const results =
+      (await rosterByClassroomId.execute({ classroomId: id })) ?? null;
+    if (!results) throw new NotFoundError("No roster found with that ID");
     return results;
   } catch (e) {
     throw new NotFoundError("No roster found with that ID");
@@ -96,8 +98,11 @@ export async function setStudentRoster(
 
 export async function getTeacherRoster(userId: string) {
   try {
-    const rosters = await rosterByTeacherId.execute({ id: userId });
-    return rosters;
+    console.log("userId", userId);
+    const results = await rosterByTeacherId.execute({ id: userId });
+    console.log("results", results);
+    if (!results) throw new NotFoundError("No roster found with that email");
+    return results;
   } catch (e) {
     throw new NotFoundError("No roster found with that email");
   }
