@@ -112,6 +112,7 @@ export async function getTeacherRoster(userId: string) {
       };
       finalResults.push(student);
     }
+    await client.quit();
     return finalResults;
   } catch (e) {
     throw new NotFoundError("No roster found with that email");
@@ -120,8 +121,13 @@ export async function getTeacherRoster(userId: string) {
 
 export async function setAttendance(student: string, status: string) {
   const client = createClient();
-  await client.set(`attendance:${student}`, status);
-  return new Response("OK", { status: 200 });
+  try {
+    await client.set(`attendance:${student}`, status);
+    await client.quit();
+    return new Response("OK", { status: 200 });
+  } catch (e) {
+    throw new NotFoundError("No roster found with that email");
+  }
 }
 
 export async function newRequest(requestId: string, request: Request) {
