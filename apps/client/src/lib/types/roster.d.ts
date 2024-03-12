@@ -56,7 +56,7 @@ export interface ClassUser {
   grades: [string];
 }
 
-export type StudentTable = {
+export interface StudentTable {
   roomNumber: string;
   teacherName: string;
   available: boolean;
@@ -64,7 +64,7 @@ export type StudentTable = {
   chatId: string;
 };
 
-export type TeacherTable = {
+export interface TeacherTable {
   studentName: string;
   studentEmail: string;
   studentId: string | null;

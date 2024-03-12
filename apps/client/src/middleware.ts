@@ -13,12 +13,16 @@ export default async function middleware(req: NextRequest) {
   if (token && token.exp! < Date.now() / 1000) {
     token = null;
   }
+  const path = req.nextUrl.pathname;
   if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    if (path.startsWith("/dashboard")) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+
+    return NextResponse.next();
   }
 
   const role = token.roles || "student";
-  const path = req.nextUrl.pathname;
   console.log("path", path);
 
   switch (role) {
@@ -37,7 +41,7 @@ export default async function middleware(req: NextRequest) {
       break;
     case "admin":
       if (path === "/dashboard") {
-        return NextResponse.redirect(new URL("/dashboard/student", req.url));
+        return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
       }
       break;
   }

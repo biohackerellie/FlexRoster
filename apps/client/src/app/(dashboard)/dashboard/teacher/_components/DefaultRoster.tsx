@@ -4,15 +4,23 @@ import * as React from "react";
 import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, CheckCircle, MessageSquare, XCircle } from "lucide-react";
-import { toast } from "sonner";
 
 import { DataTable } from "@/components/tables";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useChatNotifications } from "@/hooks";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { TeacherTable } from "@/lib/types";
+import { Attendance } from "../actions";
 
 interface RosterListProps {
   data: TeacherTable[];
+  userId: string;
 }
 
 /**
@@ -21,25 +29,29 @@ interface RosterListProps {
  * @useMediaQuery hook to determine if the user is on a desktop or mobile device.
  * Displays Table Component in a Dialog or Drawer based on the device.
  */
-export function DefaultRosterComponent({ data }: RosterListProps) {
+export function DefaultRosterComponent({ data, userId }: RosterListProps) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  useChatNotifications(userId);
   if (isDesktop) {
     return (
       <div className="flex flex-col leading-tight">
         <div className="flex items-center text-xl">
           <span className="mr-3 font-semibold text-gray-700">
-            Steam Classes
+            Default Roster
           </span>
         </div>
+
         <DataTable columns={columns} data={data} />
       </div>
     );
+  } else {
+    return (
+      <>
+        //TODO - Add Drawer Component
+        <h1>WIP</h1>
+      </>
+    );
   }
-  return (
-    <>
-      <h1>Use your PC asshole</h1>
-    </>
-  );
 }
 
 const columns: ColumnDef<TeacherTable>[] = [
@@ -72,38 +84,50 @@ const columns: ColumnDef<TeacherTable>[] = [
     },
   },
   {
-    accessorKey: "studentId",
+    accessorKey: "attendance",
     header: "Attendance",
     cell: ({ row }) => {
-      let studentValue;
-      const studentEmail: string = row.getValue("studentEmail") ?? undefined;
-      const studentId: string = row.getValue("studentId") ?? undefined;
-      if (!studentId) {
-        studentValue = studentEmail;
-      } else {
-        studentValue = studentId;
-      }
-      return (
-        <span>
+      const studentValue: string = row.getValue("studentEmail");
+
+      const attendance: "not marked" | "present" | "absent" =
+        row.getValue("attendance") ?? "not marked";
+      if (attendance === "not marked") {
+        return (
+          <span>
+            <Button
+              variant="ghost"
+              onClick={() => setAttendance(studentValue, "present")}
+            >
+              <CheckCircle size={20} color="#00ff11" strokeWidth={1.5} />
+            </Button>
+            |
+            <Button
+              variant="ghost"
+              onClick={() => setAttendance(studentValue, "absent")}
+            >
+              <XCircle size={20} color="#ff0000" strokeWidth={1.5} />
+            </Button>
+          </span>
+        );
+      } else if (attendance === "present") {
+        return (
           <Button
             variant="ghost"
-            onClick={() => {
-              console.log("boop");
-            }}
+            onClick={() => setAttendance(studentValue, "absent")}
           >
             <CheckCircle size={20} color="#00ff11" strokeWidth={1.5} />
           </Button>
-          |
+        );
+      } else {
+        return (
           <Button
             variant="ghost"
-            onClick={() => {
-              console.log("boop");
-            }}
+            onClick={() => setAttendance(studentValue, "present")}
           >
             <XCircle size={20} color="#ff0000" strokeWidth={1.5} />
           </Button>
-        </span>
-      );
+        );
+      }
     },
   },
   {
@@ -113,9 +137,14 @@ const columns: ColumnDef<TeacherTable>[] = [
       const chatId = row.getValue("chatId") ?? undefined;
       if (!chatId) {
         return (
-          <Button variant="ghost" disabled>
-            <MessageSquare size={20} strokeWidth={1.5} />
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger className="cursor-default">
+                <MessageSquare size={20} strokeWidth={1.5} />
+              </TooltipTrigger>
+              <TooltipContent>Chat Unavailable</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         );
       } else {
         return (
@@ -129,3 +158,12 @@ const columns: ColumnDef<TeacherTable>[] = [
     },
   },
 ];
+
+const setAttendance = async (studentValue: string, status: string) => {
+  try {
+    const response = await Attendance(studentValue, status);
+    return response;
+  } catch (e) {
+    console.error(e);
+  }
+};

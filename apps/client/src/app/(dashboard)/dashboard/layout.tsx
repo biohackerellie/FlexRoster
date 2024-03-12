@@ -1,11 +1,3 @@
-import Link from "next/link";
-import { redirect } from "next/navigation";
-
-import { auth } from "@local/auth";
-
-import { sidebarOptions } from "@/lib/constants";
-import { chatUsersByRole } from "@/lib/utils";
-
 export default async function DashboardLayout({
   children,
 }: {

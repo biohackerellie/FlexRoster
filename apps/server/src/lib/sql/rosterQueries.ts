@@ -31,7 +31,7 @@ export const rosterByTeacherId = db
     schema.users,
     eq(schema.classRosters.studentEmail, schema.users.email),
   )
-  .where(eq(schema.classrooms.teacherId, sql.placeholder("teacherId")))
+  .where(eq(schema.classrooms.teacherId, sql.placeholder("userId")))
   .prepare("rosterByTeacherId");
 
 export const rosterByClassroomId = db

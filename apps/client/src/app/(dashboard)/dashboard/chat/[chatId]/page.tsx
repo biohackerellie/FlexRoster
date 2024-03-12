@@ -1,10 +1,18 @@
 import { notFound } from "next/navigation";
 
 import { auth } from "@local/auth";
-import { client } from "@local/eden";
+import { fetch } from "@local/eden";
 import { messageArrayValidator } from "@local/validators";
 
 import { ChatInput, Messages } from "@/components/chat";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface PageProps {
   params: {
@@ -30,6 +38,11 @@ export default async function ChatPage({ params }: PageProps) {
       <div className="flex justify-between border-b-2 border-gray-200 py-3 sm:items-center">
         <div className="relative flex items-center space-x-4">
           <div className="flex flex-col leading-tight">
+            <div className="flex items-center text-lg text-muted-foreground">
+              <span className="mr-3 font-semibold ">
+                <PageBreadCrump />
+              </span>
+            </div>
             <div className="flex items-center text-xl">
               <span className="mr-3 font-semibold text-gray-700">
                 {chatPartner.name}
@@ -51,12 +64,21 @@ export default async function ChatPage({ params }: PageProps) {
 
 async function getChatMessages(chatId: string) {
   try {
-    const res = await client.api.inbox[`${chatId}`]?.get();
-    if (!res || res.error) {
-      throw new Error("Unable to get chat messages");
+    const { data, error } = await fetch(`/api/inbox/:chatId`, {
+      params: {
+        chatId: chatId,
+      },
+    });
+
+    if (error) {
+      console.error(error);
+      throw new Error(error.message, { cause: error.cause });
+    }
+    if (!data) {
+      throw new Error("No data found");
     }
 
-    const messages = messageArrayValidator.parse(res.data);
+    const messages = messageArrayValidator.parse(data);
     const reversedMessages = messages.reverse();
 
     return reversedMessages;
@@ -81,18 +103,27 @@ async function usersCheck(chatId: string) {
     const { user } = session;
 
     const userId = user.id;
-
+    console.log(chatId, "chatId");
     const [userId1, userId2] = chatId.split("--");
 
     if (userId !== userId1 && userId !== userId2) {
+      console.log("user is not chatID user");
       notFound();
     }
 
-    const chatPartnerId = userId === userId1 ? userId2 : userId1;
-    const chatPartnerRaw = await client.api.users[`${chatPartnerId}`]?.get();
+    const chatPartnerId = userId === userId1! ? userId2! : userId1!;
+    const chatPartnerRaw = await fetch("/api/users/:id", {
+      params: {
+        id: chatPartnerId,
+      },
+    });
 
     // if the current user is not found in the cache, set the user in the cache
-    const userIdRaw = await client.api.users[`${userId}`]?.get();
+    const userIdRaw = await fetch("/api/users/:id", {
+      params: {
+        id: userId,
+      },
+    });
 
     if (!chatPartnerRaw || !userIdRaw) {
       return notFound();
@@ -121,3 +152,21 @@ async function allData(chatId: string) {
   ]);
   return { chat, initialMessages };
 }
+
+const PageBreadCrump = () => {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbPage>Chat</BreadcrumbPage>
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
+};

@@ -6,6 +6,7 @@ import {
   getStudentRoster,
   getTeacherRoster,
   newRequest,
+  setAttendance,
   setStudentRoster,
 } from "./handlers";
 
@@ -31,6 +32,16 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
     {
       params: t.Object({
         userId: t.String(),
+      }),
+    },
+  )
+  .post(
+    "/attendance/",
+    ({ body: { student, status } }) => setAttendance(student, status),
+    {
+      body: t.Object({
+        student: t.String(),
+        status: t.String(),
       }),
     },
   )
@@ -71,5 +82,5 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
   )
   .onError(({ error, set }) => {
     set.status = 500;
-    return error.message;
+    return error;
   });
