@@ -38,7 +38,7 @@
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@local/validators": "workspace:*",
-    "@types/node": "^20.11.25",
+    "@types/node": "^20.11.26",
     "bun-types": "^1.0.30",
     "dotenv-cli": "^7.4.1",
     "eslint": "^8.57.0",
