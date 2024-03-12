@@ -57,7 +57,7 @@
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@types/node": "^20.11.26",
-    "@types/react": "^18.2.64",
+    "@types/react": "^18.2.65",
     "@types/react-dom": "^18.2.21",
     "autoprefixer": "^10.4.18",
     "dotenv-cli": "^7.4.1",
