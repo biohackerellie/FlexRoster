@@ -47,7 +47,7 @@ export function DefaultRosterComponent({ data, userId }: RosterListProps) {
   } else {
     return (
       <>
-        //TODO - Add Drawer Component
+        {/*TODO - Add Drawer Component*/}
         <h1>WIP</h1>
       </>
     );

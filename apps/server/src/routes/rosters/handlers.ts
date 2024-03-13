@@ -101,7 +101,7 @@ export async function getTeacherRoster(userId: string) {
     const results = await rosterByTeacherId.execute({ userId: userId });
     const client = createClient();
     if (!results) throw new NotFoundError("No roster found with that email");
-    let finalResults = [];
+    const finalResults = [];
     for (const r of results) {
       const studentValue = r.studentId ?? r.studentEmail;
       const attendance =

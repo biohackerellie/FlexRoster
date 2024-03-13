@@ -62,11 +62,11 @@ export interface StudentTable {
   available: boolean;
   teacherId: string;
   chatId: string;
-};
+}
 
 export interface TeacherTable {
   studentName: string;
   studentEmail: string;
   studentId: string | null;
   chatId: string | null;
-};
+}

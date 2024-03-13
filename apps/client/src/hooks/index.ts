@@ -1,2 +1,2 @@
 export * from "./useMediaQuery";
-export * from "./useNotifications"
+export * from "./useNotifications";
