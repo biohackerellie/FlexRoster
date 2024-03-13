@@ -6,9 +6,13 @@ import { requestValidator } from "@local/validators";
 
 import {
   createClient,
-  getClassRoomKV,
+  editJson,
+  getJSON,
+  getKV,
   getRequestKV,
   setClassRoomKV,
+  setJSON,
+  setKV,
   setRequestKV,
 } from "~/lib/redis";
 import {
@@ -18,6 +22,7 @@ import {
   teacherQuery,
   userRosterQuery,
 } from "~/lib/sql";
+import { cachedRoster } from "~/lib/types";
 
 export async function getRosters() {
   try {
@@ -98,34 +103,46 @@ export async function setStudentRoster(
 
 export async function getTeacherRoster(userId: string) {
   try {
-    const results = await rosterByTeacherId.execute({ userId: userId });
-    const client = createClient();
-    if (!results) throw new NotFoundError("No roster found with that email");
-    const finalResults = [];
-    for (const r of results) {
-      const studentValue = r.studentId ?? r.studentEmail;
-      const attendance =
-        (await client.get(`attendance:${studentValue}`)) || "not marked";
-      const student = {
-        ...r,
-        attendance,
-      };
-      finalResults.push(student);
+    let results = [];
+    const cache: string = await getJSON(`user:${userId}:roster`);
+
+    if (!cache) {
+      const data = await rosterByTeacherId.execute({ userId: userId });
+      const studentsObj: { [key: string]: any } = {};
+      for (const r of data) {
+        const attendance = "not marked";
+        const student = {
+          ...r,
+          attendance,
+        };
+        if (student.rosterId) {
+          studentsObj[student.rosterId] = student;
+        }
+      }
+      await setJSON(`user:${userId}:roster`, studentsObj);
+    } else {
+      console.log("cache hit");
+      const parsedCache = JSON.parse(cache);
+      results = parsedCache;
     }
-    await client.quit();
-    return finalResults;
+
+    return results as cachedRoster[];
   } catch (e) {
     throw new NotFoundError("No roster found with that email");
   }
 }
 
-export async function setAttendance(student: string, status: string) {
-  const client = createClient();
+export async function setAttendance(
+  userId: string,
+  rosterId: string,
+  status: string,
+) {
   try {
-    await client.set(`attendance:${student}`, status);
-    await client.quit();
+    const path = `$.${rosterId}.attendance`;
+    await editJson(`user:${userId}:roster`, `"${status}"`, path);
     return new Response("OK", { status: 200 });
   } catch (e) {
+    console.log(e);
     throw new NotFoundError("No roster found with that email");
   }
 }
@@ -133,7 +150,7 @@ export async function setAttendance(student: string, status: string) {
 export async function newRequest(requestId: string, request: Request) {
   const requestData = requestValidator.parse(request);
   const client = createClient();
-  const parsedData = JSON.stringify(requestData);
+
   const res = await client.hgetall(requestId);
 
   if (Object.keys(res).length > 0) {

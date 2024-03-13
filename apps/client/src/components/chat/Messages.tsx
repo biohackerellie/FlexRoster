@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useEffect, useOptimistic, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { format, set } from "date-fns";
 
 import { SelectUser } from "@local/db/types";
-import { Message, messageValidator } from "@local/validators";
+import { Message } from "@local/validators";
 
 import { pusherClient } from "@/lib/pusher";
 import { cn, toPusherKey } from "@/lib/utils";
@@ -24,7 +23,7 @@ const Messages: React.FC<MessagesProps> = ({
   chatPartner,
 }) => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
-  const router = useRouter();
+
   useEffect(() => {
     pusherClient.subscribe(toPusherKey(`chat:${chatId}`));
 

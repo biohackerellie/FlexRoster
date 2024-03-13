@@ -67,6 +67,6 @@ export interface StudentTable {
 export interface TeacherTable {
   studentName: string;
   studentEmail: string;
-  studentId: string | null;
+  studentId: string | number | null;
   chatId: string | null;
 }

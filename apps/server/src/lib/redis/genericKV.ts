@@ -1,0 +1,24 @@
+import { createClient } from "./client";
+
+/**
+ * Generic functions to set and get basic key value pairs in Redis
+ * @param key - the key to set the data to
+ * @returns - @type string or @type null
+ */
+
+export async function setKV(
+  key: string,
+  value: string,
+): Promise<string | Error> {
+  const client = createClient();
+  const result = await client.set(key, value);
+  await client.quit();
+  return result;
+}
+
+export async function getKV(key: string): Promise<string | null> {
+  const client = createClient();
+  const result = await client.get(key);
+  await client.quit();
+  return result;
+}

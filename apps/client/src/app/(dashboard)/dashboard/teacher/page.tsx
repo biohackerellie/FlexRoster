@@ -13,7 +13,7 @@ export default async function TeacherDashboardPage() {
   const firstName = session?.user?.name!.split(" ")[0];
   const teacherId = session?.user?.id!;
 
-  const roster = await cachedRoster(teacherId);
+  const roster = await getDefaultRoster(teacherId);
   return (
     <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between">
       <h1 className="text-3xl font-semibold text-gray-700">
@@ -52,15 +52,16 @@ async function getDefaultRoster(teacherId: string) {
 
   const mapped = data.map((student) => {
     return {
-      attendance: student.attendance,
+      attendance: `${student.attendance}--${student.rosterId}`,
       studentName: student.studentName,
       studentEmail: student.studentEmail,
-      studentId: student.studentId,
+      studentId: student.rosterId,
       chatId: student.studentId
         ? `/dashboard/chat/${chatHrefConstructor(teacherId, student.studentId)}`
         : null,
     };
   });
+
   return mapped;
 }
 

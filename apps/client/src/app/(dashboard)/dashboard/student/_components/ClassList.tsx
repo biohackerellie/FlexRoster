@@ -6,10 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { toast } from "sonner";
 
-import {
-  RequestRoom,
-  setRoster,
-} from "@/app/(dashboard)/dashboard/student/actions";
+import { RequestRoom } from "@/app/(dashboard)/dashboard/student/actions";
 import { DataTable } from "@/components/tables";
 import { Button } from "@/components/ui/button";
 import {

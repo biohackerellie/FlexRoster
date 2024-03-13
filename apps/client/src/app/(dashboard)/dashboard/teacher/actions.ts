@@ -2,14 +2,18 @@
 
 import { revalidateTag } from "next/cache";
 
+import { auth } from "@local/auth";
 import { fetch } from "@local/eden";
 
-export async function Attendance(student: string, status: string) {
+export async function Attendance(rosterId: string, status: string) {
+  const session = await auth();
+  const userId = session?.user?.id!;
   const { data, error } = await fetch("/api/rosters/attendance/", {
     method: "POST",
     body: {
-      student: student,
+      userId: userId,
       status: status,
+      rosterId: rosterId,
     },
   });
   if (error) {

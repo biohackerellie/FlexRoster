@@ -67,3 +67,16 @@ export interface AzureUser {
   displayName: string;
   userPrincipalName: string;
 }
+
+export interface cachedRoster {
+  attendance: "not marked" | "present" | "absent";
+  rosterId: number;
+  studentEmail: string;
+  studentName: string;
+  studentId: string | null;
+  classroomId: string;
+  roomNumber: string;
+  teacherName: string;
+  teacherId: string | null;
+  available: boolean;
+}

@@ -37,10 +37,12 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
   )
   .post(
     "/attendance/",
-    ({ body: { student, status } }) => setAttendance(student, status),
+    ({ body: { userId, rosterId, status } }) =>
+      setAttendance(userId, rosterId, status),
     {
       body: t.Object({
-        student: t.String(),
+        userId: t.String(),
+        rosterId: t.String(),
         status: t.String(),
       }),
     },

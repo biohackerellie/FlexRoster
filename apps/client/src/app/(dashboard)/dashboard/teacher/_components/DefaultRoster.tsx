@@ -87,10 +87,14 @@ const columns: ColumnDef<TeacherTable>[] = [
     accessorKey: "attendance",
     header: "Attendance",
     cell: ({ row }) => {
-      const studentValue: string = row.getValue("studentEmail");
-
-      const attendance: "not marked" | "present" | "absent" =
-        row.getValue("attendance") ?? "not marked";
+      let studentValue = "";
+      const base: string = row.getValue("attendance");
+      const [attendance, rosterId] = base.split("--");
+      if (!rosterId) {
+        studentValue = row.getValue("studentId") as unknown as string;
+      } else {
+        studentValue = rosterId;
+      }
       if (attendance === "not marked") {
         return (
           <span>
@@ -135,6 +139,7 @@ const columns: ColumnDef<TeacherTable>[] = [
     header: "Chat",
     cell: ({ row }) => {
       const chatId = row.getValue("chatId") ?? undefined;
+
       if (!chatId) {
         return (
           <TooltipProvider>
@@ -159,9 +164,9 @@ const columns: ColumnDef<TeacherTable>[] = [
   },
 ];
 
-const setAttendance = async (studentValue: string, status: string) => {
+const setAttendance = async (rosterId: string, status: string) => {
   try {
-    const response = await Attendance(studentValue, status);
+    const response = await Attendance(rosterId, status);
     return response;
   } catch (e) {
     console.error(e);
