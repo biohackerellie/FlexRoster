@@ -5,3 +5,5 @@ export * from "./client";
 export * from "./users";
 export * from "./json";
 export * from "./genericKV";
+export * from "./generickHash";
+export * from "./genericSS";

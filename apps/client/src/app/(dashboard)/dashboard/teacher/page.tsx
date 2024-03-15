@@ -7,6 +7,7 @@ import { client, fetch } from "@local/eden";
 import { Skeleton } from "@/components/ui/skeleton";
 import { chatHrefConstructor } from "@/lib/utils";
 import { DefaultRosterComponent } from "./_components";
+import Requests from "./_components/Requests";
 
 export default async function TeacherDashboardPage() {
   const session = await auth();
@@ -26,14 +27,8 @@ export default async function TeacherDashboardPage() {
   );
 }
 
-const cachedRoster = unstable_cache(
-  async (teacherId: string) => getDefaultRoster(teacherId),
-  ["default-roster"],
-  {
-    tags: ["roster"],
-    revalidate: 60,
-  },
-);
+
+
 
 async function getDefaultRoster(teacherId: string) {
   const { data, error } = await fetch("/api/rosters/teacher/roster/:userId", {

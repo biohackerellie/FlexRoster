@@ -1,6 +1,7 @@
 import { Elysia, t } from "elysia";
 
 import {
+  getRequests,
   getRosters,
   getRostersById,
   getStudentRoster,
@@ -47,6 +48,11 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
       }),
     },
   )
+  .get("/request/:userId", ({ params: { userId } }) => getRequests(userId), {
+    params: t.Object({
+      userId: t.String(),
+    }),
+  })
   .post(
     "/request/:requestId",
     ({ params: { requestId }, body: { request } }) =>

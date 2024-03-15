@@ -4,16 +4,22 @@ import type { Request } from "@local/validators";
 import { db, eq, schema, sql } from "@local/db";
 import { requestValidator } from "@local/validators";
 
+import type { cachedRoster } from "~/lib/types";
 import {
   createClient,
   editJson,
+  getHash,
   getJSON,
   getKV,
   getRequestKV,
+  getSortedSet,
   setClassRoomKV,
+  setHash,
+  setHashHM,
   setJSON,
   setKV,
   setRequestKV,
+  setSortedSet,
 } from "~/lib/redis";
 import {
   rosterByClassroomId,
@@ -22,7 +28,6 @@ import {
   teacherQuery,
   userRosterQuery,
 } from "~/lib/sql";
-import { cachedRoster } from "~/lib/types";
 
 export async function getRosters() {
   try {
@@ -108,7 +113,7 @@ export async function getTeacherRoster(userId: string) {
 
     if (!cache) {
       const data = await rosterByTeacherId.execute({ userId: userId });
-      const studentsObj: { [key: string]: any } = {};
+      const studentsObj: Record<string, any> = {};
       for (const r of data) {
         const attendance = "not marked";
         const student = {
@@ -149,35 +154,26 @@ export async function setAttendance(
 
 export async function newRequest(requestId: string, request: Request) {
   const requestData = requestValidator.parse(request);
-  const client = createClient();
-
-  const res = await client.hgetall(requestId);
+  const res = await getSortedSet(requestId);
 
   if (Object.keys(res).length > 0) {
-    const status = res.status!;
+    // const status = res.status!;
     if (status !== "denied") {
       throw new Error("You have already made a request today");
     }
   } else {
-    await client.hset(requestId, requestData);
-    await client.quit();
+    await setHashHM(requestId, requestData);
     return Response.json({ message: "Request sent" }, { status: 200 });
   }
 }
 
+export async function getRequests(userId: string) {}
+
 export async function approveRequest(requestId: string, approved: boolean) {
   const client = createClient();
   if (!approved) {
-    const request = await client.hset(
-      `request:${requestId}`,
-      "status",
-      "denied",
-    );
+    const request = await setHash(`request:${requestId}`, "status", "denied");
   } else {
-    const request = await client.hset(
-      `request:${requestId}`,
-      "status",
-      "approved",
-    );
+    const request = await setHash(`request:${requestId}`, "status", "approved");
   }
 }

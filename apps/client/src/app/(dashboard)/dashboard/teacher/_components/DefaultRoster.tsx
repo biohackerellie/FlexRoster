@@ -91,7 +91,7 @@ const columns: ColumnDef<TeacherTable>[] = [
       const base: string = row.getValue("attendance");
       const [attendance, rosterId] = base.split("--");
       if (!rosterId) {
-        studentValue = row.getValue("studentId") as unknown as string;
+        studentValue = row.getValue("studentId");
       } else {
         studentValue = rosterId;
       }

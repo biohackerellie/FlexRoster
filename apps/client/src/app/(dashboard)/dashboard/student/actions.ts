@@ -6,8 +6,6 @@ import { nanoid } from "nanoid";
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
 import {
-  Message,
-  messageValidator,
   Request,
   requestValidator,
 } from "@local/validators";
