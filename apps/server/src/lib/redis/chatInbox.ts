@@ -1,26 +1,33 @@
+import { NotFoundError } from "elysia";
+
 import { messageValidator } from "@local/validators";
 
 import { createClient } from ".";
 
 export async function getInbox(chatId: string) {
-  const client = createClient();
+  try {
+    const client = createClient();
 
-  const messages = await client.xrange(`chat:${chatId}:messages`, "0", "+");
-  await client.quit();
-  const transformedMessages = messages.map(
-    ([id, fieldsArray]: [string, string[]]) => {
-      const messageObject: Record<string, any> = {};
-      for (let i = 0; i < fieldsArray.length; i += 2) {
-        messageObject[fieldsArray[i]!] = fieldsArray[i + 1];
-      }
-      return {
-        id,
-        ...messageObject,
-      };
-    },
-  );
-  console.log(transformedMessages);
-  return transformedMessages;
+    const messages = await client.xrange(`chat:${chatId}:messages`, "0", "+");
+    await client.quit();
+    const transformedMessages = messages.map(
+      ([id, fieldsArray]: [string, string[]]) => {
+        const messageObject: Record<string, any> = {};
+        for (let i = 0; i < fieldsArray.length; i += 2) {
+          messageObject[fieldsArray[i]!] = fieldsArray[i + 1];
+        }
+        return {
+          id,
+          ...messageObject,
+        };
+      },
+    );
+    console.log(transformedMessages);
+    return transformedMessages;
+  } catch (e) {
+    console.log(e);
+    throw new NotFoundError();
+  }
 }
 
 export async function sendToInbox(chatId: string, message: any) {

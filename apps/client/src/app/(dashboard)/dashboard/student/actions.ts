@@ -5,10 +5,7 @@ import { nanoid } from "nanoid";
 
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
-import {
-  Request,
-  requestValidator,
-} from "@local/validators";
+import { Request, requestValidator } from "@local/validators";
 
 import { pusherServer } from "@/lib/pusher";
 import { requestIDConstructor, toPusherKey } from "@/lib/utils";
@@ -16,16 +13,17 @@ import { requestIDConstructor, toPusherKey } from "@/lib/utils";
 export async function RequestRoom(teacherId: string) {
   const session = await auth();
   const studentId = session?.user?.id!;
-  const { data: data, error } =
-    await client.api.users.student[`${studentId}`]?.get()!;
+  const { data, error } = await client.api.users
+    .student({ id: studentId })
+    .get();
 
-  if (error) return;
+  if (error) throw new Error("Error fetching student data");
 
-  const currentTeacher = data?.classrooms?.teacherName!;
+  const currentTeacher = data?.classrooms?.teacherId!;
   const timestamp = Date.now();
   const requestData: Request = {
-    id: nanoid(),
     status: "pending",
+    id: nanoid(),
     timestamp,
     studentId,
     currentTeacher,
@@ -35,13 +33,16 @@ export async function RequestRoom(teacherId: string) {
   const request = requestValidator.parse(requestData);
   const requestId = `request:${currentTeacher}:${studentId}`;
   const toTeacher = `request:${teacherId}:${studentId}`;
-  const res = await client.api.rosters.request[`${requestId}`]?.post({
-    request,
-  });
+  const res = await client.api.rosters.request
+    .id({ requestId: requestId })
+    .post({
+      request,
+    });
+
   if (res?.error) {
-    throw new Error("You have already made a request today.", res.error);
+    return res?.error.status;
   } else {
-    await client.api.rosters.request[`${toTeacher}`]?.post({
+    await client.api.rosters.request.id({ requestId: toTeacher }).post({
       request,
     });
     await pusherServer.trigger(
@@ -51,7 +52,7 @@ export async function RequestRoom(teacherId: string) {
     );
     await pusherServer.trigger(
       toPusherKey(`request:${currentTeacher}`),
-      "new-request",
+      "new-outgoing",
       request,
     );
     return 200;

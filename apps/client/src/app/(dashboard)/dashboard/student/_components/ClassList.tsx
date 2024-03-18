@@ -198,9 +198,12 @@ const columns: ColumnDef<StudentTable>[] = [
 async function handleTransfer(teacherId: string) {
   try {
     const res = await RequestRoom(teacherId);
-
     if (res === 200) {
       toast.info("Your request has been sent", {
+        position: "top-center",
+      });
+    } else if (res === 500) {
+      toast.error("You have already transferred today", {
         position: "top-center",
       });
     }

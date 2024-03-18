@@ -14,12 +14,19 @@ export default async function TeacherDashboardPage() {
   const firstName = session?.user?.name!.split(" ")[0];
   const teacherId = session?.user?.id!;
 
-  const roster = await getDefaultRoster(teacherId);
+  const { roster, requests } = await getAllData(teacherId);
+  const incoming = requests.incomingRequests;
+  const outgoing = requests.outgoingRequests;
   return (
     <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between">
       <h1 className="text-3xl font-semibold text-gray-700">
         Hello, {firstName}!
       </h1>
+      <Requests
+        incomingRequests={incoming}
+        outgoing={outgoing}
+        userId={teacherId}
+      />
       <Suspense fallback={<TableSkeleton />}>
         <DefaultRosterComponent data={roster} userId={teacherId} />
       </Suspense>
@@ -27,15 +34,10 @@ export default async function TeacherDashboardPage() {
   );
 }
 
-
-
-
 async function getDefaultRoster(teacherId: string) {
-  const { data, error } = await fetch("/api/rosters/teacher/roster/:userId", {
-    params: {
-      userId: teacherId,
-    },
-  });
+  const { data, error } = await client.api.rosters.teacher
+    .roster({ userId: teacherId })
+    .get();
 
   if (error) {
     console.error(error);
@@ -58,6 +60,31 @@ async function getDefaultRoster(teacherId: string) {
   });
 
   return mapped;
+}
+
+async function getRequests(teacherId: string) {
+  const { data, error } = await client.api.rosters.request
+    .user({ userId: teacherId })
+    .get();
+  console.log(data);
+  if (error) {
+    console.error(error);
+    throw new Error("Failed to fetch requests");
+  }
+  if (!data) {
+    throw new Error("No data found");
+  }
+
+  return data;
+}
+
+async function getAllData(teacherId: string) {
+  const [roster, requests] = await Promise.all([
+    getDefaultRoster(teacherId),
+    getRequests(teacherId),
+  ]);
+
+  return { roster, requests };
 }
 
 function TableSkeleton() {

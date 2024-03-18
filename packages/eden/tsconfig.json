@@ -1,5 +1,8 @@
 {
-  "extends": "@local/tsconfig/react-library.json",
+  "extends": "@local/tsconfig/base.json",
+  "compilerOptions": {
+    "strict": true
+  },
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }

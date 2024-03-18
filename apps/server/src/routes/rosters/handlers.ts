@@ -10,6 +10,7 @@ import {
   editJson,
   getHash,
   getJSON,
+  getKeys,
   getKV,
   getRequestKV,
   getSortedSet,
@@ -153,11 +154,12 @@ export async function setAttendance(
 }
 
 export async function newRequest(requestId: string, request: Request) {
+  console.log("requestId", requestId, "request", request);
   const requestData = requestValidator.parse(request);
-  const res = await getSortedSet(requestId);
-
+  const res = await getHash(requestId);
+  console.log("res", res);
   if (Object.keys(res).length > 0) {
-    // const status = res.status!;
+    const status = res.status!;
     if (status !== "denied") {
       throw new Error("You have already made a request today");
     }
@@ -167,7 +169,34 @@ export async function newRequest(requestId: string, request: Request) {
   }
 }
 
-export async function getRequests(userId: string) {}
+export async function getRequests(userId: string) {
+  const requestPattern = `request:${userId}:*`;
+  const requestKeys = await getKeys(requestPattern);
+  const incomingRequests = [];
+  const outgoingRequests = [];
+  if (requestKeys.length === 0) {
+    throw new NotFoundError("No requests found");
+  }
+
+  for (const key of requestKeys) {
+    const rawRequest = await getHash(key);
+
+    const request: Request = {
+      status: rawRequest.status!,
+      id: rawRequest.id!,
+      timestamp: parseInt(rawRequest.timestamp!, 10),
+      studentId: rawRequest.studentId!,
+      currentTeacher: rawRequest.currentTeacher!,
+      newTeacher: rawRequest.newTeacher!,
+    };
+    if (request.newTeacher === userId) {
+      incomingRequests.push(request);
+    } else if (request.currentTeacher === userId) {
+      outgoingRequests.push(request);
+    }
+  }
+  return { incomingRequests, outgoingRequests };
+}
 
 export async function approveRequest(requestId: string, approved: boolean) {
   const client = createClient();

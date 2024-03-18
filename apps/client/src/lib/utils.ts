@@ -1,12 +1,6 @@
-import { join } from "path";
 import type { ClassValue } from "clsx";
-import { NextRequest } from "next/server";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-
-import { auth } from "@local/auth";
-import { schema } from "@local/db";
-import { client } from "@local/eden";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -32,26 +26,6 @@ export function formatTeacherNames(teacherName: string) {
     .join("-");
 
   return teacher;
-}
-
-export async function chatUsersByRole(
-  role: "student" | "teacher" | "admin" | "secretary" = "student",
-) {
-  if (role === "student") {
-    const data = await client.api.users.teachers?.get();
-
-    if (!data || data?.error) {
-      throw new Error("Error fetching teachers");
-    }
-
-    return data.data;
-  } else if (role === "teacher") {
-    const data = await client.api.users.teachers?.get();
-    if (!data || data.error) {
-      throw new Error("Error fetching teachers");
-    }
-    return data.data;
-  }
 }
 
 export function toPusherKey(key: string) {

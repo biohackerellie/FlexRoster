@@ -3,6 +3,22 @@ import { Elysia, t } from "elysia";
 import { getInbox, sendToInbox } from "~/lib/redis";
 
 export const inboxRoutes = new Elysia({ prefix: "/inbox" })
+  .onError({ as: "scoped" }, ({ code, error, set }) => {
+    switch (code) {
+      case "NOT_FOUND":
+        set.status = 404;
+        return "Not found 😒";
+      case "INTERNAL_SERVER_ERROR":
+        set.status = 500;
+        return "Internal server error 😒";
+      case "VALIDATION":
+        set.status = 400;
+        return error.message;
+      default:
+        set.status = 500;
+        return error.message;
+    }
+  })
 
   .get("/:chatId", ({ params: { chatId } }) => getInbox(chatId), {
     params: t.Object({
@@ -23,19 +39,4 @@ export const inboxRoutes = new Elysia({ prefix: "/inbox" })
         }),
       }),
     },
-  )
-  .ws("/:chatId", {
-    params: t.Object({ chatId: t.String() }),
-    open(ws) {
-      console.log("Connected to chat socket");
-      // ws.subscribe(`chat:${ws.data.params.chatId}`);
-    },
-    message(ws, message) {
-      ws.send(message);
-    },
-    close(ws) {
-      console.log("Disconnected from chat socket");
-
-      // ws.unsubscribe(`chat:${ws.data.params.chatId}`);
-    },
-  });
+  );

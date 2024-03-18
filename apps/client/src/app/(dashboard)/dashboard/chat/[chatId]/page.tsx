@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { auth } from "@local/auth";
-import { fetch } from "@local/eden";
+import { client, fetch } from "@local/eden";
 import { messageArrayValidator } from "@local/validators";
 
 import { ChatInput, Messages } from "@/components/chat";
@@ -64,15 +64,16 @@ export default async function ChatPage({ params }: PageProps) {
 
 async function getChatMessages(chatId: string) {
   try {
-    const { data, error } = await fetch(`/api/inbox/:chatId`, {
-      params: {
-        chatId: chatId,
-      },
-    });
+    const { data, error } = await client.api.inbox({ chatId: chatId }).get();
 
     if (error) {
-      console.error(error);
-      throw new Error(error.message, { cause: error.cause });
+      console.error(error.value);
+      switch (error.status) {
+        case 400:
+          throw error.value;
+        default:
+          error.value;
+      }
     }
     if (!data) {
       throw new Error("No data found");
@@ -112,18 +113,10 @@ async function usersCheck(chatId: string) {
     }
 
     const chatPartnerId = userId === userId1! ? userId2! : userId1!;
-    const chatPartnerRaw = await fetch("/api/users/:id", {
-      params: {
-        id: chatPartnerId,
-      },
-    });
+    const chatPartnerRaw = await client.api.users({ id: chatPartnerId }).get();
 
     // if the current user is not found in the cache, set the user in the cache
-    const userIdRaw = await fetch("/api/users/:id", {
-      params: {
-        id: userId,
-      },
-    });
+    const userIdRaw = await client.api.users({ id: userId }).get();
 
     if (!chatPartnerRaw || !userIdRaw) {
       return notFound();

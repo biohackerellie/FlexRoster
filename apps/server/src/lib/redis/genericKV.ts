@@ -22,3 +22,10 @@ export async function getKV(key: string): Promise<string | null> {
   await client.quit();
   return result;
 }
+
+export async function getKeys(pattern: string) {
+  const client = createClient();
+  const result = await client.keys(pattern);
+  await client.quit();
+  return result;
+}

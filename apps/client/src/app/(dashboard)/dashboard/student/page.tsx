@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { unstable_cache as cache } from "next/cache";
 
 import { auth } from "@local/auth";
-import { fetch } from "@local/eden";
+import { client } from "@local/eden";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { greetings } from "@/lib/constants";
@@ -11,7 +11,8 @@ import { chatHrefConstructor, formatTeacherNames } from "@/lib/utils";
 import { ClassListComponent } from "./_components/ClassList";
 
 async function getData(email: string, userId: string) {
-  const { data, error } = await fetch("/api/classes/", {});
+  const { data, error } = await client.api.classes.all.get();
+
   if (error) {
     return [];
   }
@@ -41,13 +42,12 @@ const cachedData = cache(
 );
 
 async function getClass(userId: string) {
-  const { data, error } = await fetch("/api/rosters/student/:userId", {
-    params: {
-      userId,
-    },
-  });
+  const { data, error } = await client.api.rosters.student
+    .id({ userId: userId })
+    .get();
+
   if (error) {
-    throw new Error(error.message, { cause: error.cause });
+    throw new Error("Error Fetching Data 😘", { cause: error.toString() });
   }
   if (!data) return "No class found";
   return data;

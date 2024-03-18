@@ -9,16 +9,22 @@ import { scriptRoutes } from "./routes/scripts";
 import { userRoutes } from "./routes/users";
 
 const app = new Elysia()
-  .use(swagger())
-  .use(
-    cors({
-      origin: true,
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      credentials: true,
-    }),
-  )
-  .state("version", 1)
-  .get("/", ({ store: { version } }) => version)
+  .onError({ as: "global" }, ({ code, error, set }) => {
+    switch (code) {
+      case "NOT_FOUND":
+        set.status = 404;
+        return "Not found 😒";
+      case "INTERNAL_SERVER_ERROR":
+        set.status = 500;
+        return "Internal server error 😒";
+      case "VALIDATION":
+        set.status = 400;
+        return error.message;
+      default:
+        set.status = 500;
+        return error.message;
+    }
+  })
   .group("/api", (app) =>
     app
       .use(classRoutes)
@@ -26,6 +32,14 @@ const app = new Elysia()
       .use(inboxRoutes)
       .use(scriptRoutes)
       .use(userRoutes),
+  )
+  .use(swagger())
+  .use(
+    cors({
+      origin: true,
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      credentials: true,
+    }),
   );
 
 export default app;

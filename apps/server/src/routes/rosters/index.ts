@@ -12,14 +12,14 @@ import {
 } from "./handlers";
 
 export const rosterRoutes = new Elysia({ prefix: "/rosters" })
-  .get("/", () => getRosters())
-  .get("/:id", ({ params: { id } }) => getRostersById(id), {
+  .get("/all", () => getRosters())
+  .get("/id/:id", ({ params: { id } }) => getRostersById(id), {
     params: t.Object({
       id: t.String(),
     }),
   })
   .get(
-    "/student/:userId",
+    "/student/id/:userId",
     ({ params: { userId } }) => getStudentRoster(userId),
     {
       params: t.Object({
@@ -48,13 +48,17 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
       }),
     },
   )
-  .get("/request/:userId", ({ params: { userId } }) => getRequests(userId), {
-    params: t.Object({
-      userId: t.String(),
-    }),
-  })
+  .get(
+    "/request/user/:userId",
+    ({ params: { userId } }) => getRequests(userId),
+    {
+      params: t.Object({
+        userId: t.String(),
+      }),
+    },
+  )
   .post(
-    "/request/:requestId",
+    "/request/id/:requestId",
     ({ params: { requestId }, body: { request } }) =>
       newRequest(requestId, request),
 
@@ -64,8 +68,8 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
       }),
       body: t.Object({
         request: t.Object({
-          id: t.String(),
           status: t.String(),
+          id: t.String(),
           timestamp: t.Number(),
           studentId: t.String(),
           currentTeacher: t.String(),
@@ -87,8 +91,4 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
         teacherName: t.String(),
       }),
     },
-  )
-  .onError(({ error, set }) => {
-    set.status = 500;
-    return error;
-  });
+  );
