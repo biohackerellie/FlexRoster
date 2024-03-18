@@ -17,7 +17,7 @@
     "@local/eslint-config": "workspace:*",
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
-    "@types/react": "^18.2.66",
+    "@types/react": "^18.2.67",
     "@types/react-dom": "^18.2.22",
     "eslint": "^8.57.0",
     "prettier": "^3.2.5",
