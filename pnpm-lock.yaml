@@ -199,8 +199,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(elysia@0.8.17)
       '@elysiajs/jwt':
-        specifier: ^0.8.0
-        version: 0.8.0(elysia@0.8.17)
+        specifier: ^1.0.2
+        version: 1.0.2(elysia@0.8.17)
       '@elysiajs/swagger':
         specifier: ^1.0.2
         version: 1.0.2(elysia@0.8.17)
@@ -908,10 +908,10 @@ packages:
       elysia: 1.0.3(@sinclair/typebox@0.32.15)(typescript@5.4.2)
     dev: false
 
-  /@elysiajs/jwt@0.8.0(elysia@0.8.17):
-    resolution: {integrity: sha512-UtnxsviaGoxdDajquBK751bi03IfFNjKfzN/pBU7VMlo+StwmeYlRAY3s8EIt8BSMzRhgCR+PLZ2qnwnK0FVeQ==}
+  /@elysiajs/jwt@1.0.2(elysia@0.8.17):
+    resolution: {integrity: sha512-QxUZod6A+kFc06ON+qs4eoUGgb7QPOQifEqYoIlh6pUiNHMBCcnRo8lKk+g7+2Vx98aqWTr52jZRWVuraBAWSA==}
     peerDependencies:
-      elysia: '>= 0.8.0'
+      elysia: '>= 1.0.2'
     dependencies:
       elysia: 0.8.17(@sinclair/typebox@0.32.15)(typescript@5.4.2)
       jose: 4.15.5
