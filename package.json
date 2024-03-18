@@ -1,36 +1,36 @@
 {
-	"name": "STEAM-workspace",
-	"version": "0.0.0",
-	"private": true,
-	"workspaces": [
-		"packages/*",
-		"apps/*",
-		"tooling/*"
-	],
-	"scripts": {
-		"build": "turbo run build",
-		"dev": "turbo run dev --parallel",
-		"clean": "git clean -xdf node_modules",
-		"nightly": "pnpm -F server nightly",
-		"db:push": "pnpm -F db push",
-		"db:studio": "pnpm -F db studio",
-		"db:migrate": "pnpm -F db migrate",
-		"db:gen": "pnpm -F db gen",
-		"format": "turbo format --continue -- --cache --cache-location node_modules/.cache/.prettiercache",
-		"format:fix": "turbo format --continue -- --write --cache --cache-location node_modules/.cache/.prettiercache",
-		"lint": "turbo lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
-		"lint:fix": "turbo lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
-		"lint:ws": "pnpm dlx sherif@latest",
-		"postinstall": "pnpm lint:ws",
-		"typecheck": "turbo typecheck"
-	},
-	"devDependencies": {
-		"@local/prettier-config": "workspace:*",
-		"@turbo/gen": "^1.12.5",
-		"prettier": "^3.2.5",
-		"turbo": "^1.12.5",
-		"typescript": "^5.4.2"
-	},
-	"prettier": "@local/prettier-config",
-	"packageManager": "pnpm@8.15.4"
+  "name": "STEAM-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "tooling/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "clean": "git clean -xdf node_modules",
+    "nightly": "pnpm -F server nightly",
+    "db:push": "pnpm -F db push",
+    "db:studio": "pnpm -F db studio",
+    "db:migrate": "pnpm -F db migrate",
+    "db:gen": "pnpm -F db gen",
+    "format": "turbo format --continue -- --cache --cache-location node_modules/.cache/.prettiercache",
+    "format:fix": "turbo format --continue -- --write --cache --cache-location node_modules/.cache/.prettiercache",
+    "lint": "turbo lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
+    "lint:fix": "turbo lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
+    "lint:ws": "pnpm dlx sherif@latest",
+    "postinstall": "pnpm lint:ws",
+    "typecheck": "turbo typecheck"
+  },
+  "devDependencies": {
+    "@local/prettier-config": "workspace:*",
+    "@turbo/gen": "^1.12.5",
+    "prettier": "^3.2.5",
+    "turbo": "^1.12.5",
+    "typescript": "^5.4.2"
+  },
+  "prettier": "@local/prettier-config",
+  "packageManager": "pnpm@8.15.5"
 }
