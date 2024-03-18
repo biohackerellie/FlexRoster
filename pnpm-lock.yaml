@@ -84,8 +84,8 @@ importers:
         specifier: ^3.6.0
         version: 3.6.0
       elysia:
-        specifier: ^0.8.17
-        version: 0.8.17(@sinclair/typebox@0.32.15)(typescript@5.4.2)
+        specifier: ^1.0.3
+        version: 1.0.3(@sinclair/typebox@0.32.15)(typescript@5.4.2)
       framer-motion:
         specifier: ^11.0.14
         version: 11.0.14(react-dom@18.2.0)(react@18.2.0)
@@ -365,7 +365,7 @@ importers:
     dependencies:
       '@elysiajs/eden':
         specifier: ^0.8.1
-        version: 0.8.1(elysia@0.8.17)
+        version: 0.8.1(@sinclair/typebox@0.32.15)(elysia@1.0.3)
       '@t3-oss/env-nextjs':
         specifier: ^0.9.2
         version: 0.9.2(typescript@5.4.2)(zod@3.22.4)
@@ -899,7 +899,7 @@ packages:
       elysia: 0.8.17(@sinclair/typebox@0.32.15)(typescript@5.4.2)
     dev: false
 
-  /@elysiajs/eden@0.8.1(elysia@0.8.17):
+  /@elysiajs/eden@0.8.1(@sinclair/typebox@0.32.15)(elysia@1.0.3):
     resolution: {integrity: sha512-YzvcIANyzdxWqaXBYjVN/Y9hqaIDQwF3jc7rUMqVLVo+zOd3eTn8zruNEWcumA6n+rJujqqMYanrOD3pUolOtg==}
     peerDependencies:
       '@sinclair/typebox': '*'
@@ -908,7 +908,8 @@ packages:
       '@sinclair/typebox':
         optional: true
     dependencies:
-      elysia: 0.8.17(@sinclair/typebox@0.32.15)(typescript@5.4.2)
+      '@sinclair/typebox': 0.32.15
+      elysia: 1.0.3(@sinclair/typebox@0.32.15)(typescript@5.4.2)
       superjson: 2.2.1
     dev: false
 
@@ -6191,6 +6192,26 @@ packages:
       fast-decode-uri-component: 1.0.1
       fast-querystring: 1.1.2
       memoirist: 0.1.10
+      typescript: 5.4.2
+    dev: false
+
+  /elysia@1.0.3(@sinclair/typebox@0.32.15)(typescript@5.4.2):
+    resolution: {integrity: sha512-cP0iChwtsT5oa48EDMhYjCI0yEXdB4dI3ReVffeJaUtQNzKjVuT8xRYSHHlcndf51VsDsmqC8E7RKDKPLLcl+A==}
+    peerDependencies:
+      '@sinclair/typebox': '>= 0.31.0'
+      openapi-types: '>= 12.0.0'
+      typescript: '>= 5.0.0'
+    peerDependenciesMeta:
+      openapi-types:
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      '@sinclair/typebox': 0.32.15
+      cookie: 0.6.0
+      eventemitter3: 5.0.1
+      fast-decode-uri-component: 1.0.1
+      fast-querystring: 1.1.2
       typescript: 5.4.2
     dev: false
 
