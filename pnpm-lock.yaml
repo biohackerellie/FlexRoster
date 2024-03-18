@@ -364,8 +364,8 @@ importers:
   packages/eden:
     dependencies:
       '@elysiajs/eden':
-        specifier: ^0.8.1
-        version: 0.8.1(@sinclair/typebox@0.32.15)(elysia@1.0.3)
+        specifier: ^1.0.3
+        version: 1.0.3(elysia@1.0.3)
       '@t3-oss/env-nextjs':
         specifier: ^0.9.2
         version: 0.9.2(typescript@5.4.2)(zod@3.22.4)
@@ -899,18 +899,13 @@ packages:
       elysia: 0.8.17(@sinclair/typebox@0.32.15)(typescript@5.4.2)
     dev: false
 
-  /@elysiajs/eden@0.8.1(@sinclair/typebox@0.32.15)(elysia@1.0.3):
-    resolution: {integrity: sha512-YzvcIANyzdxWqaXBYjVN/Y9hqaIDQwF3jc7rUMqVLVo+zOd3eTn8zruNEWcumA6n+rJujqqMYanrOD3pUolOtg==}
+  /@elysiajs/eden@1.0.3(elysia@1.0.3):
+    resolution: {integrity: sha512-8SvGu416RUfwzeDLx6aB3+2W0ErOYzf6bPAouFcioQHs14eFG56Ey9Ugh5OdYnPmWfDhaYJaNR7FB8jLIxv+Dw==}
     peerDependencies:
-      '@sinclair/typebox': '*'
-      elysia: '>= 0.8.0'
-    peerDependenciesMeta:
-      '@sinclair/typebox':
-        optional: true
+      elysia: '>= 1.0.2'
     dependencies:
-      '@sinclair/typebox': 0.32.15
+      '@elysiajs/stream': 1.0.0-rc.0(elysia@1.0.3)
       elysia: 1.0.3(@sinclair/typebox@0.32.15)(typescript@5.4.2)
-      superjson: 2.2.1
     dev: false
 
   /@elysiajs/jwt@0.8.0(elysia@0.8.17):
@@ -920,6 +915,15 @@ packages:
     dependencies:
       elysia: 0.8.17(@sinclair/typebox@0.32.15)(typescript@5.4.2)
       jose: 4.15.5
+    dev: false
+
+  /@elysiajs/stream@1.0.0-rc.0(elysia@1.0.3):
+    resolution: {integrity: sha512-4VxHaDG/JngphW1j7eIIRxui+znZKugZG6999e2LlJUunj0co2Ud4WUAk6pks8izI3SO4EO/nyjhRp72GmS4lA==}
+    peerDependencies:
+      elysia: '>= 1.0.0-rc.0'
+    dependencies:
+      elysia: 1.0.3(@sinclair/typebox@0.32.15)(typescript@5.4.2)
+      nanoid: 5.0.6
     dev: false
 
   /@elysiajs/swagger@1.0.2(elysia@0.8.17):
