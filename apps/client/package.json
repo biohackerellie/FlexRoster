@@ -32,7 +32,7 @@
     "axios": "^1.6.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "date-fns": "^3.4.0",
+    "date-fns": "^3.6.0",
     "elysia": "^0.8.17",
     "framer-motion": "^11.0.12",
     "geist": "^1.2.2",
