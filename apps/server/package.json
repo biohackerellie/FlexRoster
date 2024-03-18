@@ -19,7 +19,7 @@
     "@auth/core": "^0.28.0",
     "@auth/drizzle-adapter": "^0.8.0",
     "@azure/identity": "^4.0.1",
-    "@elysiajs/cors": "^0.8.0",
+    "@elysiajs/cors": "^1.0.2",
     "@elysiajs/jwt": "^0.8.0",
     "@elysiajs/swagger": "^0.8.5",
     "@local/auth": "workspace:*",

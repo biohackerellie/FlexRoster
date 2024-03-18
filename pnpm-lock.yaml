@@ -196,8 +196,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1
       '@elysiajs/cors':
-        specifier: ^0.8.0
-        version: 0.8.0(elysia@0.8.17)
+        specifier: ^1.0.2
+        version: 1.0.2(elysia@0.8.17)
       '@elysiajs/jwt':
         specifier: ^0.8.0
         version: 0.8.0(elysia@0.8.17)
@@ -891,10 +891,10 @@ packages:
       superjson: 2.2.1
     dev: true
 
-  /@elysiajs/cors@0.8.0(elysia@0.8.17):
-    resolution: {integrity: sha512-NADcOsokALRv4nljA5DYJPJdIJ7iwq+ouV5lH5W+hLgZRMYsfbKShg82QSmxd7BJQFuGSv2dIIF2dfG9ieUyng==}
+  /@elysiajs/cors@1.0.2(elysia@0.8.17):
+    resolution: {integrity: sha512-2X+wes5M2SdSaI4lGp0YBbTK35y9TtjjjFMjmQNjMonUXxtOrAR7cA0lsSIvHQ8UTd9z+mMBn7NyBhWaKxq0jA==}
     peerDependencies:
-      elysia: '>= 0.8.0'
+      elysia: '>= 1.0.2'
     dependencies:
       elysia: 0.8.17(@sinclair/typebox@0.32.15)(typescript@5.4.2)
     dev: false
