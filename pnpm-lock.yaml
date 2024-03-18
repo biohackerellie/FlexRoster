@@ -202,8 +202,8 @@ importers:
         specifier: ^0.8.0
         version: 0.8.0(elysia@0.8.17)
       '@elysiajs/swagger':
-        specifier: ^0.8.5
-        version: 0.8.5(elysia@0.8.17)
+        specifier: ^1.0.2
+        version: 1.0.2(elysia@0.8.17)
       '@local/auth':
         specifier: workspace:*
         version: link:../../packages/auth
@@ -922,10 +922,10 @@ packages:
       jose: 4.15.5
     dev: false
 
-  /@elysiajs/swagger@0.8.5(elysia@0.8.17):
-    resolution: {integrity: sha512-8u4poCU62z8lgWuf4Edp84j6ZOdVLGMuFfbd85T/s7bEKUYHUdhbdd9lH5HFf8EKoJTmhpd+OyO4TxOF+vmOcA==}
+  /@elysiajs/swagger@1.0.2(elysia@0.8.17):
+    resolution: {integrity: sha512-uSvAyupZNpFTm9/aW6voP6w4NLDdSGMEwY05xWEoQLsfL3ftpx/mv3nbm3TgFGpBLJk0DWLFhm967J/6Vs168Q==}
     peerDependencies:
-      elysia: '>= 0.8.0'
+      elysia: '>= 1.0.2'
     dependencies:
       elysia: 0.8.17(@sinclair/typebox@0.32.15)(typescript@5.4.2)
       lodash.clonedeep: 4.5.0
