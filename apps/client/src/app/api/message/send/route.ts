@@ -44,7 +44,7 @@ export async function POST(req: Request) {
       },
     );
     console.log("sending message", message);
-    await client.api.inbox[`${chatId}`]?.post({ message });
+    await client.api.inbox({ chatId: chatId }).post({ message });
 
     return new Response("success", { status: 200 });
   } catch (error) {

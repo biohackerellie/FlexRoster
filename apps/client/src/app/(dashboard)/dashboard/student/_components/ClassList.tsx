@@ -165,8 +165,9 @@ const columns: ColumnDef<StudentTable>[] = [
     header: "Transfer",
     cell: ({ row, column }) => {
       // eslint-disable-next-line
-      const teacherId = row.getValue("teacherId") as string;
-      const available = row.getValue("available") as boolean;
+      const teacherId: string = row.getValue("teacherId");
+      // eslint-disable-next-line
+      const available: boolean = row.getValue("available");
       return (
         <Button disabled={!available} onClick={() => handleTransfer(teacherId)}>
           Transfer

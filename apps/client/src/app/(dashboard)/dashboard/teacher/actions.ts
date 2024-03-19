@@ -16,7 +16,7 @@ export async function Attendance(rosterId: string, status: string) {
 
   if (error) {
     console.error(error);
-    throw new Error("something went wrong 👌", { cause: error.toString() });
+    throw new Error("something went wrong 👌", { cause: error.value });
   }
   if (!data) {
     throw new Error("No data found");
