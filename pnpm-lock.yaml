@@ -316,7 +316,7 @@ importers:
         version: 0.9.2(typescript@5.4.2)(zod@3.22.4)
       drizzle-orm:
         specifier: ^0.30.2
-        version: 0.30.2(@types/pg@8.11.2)(pg@8.11.3)(postgres@3.4.3)
+        version: 0.30.2(@types/pg@8.11.3)(pg@8.11.3)(postgres@3.4.3)
       postgres:
         specifier: ^3.4.3
         version: 3.4.3
@@ -337,8 +337,8 @@ importers:
         specifier: ^20.11.28
         version: 20.11.28
       '@types/pg':
-        specifier: ^8.11.2
-        version: 8.11.2
+        specifier: ^8.11.3
+        version: 8.11.3
       dotenv-cli:
         specifier: ^7.4.1
         version: 7.4.1
@@ -5016,8 +5016,8 @@ packages:
     dependencies:
       undici-types: 5.26.5
 
-  /@types/pg@8.11.2:
-    resolution: {integrity: sha512-G2Mjygf2jFMU/9hCaTYxJrwdObdcnuQde1gndooZSOHsNSaCehAuwc7EIuSA34Do8Jx2yZ19KtvW8P0j4EuUXw==}
+  /@types/pg@8.11.3:
+    resolution: {integrity: sha512-xocw4LvpDcj/Ta7bN52tLZm34mso5SZ0Q8fVC0UtD8s85Itip3YHvBeYZhBmC0OThpdOujHsxXtRbEIRxqXPXg==}
     dependencies:
       '@types/node': 20.11.28
       pg-protocol: 1.6.0
@@ -6085,7 +6085,7 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.30.2(@types/pg@8.11.2)(pg@8.11.3)(postgres@3.4.3):
+  /drizzle-orm@0.30.2(@types/pg@8.11.3)(pg@8.11.3)(postgres@3.4.3):
     resolution: {integrity: sha512-DNd3djg03o+WxZX3pGD8YD+qrWT8gbrbhaZ2W0PVb6yH4rtM/VTB92cTGvumcRh7SSd2KfV0NWYDB70BHIXQTg==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -6159,7 +6159,7 @@ packages:
       sqlite3:
         optional: true
     dependencies:
-      '@types/pg': 8.11.2
+      '@types/pg': 8.11.3
       pg: 8.11.3
       postgres: 3.4.3
     dev: false
