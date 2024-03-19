@@ -25,7 +25,7 @@
     "@local/auth": "workspace:*",
     "@local/db": "workspace:*",
     "@microsoft/microsoft-graph-client": "^3.0.7",
-    "@sinclair/typebox": "^0.32.15",
+    "@sinclair/typebox": "^0.32.16",
     "@t3-oss/env-core": "^0.9.2",
     "elysia": "^1.0.5",
     "ioredis": "^5.3.2",
