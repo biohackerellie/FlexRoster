@@ -1,3 +1,4 @@
+import type { Logs } from "@local/validators";
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
 import { Message, messageValidator } from "@local/validators";
@@ -29,6 +30,11 @@ export async function POST(req: Request) {
       timestamp: timestamp,
     };
     const message = messageValidator.parse(messageData);
+    const log: Logs = {
+      user: message.senderId,
+      type: "message",
+      action: `${session.user.name} sent a message to ${friendId} that says: ${message.text}`,
+    };
 
     await pusherServer.trigger(
       toPusherKey(`chat:${chatId}`),
@@ -45,7 +51,7 @@ export async function POST(req: Request) {
     );
     console.log("sending message", message);
     await client.api.inbox({ chatId: chatId }).post({ message });
-
+    await client.api.logs.new.post({ log });
     return new Response("success", { status: 200 });
   } catch (error) {
     if (error instanceof Error) {

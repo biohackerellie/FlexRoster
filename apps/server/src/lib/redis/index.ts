@@ -7,3 +7,4 @@ export * from "./json";
 export * from "./genericKV";
 export * from "./generickHash";
 export * from "./genericSS";
+export * from "./logStreams";

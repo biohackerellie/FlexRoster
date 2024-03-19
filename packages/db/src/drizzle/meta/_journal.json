@@ -57,6 +57,20 @@
       "when": 1710175018406,
       "tag": "0008_lethal_odin",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1710861856837,
+      "tag": "0009_soft_dexter_bennett",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1710865611172,
+      "tag": "0010_modern_killraven",
+      "breakpoints": true
     }
   ]
 }

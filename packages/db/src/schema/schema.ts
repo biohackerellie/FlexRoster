@@ -101,12 +101,13 @@ export const users = pgTable("user", {
 
 export type SelectUser = typeof users.$inferSelect;
 
-export const userRelations = relations(users, ({ one }) => ({
+export const userRelations = relations(users, ({ one, many }) => ({
   classRosters: one(classRosters, {
     fields: [users.email],
     references: [classRosters.studentEmail],
   }),
   classrooms: one(classrooms),
+  logs: many(logs),
 }));
 
 export const accounts = pgTable(
@@ -154,3 +155,24 @@ export const verificationTokens = pgTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   }),
 );
+
+export const logs = pgTable("logs", {
+  id: text("id").primaryKey().notNull(),
+  user: text("user").references(() => users.id, {
+    onDelete: "no action",
+    onUpdate: "no action",
+  }),
+  type: text("type")
+    .$type<"error" | "request" | "attendance" | "message">()
+    .notNull()
+    .default("error"),
+
+  action: text("action").notNull(),
+});
+
+export const logRelations = relations(logs, ({ one }) => ({
+  users: one(users, {
+    fields: [logs.user],
+    references: [users.id],
+  }),
+}));

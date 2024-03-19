@@ -1,5 +1,5 @@
 import { db, eq, schema } from "@local/db";
-
+export async function clearDB() {
 console.info("Clearing database ...");
 const classroomsToDelete = await db.query.classrooms.findMany({});
 console.info(`Deleting ${classroomsToDelete.length} classrooms ...`);
@@ -18,3 +18,5 @@ try {
   console.error(e);
   process.exit(1);
 }
+}
+clearDB();

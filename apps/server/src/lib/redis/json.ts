@@ -35,3 +35,9 @@ export async function editJson(
   await client.call("JSON.SET", key, path, data);
   await client.quit();
 }
+
+export async function deleteJson(key: string, path: string) {
+  const client = createClient();
+  await client.call("JSON.DEL", key, path);
+  await client.quit();
+}

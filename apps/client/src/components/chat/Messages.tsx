@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useOptimistic, useRef, useState } from "react";
-import { format, set } from "date-fns";
+import React, { useEffect, useRef, useState } from "react";
+import { format } from "date-fns";
 
 import { SelectUser } from "@local/db/types";
 import { Message } from "@local/validators";

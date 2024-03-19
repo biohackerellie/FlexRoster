@@ -7,6 +7,7 @@ import { requestValidator } from "@local/validators";
 import type { cachedRoster } from "~/lib/types";
 import {
   createClient,
+  deleteJson,
   editJson,
   getHash,
   getJSON,
@@ -182,10 +183,17 @@ export async function getRequests(userId: string) {
     const rawRequest = await getHash(key);
 
     const request: Request = {
-      status: rawRequest.status!,
+      status: rawRequest.status! as
+        | "pending"
+        | "approved"
+        | "denied"
+        | "checked in",
       id: rawRequest.id!,
       timestamp: parseInt(rawRequest.timestamp!, 10),
       studentId: rawRequest.studentId!,
+      studentName: rawRequest.studentName!,
+      currentTeacherName: rawRequest.currentTeacherName!,
+      newTeacherName: rawRequest.newTeacherName!,
       currentTeacher: rawRequest.currentTeacher!,
       newTeacher: rawRequest.newTeacher!,
     };
@@ -198,11 +206,53 @@ export async function getRequests(userId: string) {
   return { incomingRequests, outgoingRequests };
 }
 
-export async function approveRequest(requestId: string, approved: boolean) {
-  const client = createClient();
-  if (!approved) {
-    const request = await setHash(`request:${requestId}`, "status", "denied");
-  } else {
-    const request = await setHash(`request:${requestId}`, "status", "approved");
+export async function approveRequest(
+  requestId: string,
+  studentId: string,
+  teacherId: string,
+  newTeacherId: string,
+) {
+  try {
+    console.log("requestId", requestId);
+    const keys = await getKeys(`request:*`);
+    console.log("keys", keys);
+    for (const key of keys) {
+      const rawRequest = await getHash(key);
+      if (rawRequest.id === requestId) {
+        await setHash(key, "status", "approved");
+      }
+    }
+    // remove student from current teacher json roster and add to new teacher json roster
+    const student = (await getJSON(
+      `user:${teacherId}:roster`,
+      studentId,
+    )) as string;
+
+    let studentObject: Record<string, any> = {};
+    const { studentParsed } = JSON.parse(student);
+    studentObject[studentId] = { ...studentParsed };
+    await setJSON(`user:${newTeacherId}:roster`, studentObject);
+    await deleteJson(`user:${teacherId}:roster`, studentId);
+
+    return new Response("OK", { status: 200 });
+  } catch (e) {
+    throw new NotFoundError("No requests found");
+  }
+}
+
+// currently not working, deletes entire roster
+
+export async function denyRequest(requestId: string, studentId: string) {
+  try {
+    const keys = await getKeys(`request:*:${studentId}`);
+    for (const key of keys) {
+      const rawRequest = await getHash(key);
+      if (rawRequest.id === requestId) {
+        await setHash(key, "status", "denied");
+      }
+    }
+    return new Response("OK", { status: 200 });
+  } catch (e) {
+    throw new NotFoundError("No requests found");
   }
 }

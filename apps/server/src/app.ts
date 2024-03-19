@@ -4,6 +4,7 @@ import { Elysia } from "elysia";
 
 import { classRoutes } from "./routes/classes";
 import { inboxRoutes } from "./routes/inbox";
+import { logRoutes } from "./routes/logs";
 import { rosterRoutes } from "./routes/rosters";
 import { scriptRoutes } from "./routes/scripts";
 import { userRoutes } from "./routes/users";
@@ -31,7 +32,8 @@ const app = new Elysia()
       .use(rosterRoutes)
       .use(inboxRoutes)
       .use(scriptRoutes)
-      .use(userRoutes),
+      .use(userRoutes)
+      .use(logRoutes),
   )
   .use(swagger())
   .use(

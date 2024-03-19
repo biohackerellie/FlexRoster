@@ -1,6 +1,8 @@
 import { Elysia, t } from "elysia";
 
 import {
+  approveRequest,
+  denyRequest,
   getRequests,
   getRosters,
   getRostersById,
@@ -68,12 +70,20 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
       }),
       body: t.Object({
         request: t.Object({
-          status: t.String(),
+          status: t.Union([
+            t.Literal("pending"),
+            t.Literal("approved"),
+            t.Literal("denied"),
+            t.Literal("checked in"),
+          ]),
           id: t.String(),
           timestamp: t.Number(),
           studentId: t.String(),
+          studentName: t.String(),
           currentTeacher: t.String(),
+          currentTeacherName: t.String(),
           newTeacher: t.String(),
+          newTeacherName: t.String(),
         }),
       }),
     },
@@ -89,6 +99,34 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
       body: t.Object({
         roomNumber: t.String(),
         teacherName: t.String(),
+      }),
+    },
+  )
+  .post(
+    "/request/approve/:requestId",
+    ({ params: { requestId }, body: { studentId, teacherId, newTeacherId } }) =>
+      approveRequest(requestId, studentId, teacherId, newTeacherId),
+    {
+      params: t.Object({
+        requestId: t.String(),
+      }),
+      body: t.Object({
+        studentId: t.String(),
+        teacherId: t.String(),
+        newTeacherId: t.String(),
+      }),
+    },
+  )
+  .post(
+    "/request/deny/:requestId",
+    ({ params: { requestId }, body: { studentId } }) =>
+      denyRequest(requestId, studentId),
+    {
+      params: t.Object({
+        requestId: t.String(),
+      }),
+      body: t.Object({
+        studentId: t.String(),
       }),
     },
   );

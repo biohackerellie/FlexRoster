@@ -2,7 +2,7 @@ import { NotFoundError } from "elysia";
 
 import { messageValidator } from "@local/validators";
 
-import { createClient } from ".";
+import { createClient, newLog } from ".";
 
 export async function getInbox(chatId: string) {
   try {
@@ -44,5 +44,6 @@ export async function sendToInbox(chatId: string, message: any) {
     messageData.timestamp,
   );
   await client.quit();
+
   return messageId;
 }

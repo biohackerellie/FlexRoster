@@ -33,9 +33,18 @@ export default async function middleware(req: NextRequest) {
       if (path === "/dashboard/teacher") {
         return NextResponse.redirect(new URL("/dashboard/student", req.url));
       }
+      if (path === "/dashboard/secretary") {
+        return NextResponse.redirect(new URL("/dashboard/student", req.url));
+      }
       break;
     case "teacher":
       if (path === "/dashboard") {
+        return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
+      }
+      if (path === "/dashboard/student") {
+        return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
+      }
+      if (path === "/dashboard/secretary") {
         return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
       }
       break;
@@ -43,6 +52,21 @@ export default async function middleware(req: NextRequest) {
       if (path === "/dashboard") {
         return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
       }
+      break;
+    case "secretary":
+      if (path === "/dashboard") {
+        return NextResponse.redirect(new URL("/dashboard/secretary", req.url));
+      }
+      if (path === "/dashboard/student") {
+        return NextResponse.redirect(new URL("/dashboard/secretary", req.url));
+      }
+      if (path === "/dashboard/teacher") {
+        return NextResponse.redirect(new URL("/dashboard/secretary", req.url));
+      }
+      if (path.startsWith("/dashboard/chat")) {
+        return NextResponse.redirect(new URL("/dashboard/secretary", req.url));
+      }
+
       break;
   }
 

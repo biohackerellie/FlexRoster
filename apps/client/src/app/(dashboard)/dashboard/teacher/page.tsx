@@ -15,7 +15,10 @@ export default async function TeacherDashboardPage() {
   const teacherId = session?.user?.id!;
 
   const { roster, requests } = await getAllData(teacherId);
-  const incoming = requests.incomingRequests;
+  const incoming = requests.incomingRequests.filter((request) => {
+    return request.status === "pending";
+  });
+
   const outgoing = requests.outgoingRequests;
   return (
     <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between">
