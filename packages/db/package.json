@@ -29,7 +29,7 @@
     "@local/eslint-config": "workspace:*",
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
-    "@types/node": "^20.11.28",
+    "@types/node": "^20.11.29",
     "@types/pg": "^8.11.3",
     "dotenv-cli": "^7.4.1",
     "drizzle-kit": "^0.20.14",
