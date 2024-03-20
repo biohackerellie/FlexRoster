@@ -103,7 +103,7 @@ function RequestComponent(request: Request) {
     }
     return format(time, "h:mm a");
   };
-  const requestID = request.id as string;
+
   return (
     <div className="flex flex-row items-center justify-between p-4">
       <div>

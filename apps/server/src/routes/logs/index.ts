@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 
-import { newLog, getLogs } from "~/lib/redis";
+import { getLogs, newLog } from "~/lib/redis";
 
 export const logRoutes = new Elysia({ prefix: "/logs" })
   .get("/all", () => getLogs())

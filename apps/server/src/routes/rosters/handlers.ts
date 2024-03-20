@@ -223,12 +223,9 @@ export async function approveRequest(
       }
     }
     // remove student from current teacher json roster and add to new teacher json roster
-    const student = (await getJSON(
-      `user:${teacherId}:roster`,
-      studentId,
-    )) as string;
+    const student = await getJSON(`user:${teacherId}:roster`, studentId);
 
-    let studentObject: Record<string, any> = {};
+    const studentObject: Record<string, any> = {};
     const { studentParsed } = JSON.parse(student);
     studentObject[studentId] = { ...studentParsed };
     await setJSON(`user:${newTeacherId}:roster`, studentObject);
