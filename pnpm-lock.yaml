@@ -205,8 +205,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(elysia@1.0.7)
       '@elysiajs/swagger':
-        specifier: ^1.0.2
-        version: 1.0.2(elysia@1.0.7)
+        specifier: ^1.0.3
+        version: 1.0.3(elysia@1.0.7)
       '@local/auth':
         specifier: workspace:*
         version: link:../../packages/auth
@@ -929,8 +929,8 @@ packages:
       nanoid: 5.0.6
     dev: false
 
-  /@elysiajs/swagger@1.0.2(elysia@1.0.7):
-    resolution: {integrity: sha512-uSvAyupZNpFTm9/aW6voP6w4NLDdSGMEwY05xWEoQLsfL3ftpx/mv3nbm3TgFGpBLJk0DWLFhm967J/6Vs168Q==}
+  /@elysiajs/swagger@1.0.3(elysia@1.0.7):
+    resolution: {integrity: sha512-l9JEs2JXE797r1TyOg4/faYS4E2uavm1g3keH45kPtnCkWkesNR6G5HSf2WSQXLaJGYfQJpnUbRbgyk5hsvkJg==}
     peerDependencies:
       elysia: '>= 1.0.2'
     dependencies:
