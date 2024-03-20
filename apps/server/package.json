@@ -22,7 +22,7 @@
     "@azure/identity": "^4.0.1",
     "@elysiajs/cors": "^1.0.2",
     "@elysiajs/jwt": "^1.0.2",
-    "@elysiajs/swagger": "^1.0.2",
+    "@elysiajs/swagger": "^1.0.3",
     "@local/auth": "workspace:*",
     "@local/db": "workspace:*",
     "@microsoft/microsoft-graph-client": "^3.0.7",
