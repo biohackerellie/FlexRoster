@@ -31,6 +31,10 @@ export const classRosters = pgTable("classRosters", {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
+  attendance: text("attendance")
+    .$type<"present" | "absent" | "not marked">()
+    .default("not marked")
+    .notNull(),
   id: serial("id").primaryKey().notNull(),
 });
 

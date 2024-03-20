@@ -10,9 +10,16 @@ export const rosterQuery = db
   .from(schema.classRosters)
   .prepare("roster");
 
+export const rosterByIDQuery = db
+  .select()
+  .from(schema.classRosters)
+  .where(eq(schema.classRosters.id, sql.placeholder("id")))
+  .prepare("rosterByID");
+
 export const rosterByTeacherId = db
   .select({
     rosterId: schema.classRosters.id,
+    attendance: schema.classRosters.attendance,
     studentEmail: schema.classRosters.studentEmail,
     studentName: schema.classRosters.studentName,
     studentId: schema.users.id,

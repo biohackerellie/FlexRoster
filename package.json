@@ -11,6 +11,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "clean": "git clean -xdf node_modules",
+    "cache:reset": "pnpm -F server cache:reset",
     "nightly": "pnpm -F server nightly",
     "db:push": "pnpm -F db push",
     "db:studio": "pnpm -F db studio",

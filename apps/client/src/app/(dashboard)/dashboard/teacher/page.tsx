@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-import { unstable_cache } from "next/cache";
+import { unstable_cache as cache } from "next/cache";
 
 import { auth } from "@local/auth";
-import { client, fetch } from "@local/eden";
+import { client } from "@local/eden";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { chatHrefConstructor } from "@/lib/utils";
@@ -15,11 +15,19 @@ export default async function TeacherDashboardPage() {
   const teacherId = session?.user?.id!;
 
   const { roster, requests } = await getAllData(teacherId);
-  const incoming = requests.incomingRequests.filter((request) => {
-    return request.status === "pending";
-  });
 
-  const outgoing = requests.outgoingRequests;
+  let incoming = null;
+  let outgoing = null;
+  if (requests) {
+    if (requests.incomingRequests && requests.incomingRequests.length > 0) {
+      incoming = requests.incomingRequests.filter((request) => {
+        return request.status === "pending";
+      });
+    }
+    if (requests.outgoingRequests && requests.outgoingRequests.length > 0) {
+      outgoing = requests.outgoingRequests;
+    }
+  }
   return (
     <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between">
       <h1 className="text-3xl font-semibold text-gray-700">
@@ -65,8 +73,17 @@ async function getDefaultRoster(teacherId: string) {
   return mapped;
 }
 
+const cachedData = cache(
+  async (teacherId: string) => getDefaultRoster(teacherId),
+  ["roster"],
+  {
+    revalidate: 60,
+    tags: ["roster"],
+  },
+);
+
 async function getRequests(teacherId: string) {
-  const { data, error } = await client.api.rosters.request
+  const { data, error } = await client.api.requests
     .user({ userId: teacherId })
     .get();
   console.log(data);
@@ -74,16 +91,13 @@ async function getRequests(teacherId: string) {
     console.error(error);
     throw new Error("Failed to fetch requests");
   }
-  if (!data) {
-    throw new Error("No data found");
-  }
 
   return data;
 }
 
 async function getAllData(teacherId: string) {
   const [roster, requests] = await Promise.all([
-    getDefaultRoster(teacherId),
+    cachedData(teacherId),
     getRequests(teacherId),
   ]);
 

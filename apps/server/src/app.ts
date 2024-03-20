@@ -2,12 +2,15 @@ import { cors } from "@elysiajs/cors";
 import swagger from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 
-import { classRoutes } from "./routes/classes";
-import { inboxRoutes } from "./routes/inbox";
-import { logRoutes } from "./routes/logs";
-import { rosterRoutes } from "./routes/rosters";
-import { scriptRoutes } from "./routes/scripts";
-import { userRoutes } from "./routes/users";
+import {
+  classRoutes,
+  inboxRoutes,
+  logRoutes,
+  requestRoutes,
+  rosterRoutes,
+  scriptRoutes,
+  userRoutes,
+} from "./routes";
 
 const app = new Elysia()
   .onError({ as: "global" }, ({ code, error, set }) => {
@@ -33,7 +36,8 @@ const app = new Elysia()
       .use(inboxRoutes)
       .use(scriptRoutes)
       .use(userRoutes)
-      .use(logRoutes),
+      .use(logRoutes)
+      .use(requestRoutes),
   )
   .use(swagger())
   .use(

@@ -87,13 +87,13 @@ const columns: ColumnDef<TeacherTable>[] = [
     accessorKey: "attendance",
     header: "Attendance",
     cell: ({ row }) => {
-      let studentValue = "";
+      let studentValue = 0;
       const base: string = row.getValue("attendance");
       const [attendance, rosterId] = base.split("--");
       if (!rosterId) {
         studentValue = row.getValue("studentId");
       } else {
-        studentValue = rosterId;
+        studentValue = parseInt(rosterId);
       }
       if (attendance === "not marked") {
         return (
@@ -164,7 +164,10 @@ const columns: ColumnDef<TeacherTable>[] = [
   },
 ];
 
-const setAttendance = async (rosterId: string, status: string) => {
+const setAttendance = async (
+  rosterId: number,
+  status: "present" | "absent" | "not marked",
+) => {
   try {
     const response = await Attendance(rosterId, status);
     return response;

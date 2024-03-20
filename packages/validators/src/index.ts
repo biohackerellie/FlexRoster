@@ -20,7 +20,7 @@ const requestStatusSchema = z.enum([
 
 export const requestValidator = z.object({
   id: z.string(),
-  studentId: z.string(),
+  studentId: z.number(),
   studentName: z.string(),
   currentTeacher: z.string(),
   currentTeacherName: z.string(),

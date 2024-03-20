@@ -30,7 +30,7 @@ export async function RequestRoom(teacherId: string) {
     status: "pending",
     studentName: student?.user?.name!,
     id: nanoid(),
-    studentId: String(student?.classRosters?.id!),
+    studentId: student?.classRosters?.id!,
     currentTeacher,
     currentTeacherName,
     newTeacher: teacherId,
@@ -41,11 +41,9 @@ export async function RequestRoom(teacherId: string) {
   const request = requestValidator.parse(requestData);
   const requestId = `request:${currentTeacher}:${studentId}`;
   const toTeacher = `request:${teacherId}:${studentId}`;
-  const res = await client.api.rosters.request
-    .id({ requestId: requestId })
-    .post({
-      request,
-    });
+  const res = await client.api.requests.id({ requestId: requestId }).post({
+    request,
+  });
 
   if (res?.error) {
     return res?.error.status;
@@ -55,7 +53,7 @@ export async function RequestRoom(teacherId: string) {
       action: `${student?.user?.name} requested to transfer to ${newTeacher?.name} from ${currentTeacherName} at ${timestamp}`,
       user: studentId,
     };
-    await client.api.rosters.request.id({ requestId: toTeacher }).post({
+    await client.api.requests.id({ requestId: toTeacher }).post({
       request,
     });
     await client.api.logs.new.post({

@@ -18,3 +18,11 @@ export const roomByIdQuery = db
   .innerJoin(schema.users, eq(schema.classrooms.teacherId, schema.users.id))
   .where(eq(schema.classrooms.id, sql.placeholder("id")))
   .prepare("roomById");
+
+export const getClassroomIdByTeacher = db
+  .select({
+    classroomId: schema.classrooms.id,
+  })
+  .from(schema.classrooms)
+  .where(eq(schema.classrooms.teacherId, sql.placeholder("teacherId")))
+  .prepare("getClassroomIdByTeacher");
