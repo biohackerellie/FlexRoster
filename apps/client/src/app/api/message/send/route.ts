@@ -9,7 +9,7 @@ import { toPusherKey } from "@/lib/utils";
 export async function POST(req: Request) {
   try {
     const { chatId, text }: { chatId: string; text: string } = await req.json();
-    console.log("hi");
+
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
 
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
     return new Response("success", { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-      console.log(error.message);
+      console.error(error.message);
       return new Response(error.message, { status: 400 });
     }
     return new Response("Internal Server Error", { status: 500 });

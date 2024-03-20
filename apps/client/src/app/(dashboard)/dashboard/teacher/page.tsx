@@ -86,7 +86,6 @@ async function getRequests(teacherId: string) {
   const { data, error } = await client.api.requests
     .user({ userId: teacherId })
     .get();
-  console.log(data);
   if (error) {
     console.error(error);
     throw new Error("Failed to fetch requests");

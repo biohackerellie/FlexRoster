@@ -97,7 +97,7 @@ export async function approveRequest(
 
 // currently not working, deletes entire roster of the new teacher
 
-export async function denyRequest(requestId: string, studentId: string) {
+export async function denyRequest(requestId: string, studentId: number) {
   try {
     const keys = await getKeys(`request:*:${studentId}`);
     for (const key of keys) {

@@ -23,7 +23,6 @@ export default async function middleware(req: NextRequest) {
   }
 
   const role = token.roles || "student";
-  console.log("path", path);
 
   switch (role) {
     case "student":

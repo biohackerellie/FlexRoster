@@ -31,7 +31,6 @@ export default async function ChatPage({ params }: PageProps) {
   const { chat, initialMessages } = await allData(chatId);
 
   const { chatPartner, userId } = chat;
-  console.log("chatPartner: ", chatPartner.name);
 
   return (
     <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between">
@@ -84,7 +83,6 @@ async function getChatMessages(chatId: string) {
 
     return reversedMessages;
   } catch (e) {
-    console.log(e);
     throw new Error();
   }
 }
@@ -104,11 +102,9 @@ async function usersCheck(chatId: string) {
     const { user } = session;
 
     const userId = user.id;
-    console.log(chatId, "chatId");
     const [userId1, userId2] = chatId.split("--");
 
     if (userId !== userId1 && userId !== userId2) {
-      console.log("user is not chatID user");
       notFound();
     }
 
@@ -133,7 +129,6 @@ async function usersCheck(chatId: string) {
 
     return { chatPartner, userId };
   } catch (e) {
-    console.log(e);
     throw new Error();
   }
 }

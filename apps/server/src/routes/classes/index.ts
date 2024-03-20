@@ -1,5 +1,6 @@
 import { Elysia, t } from "elysia";
 
+import { classroomsWithRosterCount } from "~/lib/sql";
 import { getClassById, getClasses } from "./handlers";
 
 export const classRoutes = new Elysia({ prefix: "/classes" })
@@ -9,4 +10,5 @@ export const classRoutes = new Elysia({ prefix: "/classes" })
     params: t.Object({
       id: t.String(),
     }),
-  });
+  })
+  .get("/secretary", () => classroomsWithRosterCount());

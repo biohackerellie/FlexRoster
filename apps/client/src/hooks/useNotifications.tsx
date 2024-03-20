@@ -18,7 +18,7 @@ function useChatNotifications(userId: string) {
   const pathname = usePathname();
   React.useEffect(() => {
     pusherClient.subscribe(toPusherKey(`user:${userId}:chats`));
-    console.log("subscribed to chats");
+
     const chatHandler = (message: ExtendedMessage) => {
       const shouldNotify =
         pathname !==

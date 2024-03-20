@@ -66,7 +66,7 @@ export const requestRoutes = new Elysia({ prefix: "/requests" })
         requestId: t.String(),
       }),
       body: t.Object({
-        studentId: t.String(),
+        studentId: t.Number(),
       }),
     },
   );

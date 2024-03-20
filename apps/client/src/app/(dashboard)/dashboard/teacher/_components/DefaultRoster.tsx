@@ -37,7 +37,7 @@ export function DefaultRosterComponent({ data, userId }: RosterListProps) {
       <div className="flex flex-col leading-tight">
         <div className="flex items-center text-xl">
           <span className="mr-3 font-semibold text-gray-700">
-            Default Roster
+            Today's Roster
           </span>
         </div>
 

@@ -51,7 +51,22 @@ export async function RequestApproval(
     if (!res) {
       throw new Error("No data found");
     }
-    revalidateTag("roster");
-    revalidatePath("/(dashboard)/dashboard", "layout");
   }
+  if (status === "denied") {
+    const { data: res, error } = await client.api.requests
+      .deny({ requestId: requestId })
+      .post({
+        studentId: studentId,
+      });
+
+    if (error) {
+      console.error(error);
+      throw new Error("something went wrong 👌", { cause: error.value });
+    }
+    if (!res) {
+      throw new Error("No data found");
+    }
+  }
+  revalidateTag("roster");
+  revalidatePath("/(dashboard)/dashboard", "layout");
 }
