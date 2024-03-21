@@ -83,57 +83,7 @@ const columns: ColumnDef<TeacherTable>[] = [
       );
     },
   },
-  {
-    accessorKey: "attendance",
-    header: "Attendance",
-    cell: ({ row }) => {
-      let studentValue = 0;
-      const base: string = row.getValue("attendance");
-      const [attendance, rosterId] = base.split("--");
-      if (!rosterId) {
-        studentValue = row.getValue("studentId");
-      } else {
-        studentValue = parseInt(rosterId);
-      }
-      if (attendance === "not marked") {
-        return (
-          <span>
-            <Button
-              variant="ghost"
-              onClick={() => setAttendance(studentValue, "present")}
-            >
-              <CheckCircle size={20} color="#00ff11" strokeWidth={1.5} />
-            </Button>
-            |
-            <Button
-              variant="ghost"
-              onClick={() => setAttendance(studentValue, "absent")}
-            >
-              <XCircle size={20} color="#ff0000" strokeWidth={1.5} />
-            </Button>
-          </span>
-        );
-      } else if (attendance === "present") {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => setAttendance(studentValue, "absent")}
-          >
-            <CheckCircle size={20} color="#00ff11" strokeWidth={1.5} />
-          </Button>
-        );
-      } else {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => setAttendance(studentValue, "present")}
-          >
-            <XCircle size={20} color="#ff0000" strokeWidth={1.5} />
-          </Button>
-        );
-      }
-    },
-  },
+
   {
     accessorKey: "chatId",
     header: "Chat",
@@ -162,14 +112,66 @@ const columns: ColumnDef<TeacherTable>[] = [
       }
     },
   },
+  {
+    accessorKey: "transferred",
+    header: "Transfers",
+    cell: ({ row }) => {
+      //eslint-disable-next-line
+      const transferred = row.getValue("transferred") as boolean;
+      //eslint-disable-next-line
+      const arrived = row.getValue("arrived") as boolean;
+      //eslint-disable-next-line
+      const id = row.getValue("studentId") as number;
+      console.log("id", id);
+      if (!transferred) {
+        return <div className="font-thin text-gray-400">N/A</div>;
+      } else if (transferred === true) {
+        if (!arrived) {
+          return (
+            <>
+              <div className="font-thin text-green-500">Transfer status:</div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger
+                    onClick={() => setAttendance(id)}
+                    className="cursor-default"
+                  >
+                    <XCircle size={20} color="red" strokeWidth={1.5} />
+                  </TooltipTrigger>
+                  <TooltipContent>Click when student arrives</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </>
+          );
+        } else if (arrived) {
+          return (
+            <div className="font-thin text-green-500">
+              Transferred: <CheckCircle />
+            </div>
+          );
+        } else return <div> </div>;
+      }
+    },
+  },
+  {
+    accessorKey: "arrived",
+    header: ({ column }) => {
+      column.toggleVisibility(false);
+      return <></>;
+    },
+  },
+  {
+    accessorKey: "studentId",
+    header: ({ column }) => {
+      column.toggleVisibility(false);
+      return <></>;
+    },
+  },
 ];
 
-const setAttendance = async (
-  rosterId: number,
-  status: "present" | "absent" | "not marked",
-) => {
+const setAttendance = async (rosterId: number) => {
   try {
-    const response = await Attendance(rosterId, status);
+    const response = await Attendance(rosterId);
     return response;
   } catch (e) {
     console.error(e);

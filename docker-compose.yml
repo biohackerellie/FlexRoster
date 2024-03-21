@@ -1,11 +1,19 @@
 version: "3"
 
-services: 
-  server:
-    container_name: bun-api
-    build: 
+services:
+  # server:
+  #   container_name: bun-api
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/server/Dockerfile
+  #   restart: unless-stopped
+  #   ports:
+  #     - "3030:3030"
+  client:
+    container_name: client
+    build:
       context: .
-      dockerfile: ./apps/server/Dockerfile
+      dockerfile: ./apps/client/Dockerfile
     restart: unless-stopped
-    ports: 
-      - "3030:3030"
+    ports:
+      - "3000:3000"

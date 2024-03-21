@@ -65,8 +65,10 @@ export interface StudentTable {
 }
 
 export interface TeacherTable {
+  transferred: boolean;
+  arrived: boolean;
   studentName: string;
   studentEmail: string;
-  studentId: string | number | null;
+  studentId: number;
   chatId: string | null;
 }

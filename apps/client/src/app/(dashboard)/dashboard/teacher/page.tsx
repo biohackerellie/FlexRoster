@@ -1,3 +1,4 @@
+import { transcode } from "buffer";
 import { Suspense } from "react";
 import { unstable_cache as cache } from "next/cache";
 
@@ -60,7 +61,8 @@ async function getDefaultRoster(teacherId: string) {
 
   const mapped = data.map((student) => {
     return {
-      attendance: `${student.attendance}--${student.rosterId}`,
+      transferred: student.transferred,
+      arrived: student.arrived,
       studentName: student.studentName,
       studentEmail: student.studentEmail,
       studentId: student.rosterId,

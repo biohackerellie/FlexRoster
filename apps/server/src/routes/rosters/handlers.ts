@@ -75,7 +75,7 @@ export async function setStudentRoster(
     const previousRequest = await getRequestKV(email);
     console.log("previousRequest", previousRequest);
     if (previousRequest) {
-      console.log("You have already requested a transfer today");
+      console.error("You have already requested a transfer today");
       return new Response("You have already requested a transfer today", {
         status: 301,
       });
@@ -102,19 +102,16 @@ export async function getTeacherRoster(userId: string) {
   }
 }
 
-export async function setAttendance(
-  userId: string,
-  rosterId: number,
-  status: "present" | "absent" | "not marked",
-) {
+export async function setAttendance(rosterId: number) {
   try {
     await db
       .update(schema.classRosters)
-      .set({ attendance: status })
+      .set({ arrived: true })
       .where(eq(schema.classRosters.id, rosterId));
+
     return new Response("OK", { status: 200 });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     throw new NotFoundError("No roster found with that email");
   }
 }

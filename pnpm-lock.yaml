@@ -207,9 +207,6 @@ importers:
       '@elysiajs/swagger':
         specifier: ^1.0.3
         version: 1.0.3(elysia@1.0.7)
-      '@local/auth':
-        specifier: workspace:*
-        version: link:../../packages/auth
       '@local/db':
         specifier: workspace:*
         version: link:../../packages/db

@@ -35,6 +35,8 @@ export const classRosters = pgTable("classRosters", {
     .$type<"present" | "absent" | "not marked">()
     .default("not marked")
     .notNull(),
+  transferred: boolean("transferred").default(false).notNull(),
+  arrived: boolean("arrived").default(false).notNull(),
   id: serial("id").primaryKey().notNull(),
 });
 

@@ -7,21 +7,20 @@ RUN apk update
 WORKDIR /app
 RUN yarn global add turbo
 COPY . . 
+COPY .env .env
 RUN turbo prune client --docker
 
 FROM base AS installer 
 RUN apk add --no-cache libc6-compat
 RUN apk update
 WORKDIR /app
-
-COPY .gitignore .gitignore
-COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN yarn global add pnpm && pnpm i --frozen-lockfile
-
+COPY --from=builder /app/.env .env
 COPY --from=builder /app/out/full/ .
-COPY turbo.json turbo.json
-RUN yarn turbo build --filter=client...
+
+RUN yarn global add pnpm && pnpm i 
+
+
+RUN pnpm turbo build --filter=client...
 
 FROM base AS runner
 WORKDIR /app

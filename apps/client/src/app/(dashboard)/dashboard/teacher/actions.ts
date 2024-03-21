@@ -2,18 +2,11 @@
 
 import { revalidatePath, revalidateTag } from "next/cache";
 
-import { auth } from "@local/auth";
 import { client } from "@local/eden";
 
-export async function Attendance(
-  rosterId: number,
-  status: "present" | "absent" | "not marked",
-) {
-  const session = await auth();
-  const userId = session?.user?.id!;
+export async function Attendance(rosterId: number) {
+  console.log("rosterId", rosterId);
   const { data, error } = await client.api.rosters.attendance[""].post({
-    userId: userId,
-    status: status,
     rosterId: rosterId,
   });
 
