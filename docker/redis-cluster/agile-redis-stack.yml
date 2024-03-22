@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   redis-sentinel:
-    image: 127.0.0.1:5000/agile-redis-sentinel
+    image: docker.laurel.k12.mt.us/agile-redis-sentinel
     volumes:
       - sentinel-conf:/etc/redis
     deploy:
@@ -14,7 +14,7 @@ services:
       - host
 
   redis-master:
-    image: 127.0.0.1:5000/agile-redis
+    image: docker.laurel.k12.mt.us/agile-redis
     volumes:
       - redis-data:/data
       - redis-conf:/etc/redis
@@ -27,7 +27,7 @@ services:
       - host
 
   redis-slave-node1:
-    image: 127.0.0.1:5000/agile-redis
+    image: docker.laurel.k12.mt.us/agile-redis
     volumes:
       - redis-data:/data
       - redis-conf:/etc/redis
@@ -42,7 +42,7 @@ services:
       - host
 
   redis-slave-node2:
-    image: 127.0.0.1:5000/agile-redis
+    image: docker.laurel.k12.mt.us/agile-redis
     volumes:
       - redis-data:/data
       - redis-conf:/etc/redis
@@ -57,7 +57,7 @@ services:
       - host
 
   agile-python-app:
-    image: 127.0.0.1:5000/agile-python-app
+    image: docker.laurel.k12.mt.us/agile-python-app
     ports:
       - "38000:611"
     deploy:
