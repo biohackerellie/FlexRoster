@@ -56,7 +56,8 @@ const columns: ColumnDef<RosterList>[] = [
 
 type RosterTable = {
   rosterId: number;
-  attendance: "present" | "absent" | "not marked";
+  transferred: boolean;
+  arrived: boolean;
   studentEmail: string;
   studentName: string;
   studentId: string | null;
@@ -97,7 +98,7 @@ const studentColumns: ColumnDef<RosterTable>[] = [
     },
   },
   {
-    accessorKey: "attendance",
+    accessorKey: "transferred",
     header: "Attendance",
   },
 ];

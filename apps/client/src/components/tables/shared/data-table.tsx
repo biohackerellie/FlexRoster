@@ -49,7 +49,7 @@ export function DataTable<TData, TValue>({
     },
     state: {
       sorting,
-			columnVisibility,
+      columnVisibility,
     },
   });
 

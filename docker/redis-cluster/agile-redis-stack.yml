@@ -56,15 +56,15 @@ services:
     networks:
       - host
 
-  agile-python-app:
-    image: docker.laurel.k12.mt.us/agile-python-app
-    ports:
-      - "38000:611"
-    deploy:
-      mode: replicated
-      replicas: 3
-    environment:
-      - SENTINEL_HOST=${SENTINEL_IP}
+  # agile-python-app:
+  #   image: docker.laurel.k12.mt.us/agile-python-app
+  #   ports:
+  #     - "38000:611"
+  #   deploy:
+  #     mode: replicated
+  #     replicas: 3
+  #   environment:
+  #     - SENTINEL_HOST=${SENTINEL_IP}
 
 volumes:
   redis-data:

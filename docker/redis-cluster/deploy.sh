@@ -26,11 +26,11 @@ echo "(2)End to build and push redis sentinel image to registry."
 echo "-------------------------------------------------------\n"
 
 
-echo "3- Start to push our python app  on the registry..."
-docker compose -f python-app/compose-app.yml build
-docker compose -f python-app/compose-app.yml push
-echo "(3)End to push our python app  on the registry."
-echo "-------------------------------------------------------\n"
+# echo "3- Start to push our python app  on the registry..."
+# docker compose -f python-app/compose-app.yml build
+# docker compose -f python-app/compose-app.yml push
+# echo "(3)End to push our python app  on the registry."
+# echo "-------------------------------------------------------\n"
 
 
 echo "4- Start to deploy the stack..."
