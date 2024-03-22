@@ -1,4 +1,4 @@
-FROM redis:5
+FROM redis:latest
 
 EXPOSE 26379
 
