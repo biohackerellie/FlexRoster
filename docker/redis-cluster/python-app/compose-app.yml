@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   agile-python-app:
-    image: docker.laurel.k12.mt.us/agile-python-app
+    image: localhost:5000/agile-python-app
     build:
       context: ./
       dockerfile: ./Dockerfile.yml
