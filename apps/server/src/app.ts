@@ -29,6 +29,7 @@ const app = new Elysia()
         return error.message;
     }
   })
+  .get("/", () => "💩")
   .group("/api", (app) =>
     app
       .use(classRoutes)

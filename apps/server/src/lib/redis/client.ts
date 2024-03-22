@@ -5,8 +5,12 @@ import { env } from "~/env";
 export function createClient() {
   try {
     const redis = new Redis({
-      host: env.REDIS_HOST as unknown as string,
-      port: env.REDIS_PORT as unknown as number,
+      sentinels: [
+        { host: env.REDIS_HOST1, port: parseInt(env.REDIS_PORT) },
+        { host: env.REDIS_HOST2, port: parseInt(env.REDIS_PORT) },
+        { host: env.REDIS_HOST3, port: parseInt(env.REDIS_PORT) },
+      ],
+      name: "mymaster",
       showFriendlyErrorStack: true,
       enableAutoPipelining: true,
       maxRetriesPerRequest: 0,
