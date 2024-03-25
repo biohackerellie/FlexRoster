@@ -20,10 +20,29 @@ interface PageProps {
   };
 }
 
-export const dynamic = "force-dynamic";
+export async function generateMetadata({
+  params,
+}: {
+  params: { chatId: string };
+}) {
+  const session = await auth();
+  if (!session) return { title: `Chat` };
+  const [userId1, userId2] = params.chatId.split("--");
+  const { user } = session;
 
-export async function generateMetadata() {
-  return { title: `Chat` };
+  const chatPartnerId = user.id === userId1 ? userId2! : userId1!;
+
+  const { data: chatPartnerRaw, error } = await client.api
+    .users({ id: chatPartnerId })
+    .get();
+  if (error) {
+    console.error(error);
+  }
+  if (!chatPartnerRaw) {
+    return { title: `Chat` };
+  }
+
+  return { title: `FLEX | ${chatPartnerRaw.name} chat` };
 }
 
 export default async function ChatPage({ params }: PageProps) {

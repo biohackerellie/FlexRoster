@@ -3,7 +3,7 @@ import { env } from "./env";
 
 app.listen(env.SERVER_PORT, () => {
   console.log(
-    `💩 STEAMing pile of shit being served at ${app.server?.hostname}:${app.server?.port}`,
+    `💩 FLEXible pile of shit being served at ${app.server?.hostname}:${app.server?.port}`,
   );
 });
 

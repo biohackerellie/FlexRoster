@@ -12,7 +12,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "STEAM | Home",
+  title: "FLEX | Home",
   description:
     "Sit down, shut up, and read an unbanned, straight, white, christian mom approved book",
 };
@@ -22,12 +22,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-
   return (
-    <html lang="en" className="light" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
+        className={`${GeistSans.variable} ${GeistMono.variable} dark:bg-grid-small-white/[0.2] bg-grid-small-black/[0.2] h-full w-full bg-white  antialiased dark:bg-black`}
       >
         <Providers>{children}</Providers>
         <Toaster />

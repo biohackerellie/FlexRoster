@@ -54,11 +54,11 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatPartner, chatId }) => {
             }
           }}
           rows={1}
-          className="sm:leading-0 block w-full resize-none border-0 bg-transparent text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:py-1.5 sm:text-sm"
+          className="sm:leading-0 block w-full resize-none border-0 bg-transparent text-primary placeholder:text-gray-400 focus:ring-0 sm:py-1.5 sm:text-sm"
         />
         <div
           onClick={() => textareaRef.current?.focus()}
-          className="py-2"
+          className="hidden py-2"
           aria-hidden="true"
         >
           <div className="py-px">
