@@ -19,7 +19,7 @@ export const env = createEnv({
     CLIENT_HOST: z.string().min(1),
     SERVER_HOST: z.string().min(1),
     SERVER_PORT: z.string(),
-		REDIS_HOST1: z.string(),
+    REDIS_HOST1: z.string(),
     REDIS_HOST2: z.string(),
     REDIS_HOST3: z.string(),
     REDIS_PORT: z.string(),
