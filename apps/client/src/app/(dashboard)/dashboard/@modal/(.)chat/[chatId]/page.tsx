@@ -1,17 +1,10 @@
 import { notFound } from "next/navigation";
 
 import { auth } from "@local/auth";
-import { client, fetch } from "@local/eden";
+import { client } from "@local/eden";
 
 import { ChatInput, Messages } from "@/components/chat";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import Modal from "@/components/ui/modal";
 
 interface PageProps {
   params: {
@@ -51,31 +44,19 @@ export default async function ChatPage({ params }: PageProps) {
   const { chatPartner, userId } = chat;
 
   return (
-    <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between">
-      <div className="flex justify-between border-b-2 border-gray-200 py-3 sm:items-center">
-        <div className="relative flex items-center space-x-4">
-          <div className="flex flex-col leading-tight">
-            <div className="flex items-center text-lg text-muted-foreground">
-              <span className="mr-3 font-semibold ">
-                <PageBreadCrump />
-              </span>
-            </div>
-            <div className="flex items-center text-xl">
-              <span className="mr-3 font-semibold text-gray-700">
-                {chatPartner.name}
-              </span>
-            </div>
-          </div>
-        </div>
+    <Modal>
+      <div className="max-w-screen relative max-h-[calc(100vh-6rem)] w-full min-w-0 justify-between">
+        <span className="mr-3 font-semibold ">{chatPartner.name}</span>
+
+        <Messages
+          chatId={chatId}
+          initialMessages={initialMessages}
+          sessionId={userId}
+          chatPartner={chatPartner}
+        />
+        <ChatInput userId={userId} chatId={chatId} chatPartner={chatPartner} />
       </div>
-      <Messages
-        chatId={chatId}
-        initialMessages={initialMessages}
-        sessionId={userId}
-        chatPartner={chatPartner}
-      />
-      <ChatInput userId={userId} chatId={chatId} chatPartner={chatPartner} />
-    </div>
+    </Modal>
   );
 }
 
@@ -154,21 +135,3 @@ async function allData(chatId: string) {
   ]);
   return { chat, initialMessages };
 }
-
-const PageBreadCrump = () => {
-  return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbPage>Chat</BreadcrumbPage>
-      </BreadcrumbList>
-    </Breadcrumb>
-  );
-};

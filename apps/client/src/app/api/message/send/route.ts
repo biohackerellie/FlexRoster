@@ -1,3 +1,5 @@
+import { nanoid } from "nanoid";
+
 import type { Logs } from "@local/validators";
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
@@ -23,11 +25,11 @@ export async function POST(req: Request) {
       return new Response("Unauthorized", { status: 401 });
     }
     const friendId = session.user.id === userId1 ? userId2 : userId1;
-    const idNumber = Math.random().toString(16).slice(2);
     const messageData: Message = {
       senderId: session.user.id,
       text,
       timestamp: timestamp,
+      id: nanoid(),
     };
     const message = messageValidator.parse(messageData);
     const log: Logs = {
@@ -49,7 +51,7 @@ export async function POST(req: Request) {
         senderName: session.user.name,
       },
     );
-    console.log("sending message", message);
+    
     await client.api.inbox({ chatId: chatId }).post({ message });
     await client.api.logs.new.post({ log });
     return new Response("success", { status: 200 });

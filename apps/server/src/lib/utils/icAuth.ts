@@ -40,6 +40,6 @@ async function fetchNewToken(): Promise<TokenResponse> {
       body: body.toString(),
     },
   );
-  console.log("data: ", data);
+
   return data;
 }

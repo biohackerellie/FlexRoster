@@ -7,8 +7,6 @@ type SyncTeachers = {
 }[];
 
 export async function syncTeachers(body: SyncTeachers) {
-  console.log("body", body);
-
   try {
     const teachers = body.map((teacher) => {
       return {
@@ -33,10 +31,8 @@ export async function syncTeachers(body: SyncTeachers) {
         count++;
       }
     });
-    console.log(`Completed ${count} teachers added`);
     return new Response("OK", { status: 200 });
   } catch (error) {
-    console.log("error", error);
     throw new Error();
   }
 }

@@ -60,7 +60,7 @@ export async function getStudentRoster(userId: string) {
     }
     return message;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     throw new NotFoundError("No roster found with that userId");
   }
 }
@@ -71,9 +71,7 @@ export async function setStudentRoster(
   teacherName: string,
 ) {
   try {
-    console.log("step one");
     const previousRequest = await getRequestKV(email);
-    console.log("previousRequest", previousRequest);
     if (previousRequest) {
       console.error("You have already requested a transfer today");
       return new Response("You have already requested a transfer today", {

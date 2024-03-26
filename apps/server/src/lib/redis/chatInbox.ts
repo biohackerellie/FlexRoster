@@ -1,49 +1,97 @@
 import { NotFoundError } from "elysia";
 
-import { messageValidator } from "@local/validators";
+import {
+  Message,
+  messageArrayValidator,
+  messageValidator,
+} from "@local/validators";
+import { messageAlerts } from "@local/validators/types";
 
 import { createClient, newLog } from ".";
+import { userQuery } from "../sql";
 
+/**
+ * Messaging using Redis Streams
+ */
+
+// get messages from chat by chatId
 export async function getInbox(chatId: string) {
   try {
     const client = createClient();
 
-    const messages = await client.xrange(`chat:${chatId}:messages`, "0", "+");
+    const results: string[] = await client.zrange(`chat:${chatId}`, 0, -1);
     await client.quit();
-    const transformedMessages = messages.map(
-      ([id, fieldsArray]: [string, string[]]) => {
-        const messageObject: Record<string, any> = {};
-        for (let i = 0; i < fieldsArray.length; i += 2) {
-          messageObject[fieldsArray[i]!] = fieldsArray[i + 1];
-        }
-        return {
-          id,
-          ...messageObject,
-        };
-      },
-    );
-    console.log(transformedMessages);
-    return transformedMessages;
+    const dbMessages = results.map((message) => JSON.parse(message) as Message);
+
+    const reversedDbMessages = dbMessages.reverse();
+
+    const messages = messageArrayValidator.parse(reversedDbMessages);
+    return messages;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     throw new NotFoundError();
   }
 }
 
+// send message to chat by chatId
 export async function sendToInbox(chatId: string, message: any) {
-  const messageData = messageValidator.parse(message);
-  const client = createClient();
-  const messageId = await client.xadd(
-    `chat:${chatId}:messages`,
-    "*",
-    "senderId",
-    messageData.senderId,
-    "text",
-    messageData.text,
-    "timestamp",
-    messageData.timestamp,
-  );
-  await client.quit();
+  try {
+    const messageData = messageValidator.parse(message);
+    const client = createClient();
+    await client.zadd(
+      `chat:${chatId}`,
+      messageData.timestamp,
+      JSON.stringify(messageData),
+    );
+    await client.quit();
 
-  return messageId;
+    return "success";
+  } catch (e) {
+    console.error(e);
+    throw new NotFoundError();
+  }
+}
+
+/**
+ * get entire inbox for user by userId searching partial chatIds and returning the chatId + other user's name
+ * @returns {Array<messageAlerts>}
+ */
+export async function getAlerts(userId: string): Promise<messageAlerts[]> {
+  const client = createClient();
+  try {
+    const chatIds = await client.keys(`chat:${userId}--*`);
+    const moreChatIds = await client.keys(`chat:*--${userId}`);
+    const allChatIds = [...chatIds, ...moreChatIds];
+
+    const results = [];
+    for (const chatId of allChatIds) {
+      //remove the chatId prefix
+      const appendChatId = chatId.replace("chat:", "");
+
+      // split the chatId to get the chatPartnerId
+      const chatPartnerId = appendChatId
+        .split("--")
+        .find((id) => id !== userId);
+
+      if (!chatPartnerId) {
+        continue;
+      }
+
+      const chatPartner = await userQuery.execute({ id: chatPartnerId! });
+
+      const chatPartnerName = chatPartner[0]?.name!;
+      const chatParnterId = chatPartner[0]?.id!;
+      results.push({
+        chatPartnerId: chatParnterId,
+        chatPartnerName: chatPartnerName,
+      });
+    }
+    await client.quit();
+
+    return results;
+  } catch (e) {
+    console.error(e);
+    await client.quit();
+    throw new NotFoundError();
+  }
 }

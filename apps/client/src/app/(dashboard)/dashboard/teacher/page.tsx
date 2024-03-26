@@ -17,8 +17,8 @@ export default async function TeacherDashboardPage() {
   const roster = await cachedData(teacherId);
 
   return (
-    <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between">
-      <h1 className="z-20 bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text py-8 text-4xl font-bold text-transparent sm:text-4xl">
+    <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-evenly">
+      <h1 className="relative z-10 block bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text py-8 text-4xl font-bold text-transparent sm:text-4xl">
         Hello, {firstName}!
       </h1>
       <Suspense fallback={<TableSkeleton />}>

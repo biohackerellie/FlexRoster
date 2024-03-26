@@ -36,7 +36,7 @@ export function DefaultRosterComponent({ data, userId }: RosterListProps) {
     return (
       <div className="flex flex-col leading-tight">
         <div className="flex items-center text-xl">
-          <span className="mr-3 font-semibold text-gray-700">
+          <span className="mr-3 font-semibold text-neutral-200">
             Today's Roster
           </span>
         </div>
@@ -61,6 +61,7 @@ const columns: ColumnDef<TeacherTable>[] = [
       return (
         <Button
           variant="ghost"
+          className="text-lg font-medium"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Student Name
@@ -75,6 +76,7 @@ const columns: ColumnDef<TeacherTable>[] = [
       return (
         <Button
           variant="ghost"
+          className="text-lg font-medium"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Student Email
@@ -86,7 +88,9 @@ const columns: ColumnDef<TeacherTable>[] = [
 
   {
     accessorKey: "chatId",
-    header: "Chat",
+    header: ({ column }) => {
+      return <span className="text-lg font-medium">Chat</span>;
+    },
     cell: ({ row }) => {
       const chatId = row.getValue("chatId") ?? undefined;
 
@@ -103,7 +107,7 @@ const columns: ColumnDef<TeacherTable>[] = [
         );
       } else {
         return (
-          <Button variant="ghost" asChild>
+          <Button variant="link" asChild>
             <Link href={chatId}>
               <MessageSquare size={20} strokeWidth={1.5} />
             </Link>
@@ -114,7 +118,9 @@ const columns: ColumnDef<TeacherTable>[] = [
   },
   {
     accessorKey: "transferred",
-    header: "Transfers",
+    header: ({ column }) => {
+      return <span className="text-lg font-medium">Transfers</span>;
+    },
     cell: ({ row }) => {
       //eslint-disable-next-line
       const transferred = row.getValue("transferred") as boolean;
@@ -122,7 +128,6 @@ const columns: ColumnDef<TeacherTable>[] = [
       const arrived = row.getValue("arrived") as boolean;
       //eslint-disable-next-line
       const id = row.getValue("studentId") as number;
-      console.log("id", id);
       if (!transferred) {
         return <div className="font-thin text-gray-400">N/A</div>;
       } else if (transferred === true) {

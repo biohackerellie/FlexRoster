@@ -107,7 +107,7 @@ async function azureTeachers(): Promise<AzureUser[]> {
     );
     process.exit(0);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new Error();
   }
 }

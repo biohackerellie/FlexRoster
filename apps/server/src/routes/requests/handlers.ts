@@ -8,10 +8,8 @@ import { getHash, getKeys, setHash, setHashHM } from "~/lib/redis";
 import { getClassroomIdByTeacher } from "~/lib/sql";
 
 export async function newRequest(requestId: string, request: Request) {
-  console.log("requestId", requestId, "request", request);
   const requestData = requestValidator.parse(request);
   const res = await getHash(requestId);
-  console.log("res", res);
   if (Object.keys(res).length > 0) {
     const status = res.status!;
     if (status !== "denied") {
@@ -66,9 +64,7 @@ export async function approveRequest(
   newTeacherId: string,
 ) {
   try {
-    console.log("requestId", requestId);
     const keys = await getKeys(`request:*`);
-    console.log("keys", keys);
     for (const key of keys) {
       const rawRequest = await getHash(key);
       if (rawRequest.id === requestId) {

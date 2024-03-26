@@ -39,7 +39,6 @@ function useChatNotifications(userId: string) {
     pusherClient.bind("new-message", chatHandler);
 
     return () => {
-      console.log("unsubscribed from chats");
       pusherClient.unsubscribe(toPusherKey(`user:${userId}:chats`));
       pusherClient.unbind("new-message", chatHandler);
     };

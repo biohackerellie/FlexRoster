@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 
-import { getInbox, sendToInbox } from "~/lib/redis";
+import { getAlerts, getInbox, sendToInbox } from "~/lib/redis";
 
 export const inboxRoutes = new Elysia({ prefix: "/inbox" })
   .onError({ as: "scoped" }, ({ code, error, set }) => {
@@ -19,7 +19,11 @@ export const inboxRoutes = new Elysia({ prefix: "/inbox" })
         return error.message;
     }
   })
-
+  .get("/alerts/:userId", ({ params: { userId } }) => getAlerts(userId), {
+    params: t.Object({
+      userId: t.String(),
+    }),
+  })
   .get("/:chatId", ({ params: { chatId } }) => getInbox(chatId), {
     params: t.Object({
       chatId: t.String(),

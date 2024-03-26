@@ -23,9 +23,7 @@ export async function getStudent(id: string) {
       throw new NotFoundError("No student found with that ID");
     }
     const student = results[0];
-    console.log(student);
     if (student?.classrooms === null) {
-      console.log("oops");
       throw new NotFoundError("No Classroom found for student");
     }
     return student;

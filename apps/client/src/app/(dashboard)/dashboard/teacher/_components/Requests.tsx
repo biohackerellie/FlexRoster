@@ -60,10 +60,7 @@ const Requests: React.FC<RequestsProps> = ({
       pusherClient.unbind("new-outgoing", outgoingHandler);
     };
   }, [userId]);
-  console.log(
-    "requests",
-    requests ? requests[0]?.currentTeacherName : "no requests",
-  );
+
   return (
     <div className="inset-0  h-auto w-full  items-center justify-between">
       <Tabs defaultValue="requests">
@@ -203,7 +200,7 @@ const Approval = async (
     );
     router.refresh();
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 

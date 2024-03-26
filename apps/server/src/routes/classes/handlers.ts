@@ -3,12 +3,11 @@ import { NotFoundError } from "elysia";
 import { classroomsQuery, roomByIdQuery } from "~/lib/sql";
 
 export async function getClasses() {
-  console.log("hi");
   try {
     const res = await classroomsQuery.execute();
     return res;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     throw new NotFoundError("No classes found");
   }
 }

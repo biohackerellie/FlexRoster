@@ -5,7 +5,6 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { client } from "@local/eden";
 
 export async function Attendance(rosterId: number) {
-  console.log("rosterId", rosterId);
   const { data, error } = await client.api.rosters.attendance[""].post({
     rosterId: rosterId,
   });

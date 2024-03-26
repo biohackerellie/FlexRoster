@@ -21,7 +21,7 @@ export default function teacherLayout({
           },
           {
             name: "Messages",
-            link: "/dashboard/chat",
+            link: "/dashboard/teacher/messages",
           },
         ]}
       />
