@@ -1,4 +1,3 @@
-import { transcode } from "buffer";
 import { Suspense } from "react";
 import { unstable_cache as cache } from "next/cache";
 
@@ -15,30 +14,13 @@ export default async function TeacherDashboardPage() {
   const firstName = session?.user?.name!.split(" ")[0];
   const teacherId = session?.user?.id!;
 
-  const { roster, requests } = await getAllData(teacherId);
+  const roster = await cachedData(teacherId);
 
-  let incoming = null;
-  let outgoing = null;
-  if (requests) {
-    if (requests.incomingRequests && requests.incomingRequests.length > 0) {
-      incoming = requests.incomingRequests.filter((request) => {
-        return request.status === "pending";
-      });
-    }
-    if (requests.outgoingRequests && requests.outgoingRequests.length > 0) {
-      outgoing = requests.outgoingRequests;
-    }
-  }
   return (
     <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between">
-      <h1 className="text-3xl font-semibold text-gray-700">
+      <h1 className="z-20 bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text py-8 text-4xl font-bold text-transparent sm:text-4xl">
         Hello, {firstName}!
       </h1>
-      <Requests
-        incomingRequests={incoming}
-        outgoing={outgoing}
-        userId={teacherId}
-      />
       <Suspense fallback={<TableSkeleton />}>
         <DefaultRosterComponent data={roster} userId={teacherId} />
       </Suspense>
@@ -83,27 +65,6 @@ const cachedData = cache(
     tags: ["roster"],
   },
 );
-
-async function getRequests(teacherId: string) {
-  const { data, error } = await client.api.requests
-    .user({ userId: teacherId })
-    .get();
-  if (error) {
-    console.error(error);
-    throw new Error("Failed to fetch requests");
-  }
-
-  return data;
-}
-
-async function getAllData(teacherId: string) {
-  const [roster, requests] = await Promise.all([
-    cachedData(teacherId),
-    getRequests(teacherId),
-  ]);
-
-  return { roster, requests };
-}
 
 function TableSkeleton() {
   return (

@@ -1,3 +1,9 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "FLEX | Dashboard",
+};
+
 export default async function DashboardLayout({
   children,
 }: {

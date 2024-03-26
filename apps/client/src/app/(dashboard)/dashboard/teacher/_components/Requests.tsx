@@ -65,31 +65,33 @@ const Requests: React.FC<RequestsProps> = ({
     requests ? requests[0]?.currentTeacherName : "no requests",
   );
   return (
-    <>
+    <div className="inset-0  h-auto w-full  items-center justify-between">
       <Tabs defaultValue="requests">
         <TabsList>
           <TabsTrigger value="requests">Requests</TabsTrigger>
           <TabsTrigger value="outgoing">Outgoing</TabsTrigger>
         </TabsList>
         <TabsContent value="requests">
-          <ScrollArea>
-            {requests ? (
-              requests.map((request, index) => {
-                return (
-                  <div key={index}>
-                    <RequestComponent {...request} />
-                    <Separator />
-                  </div>
-                );
-              })
-            ) : (
-              <div className="flex h-48 items-center justify-center">
-                <h1 className="text-2xl font-semibold text-gray-500">
-                  No requests
-                </h1>
-              </div>
-            )}
-          </ScrollArea>
+          <div className="flex h-48 w-auto items-center justify-center ">
+            <ScrollArea>
+              {requests ? (
+                requests.map((request, index) => {
+                  return (
+                    <div key={index}>
+                      <RequestComponent {...request} />
+                      <Separator />
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="flex h-fit items-center justify-center">
+                  <h1 className="text-2xl font-semibold text-gray-500">
+                    No requests
+                  </h1>
+                </div>
+              )}
+            </ScrollArea>
+          </div>
         </TabsContent>
         <TabsContent value="outgoing">
           <ScrollArea>
@@ -112,7 +114,7 @@ const Requests: React.FC<RequestsProps> = ({
           </ScrollArea>
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
 };
 
@@ -126,22 +128,22 @@ function RequestComponent(request: Request) {
   };
 
   return (
-    <div className="flex flex-row items-center justify-between p-4">
+    <div className="flex w-full justify-between p-2">
       <div>
         <div className="text-sm font-semibold">
           {request.studentName} from {request.currentTeacherName}'s room
         </div>
-        <div className="text-xs text-gray-500">
+        <div className="flex justify-between">
           {formatTimestamp(request.timestamp)}
+          <div className="cursor-pointer ">
+            <ApprovalMenu
+              requestId={request.id}
+              studentId={request.studentId}
+              teacherId={request.currentTeacher}
+              newTeacherId={request.newTeacher}
+            />
+          </div>
         </div>
-      </div>
-      <div className="flex cursor-pointer flex-row items-center">
-        <ApprovalMenu
-          requestId={request.id}
-          studentId={request.studentId}
-          teacherId={request.currentTeacher}
-          newTeacherId={request.newTeacher}
-        />
       </div>
     </div>
   );

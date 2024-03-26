@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
 import { ButtonGlow } from "@/components/ui/buttonGlow";
 
 export default async function Home() {
