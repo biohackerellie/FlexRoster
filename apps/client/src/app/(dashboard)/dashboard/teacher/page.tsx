@@ -7,7 +7,6 @@ import { client } from "@local/eden";
 import { Skeleton } from "@/components/ui/skeleton";
 import { chatHrefConstructor } from "@/lib/utils";
 import { DefaultRosterComponent } from "./_components";
-import Requests from "./_components/Requests";
 
 export default async function TeacherDashboardPage() {
   const session = await auth();

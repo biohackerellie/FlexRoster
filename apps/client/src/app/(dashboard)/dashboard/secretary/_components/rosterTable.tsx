@@ -6,6 +6,12 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, CheckCircle, MessageSquare, XCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type RosterList = {
   count: number;
@@ -46,7 +52,7 @@ const columns: ColumnDef<RosterList>[] = [
       //eslint-disable-next-line
       const id = row.getValue("teacherId") as string;
       return (
-        <Button asChild>
+        <Button variant={"outline"} asChild>
           <Link href={`/dashboard/secretary/${id}`}>Students</Link>
         </Button>
       );
@@ -99,7 +105,51 @@ const studentColumns: ColumnDef<RosterTable>[] = [
   },
   {
     accessorKey: "transferred",
-    header: "Attendance",
+    header: "Transfered?",
+    cell: ({ row }) => {
+      //eslint-disable-next-line
+      const transferred = row.getValue("transferred") as boolean;
+      //eslint-disable-next-line
+      const arrived = row.getValue("arrived") as boolean;
+      if (transferred) {
+        if (arrived) {
+          return (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger className="cursor-default">
+                  <CheckCircle fill={"green"} size={20} strokeWidth={1.5} />
+                </TooltipTrigger>
+                <TooltipContent>
+                  Student transferred to this room and has arrived
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          );
+        } else {
+          return (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger className="cursor-default">
+                  <XCircle fill={"red"} size={20} strokeWidth={1.5} />
+                </TooltipTrigger>
+                <TooltipContent>
+                  Student transferred to this room but not marked as arrived
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          );
+        }
+      } else {
+        return <span className="font-light text-gray-400">N/A</span>;
+      }
+    },
+  },
+  {
+    accessorKey: "arrived",
+    header: ({ column }) => {
+      column.toggleVisibility(false);
+      return <></>;
+    },
   },
 ];
 

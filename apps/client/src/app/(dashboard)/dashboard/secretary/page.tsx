@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { unstable_cache as cache } from "next/cache";
+import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
@@ -14,14 +15,16 @@ export default async function SecretaryPage() {
   const data = await getCachedData();
 
   return (
-    <div className=" flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between">
-      <h1 className="pb-2 text-center text-4xl font-semibold">
+    <div className=" flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-evenly">
+      <h1 className="relative z-10 block bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text py-8 text-4xl font-bold text-transparent sm:text-4xl">
         Hello {firstName}!
       </h1>
-      <p className="pb-2 text-center text-2xl font-medium">Rosters</p>
+      <div className="flex flex-col leading-tight">
+        <div className="flex items-center text-xl">
+          <span className="mr-3 font-semibold text-neutral-200">Rosters</span>
+        </div>
 
-      <div className="max-h-2xl container flex max-w-4xl flex-col justify-center p-4">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loader2 className="h-2 w-2 animate-spin" />}>
           <DataTable columns={columns} data={data} />
         </Suspense>
       </div>

@@ -45,9 +45,8 @@ export default async function ChatPage({ params }: PageProps) {
 
   return (
     <Modal>
-      <div className="max-w-screen relative max-h-[calc(100vh-6rem)] w-full min-w-0 justify-between">
+      <div className="max-w-screen flex max-h-screen  w-full min-w-0 flex-col justify-between overflow-scroll p-2">
         <span className="mr-3 font-semibold ">{chatPartner.name}</span>
-
         <Messages
           chatId={chatId}
           initialMessages={initialMessages}
