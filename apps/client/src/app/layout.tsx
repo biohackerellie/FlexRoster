@@ -25,7 +25,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${GeistSans.variable} ${GeistMono.variable} dark:bg-grid-small-white/[0.2] bg-grid-small-black/[0.2] h-full w-full bg-white  antialiased dark:bg-black`}
+        className={`${GeistSans.variable} ${GeistMono.variable} h-full w-full bg-white antialiased bg-grid-small-black/[0.2]  dark:bg-black dark:bg-grid-small-white/[0.2]`}
       >
         <Providers>{children}</Providers>
         <Toaster />
