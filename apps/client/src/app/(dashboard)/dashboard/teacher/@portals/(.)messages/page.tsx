@@ -1,16 +1,14 @@
 import { Suspense } from "react";
 import { unstable_cache as cache } from "next/cache";
-import { AlertComponent } from "../../_components/AlertComponent";
 import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
 
-
 import Modal from "@/components/ui/modal";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-
+import { AlertComponent } from "../../_components/AlertComponent";
 
 export default async function MessagesPage() {
   const session = await auth();

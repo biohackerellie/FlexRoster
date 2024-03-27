@@ -1,13 +1,10 @@
 import { NotFoundError } from "elysia";
 
-import {
-  Message,
-  messageArrayValidator,
-  messageValidator,
-} from "@local/validators";
-import { messageAlerts } from "@local/validators/types";
+import type { Message } from "@local/validators";
+import type { messageAlerts } from "@local/validators/types";
+import { messageArrayValidator, messageValidator } from "@local/validators";
 
-import { createClient, newLog } from ".";
+import { createClient } from ".";
 import { userQuery } from "../sql";
 
 /**
@@ -77,12 +74,11 @@ export async function getAlerts(userId: string): Promise<messageAlerts[]> {
         continue;
       }
 
-      const chatPartner = await userQuery.execute({ id: chatPartnerId! });
+      const chatPartner = await userQuery.execute({ id: chatPartnerId });
 
       const chatPartnerName = chatPartner[0]?.name!;
-      const chatParnterId = chatPartner[0]?.id!;
       results.push({
-        chatPartnerId: chatParnterId,
+        chatPartnerId: chatPartnerId,
         chatPartnerName: chatPartnerName,
       });
     }

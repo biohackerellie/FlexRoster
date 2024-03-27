@@ -51,7 +51,7 @@ export async function POST(req: Request) {
         senderName: session.user.name,
       },
     );
-    
+
     await client.api.inbox({ chatId: chatId }).post({ message });
     await client.api.logs.new.post({ log });
     return new Response("success", { status: 200 });
