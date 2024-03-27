@@ -6,12 +6,12 @@ $.cwd(`src/scripts`);
 console.log("Working directory: ");
 await $`pwd`;
 
-// const redisInit = await $`bun ./nightly/redisInit.ts`;
-// if (redisInit.exitCode === 1) {
-//   console.error(redisInit.stderr);
-//   process.exit(1);
-// }
-// await $`echo "Redis flushed"`;
+const redisInit = await $`bun ./nightly/redisInit.ts`;
+if (redisInit.exitCode === 1) {
+  console.error(redisInit.stderr);
+  process.exit(1);
+}
+await $`echo "Redis flushed"`;
 
 const azure = await $`bun ./nightly/azure/index.ts`;
 if (azure.exitCode === 1) {

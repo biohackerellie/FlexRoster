@@ -1,19 +1,27 @@
-version: "3"
+version: "3.8"
 
 services:
-  # server:
-  #   container_name: bun-api
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/server/Dockerfile
-  #   restart: unless-stopped
-  #   ports:
-  #     - "3030:3030"
+  server:
+    image: docker.laurel.k12.mt.us/bun-api
+    ports:
+      - "3030:3030"
+    deploy:
+      replicas: 3 # You can adjust the number of replicas as needed
+      restart_policy:
+        condition: on-failure
+    networks:
+      - webnet
+
   client:
-    container_name: client
-    build:
-      context: .
-      dockerfile: ./apps/client/Dockerfile
-    restart: unless-stopped
+    image: docker.laurel.k12.mt.us/flexroster
     ports:
       - "3000:3000"
+    deploy:
+      replicas: 3 # Adjust based on your needs
+      restart_policy:
+        condition: on-failure
+    networks:
+      - webnet
+
+networks:
+  webnet:
