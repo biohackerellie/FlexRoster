@@ -16,4 +16,8 @@ COPY --chown=nextjs:nodejs ./apps/client/.next/static ./apps/client/.next/static
 COPY --chown=nextjs:nodejs ./apps/client/public ./apps/client/public
 
 EXPOSE 3000
-CMD node apps/client/server.js
+
+ENV PORT 3000
+
+
+CMD HOSTNAME="0.0.0.0" node ./apps/client/server.js
