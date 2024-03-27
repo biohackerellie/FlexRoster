@@ -1,1 +1,0 @@
-ALTER TABLE "classRosters" ADD COLUMN "attendance" text DEFAULT 'not marked' NOT NULL;

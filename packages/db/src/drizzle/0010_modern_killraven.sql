@@ -1,1 +1,0 @@
-ALTER TABLE "logs" ALTER COLUMN "id" SET DATA TYPE text;

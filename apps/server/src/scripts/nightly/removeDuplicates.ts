@@ -12,6 +12,10 @@ async function removeDuplicates() {
       (email, index) =>
         emails.indexOf(email) !== index && emails.lastIndexOf(email) === index,
     );
+    if (duplicateEmails.length === 0) {
+      console.log("No duplicates found");
+      process.exit(0);
+    }
     console.log(`Found ${duplicateEmails.length} duplicate emails`);
     let count = 0;
     await db.transaction(async (tx) => {

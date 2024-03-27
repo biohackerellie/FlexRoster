@@ -5,85 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1707772794986,
-      "tag": "0000_shocking_taskmaster",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1707841070626,
-      "tag": "0001_lush_chimera",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1707843231988,
-      "tag": "0002_nebulous_white_queen",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1707843732628,
-      "tag": "0004_public_the_initiative",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1708443856158,
-      "tag": "0005_fair_psylocke",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1708618116600,
-      "tag": "0006_abnormal_phil_sheldon",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "5",
-      "when": 1710172758515,
-      "tag": "0007_safe_viper",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "5",
-      "when": 1710175018406,
-      "tag": "0008_lethal_odin",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "5",
-      "when": 1710861856837,
-      "tag": "0009_soft_dexter_bennett",
-      "breakpoints": true
-    },
-    {
-      "idx": 10,
-      "version": "5",
-      "when": 1710865611172,
-      "tag": "0010_modern_killraven",
-      "breakpoints": true
-    },
-    {
-      "idx": 11,
-      "version": "5",
-      "when": 1710947569275,
-      "tag": "0011_gifted_lyja",
-      "breakpoints": true
-    },
-    {
-      "idx": 12,
-      "version": "5",
-      "when": 1711035439092,
-      "tag": "0012_mean_dust",
+      "when": 1711553285971,
+      "tag": "0000_quiet_rhino",
       "breakpoints": true
     }
   ]

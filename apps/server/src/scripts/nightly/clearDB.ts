@@ -3,6 +3,10 @@ import { db, eq, schema } from "@local/db";
 export async function clearDB() {
   console.info("Clearing database ...");
   const classroomsToDelete = await db.query.classrooms.findMany({});
+  if (classroomsToDelete.length === 0) {
+    console.info("No classrooms to delete");
+    process.exit(0);
+  }
   console.info(`Deleting ${classroomsToDelete.length} classrooms ...`);
   let count = 0;
   try {

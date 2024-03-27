@@ -1,12 +1,10 @@
 import { Elysia, t } from "elysia";
 
 import { env } from "~/env";
-import { syncTeachers } from "./handlers";
+import { pong, syncTeachers } from "./handlers";
 
-export const scriptRoutes = new Elysia({ prefix: "/script" }).post(
-  "/teachersync",
-  ({ body }) => syncTeachers(body),
-  {
+export const scriptRoutes = new Elysia({ prefix: "/script" })
+  .post("/teachersync", ({ body }) => syncTeachers(body), {
     body: t.Array(
       t.Object({
         email: t.String(),
@@ -14,5 +12,5 @@ export const scriptRoutes = new Elysia({ prefix: "/script" }).post(
         id: t.String(),
       }),
     ),
-  },
-);
+  })
+  .get("/ping", () => pong());
