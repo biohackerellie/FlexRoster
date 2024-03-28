@@ -8,6 +8,7 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs
 
+COPY .env .env
 COPY ./apps/client/next.config.js .
 COPY ./apps/client/package.json .
 
