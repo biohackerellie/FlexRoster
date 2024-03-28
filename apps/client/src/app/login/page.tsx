@@ -1,6 +1,9 @@
+import { cookies } from "next/headers";
+
 import { signIn } from "@local/auth";
 
 import { Button } from "@/components/ui/button";
+import { env } from "@/env";
 
 export default function SignIn() {
   return (
@@ -9,10 +12,13 @@ export default function SignIn() {
         <Button
           formAction={async () => {
             "use server";
-            await signIn("azure-ad", {
-              callbackUrl:
+            if (env.NODE_ENV === "production") {
+              cookies().set(
+                "authjs.callback-url",
                 "https://flex.laurel.k12.mt.us/api/auth/callback/azure-ad",
-            });
+              );
+            }
+            await signIn("azure-ad");
           }}
         >
           Sign in
