@@ -20,9 +20,7 @@ export default {
       allowDangerousEmailAccountLinking: true,
     }),
   ],
-  pages: {
-    signIn: "/login",
-  },
+
   trustHost: true,
   debug: true,
   basePath: "/api/auth",
