@@ -22,6 +22,9 @@ services:
         condition: on-failure
     networks:
       - webnet
+    env_file:
+      - path: .env
+        required: true
 
 networks:
   webnet:
