@@ -23,7 +23,7 @@ export default {
   pages: {
     signIn: "/login",
   },
-
+  trustHost: true,
   callbacks: {
     async redirect({ url, baseUrl }) {
       baseUrl ?? (baseUrl = "/");
