@@ -1,23 +1,30 @@
-import { cookies } from "next/headers";
+"use client";
+
+import { useSearchParams } from "next/navigation";
 
 import { signIn } from "@local/auth";
 
 import { Button } from "@/components/ui/button";
-import { env } from "@/env";
 
 export default function SignIn() {
+  const searchParams = useSearchParams();
+
+  const callbackUrl = Array.isArray(
+    searchParams.get("callbackUrl") ? searchParams.get("callbackUrl") : "/",
+  );
+
   return (
-    <div className="container flex flex-col">
-      <form>
-        <Button
-          formAction={async () => {
-            "use server";
-            await signIn("azure-ad");
-          }}
-        >
-          Sign in
-        </Button>
-      </form>
+    <div className="container flex h-full flex-col items-center justify-center  ">
+      <Button
+        onClick={() => {
+          signIn("azure-ad", {
+            redirect: true,
+            callbackUrl,
+          });
+        }}
+      >
+        Sign in
+      </Button>
     </div>
   );
 }
