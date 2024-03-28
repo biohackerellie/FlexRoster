@@ -8,7 +8,6 @@ export default async function middleware(req: NextRequest) {
   let token = await getToken({
     req,
     secret: env.NEXTAUTH_SECRET,
-    secureCookie: process.env.NODE_ENV === "production",
   });
 
   console.log("hello!", token);

@@ -31,17 +31,6 @@ export default {
       return baseUrl;
     },
 
-    jwt({ token, user }) {
-      if (user) {
-        token.id = user.id as string;
-        token.email = user.email;
-        token.name = user.name;
-        //@ts-expect-error
-        token.roles = user.role;
-      }
-      return token;
-    },
-
     session({ session, token }) {
       if (token) {
         session.user.id = token.id as string;
