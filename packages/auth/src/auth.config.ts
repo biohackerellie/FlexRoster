@@ -25,7 +25,7 @@ export default {
   },
   trustHost: true,
   debug: true,
-  useSecureCookies: true,
+
   callbacks: {
     async redirect({ url, baseUrl }) {
       baseUrl ?? (baseUrl = "/");
