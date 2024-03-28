@@ -10,13 +10,11 @@ export default async function middleware(req: NextRequest) {
     secret: env.NEXTAUTH_SECRET,
   });
 
-  if (token && token.exp! < Date.now() / 1000) {
-    token = null;
-  }
+  console.log("hello!", token);
   const path = req.nextUrl.pathname;
   if (!token) {
     if (path.startsWith("/dashboard")) {
-      return NextResponse.redirect(new URL("/login", req.url));
+      return NextResponse.redirect(new URL("/api/auth/signin", req.url));
     }
 
     return NextResponse.next();
