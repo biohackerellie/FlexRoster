@@ -25,12 +25,14 @@ export default {
   },
   trustHost: true,
   debug: true,
+  basePath: "/api/auth",
 
   callbacks: {
     async redirect({ url, baseUrl }) {
       baseUrl ?? (baseUrl = "/");
       return baseUrl;
     },
+
     jwt({ token, user }) {
       if (user) {
         token.id = user.id as string;
