@@ -9,7 +9,10 @@ export default function SignIn() {
         <Button
           formAction={async () => {
             "use server";
-            await signIn("azure-ad");
+            await signIn("azure-ad", {
+              callbackUrl:
+                "https://flex.laurel.k12.mt.us/api/auth/callback/azure-ad",
+            });
           }}
         >
           Sign in
