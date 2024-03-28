@@ -23,8 +23,7 @@ services:
     networks:
       - webnet
     env_file:
-      - path: .env
-        required: true
+      - .env
 
 networks:
   webnet:
