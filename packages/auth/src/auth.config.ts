@@ -42,12 +42,11 @@ export default {
     },
 
     session({ session, token }) {
-      if (token) {
-        session.user.id = token.id as string;
-        session.user.email = token.email as string;
-        session.user.name = token.name as string;
-        session.user.roles = token.roles as typeof session.user.roles;
-      }
+      session.user.id = token.id as string;
+      session.user.email = token.email as string;
+      session.user.name = token.name as string;
+      session.user.roles = token.roles as typeof session.user.roles;
+
       return session;
     },
   },
