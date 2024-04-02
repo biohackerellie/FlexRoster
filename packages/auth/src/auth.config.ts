@@ -30,6 +30,16 @@ export default {
       baseUrl ?? (baseUrl = "/");
       return baseUrl;
     },
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id as string;
+        token.email = user.email;
+        token.name = user.name;
+        //@ts-expect-error
+        token.roles = user.role;
+      }
+      return token;
+    },
 
     session({ session, token }) {
       if (token) {
