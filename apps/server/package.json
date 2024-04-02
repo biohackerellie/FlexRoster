@@ -17,7 +17,7 @@
     "with-env": "bun --env-file=../../.env --"
   },
   "dependencies": {
-    "@auth/core": "^0.28.0",
+    "@auth/core": "^0.28.2",
     "@auth/drizzle-adapter": "^0.8.2",
     "@azure/identity": "^4.0.1",
     "@elysiajs/cors": "^1.0.2",
