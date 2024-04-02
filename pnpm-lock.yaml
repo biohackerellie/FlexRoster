@@ -367,8 +367,8 @@ importers:
   packages/eden:
     dependencies:
       '@elysiajs/eden':
-        specifier: ^1.0.5
-        version: 1.0.5(elysia@1.0.10)
+        specifier: ^1.0.8
+        version: 1.0.8(elysia@1.0.10)
       '@t3-oss/env-nextjs':
         specifier: ^0.9.2
         version: 0.9.2(typescript@5.4.2)(zod@3.22.4)
@@ -925,8 +925,8 @@ packages:
       elysia: 1.0.10(@sinclair/typebox@0.32.20)(typescript@5.4.3)
     dev: false
 
-  /@elysiajs/eden@1.0.5(elysia@1.0.10):
-    resolution: {integrity: sha512-3NFLywotrdKUaYu98DmhtHWiJdXHf4pIMjFU8LNmCecEGOqWH9plVVULp4nvZVJ+ZQ/fnt74y/xLnZEQZkPeBQ==}
+  /@elysiajs/eden@1.0.8(elysia@1.0.10):
+    resolution: {integrity: sha512-kFnEscEuUONBYL9zkdwwswIGYpigELHF4OZM0KicX3HjmSilrS21pEwptSkiXwjcYhgft5ujp+WPyJ8adACAIA==}
     peerDependencies:
       elysia: '>= 1.0.2'
     dependencies:
