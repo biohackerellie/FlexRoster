@@ -4,11 +4,11 @@ import { decode, getToken } from "next-auth/jwt";
 import { env } from "./env";
 
 export default async function middleware(req: NextRequest) {
-  // @ts-expect-error - token is not defined
   let token = await getToken({
     req,
     secret: env.NEXTAUTH_SECRET,
     secureCookie: true,
+    salt: "__Secure-authjs.session-token",
   });
 
   console.log("hello!", token);
