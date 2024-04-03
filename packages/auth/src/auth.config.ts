@@ -23,7 +23,6 @@ export default {
 
   trustHost: true,
   debug: true,
-  basePath: "/api/auth",
 
   callbacks: {
     async redirect({ url, baseUrl }) {
