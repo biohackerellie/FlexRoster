@@ -38,7 +38,7 @@
     "framer-motion": "^11.0.20",
     "geist": "^1.2.2",
     "ioredis": "^5.3.2",
-    "lucide-react": "^0.363.0",
+    "lucide-react": "^0.364.0",
     "mini-svg-data-uri": "^1.4.4",
     "nanoid": "^5.0.6",
     "next": "^14.1.4",
