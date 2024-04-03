@@ -40,19 +40,19 @@ export default {
   ],
 
   trustHost: true,
-  debug: true,
 
   callbacks: {
     async redirect({ url, baseUrl }) {
       baseUrl ?? (baseUrl = "/");
       return baseUrl;
     },
-    jwt({ token, user }) {
+    jwt({ token, user, profile }) {
       if (user) {
         token.id = user.id as string;
         token.email = user.email;
         token.name = user.name;
-        token.roles = user.roles;
+        // @ts-expect-error - roles is not defined in the user object because authjs is garbage
+        token.roles = profile?.roles[0] || "student";
       }
       return token;
     },

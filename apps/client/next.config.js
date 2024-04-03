@@ -30,7 +30,7 @@ const nextConfig = {
     return config;
   },
   experimental: {
-    serverComponentsExternalPackages: [],
+    instrumentationHook: true,
   },
 };
 

@@ -7,9 +7,10 @@ import authConfig from "@local/auth/auth.config";
 const { auth: middleware } = NextAuth(authConfig);
 
 export default middleware((req) => {
+  const response = NextResponse.next();
+
   const token = req.auth;
 
-  console.log("token", token);
   const path = req.nextUrl.pathname;
   if (!token) {
     if (path.startsWith("/dashboard")) {
@@ -66,7 +67,7 @@ export default middleware((req) => {
       break;
   }
 
-  return NextResponse.next();
+  return response;
 });
 
 export const config = {
