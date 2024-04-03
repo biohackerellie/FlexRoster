@@ -40,7 +40,9 @@ export default {
   ],
 
   trustHost: true,
-
+  pages: {
+    signIn: "/login",
+  },
   callbacks: {
     async redirect({ url, baseUrl }) {
       baseUrl ?? (baseUrl = "/");

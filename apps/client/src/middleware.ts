@@ -14,7 +14,7 @@ export default middleware((req) => {
   const path = req.nextUrl.pathname;
   if (!token) {
     if (path.startsWith("/dashboard")) {
-      return NextResponse.redirect(new URL("/api/auth/signin", req.url));
+      return NextResponse.redirect(new URL("/login", req.url));
     }
 
     return NextResponse.next();
@@ -47,7 +47,7 @@ export default middleware((req) => {
       break;
     case "admin":
       if (path === "/dashboard") {
-        return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
+        return NextResponse.redirect(new URL("/dashboard/secretary", req.url));
       }
       break;
     case "secretary":

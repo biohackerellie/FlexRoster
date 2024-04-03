@@ -3,7 +3,7 @@ import { Adapter } from "@auth/core/adapters";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
 import { decode, getToken } from "next-auth/jwt";
-import { useSession } from "next-auth/react";
+
 
 import { db, InferSelectModel, pgTable, PgTableFn, schema } from "@local/db";
 
