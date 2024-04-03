@@ -1,15 +1,16 @@
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { env } from "./env";
-import { authConfig } from "@local/auth";
+import { NextResponse } from "next/server";
 import NextAuth from "next-auth";
 
+import { authConfig } from "@local/auth";
 
-const {auth} = NextAuth(authConfig);
+import { env } from "./env";
+
+//@ts-expect-error
+const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
-
-	const token = req.auth
+  const token = req.auth;
 
   console.log("hello!", token);
   const path = req.nextUrl.pathname;
@@ -69,7 +70,7 @@ export default auth((req) => {
   }
 
   return NextResponse.next();
-})
+});
 
 export const config = {
   matcher: [

@@ -1,7 +1,32 @@
-import type { NextAuthConfig } from "next-auth";
+import type { DefaultSession, NextAuthConfig } from "next-auth";
 import azureAd from "next-auth/providers/azure-ad";
 
+import { InferSelectModel, schema } from "@local/db";
+
 import { env } from "../env";
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      roles: "student" | "teacher" | "admin" | "secretary";
+    } & DefaultSession["user"];
+  }
+  interface JWT {
+    id: string;
+    roles: "student" | "teacher" | "admin" | "secretary";
+  }
+  interface User {
+    id?: string | undefined;
+    roles: "student" | "teacher" | "admin" | "secretary";
+  }
+}
+
+declare module "@auth/core/adapters" {
+  export interface AdapterUser extends InferSelectModel<typeof schema.users> {
+    roles: "student" | "teacher" | "admin" | "secretary";
+  }
+}
 
 export default {
   providers: [
@@ -14,7 +39,7 @@ export default {
           id: profile.oid,
           name: profile.name,
           email: profile.email,
-          role: profile.roles[0] || "student",
+          roles: profile.roles[0] || "student",
         };
       },
       allowDangerousEmailAccountLinking: true,
@@ -34,8 +59,7 @@ export default {
         token.id = user.id as string;
         token.email = user.email;
         token.name = user.name;
-        //@ts-expect-error
-        token.roles = user.role;
+        token.roles = user.roles;
       }
       return token;
     },

@@ -28,7 +28,7 @@ declare module "next-auth" {
 
 declare module "@auth/core/adapters" {
   export interface AdapterUser extends InferSelectModel<typeof users> {
-    role: "student" | "teacher" | "admin" | "secretary";
+    roles: "student" | "teacher" | "admin" | "secretary";
   }
 }
 
@@ -65,7 +65,9 @@ export const {
 } = NextAuth({
   secret: env.NEXTAUTH_SECRET,
   adapter: adapter,
-
+  session: {
+    strategy: "jwt",
+  },
   ...authConfig,
 });
 
