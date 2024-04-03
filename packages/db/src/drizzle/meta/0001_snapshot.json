@@ -60,12 +60,8 @@
           "name": "classRosters_classroomId_classrooms_id_fk",
           "tableFrom": "classRosters",
           "tableTo": "classrooms",
-          "columnsFrom": [
-            "classroomId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["classroomId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -75,9 +71,7 @@
         "classRosters_studentEmail_unique": {
           "name": "classRosters_studentEmail_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "studentEmail"
-          ]
+          "columns": ["studentEmail"]
         }
       }
     },
@@ -158,12 +152,8 @@
           "name": "logs_user_user_id_fk",
           "tableFrom": "logs",
           "tableTo": "user",
-          "columnsFrom": [
-            "user"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -260,12 +250,8 @@
           "name": "session_user_id_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -363,9 +349,7 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       }
     },
@@ -397,10 +381,7 @@
       "compositePrimaryKeys": {
         "verificationToken_identifier_token_pk": {
           "name": "verificationToken_identifier_token_pk",
-          "columns": [
-            "identifier",
-            "token"
-          ]
+          "columns": ["identifier", "token"]
         }
       },
       "uniqueConstraints": {}

@@ -1,9 +1,12 @@
 #!/bin/bash
 
+set -e
+
 cd ../
 pnpm turbo build 
 
 docker compose -f docker-build.yml build
+
 docker compose -f docker-build.yml push
 
 

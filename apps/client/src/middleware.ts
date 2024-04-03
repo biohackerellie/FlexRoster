@@ -1,18 +1,15 @@
-import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import NextAuth from "next-auth";
 
-import { authConfig } from "@local/auth";
-
-import { env } from "./env";
+import authConfig from "@local/auth/auth.config";
 
 //@ts-expect-error
-const { auth } = NextAuth(authConfig);
+const { auth: middleware } = NextAuth(authConfig);
 
-export default auth((req) => {
+export default middleware((req) => {
   const token = req.auth;
 
-  console.log("hello!", token);
+  console.log("token", token);
   const path = req.nextUrl.pathname;
   if (!token) {
     if (path.startsWith("/dashboard")) {
@@ -21,8 +18,8 @@ export default auth((req) => {
 
     return NextResponse.next();
   }
-
-  const role = token.user.roles || "student";
+  //@ts-expect-error
+  const role = token.user?.roles || "student";
 
   switch (role) {
     case "student":

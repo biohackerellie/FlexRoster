@@ -1,8 +1,6 @@
 import type { DefaultSession, NextAuthConfig } from "next-auth";
 import azureAd from "next-auth/providers/azure-ad";
 
-import { InferSelectModel, schema } from "@local/db";
-
 import { env } from "../env";
 
 declare module "next-auth" {
@@ -22,12 +20,7 @@ declare module "next-auth" {
   }
 }
 
-declare module "@auth/core/adapters" {
-  export interface AdapterUser extends InferSelectModel<typeof schema.users> {
-    roles: "student" | "teacher" | "admin" | "secretary";
-  }
-}
-
+const mode = process.env.NODE_ENV!;
 export default {
   providers: [
     azureAd({
