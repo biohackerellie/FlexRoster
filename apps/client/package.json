@@ -59,7 +59,7 @@
     "@local/eslint-config": "workspace:*",
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.3",
     "@types/react": "^18.2.74",
     "@types/react-dom": "^18.2.23",
     "autoprefixer": "^10.4.19",
