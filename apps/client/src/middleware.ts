@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
-import { decode, getToken } from "next-auth/jwt";
-
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import {auth} from "@local/auth"
 import { env } from "./env";
 
-export default async function middleware(req: NextRequest) {
-  let token = await getToken({
-    req,
-    secret: env.NEXTAUTH_SECRET,
-    secureCookie: true,
-    salt: "__Secure-authjs.session-token",
-  });
+
+
+
+
+export default auth((req) => {
+
+	const token = req.auth
 
   console.log("hello!", token);
   const path = req.nextUrl.pathname;
@@ -21,7 +21,7 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const role = token.roles || "student";
+  const role = token.user.roles || "student";
 
   switch (role) {
     case "student":
@@ -69,7 +69,7 @@ export default async function middleware(req: NextRequest) {
   }
 
   return NextResponse.next();
-}
+})
 
 export const config = {
   matcher: [

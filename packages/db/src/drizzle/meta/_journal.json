@@ -43,6 +43,13 @@
       "when": 1712082080097,
       "tag": "0005_tranquil_obadiah_stane",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1712150481050,
+      "tag": "0006_faithful_rafael_vega",
+      "breakpoints": true
     }
   ]
 }
