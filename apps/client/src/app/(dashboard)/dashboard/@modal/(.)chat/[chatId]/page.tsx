@@ -40,7 +40,9 @@ export async function generateMetadata({
 export default async function ChatPage({ params }: PageProps) {
   const { chatId } = params;
   const { chat, initialMessages } = await allData(chatId);
-
+  if (!chat) {
+    return notFound();
+  }
   const { chatPartner, userId } = chat;
 
   return (
@@ -49,7 +51,7 @@ export default async function ChatPage({ params }: PageProps) {
         <span className="mr-3 font-semibold ">{chatPartner.name}</span>
         <Messages
           chatId={chatId}
-          initialMessages={initialMessages}
+          initialMessages={initialMessages!}
           sessionId={userId}
           chatPartner={chatPartner}
         />
@@ -65,19 +67,13 @@ async function getChatMessages(chatId: string) {
 
     if (error) {
       console.error(error.value);
-      switch (error.status) {
-        case 400:
-          throw error.value;
-        default:
-          error.value;
-      }
     }
     if (!data) {
-      throw new Error("No data found");
+      return [];
     }
     return data;
   } catch (e) {
-    throw new Error();
+    console.error(e);
   }
 }
 
@@ -123,7 +119,7 @@ async function usersCheck(chatId: string) {
 
     return { chatPartner, userId };
   } catch (e) {
-    throw new Error();
+    console.error(e);
   }
 }
 

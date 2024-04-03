@@ -3,7 +3,7 @@ import NextAuth from "next-auth";
 
 import authConfig from "@local/auth/auth.config";
 
-//@ts-expect-error
+//@ts-expect-error - roles is not defined in the user object because authjs is garbage
 const { auth: middleware } = NextAuth(authConfig);
 
 export default middleware((req) => {
@@ -18,7 +18,7 @@ export default middleware((req) => {
 
     return NextResponse.next();
   }
-  //@ts-expect-error
+  //@ts-expect-error - roles is not defined in the user object because authjs is garbage
   const role = token.user?.roles || "student";
 
   switch (role) {

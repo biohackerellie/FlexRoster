@@ -36,10 +36,9 @@ async function getData() {
   const { data, error } = await client.api.classes.secretary.get();
   if (error) {
     console.error(error);
-    throw new Error("Failed to fetch classes");
   }
   if (!data) {
-    throw new Error("No data found");
+    return [];
   }
   return data;
 }

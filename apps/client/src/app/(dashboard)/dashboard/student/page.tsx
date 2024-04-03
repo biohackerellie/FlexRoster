@@ -47,9 +47,9 @@ async function getClass(userId: string) {
     .get();
 
   if (error) {
-    throw new Error("Error Fetching Data 😘", { cause: error.value });
+    console.error(error);
   }
-  if (!data) return "No class found";
+  if (!data) return [];
   return data;
 }
 

@@ -10,7 +10,7 @@ import { pusherClient } from "@/lib/pusher";
 import { cn, toPusherKey } from "@/lib/utils";
 
 interface MessagesProps {
-  initialMessages: Message[];
+  initialMessages: Message[] | undefined;
   sessionId: string;
   chatId: string;
   chatPartner: Partial<SelectUser>;
@@ -22,7 +22,7 @@ const Messages: React.FC<MessagesProps> = ({
   chatId,
   chatPartner,
 }) => {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [messages, setMessages] = useState<Message[]>(initialMessages || []);
 
   useEffect(() => {
     pusherClient.subscribe(toPusherKey(`chat:${chatId}`));

@@ -34,10 +34,9 @@ async function getDefaultRoster(teacherId: string) {
 
   if (error) {
     console.error(error);
-    throw new Error("Failed to fetch roster");
   }
   if (!data) {
-    throw new Error("No data found");
+    return [];
   }
 
   const mapped = data.map((student) => {

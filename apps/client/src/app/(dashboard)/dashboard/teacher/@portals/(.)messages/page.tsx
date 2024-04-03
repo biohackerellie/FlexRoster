@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { unstable_cache as cache } from "next/cache";
+import { notFound } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
@@ -14,7 +15,7 @@ export default async function MessagesPage() {
   const session = await auth();
   const userId = session?.user?.id!;
   if (!userId) {
-    throw new Error("No user found");
+    notFound();
   }
   const messages = await cachedData(userId);
   return (
