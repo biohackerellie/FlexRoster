@@ -22,7 +22,10 @@ export function LoginForm() {
         <form
           action={async () => {
             "use server";
-            await signIn("azure-ad");
+            await signIn("azure-ad", {
+              redirect: true,
+              redirectTo: "/dashboard",
+            });
           }}
         >
           <Button type="submit" variant="outline" className="w-full">

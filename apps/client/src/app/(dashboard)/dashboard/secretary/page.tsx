@@ -15,7 +15,7 @@ export default async function SecretaryPage() {
   const data = await getCachedData();
 
   return (
-    <div className=" flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-evenly">
+    <div className=" flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-center">
       <h1 className="relative z-10 block bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text py-8 text-4xl font-bold text-transparent sm:text-4xl">
         Hello {firstName}!
       </h1>

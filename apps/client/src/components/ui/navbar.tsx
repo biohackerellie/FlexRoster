@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import Link from "next/link";
 import {
   AnimatePresence,
@@ -9,10 +9,12 @@ import {
   useScroll,
 } from "framer-motion";
 
+import { useChatNotifications, useRequestNotifications } from "@/hooks";
 import { cn } from "@/lib/utils";
 
 export const Navbar = ({
   navItems,
+  userId,
   className,
 }: {
   navItems: {
@@ -21,15 +23,18 @@ export const Navbar = ({
     icon?: JSX.Element;
   }[];
   className?: string;
+  userId: string;
 }) => {
   const { scrollYProgress } = useScroll();
   const [visible, setVisible] = useState(true);
+  useChatNotifications(userId);
 
+  useRequestNotifications(userId);
   useMotionValueEvent(scrollYProgress, "change", (current) => {
     if (typeof current === "number") {
       let direction = current! - scrollYProgress.getPrevious()!;
 
-      if (scrollYProgress.get() > 0.5) {
+      if (scrollYProgress.get() > 2.5) {
         setVisible(false);
       } else {
         if (direction < 0) {

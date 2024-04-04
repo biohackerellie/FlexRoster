@@ -36,9 +36,10 @@ echo "running weekly cleanup script"
 # Check if Docker is running and clean up if it is
 if [ $(docker info >/dev/null 2>&1; echo $?) -eq 0 ]; then
     echo "cleaning up docker"
+		docker volume rm $(docker volume ls -qf dangling=true)
     docker volume ls -qf dangling=true | xargs -r docker volume rm
     docker ps -qa --no-trunc --filter "status=exited" | xargs -r docker rm
-    docker image prune -f
+    docker images | grep -w "<none>" | awk '{print $3}' | xargs -r docker rmi
     docker system prune -f
 else
     echo "Docker is not running"

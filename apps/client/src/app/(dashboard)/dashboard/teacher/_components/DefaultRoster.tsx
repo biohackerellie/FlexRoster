@@ -31,7 +31,7 @@ interface RosterListProps {
  */
 export function DefaultRosterComponent({ data, userId }: RosterListProps) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  useChatNotifications(userId);
+
   if (isDesktop) {
     return (
       <div className="flex flex-col leading-tight">

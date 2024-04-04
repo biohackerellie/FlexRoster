@@ -33,6 +33,7 @@ const columns: ColumnDef<RosterList>[] = [
       return (
         <Button
           variant="ghost"
+          className="text-lg font-semibold"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Teacher Name
