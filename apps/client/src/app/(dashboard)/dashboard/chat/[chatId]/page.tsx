@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
 
 import { auth } from "@local/auth";
@@ -81,6 +82,7 @@ export default async function ChatPage({ params }: PageProps) {
 
 async function getChatMessages(chatId: string) {
   try {
+    noStore();
     const { data, error } = await client.api.inbox({ chatId: chatId }).get();
 
     if (error) {
