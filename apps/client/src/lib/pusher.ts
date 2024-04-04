@@ -16,6 +16,6 @@ export const pusherClient = new PusherClient("app-key", {
   cluster: "",
   wsHost: env.NEXT_PUBLIC_PUSHER_APP_HOST,
   forceTLS: false,
-  disableStats: false,
+  disableStats: true,
   enabledTransports: ["ws", "wss"],
 });
