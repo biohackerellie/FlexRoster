@@ -1,23 +1,21 @@
 import PusherServer from "pusher";
 import PusherClient from "pusher-js";
 
+import { env } from "@/env";
+
 export const pusherServer = new PusherServer({
   appId: "app-id",
   key: "app-key",
   secret: "app-secret",
   cluster: "",
   useTLS: false,
-  host: "10.50.99.84",
-  port: "6001",
+  host: env.NEXT_PUBLIC_PUSHER_APP_HOST,
 });
 
 export const pusherClient = new PusherClient("app-key", {
   cluster: "",
-
-  wsHost: "10.50.99.84",
-  wsPort: 6001,
-  wssPort: 6001,
+  wsHost: env.NEXT_PUBLIC_PUSHER_APP_HOST,
   forceTLS: false,
-  disableStats: true,
+  disableStats: false,
   enabledTransports: ["ws", "wss"],
 });

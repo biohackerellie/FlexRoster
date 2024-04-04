@@ -20,7 +20,7 @@ export const env = createEnv({
     REDIS_PORT: z.string(),
   },
   client: {
-    NEXT_PUBLIC_SOCKET: z.string(),
+    NEXT_PUBLIC_PUSHER_APP_HOST: z.string().url(),
     NEXT_PUBLIC_API_URL: z.string().url(),
     NEXT_PUBLIC_API_PORT: z.string(),
     NEXT_PUBLIC_HOST: z.string().url(),
@@ -36,7 +36,7 @@ export const env = createEnv({
     REDIS_HOST2: process.env.REDIS_HOST2,
     REDIS_HOST3: process.env.REDIS_HOST3,
     REDIS_PORT: process.env.REDIS_PORT,
-    NEXT_PUBLIC_SOCKET: process.env.NEXT_PUBLIC_SOCKET,
+    NEXT_PUBLIC_PUSHER_APP_HOST: process.env.NEXT_PUBLIC_PUSHER_APP_HOST,
     NEXT_PUBLIC_HOST: process.env.NEXT_PUBLIC_HOST,
     NEXT_PUBLIC_API_PORT: process.env.NEXT_PUBLIC_API_PORT,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
