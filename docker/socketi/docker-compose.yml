@@ -1,0 +1,28 @@
+services:
+  # ...
+
+  soketi:
+    container_name: "soketi_server"
+    restart: unless-stopped
+    image: "quay.io/soketi/soketi:0.17-16-alpine"
+    ports:
+      - "${SOKETI_PORT}:6001"
+      - "${SOKETI_METRICS_SERVER_PORT}:9601"
+    env_file:
+      - .env
+    environment:
+      - SOKETI_DEBUG=${DEBUG}
+      - DEFAULT_APP_ID=${PUSHER_APP_ID}
+      - DEFAULT_APP_KEY=${PUSHER_APP_KEY}
+      - DEFAULT_APP_SECRET=${PUSHER_APP_SECRET}
+      - PUSHER_HOST=${PUSHER_HOST}
+      - PUSHER_PORT= ${PUSHER_PORT}
+      - PUSHER_SCHEME=${PUSHER_SCHEME} # or https
+      - METRICS_SERVER_PORT=${SOKETI_METRICS_SERVER_PORT}
+      - DEFAULT_APP_ENABLE_CLIENT_MESSAGES=${DEFAULT_APP_ENABLE_CLIENT_MESSAGES}
+    networks:
+      - soketi_network
+
+networks:
+  soketi_network:
+    driver: bridge

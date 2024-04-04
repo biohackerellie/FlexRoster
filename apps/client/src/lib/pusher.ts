@@ -8,18 +8,24 @@ export const pusherServer = new PusherServer({
   key: "app-key",
   secret: "app-secret",
   cluster: "",
-  useTLS: true,
-  host: env.NEXT_PUBLIC_PUSHER_APP_HOST,
-  // port: env.NEXT_PUBLIC_PUSHER_APP_PORT,
+  useTLS: env.NODE_ENV === "production" ? true : false,
+  host:
+    env.NODE_ENV === "production"
+      ? env.NEXT_PUBLIC_PUSHER_APP_HOST
+      : "10.50.99.84",
+  port: env.NODE_ENV === "production" ? "443" : "6001",
 });
 
 export const pusherClient = new PusherClient("app-key", {
   cluster: "",
-	httpHost: env.NEXT_PUBLIC_PUSHER_APP_HOST,
-  // wsHost: env.NEXT_PUBLIC_PUSHER_APP_HOST,
-  // wsPort: parseInt(env.NEXT_PUBLIC_PUSHER_APP_PORT),
-  // wssPort: parseInt(env.NEXT_PUBLIC_PUSHER_APP_PORT),
-  forceTLS: true,
+  // httpHost: env.NEXT_PUBLIC_PUSHER_APP_HOST,
+  wsHost:
+    env.NODE_ENV === "production"
+      ? env.NEXT_PUBLIC_PUSHER_APP_HOST
+      : "10.50.99.84",
+  wsPort: 6001,
+  wssPort: 443,
+  forceTLS: env.NODE_ENV === "production" ? true : false,
   disableStats: true,
-  enabledTransports: ["wss"],
+  enabledTransports: ["wss", "ws"],
 });
