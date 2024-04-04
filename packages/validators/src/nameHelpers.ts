@@ -56,7 +56,7 @@ export function findUserIdByName(
 
 export function formatTeacherNames(teacherName: string) {
   const formattedTeacherName = teacherName?.split(", ").reverse().join(" ");
-  console.log("formattedTeacherName", formattedTeacherName);
+
   //remove the middle initial from 'firstname middleinitial lastname'
   const teacher = formattedTeacherName
     ?.split(" ")

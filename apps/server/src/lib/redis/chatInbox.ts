@@ -33,6 +33,7 @@ export async function getInbox(chatId: string) {
 // send message to chat by chatId
 export async function sendToInbox(chatId: string, message: any) {
   try {
+    console.log("hi im here");
     const messageData = messageValidator.parse(message);
     const client = createClient();
     await client.zadd(

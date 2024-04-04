@@ -11,10 +11,10 @@ import { toPusherKey } from "@/lib/utils";
 export async function POST(req: Request) {
   try {
     const { chatId, text }: { chatId: string; text: string } = await req.json();
-
+    console.log(chatId, text);
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
-
+    console.log("session", session);
     const [userId1, userId2] = chatId.split("--");
     if (!session) {
       throw new Error("You are not logged in");
@@ -37,12 +37,13 @@ export async function POST(req: Request) {
       type: "message",
       action: `${session.user.name} sent a message to ${friendId} that says: ${message.text}`,
     };
-
-    await pusherServer.trigger(
+    console.log(message);
+    const push = await pusherServer.trigger(
       toPusherKey(`chat:${chatId}`),
       "incoming-message",
       message,
     );
+
     await pusherServer.trigger(
       toPusherKey(`user:${friendId}:chats`),
       "new-message",
