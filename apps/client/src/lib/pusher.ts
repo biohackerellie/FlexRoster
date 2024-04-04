@@ -10,14 +10,15 @@ export const pusherServer = new PusherServer({
   cluster: "",
   useTLS: true,
   host: env.NEXT_PUBLIC_PUSHER_APP_HOST,
-  port: env.NEXT_PUBLIC_PUSHER_APP_PORT,
+  // port: env.NEXT_PUBLIC_PUSHER_APP_PORT,
 });
 
 export const pusherClient = new PusherClient("app-key", {
   cluster: "",
-  wsHost: env.NEXT_PUBLIC_PUSHER_APP_HOST,
-  wsPort: parseInt(env.NEXT_PUBLIC_PUSHER_APP_PORT),
-  wssPort: parseInt(env.NEXT_PUBLIC_PUSHER_APP_PORT),
+	httpHost: env.NEXT_PUBLIC_PUSHER_APP_HOST,
+  // wsHost: env.NEXT_PUBLIC_PUSHER_APP_HOST,
+  // wsPort: parseInt(env.NEXT_PUBLIC_PUSHER_APP_PORT),
+  // wssPort: parseInt(env.NEXT_PUBLIC_PUSHER_APP_PORT),
   forceTLS: true,
   disableStats: true,
   enabledTransports: ["wss"],
