@@ -20,7 +20,7 @@ export const env = createEnv({
     REDIS_PORT: z.string(),
   },
   client: {
-    NEXT_PUBLIC_PUSHER_APP_HOST: z.string().url(),
+    NEXT_PUBLIC_PUSHER_APP_HOST: z.string(),
     NEXT_PUBLIC_API_URL: z.string().url(),
     NEXT_PUBLIC_API_PORT: z.string(),
     NEXT_PUBLIC_HOST: z.string().url(),
