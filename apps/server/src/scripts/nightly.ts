@@ -6,6 +6,13 @@ $.cwd(`src/scripts`);
 console.log("Working directory: ");
 await $`pwd`;
 
+const processLogs = await $`bun ./processLogs.ts`;
+if (processLogs.exitCode === 1) {
+  console.error(processLogs.stderr);
+  process.exit(1);
+}
+await $`echo "Logs processed"`;
+
 const redisInit = await $`bun ./nightly/redisInit.ts`;
 if (redisInit.exitCode === 1) {
   console.error(redisInit.stderr);
