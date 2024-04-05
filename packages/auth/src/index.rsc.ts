@@ -1,4 +1,5 @@
 import type { DefaultSession, NextAuthConfig } from "next-auth";
+//@ts-expect-error - types not set from react-canary
 import { cache } from "react";
 import { Adapter } from "@auth/core/adapters";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
@@ -73,4 +74,4 @@ const {
 
 const auth = cache(defaultAuth);
 
-export { decode, getToken, authConfig };
+export { decode, getToken, authConfig, signIn, signOut, GET, POST, auth };

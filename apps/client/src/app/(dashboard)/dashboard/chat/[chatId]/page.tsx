@@ -71,7 +71,7 @@ export default async function ChatPage({ params }: PageProps) {
       </div>
       <Messages
         chatId={chatId}
-        initialMessages={initialMessages!}
+        initialMessages={initialMessages}
         sessionId={userId}
         chatPartner={chatPartner}
       />
