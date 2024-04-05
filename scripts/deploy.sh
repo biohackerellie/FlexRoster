@@ -2,8 +2,13 @@
 
 set -e
 
-cd ../
+
+pnpm turbo clean
+pnpm clean
+pnpm install
+
 pnpm turbo build 
+
 
 docker compose -f docker-build.yml build
 
