@@ -25,7 +25,9 @@ type RosterList = {
 const columns: ColumnDef<RosterList>[] = [
   {
     accessorKey: "roomNumber",
-    header: "Room Number",
+    header: () => {
+      return <span className="text-lg font-semibold">Room Number</span>;
+    },
   },
   {
     accessorKey: "teacherName",
@@ -44,11 +46,15 @@ const columns: ColumnDef<RosterList>[] = [
   },
   {
     accessorKey: "count",
-    header: "Student Count",
+    header: () => {
+      return <span className="text-lg font-semibold">Student Count</span>;
+    },
   },
   {
     accessorKey: "teacherId",
-    header: "Roster",
+    header: () => {
+      return <span className="text-lg font-semibold">Roster</span>;
+    },
     cell: ({ row }) => {
       //eslint-disable-next-line
       const id = row.getValue("teacherId") as string;
