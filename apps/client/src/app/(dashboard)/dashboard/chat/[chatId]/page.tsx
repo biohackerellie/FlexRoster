@@ -62,13 +62,14 @@ export default async function ChatPage({ params }: PageProps) {
               </span>
             </div>
             <div className="flex items-center text-xl">
-              <span className="mr-3 font-semibold text-gray-700">
+              <span className="mr-3 font-semibold text-neutral-300">
                 {chatPartner.name}
               </span>
             </div>
           </div>
         </div>
       </div>
+
       <Messages
         chatId={chatId}
         initialMessages={initialMessages}

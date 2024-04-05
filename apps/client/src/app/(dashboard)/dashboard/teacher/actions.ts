@@ -60,5 +60,6 @@ export async function RequestApproval(
     }
   }
   revalidateTag("roster");
+  revalidateTag("requests");
   revalidatePath("/(dashboard)/dashboard", "layout");
 }

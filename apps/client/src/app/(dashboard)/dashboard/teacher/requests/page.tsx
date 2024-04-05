@@ -10,6 +10,11 @@ export default async function RequestsPage() {
   const requests = await cachedData(session?.user?.id!);
   let incoming = null;
   let outgoing = null;
+  if (!requests) {
+    incoming = [];
+    outgoing = [];
+  }
+
   if (requests) {
     if (requests.incomingRequests && requests.incomingRequests.length > 0) {
       incoming = requests.incomingRequests.filter((request) => {
@@ -22,7 +27,7 @@ export default async function RequestsPage() {
   }
 
   return (
-    <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between">
+    <div className="flex h-full max-h-[calc(100vh-6rem)] w-fit flex-1 flex-col content-center items-center justify-center align-middle">
       <h1 className="z-20 bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text py-8 text-4xl font-bold text-transparent sm:text-4xl">
         Requests
       </h1>

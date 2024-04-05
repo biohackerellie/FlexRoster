@@ -1,12 +1,12 @@
 import { Home } from "lucide-react";
 
 export const greetings = [
-  "What's Kickin",
-  "Howdy Doody",
-  "Greetings Earthling",
+  "What's Kickin 🤠",
+  "Howdy Doody 🙃",
+  "Greetings Earthling 👽",
   "What's Crackalackin",
-  "How's it Hanging",
-  "Hey there, Space Cowboy",
+  "How's it Hanging ",
+  "Hey there, Space Cowboy 🤠",
   "Ahoy, Matey",
   "What in tarnation",
   "Bonjour",
@@ -17,7 +17,7 @@ export const greetings = [
   "Look who's here! It's",
   "Sup",
   "What's Poppin",
-  "Yo Yo Yo",
+  "Yo Yo Yo ",
 ] as const;
 
 export const sidebarOptions = [

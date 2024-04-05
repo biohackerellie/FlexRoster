@@ -41,9 +41,9 @@ export function ClassListComponent({ data }: ClassListProps) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   if (isDesktop) {
     return (
-      <div className="flex flex-col leading-tight">
+      <div className=" leading-tight">
         <div className="flex items-center text-xl">
-          <span className="mr-3 font-semibold text-gray-700">
+          <span className="mr-3 font-semibold text-neutral-400">
             Steam Classes
           </span>
         </div>
@@ -85,6 +85,7 @@ const ClassList = ({ data }: { data: StudentTable[] }) => {
       teacher: room.teacherName,
       available: room.available,
       teacherId: room.teacherId,
+      chatId: room.chatId,
     };
   });
   return (
@@ -96,15 +97,22 @@ const ClassList = ({ data }: { data: StudentTable[] }) => {
               <p className="text-lg font-semibold">{room.room}</p>
               <p className="text-sm text-gray-500">{room.teacher}</p>
             </div>
-            <div>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={!room.available}
-                onClick={() => handleTransfer(room.teacherId)}
-              >
-                {room.available ? "Join" : "Unavailable"}
-              </Button>
+            <div className="flex gap-2">
+              <div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!room.available}
+                  onClick={() => handleTransfer(room.teacherId)}
+                >
+                  {room.available ? "Join" : "Unavailable"}
+                </Button>
+              </div>
+              <div>
+                <Button size="sm">
+                  <Link href={`/chat/${room.chatId}`}>Chat</Link>
+                </Button>
+              </div>
             </div>
           </div>
         ))}

@@ -189,7 +189,6 @@ const Approval = async (
   newTeacherId: string,
   status: "approved" | "denied",
 ) => {
-  const router = useRouter();
   try {
     await RequestApproval(
       requestId,
@@ -198,7 +197,6 @@ const Approval = async (
       teacherId,
       newTeacherId,
     );
-    router.refresh();
   } catch (e) {
     console.error(e);
   }

@@ -78,12 +78,14 @@ export default async function StudentDashboard() {
 
   const greeting = getRandomGreeting();
   return (
-    <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between">
-      <h1 className="pb-2 text-center text-4xl font-semibold">
+    <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between sm:container">
+      <h1 className="pb-2 text-center text-4xl font-semibold text-neutral-300  ">
         {greeting} {firstName}!
       </h1>
-      <p className="pb-2 text-center text-2xl font-medium">{currentClass}</p>
-      <div className="max-h-2xl container flex max-w-4xl flex-col justify-center p-4">
+      <p className="text-neutral-30 pb-2 text-center text-2xl font-medium">
+        {currentClass}
+      </p>
+      <div className="max-h-2xl flex flex-col  justify-center  p-4 sm:flex-row">
         <Suspense fallback={<Skeleton className="h-full w-full" />}>
           <ClassListComponent data={availableClasses} />
         </Suspense>
