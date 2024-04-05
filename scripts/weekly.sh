@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo "running weekly cleanup script"
+cd /apps/FlexRoster
 # backup_dir="/tmp/docker_volumes_backup"
 # backup_filename="docker_volumes_$(date +%Y-%m-%d_%H-%M-%S).tar.gz"
 # remote_backup_location=""
