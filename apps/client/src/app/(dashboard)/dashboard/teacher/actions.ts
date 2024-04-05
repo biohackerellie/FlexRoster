@@ -2,6 +2,7 @@
 
 import { revalidatePath, revalidateTag } from "next/cache";
 
+import type { Logs } from "@local/validators";
 import { client } from "@local/eden";
 
 export async function Attendance(rosterId: number) {
@@ -27,6 +28,13 @@ export async function RequestApproval(
   teacherId: string,
   newTeacherId: string,
 ) {
+  const log: Logs = {
+    user: newTeacherId,
+    type: "request",
+    action: `User ${newTeacherId} ${status} request ${requestId} for student ${studentId} from teacher ${teacherId} to teacher ${newTeacherId}`,
+  };
+  await client.api.logs.new.post({ log });
+
   if (status === "approved") {
     const { data: res, error } = await client.api.requests
       .approve({ requestId: requestId })

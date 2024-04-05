@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     console.log(chatId, text);
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
-    console.log("session", session);
+
     const [userId1, userId2] = chatId.split("--");
     if (!session) {
       throw new Error("You are not logged in");
@@ -37,8 +37,8 @@ export async function POST(req: Request) {
       type: "message",
       action: `${session.user.name} sent a message to ${friendId} that says: ${message.text}`,
     };
-    console.log(message);
-    const push = await pusherServer.trigger(
+
+    await pusherServer.trigger(
       toPusherKey(`chat:${chatId}`),
       "incoming-message",
       message,
@@ -58,7 +58,6 @@ export async function POST(req: Request) {
     return new Response("success", { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-      console.log(error);
       console.error(error.message);
       return new Response(error.message, { status: 400 });
     }

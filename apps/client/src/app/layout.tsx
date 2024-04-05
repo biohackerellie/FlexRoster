@@ -10,8 +10,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "FLEX | Home",
-  description:
-    "Sit down, shut up, and read an unbanned, straight, white, christian mom approved book",
+  description: "Be gay, do crime",
 };
 
 export default async function RootLayout({
