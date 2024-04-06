@@ -9,7 +9,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@elysiajs/eden": "^1.0.8",
+    "@elysiajs/eden": "^1.0.11",
     "@t3-oss/env-nextjs": "^0.9.2",
     "server": "workspace:*",
     "zod": "^3.22.4"
