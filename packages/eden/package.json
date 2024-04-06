@@ -19,7 +19,7 @@
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@types/react": "^18.2.74",
-    "@types/react-dom": "^18.2.23",
+    "@types/react-dom": "^18.2.24",
     "eslint": "^8.57.0",
     "prettier": "^3.2.5",
     "typescript": "latest"
