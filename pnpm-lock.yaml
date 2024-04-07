@@ -257,8 +257,8 @@ importers:
         specifier: ^20.12.5
         version: 20.12.5
       bun-types:
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.1.2
+        version: 1.1.2
       dotenv-cli:
         specifier: ^7.4.1
         version: 7.4.1
@@ -505,8 +505,8 @@ importers:
   tooling/tsconfig:
     dependencies:
       bun-types:
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.1.2
+        version: 1.1.2
 
 packages:
 
@@ -5719,8 +5719,8 @@ packages:
       semver: 7.6.0
     dev: true
 
-  /bun-types@1.1.0:
-    resolution: {integrity: sha512-GhMDD7TosdJzQPGUOcQD5PZshvXVxDfwGAZs2dq+eSaPsRn3iUCzvpFlsg7Q51bXVzLAUs+FWHlnmpgZ5UggIg==}
+  /bun-types@1.1.2:
+    resolution: {integrity: sha512-orHLB/tiBuKlk3c/0Vqbu5F1F/dnLlLrcCJxPy3uxFsIhQbwet7gkthMJ6i9B+HI8aR2nV50uikOqd8lpRx2KQ==}
     dependencies:
       '@types/node': 20.11.30
       '@types/ws': 8.5.10
