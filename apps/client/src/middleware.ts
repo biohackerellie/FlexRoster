@@ -10,13 +10,13 @@ export default middleware((req) => {
   const response = NextResponse.next();
 
   // route to 404 between 5pm and 7am or on weekends
-  // const now = new Date();
-  // const hours = now.getHours();
-  // const daysOfWeek = now.getDay();
-  // console.log(hours);
-  // if (hours >= 17 || hours < 7 || daysOfWeek === 0 || daysOfWeek === 6) {
-  //   return NextResponse.redirect(new URL("/404", req.url));
-  // }
+  const now = new Date();
+  const hours = now.getHours();
+  const daysOfWeek = now.getDay();
+  console.log(hours);
+  if (hours >= 17 || hours < 7 || daysOfWeek === 0 || daysOfWeek === 6) {
+    return NextResponse.redirect(new URL("/404", req.url));
+  }
 
   const token = req.auth;
 
