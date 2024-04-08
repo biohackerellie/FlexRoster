@@ -3,9 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { nanoid } from "nanoid";
 
+import type { Logs, Request } from "@local/validators";
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
-import { Logs, Request, requestValidator } from "@local/validators";
+import { requestValidator } from "@local/validators";
 
 import { pusherServer } from "@/lib/pusher";
 import { requestIDConstructor, toPusherKey } from "@/lib/utils";

@@ -1,15 +1,17 @@
 "use client";
 
+import type {
+  ColumnDef,
+  SortingState,
+  VisibilityState,
+} from "@tanstack/react-table";
 import * as React from "react";
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  SortingState,
   useReactTable,
-  VisibilityState,
 } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";

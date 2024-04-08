@@ -8,7 +8,7 @@
     "dev": "pnpm with-env next dev --turbo",
     "build": "pnpm with-env next build",
     "start": "next start",
-    "lint": "dotenv -v SKIP_ENV_VALIDATION=1 next lint",
+    "lint": "eslint",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
@@ -71,14 +71,6 @@
     "prettier": "^3.2.5",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.4"
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@local/eslint-config/base",
-      "@local/eslint-config/nextjs",
-      "@local/eslint-config/react"
-    ]
   },
   "prettier": "@local/prettier-config"
 }

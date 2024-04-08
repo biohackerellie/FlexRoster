@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: "Be gay, do crime",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;

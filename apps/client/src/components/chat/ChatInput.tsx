@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
 
-import { SelectUser } from "@local/db/types";
+import type { SelectUser } from "@local/db/types";
 
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "../ui/button";
