@@ -9,7 +9,7 @@ const { auth: middleware } = NextAuth(authConfig);
 export default middleware((req) => {
   const response = NextResponse.next();
 
-  // route to 404 between 5pm and 7am or on weekends
+  //route to 404 between 5pm and 7am or on weekends
   const now = new Date();
   const hours = now.getHours();
   const daysOfWeek = now.getDay();
