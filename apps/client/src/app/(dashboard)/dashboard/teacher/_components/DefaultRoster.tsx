@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ArrowUpDown, CheckCircle, MessageSquare, XCircle } from "lucide-react";
 
 import { Button } from "@local/ui/button";
+import { DataTable } from "@local/ui/data-table";
 import {
   Tooltip,
   TooltipContent,
@@ -14,7 +15,6 @@ import {
   TooltipTrigger,
 } from "@local/ui/tooltip";
 
-import { DataTable } from "@/components/tables";
 import { useChatNotifications } from "@/hooks";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { Attendance } from "../actions";

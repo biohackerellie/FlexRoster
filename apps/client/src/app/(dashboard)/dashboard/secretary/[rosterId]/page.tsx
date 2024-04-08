@@ -11,8 +11,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@local/ui/breadcrumb";
+import { DataTable } from "@local/ui/data-table";
 
-import { DataTable } from "@/components/tables";
 import { studentColumns } from "../_components/rosterTable";
 
 interface PageProps {

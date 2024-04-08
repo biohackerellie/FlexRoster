@@ -1,4 +1,4 @@
-import { cn } from "@local/ui";
+import { cn } from ".";
 
 function Skeleton({
   className,

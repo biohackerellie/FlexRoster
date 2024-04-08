@@ -39,7 +39,8 @@
     "../../packages/ui/src/table.tsx",
     "../../packages/ui/src/tabs.tsx",
     "../../packages/ui/src/textarea.tsx",
-    "../../packages/ui/src/tooltip.tsx"
+    "../../packages/ui/src/tooltip.tsx",
+    "../../packages/ui/src/data-table.tsx"
   ],
   "exclude": ["node_modules"]
 }

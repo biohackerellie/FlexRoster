@@ -15,6 +15,7 @@ const nextConfig = {
     "@local/eden",
     "@local/db",
     "@local/auth",
+    "@local/ui",
     "@local/validators",
   ],
   eslint: { ignoreDuringBuilds: true },

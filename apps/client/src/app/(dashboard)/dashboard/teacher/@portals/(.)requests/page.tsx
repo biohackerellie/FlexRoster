@@ -26,7 +26,7 @@ export default async function RequestsPage() {
 
   return (
     <Modal>
-      <Suspense fallback={<Loader2 className="h-2 h-2 animate-spin" />}>
+      <Suspense fallback={<Loader2 className="h-2 animate-spin" />}>
         <Requests
           incomingRequests={incoming}
           outgoing={outgoing}

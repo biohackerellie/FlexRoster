@@ -6,7 +6,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import { Loader2 } from "lucide-react";
 
-import { cn } from "@local/ui";
+import { cn } from ".";
 
 const buttonVariants = cva(
   "group/btn relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm disabled:pointer-events-none disabled:opacity-50",
