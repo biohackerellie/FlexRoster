@@ -1,0 +1,8 @@
+{
+  "extends": "@local/tsconfig/base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+  },
+  "include": ["*.ts", "src", "../../apps/client/src/components/navbar.tsx"],
+  "exclude": ["node_modules"]
+}

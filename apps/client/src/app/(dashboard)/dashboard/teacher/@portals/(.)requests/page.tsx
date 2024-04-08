@@ -4,8 +4,8 @@ import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
+import Modal from "@local/ui/modal";
 
-import Modal from "@/components/ui/modal";
 import Requests from "../../_components/Requests";
 
 export default async function RequestsPage() {
@@ -26,7 +26,7 @@ export default async function RequestsPage() {
 
   return (
     <Modal>
-      <Suspense fallback={<Loader2 className="h-2 h-2 animate-spin" />}>
+      <Suspense fallback={<Loader2 className="h-2 animate-spin" />}>
         <Requests
           incomingRequests={incoming}
           outgoing={outgoing}

@@ -6,14 +6,15 @@ import * as React from "react";
 import Link from "next/link";
 import { ArrowUpDown, CheckCircle, MessageSquare, XCircle } from "lucide-react";
 
-import { DataTable } from "@/components/tables";
-import { Button } from "@/components/ui/button";
+import { Button } from "@local/ui/button";
+import { DataTable } from "@local/ui/data-table";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@local/ui/tooltip";
+
 import { useChatNotifications } from "@/hooks";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { Attendance } from "../actions";

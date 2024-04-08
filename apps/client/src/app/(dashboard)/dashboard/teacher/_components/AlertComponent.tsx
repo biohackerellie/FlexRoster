@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 import type { messageAlerts } from "@local/validators/types";
+import { Button } from "@local/ui/button";
 
-import { Button } from "@/components/ui/button";
 import { chatHrefConstructor } from "@/lib/utils";
 
 interface Props {

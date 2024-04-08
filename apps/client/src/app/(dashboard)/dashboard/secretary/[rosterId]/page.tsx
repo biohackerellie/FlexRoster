@@ -3,8 +3,6 @@ import { unstable_cache as cache } from "next/cache";
 import { Loader2 } from "lucide-react";
 
 import { client } from "@local/eden";
-
-import { DataTable } from "@/components/tables";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,7 +10,9 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+} from "@local/ui/breadcrumb";
+import { DataTable } from "@local/ui/data-table";
+
 import { studentColumns } from "../_components/rosterTable";
 
 interface PageProps {

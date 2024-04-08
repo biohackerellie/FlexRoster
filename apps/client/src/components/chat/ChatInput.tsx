@@ -6,9 +6,8 @@ import axios from "axios";
 import { toast } from "sonner";
 
 import type { SelectUser } from "@local/db/types";
-
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "../ui/button";
+import { Button } from "@local/ui/button";
+import { Textarea } from "@local/ui/textarea";
 
 interface ChatInputProps {
   chatPartner: Partial<SelectUser>;

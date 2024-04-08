@@ -1,4 +1,4 @@
-import { Home } from "lucide-react";
+import { Home } from "@local/ui/";
 
 export const greetings = [
   "What's Kickin 🤠",

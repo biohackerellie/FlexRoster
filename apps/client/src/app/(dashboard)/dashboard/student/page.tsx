@@ -4,8 +4,8 @@ import { unstable_cache as cache } from "next/cache";
 
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
+import { Skeleton } from "@local/ui/skeleton";
 
-import { Skeleton } from "@/components/ui/skeleton";
 import { greetings } from "@/lib/constants";
 import { chatHrefConstructor, formatTeacherNames } from "@/lib/utils";
 import { ClassListComponent } from "./_components/ClassList";

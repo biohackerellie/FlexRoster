@@ -4,8 +4,8 @@ import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
+import { DataTable } from "@local/ui/data-table";
 
-import { DataTable } from "@/components/tables";
 import { columns } from "./_components/rosterTable";
 
 export default async function SecretaryPage() {

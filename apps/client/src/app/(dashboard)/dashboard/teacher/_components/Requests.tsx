@@ -6,16 +6,16 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 
 import type { Request } from "@local/validators";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from "@local/ui/dropdown-menu";
+import { ScrollArea } from "@local/ui/scroll-area";
+import { Separator } from "@local/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@local/ui/tabs";
+
 import { pusherClient } from "@/lib/pusher";
 import { toPusherKey } from "@/lib/utils";
 import { RequestApproval } from "../actions";
