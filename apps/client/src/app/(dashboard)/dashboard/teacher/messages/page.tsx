@@ -8,9 +8,9 @@ import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
+import { ScrollArea } from "@local/ui/scroll-area";
+import { Separator } from "@local/ui/separator";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { AlertComponent } from "../_components/AlertComponent";
 
 /**

@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 
-import { Providers } from "./providers";
-
 import "./globals.css";
 
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@local/ui/sonner";
 
 export const metadata: Metadata = {
   title: "FLEX | Home",
@@ -23,7 +21,7 @@ export default function RootLayout({
       <body
         className={`${GeistSans.variable} ${GeistMono.variable} h-full w-full bg-white antialiased bg-dot-black/[0.2]  dark:bg-black dark:bg-dot-white/[0.2]`}
       >
-        <Providers>{children}</Providers>
+        {children}
         <Toaster />
       </body>
     </html>

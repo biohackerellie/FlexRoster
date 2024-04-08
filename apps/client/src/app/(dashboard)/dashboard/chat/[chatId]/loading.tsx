@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@local/ui/skeleton";
 
 const loading: React.FC = () => {
   return (

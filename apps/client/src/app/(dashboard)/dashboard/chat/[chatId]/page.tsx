@@ -3,8 +3,6 @@ import { notFound } from "next/navigation";
 
 import { auth } from "@local/auth";
 import { client, fetch } from "@local/eden";
-
-import { ChatInput, Messages } from "@/components/chat";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,7 +10,9 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+} from "@local/ui/breadcrumb";
+
+import { ChatInput, Messages } from "@/components/chat";
 
 interface PageProps {
   params: {

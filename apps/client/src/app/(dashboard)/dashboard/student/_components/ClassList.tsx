@@ -7,9 +7,7 @@ import Link from "next/link";
 import { ArrowUpDown } from "lucide-react";
 import { toast } from "sonner";
 
-import { RequestRoom } from "@/app/(dashboard)/dashboard/student/actions";
-import { DataTable } from "@/components/tables";
-import { Button } from "@/components/ui/button";
+import { Button } from "@local/ui/button";
 import {
   Drawer,
   DrawerContent,
@@ -17,9 +15,12 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
+} from "@local/ui/drawer";
+import { ScrollArea, ScrollBar } from "@local/ui/scroll-area";
+import { Separator } from "@local/ui/separator";
+
+import { RequestRoom } from "@/app/(dashboard)/dashboard/student/actions";
+import { DataTable } from "@/components/tables";
 import useMediaQuery from "@/hooks/useMediaQuery";
 
 /**

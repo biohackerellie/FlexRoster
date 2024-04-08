@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { auth } from "@local/auth";
-
-import { Navbar } from "@/components/ui/navbar";
+import { Navbar } from "@local/ui/navbar";
 
 export default async function teacherLayout({
   children,

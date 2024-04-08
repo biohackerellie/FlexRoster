@@ -5,13 +5,13 @@ import * as React from "react";
 import Link from "next/link";
 import { ArrowUpDown, CheckCircle, MessageSquare, XCircle } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@local/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@local/ui/tooltip";
 
 interface RosterList {
   count: number;

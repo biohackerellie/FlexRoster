@@ -9,8 +9,9 @@ import {
   useScroll,
 } from "framer-motion";
 
+import { cn } from "@local/ui";
+
 import { useChatNotifications, useRequestNotifications } from "@/hooks";
-import { cn } from "@/lib/utils";
 
 export const Navbar = ({
   navItems,
