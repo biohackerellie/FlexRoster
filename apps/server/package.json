@@ -8,7 +8,7 @@
     "dev": "bun --env-file=../../.env run --watch src/index.ts",
     "clean": "rm -rf .turbo node_modules",
     "start": "bun run dist/index.js",
-    "lint": "bun --bun eslint --ext .ts src",
+    "lint": "bun --bun eslint",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit",
     "build": "/usr/local/bin/bun build ./src/index.ts --outdir ./dist --target bun",
@@ -44,12 +44,6 @@
     "eslint": "^9.0.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.4"
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@local/eslint-config/base"
-    ]
   },
   "prettier": "@local/prettier-config"
 }

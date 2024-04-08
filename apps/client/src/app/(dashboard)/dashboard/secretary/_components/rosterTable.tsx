@@ -1,8 +1,8 @@
 "use client";
 
+import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
 import Link from "next/link";
-import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, CheckCircle, MessageSquare, XCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -13,14 +13,14 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-type RosterList = {
+interface RosterList {
   count: number;
   id: string;
   roomNumber: string;
   teacherName: string;
   teacherId: string | null;
   available: boolean;
-};
+}
 
 const columns: ColumnDef<RosterList>[] = [
   {
@@ -67,7 +67,7 @@ const columns: ColumnDef<RosterList>[] = [
   },
 ];
 
-type RosterTable = {
+interface RosterTable {
   rosterId: number;
   transferred: boolean;
   arrived: boolean;
@@ -79,7 +79,7 @@ type RosterTable = {
   teacherName: string;
   teacherId: string | null;
   available: boolean;
-};
+}
 
 const studentColumns: ColumnDef<RosterTable>[] = [
   {

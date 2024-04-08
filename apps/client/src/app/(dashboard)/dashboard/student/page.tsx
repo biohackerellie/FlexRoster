@@ -1,3 +1,4 @@
+import type { StudentTable } from "@/lib/types";
 import { Suspense } from "react";
 import { unstable_cache as cache } from "next/cache";
 
@@ -6,7 +7,6 @@ import { client } from "@local/eden";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { greetings } from "@/lib/constants";
-import { StudentTable } from "@/lib/types";
 import { chatHrefConstructor, formatTeacherNames } from "@/lib/utils";
 import { ClassListComponent } from "./_components/ClassList";
 

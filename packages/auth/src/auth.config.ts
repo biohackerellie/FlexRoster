@@ -20,7 +20,6 @@ declare module "next-auth" {
   }
 }
 
-const mode = process.env.NODE_ENV!;
 export default {
   providers: [
     azureAd({

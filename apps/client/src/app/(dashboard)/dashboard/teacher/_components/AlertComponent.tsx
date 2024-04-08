@@ -1,14 +1,14 @@
 import Link from "next/link";
 
-import { messageAlerts } from "@local/validators/types";
+import type { messageAlerts } from "@local/validators/types";
 
 import { Button } from "@/components/ui/button";
 import { chatHrefConstructor } from "@/lib/utils";
 
-type Props = {
+interface Props {
   messageAlerts: messageAlerts;
   userId: string;
-};
+}
 
 export function AlertComponent({ messageAlerts, userId }: Props) {
   return (

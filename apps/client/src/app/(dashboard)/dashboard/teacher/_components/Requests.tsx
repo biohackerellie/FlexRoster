@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
-import { Request } from "@local/validators";
+import type { Request } from "@local/validators";
 
 import {
   DropdownMenu,

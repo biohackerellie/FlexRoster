@@ -1,7 +1,7 @@
 import { log } from "console";
 
+import type { Logs } from "@local/validators";
 import { db, schema } from "@local/db";
-import { Logs } from "@local/validators";
 
 import { createClient } from "~/lib/redis";
 
@@ -23,10 +23,10 @@ async function processLogs() {
       "STREAMS",
       "logs",
       ">",
-    )) as Array<[string, Array<[string, string[]]>]> | null;
+    )) as [string, [string, string[]][]][] | null;
     console.log(rawLogs);
     if (rawLogs && rawLogs.length > 0) {
-      const streamLogs = rawLogs[0]![1]!;
+      const streamLogs = rawLogs[0]![1];
       const transformedLogs = streamLogs.map(
         ([streamId, fieldsArray]: [string, string[]]) => {
           const logObject: Record<string, any> = { id: streamId };
@@ -61,7 +61,7 @@ async function processLogs() {
       });
       await Promise.all(
         transformedLogs.map((log) =>
-          client.xack("logs", "log-consumer-group", log.id!),
+          client.xack("logs", "log-consumer-group", log.id),
         ),
       );
     } else {

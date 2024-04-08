@@ -3,8 +3,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 
-import { SelectUser } from "@local/db/types";
-import { Message } from "@local/validators";
+import type { SelectUser } from "@local/db/types";
+import type { Message } from "@local/validators";
 
 import { pusherClient } from "@/lib/pusher";
 import { cn, toPusherKey } from "@/lib/utils";

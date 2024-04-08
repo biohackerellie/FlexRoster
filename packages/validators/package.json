@@ -23,11 +23,6 @@
     "prettier": "^3.2.5",
     "typescript": "^5.4.4"
   },
-  "eslintConfig": {
-    "extends": [
-      "@local/eslint-config/base"
-    ]
-  },
   "prettier": "@local/prettier-config",
   "dependencies": {
     "zod": "^3.22.4"

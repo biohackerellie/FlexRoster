@@ -1,8 +1,9 @@
 "use client";
 
+import type { TeacherTable } from "@/lib/types";
+import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
 import Link from "next/link";
-import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, CheckCircle, MessageSquare, XCircle } from "lucide-react";
 
 import { DataTable } from "@/components/tables";
@@ -15,7 +16,6 @@ import {
 } from "@/components/ui/tooltip";
 import { useChatNotifications } from "@/hooks";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { TeacherTable } from "@/lib/types";
 import { Attendance } from "../actions";
 
 interface RosterListProps {

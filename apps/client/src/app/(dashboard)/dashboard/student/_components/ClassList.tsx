@@ -1,8 +1,9 @@
 "use client";
 
+import type { StudentTable } from "@/lib/types";
+import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
 import Link from "next/link";
-import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { toast } from "sonner";
 
@@ -20,7 +21,6 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { StudentTable } from "@/lib/types";
 
 /**
  * Class List Component
@@ -172,9 +172,8 @@ const columns: ColumnDef<StudentTable>[] = [
     accessorKey: "teacherId",
     header: "Transfer",
     cell: ({ row, column }) => {
-      // eslint-disable-next-line
       const teacherId: string = row.getValue("teacherId");
-      // eslint-disable-next-line
+
       const available: boolean = row.getValue("available");
       return (
         <Button disabled={!available} onClick={() => handleTransfer(teacherId)}>

@@ -1,7 +1,10 @@
 {
   "name": "@local/eden",
   "version": "0.0.0",
-  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "type": "module",
   "types": "./src/index.ts",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
@@ -23,12 +26,6 @@
     "eslint": "^9.0.0",
     "prettier": "^3.2.5",
     "typescript": "latest"
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@local/eslint-config/base"
-    ]
   },
   "prettier": "@local/prettier-config"
 }
