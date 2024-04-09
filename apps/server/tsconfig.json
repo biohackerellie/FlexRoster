@@ -1,17 +1,13 @@
 {
-  "extends": "@local/tsconfig/base.json",
+  "extends": "@local/tsconfig/internal-package.json",
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "ES2022"],
     "noUncheckedIndexedAccess": true,
-		"outDir": "dist",
     "allowImportingTsExtensions": true,
+		"emitDeclarationOnly": false,
     "baseUrl": ".",
-		"module":"ESNext",
+    "outDir": "dist",
     "strict": true,
-		"declaration": true,
-    "declarationMap": true,
-    "noEmit": false,
-    "emitDeclarationOnly": true,
     "paths": {
       "~/*": ["./src/*"]
     },
@@ -20,6 +16,5 @@
     ],
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-	"include": ["src"],
-  "exclude": ["node_modules", "dist", "tests", "src/scripts/**"]
+  "exclude": ["node_modules", "dist", "tests", "scr/scripts/**", "scripts"]
 }

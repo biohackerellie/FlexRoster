@@ -23,7 +23,7 @@ interface PageProps {
 
 export default async function SecRosterPage({ params }: PageProps) {
   const data = await getCachedData(params.rosterId);
-  const teacherName = data[0]?.teacherName;
+  const teacherName = data[0]?.teacherName ?? "Teacher";
 
   return (
     <div className=" flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-evenly">

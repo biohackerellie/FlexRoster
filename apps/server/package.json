@@ -1,8 +1,13 @@
 {
   "name": "server",
   "private": true,
-  "main": "./src/index.ts",
-  "module": "src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    }
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun --env-file=../../.env run --watch src/index.ts",
@@ -11,7 +16,7 @@
     "lint": "bun --bun eslint",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit",
-    "build": "/usr/local/bin/bun build ./src/index.ts --outdir ./dist --target bun",
+    "build": "/usr/local/bin/bun build ./src/index.ts --outdir ./dist --target bun && tsc",
     "nightly": "bun --env-file=../../.env run ./src/scripts/nightly.ts",
     "cache:reset": "bun --env-file=../../.env run ./src/scripts/nightly/redisInit.ts && bun --env-file=../../.env run ./src/scripts/nightly/cacheRosters.ts",
     "with-env": "bun --env-file=../../.env --"

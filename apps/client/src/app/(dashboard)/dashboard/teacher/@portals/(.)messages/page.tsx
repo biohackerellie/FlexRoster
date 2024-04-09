@@ -1,4 +1,4 @@
-import type { Key} from "react";
+import type { Key } from "react";
 import { Suspense } from "react";
 import { unstable_cache as cache } from "next/cache";
 import { notFound } from "next/navigation";
@@ -58,7 +58,7 @@ async function getMessages(userId: string) {
   if (!data) {
     return [];
   }
-  return data;
+  return data as messageAlerts[];
 }
 
 const cachedData = cache(
