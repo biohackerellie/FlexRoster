@@ -1,7 +1,11 @@
 {
   "extends": "@local/tsconfig/base.json",
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+		"baseUrl": ".",
+		"paths": {
+			"~/*": ["../../apps/server/src/*"]
+		},
   },
   "include": ["src"],
   "exclude": ["node_modules"]
