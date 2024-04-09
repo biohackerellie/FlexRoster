@@ -4,7 +4,6 @@
     "lib": ["dom", "dom.iterable", "ES2022"],
     "noUncheckedIndexedAccess": true,
     "allowImportingTsExtensions": true,
-		"emitDeclarationOnly": false,
     "baseUrl": ".",
     "outDir": "dist",
     "strict": true,

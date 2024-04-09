@@ -9,7 +9,16 @@ import {
   CardTitle,
 } from "@local/ui/card";
 
-export function LoginForm() {
+
+export default function LoginPage() {
+  return (
+    <div className="flex h-screen items-center justify-center">
+      <LoginForm />
+    </div>
+  );
+}
+
+function LoginForm() {
   return (
     <Card className="flex w-full max-w-sm flex-col items-center justify-center text-center align-middle">
       <CardHeader>
@@ -33,13 +42,5 @@ export function LoginForm() {
         </form>
       </CardFooter>
     </Card>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <div className="flex h-screen items-center justify-center">
-      <LoginForm />
-    </div>
   );
 }
