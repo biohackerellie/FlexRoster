@@ -6,16 +6,7 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: [
-      "**/*.config.js",
-      "**/*.config.cjs",
-      "**/.eslintrc.cjs",
-      ".next",
-      "dist",
-      "**/ui/**",
-      "scripts",
-      "pnpm-lock.yaml",
-    ],
+    ignores: ["**/*.config.js"],
   },
   {
     files: ["**/*.js", "**/*.ts", "**/*.tsx"],

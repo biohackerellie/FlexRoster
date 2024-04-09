@@ -25,7 +25,7 @@ async function getData(email: string, userId: string) {
       teacherName: formattedTeacherName,
       available: rooms.classrooms.available,
       teacherId: rooms.classrooms.teacherId ?? "",
-      chatId: `/dashboard/chat/${chatHrefConstructor(userId, rooms.classrooms.teacherId!)}`,
+      chatId: `/dashboard/chat/${chatHrefConstructor(userId, rooms.classrooms.teacherId)}`,
     };
   });
 

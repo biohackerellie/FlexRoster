@@ -33,7 +33,7 @@ export const Navbar = ({
   useRequestNotifications(userId);
   useMotionValueEvent(scrollYProgress, "change", (current) => {
     if (typeof current === "number") {
-      let direction = current! - scrollYProgress.getPrevious()!;
+      const direction = current - scrollYProgress.getPrevious()!;
 
       if (scrollYProgress.get() > 2.5) {
         setVisible(false);

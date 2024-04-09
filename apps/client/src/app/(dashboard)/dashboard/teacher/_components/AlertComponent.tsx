@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import type { messageAlerts } from "@local/validators/types";
+import type { messageAlerts } from "@local/validators/";
 import { Button } from "@local/ui/button";
 
 import { chatHrefConstructor } from "@/lib/utils";

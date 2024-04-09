@@ -182,3 +182,4 @@ export const logRelations = relations(logs, ({ one }) => ({
     references: [users.id],
   }),
 }));
+

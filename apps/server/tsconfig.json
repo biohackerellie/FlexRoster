@@ -1,23 +1,17 @@
 {
+  "extends": "@local/tsconfig/base.json",
   "compilerOptions": {
-    "target": "ES2022",
     "lib": ["dom", "dom.iterable", "ES2022"],
-    "allowJs": true,
-    "skipLibCheck": true,
-
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "Bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "jsx": "preserve",
-    "incremental": true,
     "noUncheckedIndexedAccess": true,
+		"outDir": "dist",
     "allowImportingTsExtensions": true,
     "baseUrl": ".",
+		"module":"ESNext",
     "strict": true,
+		"declaration": true,
+    "declarationMap": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true,
     "paths": {
       "~/*": ["./src/*"]
     },
@@ -26,5 +20,6 @@
     ],
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-  "exclude": ["node_modules", "dist", "tests"]
+	"include": ["src"],
+  "exclude": ["node_modules", "dist", "tests", "src/scripts/**"]
 }

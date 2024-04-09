@@ -1,11 +1,10 @@
 import dns from "dns";
 import { fileURLToPath } from "url";
-import _jiti from "jiti";
+import createJiti from "jiti";
 
 dns.setDefaultResultOrder("ipv4first");
-const jiti = _jiti(fileURLToPath(import.meta.url));
-jiti("./src/env");
-jiti("@local/auth/env");
+createJiti(fileURLToPath(import.meta.url))("./src/env");
+createJiti(fileURLToPath(import.meta.url))("@local/auth/env");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

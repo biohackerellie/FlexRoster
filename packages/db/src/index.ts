@@ -13,3 +13,9 @@ const postgresSqlClient = postgres(connectionString);
 export const schema = { ...main };
 
 export const db = drizzle(postgresSqlClient, { schema });
+export type SelectClassroom = typeof schema.classrooms.$inferSelect;
+export type SelectClassRoster = typeof schema.classRosters.$inferSelect;
+export type SelectUser = typeof schema.users.$inferSelect;
+export interface ClassRoomWithUsers extends SelectClassroom {
+  users: SelectUser[];
+}

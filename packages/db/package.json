@@ -4,18 +4,22 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./types": "./src/types.d.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    }
   },
   "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
     "clean": "rm -rf .turbo node_modules",
-    "push": "pnpm with-env drizzle-kit push:pg",
-    "studio": "pnpm with-env drizzle-kit studio",
-    "gen": "pnpm drizzle-kit generate:pg",
+    "push": "pnpm with-env drizzle-kit push:pg --config src/drizzle.config.ts",
+    "studio": "pnpm with-env drizzle-kit studio --config src/drizzle.config.ts",
+    "gen": "pnpm drizzle-kit generate:pg --config src/drizzle.config.ts",
     "migrate": "pnpm with-env tsx src/migrate.ts",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
