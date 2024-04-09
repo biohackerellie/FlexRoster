@@ -61,7 +61,7 @@ async function getMessages(userId: string) {
   if (!data) {
     return [];
   }
-  return data as messageAlerts[];
+  return data;
 }
 
 const cachedData = cache(

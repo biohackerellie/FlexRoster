@@ -1,16 +1,12 @@
 {
   "name": "@local/eden",
   "version": "0.0.0",
-  "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./src/index.ts"
-    }
+    ".": "./src/index.ts"
   },
+  "type": "module",
+  "types": "./src/index.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
     "clean": "rm -rf .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint ."

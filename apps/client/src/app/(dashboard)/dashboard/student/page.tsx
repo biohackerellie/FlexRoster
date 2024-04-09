@@ -10,8 +10,6 @@ import { greetings } from "@/lib/constants";
 import { chatHrefConstructor, formatTeacherNames } from "@/lib/utils";
 import { ClassListComponent } from "./_components/ClassList";
 
-
-
 export default async function StudentDashboard() {
   const session = await auth();
 
@@ -45,7 +43,6 @@ export default async function StudentDashboard() {
   );
 }
 
-
 async function allData(email: string, userId: string) {
   const [availableClasses, currentClass] = await Promise.all([
     cachedData(email, userId),
@@ -53,7 +50,6 @@ async function allData(email: string, userId: string) {
   ]);
   return { availableClasses, currentClass };
 }
-
 
 async function getData(email: string, userId: string) {
   const { data, error } = await client.api.classes.all.get();
@@ -65,7 +61,7 @@ async function getData(email: string, userId: string) {
     const formattedTeacherName = formatTeacherNames(
       rooms.classrooms.teacherName,
     );
-		const teacherId = rooms.classrooms.teacherId ?? "";
+    const teacherId = rooms.classrooms.teacherId ?? "";
     return {
       roomNumber: rooms.classrooms.roomNumber,
       teacherName: formattedTeacherName,
