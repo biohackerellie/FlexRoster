@@ -41,6 +41,11 @@ export const logValidator = z.object({
   action: z.string(),
 });
 
+export interface messageAlerts {
+  chatPartnerId: string;
+  chatPartnerName: string;
+}
+
 export const logArrayValidator = z.array(logValidator);
 export type Logs = z.infer<typeof logValidator>;
 

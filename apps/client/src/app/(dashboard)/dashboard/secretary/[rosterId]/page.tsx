@@ -23,11 +23,11 @@ interface PageProps {
 
 export default async function SecRosterPage({ params }: PageProps) {
   const data = await getCachedData(params.rosterId);
-  const teacherName = data[0]?.teacherName;
+  const teacherName = data[0]?.teacherName ?? "Teacher";
 
   return (
     <div className=" flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-evenly">
-      {PageBreadCrump(teacherName!)}
+      {PageBreadCrump(teacherName)}
       <h1 className="relative z-10 block bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text py-8 text-4xl font-bold text-transparent sm:text-4xl">
         {teacherName} Roster
       </h1>

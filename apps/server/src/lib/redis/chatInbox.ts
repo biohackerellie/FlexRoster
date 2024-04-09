@@ -1,7 +1,6 @@
 import { NotFoundError } from "elysia";
 
-import type { Message } from "@local/validators";
-import type { messageAlerts } from "@local/validators/types";
+import type { Message, messageAlerts } from "@local/validators";
 import { messageArrayValidator, messageValidator } from "@local/validators";
 
 import { createClient } from ".";
@@ -12,7 +11,7 @@ import { userQuery } from "../sql";
  */
 
 // get messages from chat by chatId
-export async function getInbox(chatId: string) {
+export async function getInbox(chatId: string): Promise<Message[]> {
   try {
     const client = createClient();
 

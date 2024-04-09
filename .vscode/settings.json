@@ -25,7 +25,11 @@
     "next/router.d.ts",
     "next/dist/client/router.d.ts"
   ],
-
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ],
+  "tailwindCSS.experimental.configFile": "./tooling/tailwind/web.ts",
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.linkedEditing": true,
   "editor.mouseWheelZoom": true,

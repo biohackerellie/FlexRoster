@@ -1,11 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
 
-import type { SelectUser } from "@local/db/types";
+import type { SelectUser } from "@local/db";
 import { Button } from "@local/ui/button";
 import { Textarea } from "@local/ui/textarea";
 

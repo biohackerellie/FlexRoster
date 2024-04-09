@@ -1,3 +1,4 @@
+//@ts-nocheck
 import type { Config } from "tailwindcss";
 import svgToDataUri from "mini-svg-data-uri";
 import animate from "tailwindcss-animate";

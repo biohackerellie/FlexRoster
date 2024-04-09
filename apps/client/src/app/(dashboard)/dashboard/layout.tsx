@@ -8,7 +8,6 @@ export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
-  modal: React.ReactNode;
 }) {
   return (
     <div className="flex h-screen w-full">

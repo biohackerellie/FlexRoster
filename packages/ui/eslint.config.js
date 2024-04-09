@@ -1,11 +1,10 @@
-import reactConfig from "@acme/eslint-config/react";
-
 import baseConfig from "@local/eslint-config/base";
+import reactConfig from "@local/eslint-config/react";
 
 /** @type {import('typescript-eslint').Config} */
 export default [
   {
-    ignores: [],
+    ignores: ["node_modules"],
   },
   ...baseConfig,
   ...reactConfig,

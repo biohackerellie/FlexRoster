@@ -1,14 +1,17 @@
+import type { Key } from "react";
 import { Suspense } from "react";
 import { unstable_cache as cache } from "next/cache";
 import { notFound } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
+import type { messageAlerts } from "@local/validators/";
 import { auth } from "@local/auth";
 import { client } from "@local/eden";
 import Modal from "@local/ui/modal";
 import { ScrollArea } from "@local/ui/scroll-area";
 import { Separator } from "@local/ui/separator";
 
+import OpenModel from "@/lib/modalHelpter";
 import { AlertComponent } from "../../_components/AlertComponent";
 
 export default async function MessagesPage() {
@@ -19,13 +22,13 @@ export default async function MessagesPage() {
   }
   const messages = await cachedData(userId);
   return (
-    <Modal>
+    <Modal fn={OpenModel}>
       <div className="inset-0 h-auto w-full items-center justify-between">
         <h1 className="text-2xl font-semibold text-gray-500">Messages</h1>
         <div className="flex h-48 w-auto items-center justify-center">
           <ScrollArea>
             <Suspense fallback={<Loader2 className="h-4 w-4 animate-spin" />}>
-              {messages.map((messageAlerts, index) => {
+              {messages.map((messageAlerts: messageAlerts, index: Key) => {
                 return (
                   <div key={index}>
                     <AlertComponent

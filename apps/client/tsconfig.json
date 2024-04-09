@@ -2,6 +2,7 @@
   "extends": "@local/tsconfig/base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "jsx": "preserve",
     "paths": {
       "@/*": ["./src/*"],
       "~/*": ["../server/src/*"]
@@ -11,36 +12,9 @@
         "name": "next"
       }
     ],
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "module": "esnext"
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "src/app/(dashboard)/dashboard/default.js",
-    "src/instrumentation.js",
-    "../../packages/ui/src/badge.tsx",
-    "../../packages/ui/src/breadcrumb.tsx",
-    "../../packages/ui/src/button.tsx",
-    "../../packages/ui/src/buttonGlow.tsx",
-    "../../packages/ui/src/card.tsx",
-    "../../packages/ui/src/dialog.tsx",
-    "../../packages/ui/src/drawer.tsx",
-    "../../packages/ui/src/dropdown-menu.tsx",
-    "../../packages/ui/src/input.tsx",
-    "../../packages/ui/src/label.tsx",
-    "../../packages/ui/src/modal.tsx",
-    "src/components/navbar.tsx",
-    "../../packages/ui/src/scroll-area.tsx",
-    "../../packages/ui/src/separator.tsx",
-    "../../packages/ui/src/skeleton.tsx",
-    "../../packages/ui/src/sonner.tsx",
-    "../../packages/ui/src/table.tsx",
-    "../../packages/ui/src/tabs.tsx",
-    "../../packages/ui/src/textarea.tsx",
-    "../../packages/ui/src/tooltip.tsx",
-    "../../packages/ui/src/data-table.tsx"
-  ],
+  "include": [".", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

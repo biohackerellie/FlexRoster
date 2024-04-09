@@ -3,11 +3,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 
-import type { SelectUser } from "@local/db/types";
+import type { SelectUser } from "@local/db";
 import type { Message } from "@local/validators";
+import { cn } from "@local/ui";
 
 import { pusherClient } from "@/lib/pusher";
-import { cn, toPusherKey } from "@/lib/utils";
+import { toPusherKey } from "@/lib/utils";
 
 interface MessagesProps {
   initialMessages: Message[] | undefined;
