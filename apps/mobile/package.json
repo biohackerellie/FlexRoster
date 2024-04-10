@@ -36,7 +36,7 @@
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@local/tailwind-config": "workspace:*",
-    "@babel/core": "^7.20.0",
+    "@babel/core": "^7.24.4",
     "@babel/preset-env": "^7.24.4",
     "@babel/runtime": "^7.24.4",
     "@types/babel__core": "^7.20.5",
