@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { unstable_cache as cache } from "next/cache";
 import { Loader2 } from "lucide-react";
 
-import { client } from "@local/eden";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,6 +12,7 @@ import {
 } from "@local/ui/breadcrumb";
 import { DataTable } from "@local/ui/data-table";
 
+import { client } from "@/lib/eden";
 import { studentColumns } from "../_components/rosterTable";
 
 interface PageProps {

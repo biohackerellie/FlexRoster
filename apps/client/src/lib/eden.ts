@@ -1,7 +1,8 @@
-import type { App } from "server";
 import { edenFetch, treaty } from "@elysiajs/eden";
 
-import { env } from "./env";
+import type { App } from "@local/server";
+
+import { env } from "@/env";
 
 const fetch = edenFetch<App>(
   `${env.NEXT_PUBLIC_API_URL}:${env.NEXT_PUBLIC_API_PORT}`,

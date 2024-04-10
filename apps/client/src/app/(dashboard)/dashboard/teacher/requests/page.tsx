@@ -1,8 +1,8 @@
 import { unstable_cache as cache } from "next/cache";
 
 import { auth } from "@local/auth";
-import { client } from "@local/eden";
 
+import { client } from "@/lib/eden";
 import Requests from "../_components/Requests";
 
 export default async function RequestsPage() {

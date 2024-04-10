@@ -3,7 +3,8 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 
 import type { Logs } from "@local/validators";
-import { client } from "@local/eden";
+
+import { client } from "@/lib/eden";
 
 export async function Attendance(rosterId: number) {
   const { data, error } = await client.api.rosters.attendance[""].post({

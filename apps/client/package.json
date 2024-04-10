@@ -14,10 +14,11 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@elysiajs/eden": "^1.0.11",
+    "@local/server": "workspace:*",
     "@local/auth": "workspace:*",
     "@local/ui": "workspace:*",
     "@local/db": "workspace:*",
-    "@local/eden": "workspace:*",
     "@local/validators": "workspace:*",
     "@t3-oss/env-nextjs": "^0.9.2",
     "@tanstack/react-table": "^8.15.3",

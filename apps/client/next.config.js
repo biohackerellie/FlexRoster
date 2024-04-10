@@ -11,7 +11,7 @@ const nextConfig = {
   output: "standalone",
   reactStrictMode: true,
   transpilePackages: [
-    "@local/eden",
+    "@local/server",
     "@local/db",
     "@local/auth",
     "@local/ui",

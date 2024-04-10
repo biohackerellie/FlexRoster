@@ -2,9 +2,9 @@ import { nanoid } from "nanoid";
 
 import type { Logs, Message } from "@local/validators";
 import { auth } from "@local/auth";
-import { client } from "@local/eden";
 import { messageValidator } from "@local/validators";
 
+import { client } from "@/lib/eden";
 import { pusherServer } from "@/lib/pusher";
 import { toPusherKey } from "@/lib/utils";
 

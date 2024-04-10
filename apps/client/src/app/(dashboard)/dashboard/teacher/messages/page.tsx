@@ -8,10 +8,10 @@ import { Loader2 } from "lucide-react";
 
 import type { messageAlerts } from "@local/validators";
 import { auth } from "@local/auth";
-import { client } from "@local/eden";
 import { ScrollArea } from "@local/ui/scroll-area";
 import { Separator } from "@local/ui/separator";
 
+import { client } from "@/lib/eden";
 import { AlertComponent } from "../_components/AlertComponent";
 
 /**
