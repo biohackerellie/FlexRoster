@@ -121,7 +121,7 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/react':
-        specifier: ^18.2.74
+        specifier: ^18.2.75
         version: 18.2.75
       '@types/react-dom':
         specifier: ^18.2.24
@@ -350,7 +350,7 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/tsconfig
       '@types/react':
-        specifier: ^18.2.74
+        specifier: ^18.2.75
         version: 18.2.75
       '@types/react-dom':
         specifier: ^18.2.24
@@ -432,7 +432,7 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/tsconfig
       '@types/react':
-        specifier: ^18.2.74
+        specifier: ^18.2.75
         version: 18.2.75
       eslint:
         specifier: ^9.0.0
