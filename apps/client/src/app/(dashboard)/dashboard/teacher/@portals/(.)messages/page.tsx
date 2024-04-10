@@ -6,11 +6,11 @@ import { Loader2 } from "lucide-react";
 
 import type { messageAlerts } from "@local/validators/";
 import { auth } from "@local/auth";
-import { client } from "@/lib/eden";
 import Modal from "@local/ui/modal";
 import { ScrollArea } from "@local/ui/scroll-area";
 import { Separator } from "@local/ui/separator";
 
+import { client } from "@/lib/eden";
 import OpenModel from "@/lib/modalHelpter";
 import { AlertComponent } from "../../_components/AlertComponent";
 

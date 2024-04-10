@@ -3,9 +3,9 @@ import { unstable_cache as cache } from "next/cache";
 import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
-import { client } from "@/lib/eden";
 import Modal from "@local/ui/modal";
 
+import { client } from "@/lib/eden";
 import OpenModel from "@/lib/modalHelpter";
 import Requests from "../../_components/Requests";
 

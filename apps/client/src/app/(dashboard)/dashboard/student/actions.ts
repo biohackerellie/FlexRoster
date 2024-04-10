@@ -5,9 +5,9 @@ import { nanoid } from "nanoid";
 
 import type { Logs, Request } from "@local/validators";
 import { auth } from "@local/auth";
-import { client } from "@/lib/eden";
 import { requestValidator } from "@local/validators";
 
+import { client } from "@/lib/eden";
 import { pusherServer } from "@/lib/pusher";
 import { requestIDConstructor, toPusherKey } from "@/lib/utils";
 

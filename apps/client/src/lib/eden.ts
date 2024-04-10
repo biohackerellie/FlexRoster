@@ -1,5 +1,6 @@
-import type { App } from "@local/server";
 import { edenFetch, treaty } from "@elysiajs/eden";
+
+import type { App } from "@local/server";
 
 import { env } from "@/env";
 

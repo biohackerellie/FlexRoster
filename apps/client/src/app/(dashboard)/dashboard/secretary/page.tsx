@@ -3,9 +3,9 @@ import { unstable_cache as cache } from "next/cache";
 import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
-import { client } from "@/lib/eden";
 import { DataTable } from "@local/ui/data-table";
 
+import { client } from "@/lib/eden";
 import { columns } from "./_components/rosterTable";
 
 export default async function SecretaryPage() {

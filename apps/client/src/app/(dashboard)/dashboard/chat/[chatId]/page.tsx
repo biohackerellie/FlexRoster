@@ -2,7 +2,6 @@ import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
 
 import { auth } from "@local/auth";
-import { client } from "@/lib/eden";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,6 +12,7 @@ import {
 } from "@local/ui/breadcrumb";
 
 import { ChatInput, Messages } from "@/components/chat";
+import { client } from "@/lib/eden";
 
 interface PageProps {
   params: {
