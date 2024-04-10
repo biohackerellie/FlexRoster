@@ -21,7 +21,7 @@ importers:
         specifier: ^1.13.2
         version: 1.13.2
       typescript:
-        specifier: ^5.4.4
+        specifier: ^5.4.5
         version: 5.4.5
 
   apps/client:
@@ -148,7 +148,7 @@ importers:
         specifier: ^3.4.3
         version: 3.4.3
       typescript:
-        specifier: ^5.4.4
+        specifier: ^5.4.5
         version: 5.4.5
 
   apps/server:
@@ -227,7 +227,7 @@ importers:
         specifier: ^3.2.5
         version: 3.2.5
       typescript:
-        specifier: ^5.4.4
+        specifier: ^5.4.5
         version: 5.4.5
 
   packages/auth:
@@ -267,7 +267,7 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       typescript:
-        specifier: ^5.4.4
+        specifier: ^5.4.5
         version: 5.4.5
 
   packages/db:
@@ -322,7 +322,7 @@ importers:
         specifier: ^4.7.2
         version: 4.7.2
       typescript:
-        specifier: ^5.4.4
+        specifier: ^5.4.5
         version: 5.4.5
 
   packages/eden:
@@ -447,7 +447,7 @@ importers:
         specifier: ^3.4.3
         version: 3.4.3
       typescript:
-        specifier: ^5.4.4
+        specifier: ^5.4.5
         version: 5.4.5
       zod:
         specifier: ^3.22.4
@@ -475,7 +475,7 @@ importers:
         specifier: ^3.2.5
         version: 3.2.5
       typescript:
-        specifier: ^5.4.4
+        specifier: ^5.4.5
         version: 5.4.5
 
   tooling/eslint-config:
@@ -530,7 +530,7 @@ importers:
         specifier: ^3.2.5
         version: 3.2.5
       typescript:
-        specifier: ^5.4.4
+        specifier: ^5.4.5
         version: 5.4.5
 
   tooling/github: {}
@@ -554,7 +554,7 @@ importers:
         specifier: ^9.0.0
         version: 9.0.0
       typescript:
-        specifier: ^5.4.4
+        specifier: ^5.4.5
         version: 5.4.5
 
   tooling/tailwind:
@@ -591,7 +591,7 @@ importers:
         specifier: ^3.2.5
         version: 3.2.5
       typescript:
-        specifier: ^5.4.4
+        specifier: ^5.4.5
         version: 5.4.5
 
   tooling/tsconfig:
