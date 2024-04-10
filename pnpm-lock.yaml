@@ -156,6 +156,12 @@ importers:
       '@expo/metro-config':
         specifier: ^0.17.6
         version: 0.17.6(@react-native/babel-preset@0.73.21)
+      '@local/eden':
+        specifier: workspace:*
+        version: link:../../packages/eden
+      '@shopify/flash-list':
+        specifier: ^1.6.4
+        version: 1.6.4(@babel/runtime@7.24.4)(react-native@0.73.6)(react@18.2.0)
       expo:
         specifier: ~50.0.14
         version: 50.0.14(@babel/core@7.24.0)(@react-native/babel-preset@0.73.21)
@@ -168,6 +174,9 @@ importers:
       expo-router:
         specifier: ~3.4.8
         version: 3.4.8(expo-constants@15.4.5)(expo-linking@6.2.2)(expo-modules-autolinking@1.10.3)(expo-status-bar@1.11.1)(expo@50.0.14)(react-dom@18.2.0)(react-native-reanimated@3.8.1)(react-native-safe-area-context@4.8.2)(react-native-screens@3.29.0)(react-native@0.73.6)(react@18.2.0)
+      expo-splash-screen:
+        specifier: ~0.26.4
+        version: 0.26.4(expo-modules-autolinking@1.10.3)(expo@50.0.14)
       expo-status-bar:
         specifier: ~1.11.1
         version: 1.11.1
@@ -181,7 +190,7 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
       react-native:
-        specifier: 0.73.6
+        specifier: ~0.73.6
         version: 0.73.6(@babel/core@7.24.0)(@babel/preset-env@7.24.4)(react@18.2.0)
       react-native-css-interop:
         specifier: ~0.0.34
@@ -223,6 +232,9 @@ importers:
       '@local/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/tsconfig
+      '@local/validators':
+        specifier: workspace:*
+        version: link:../../packages/validators
       '@types/babel__core':
         specifier: ^7.20.5
         version: 7.20.5
@@ -5066,6 +5078,20 @@ packages:
     dependencies:
       component-type: 1.2.2
       join-component: 1.1.0
+    dev: false
+
+  /@shopify/flash-list@1.6.4(@babel/runtime@7.24.4)(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-M2momcnY7swsvmpHIFDVbdOaFw4aQocJXA/lFP0Gpz+alQjFylqVKvszxl4atYO2SNbjxlb2L6hEP9WEcAknGQ==}
+    peerDependencies:
+      '@babel/runtime': '*'
+      react: '*'
+      react-native: '*'
+    dependencies:
+      '@babel/runtime': 7.24.4
+      react: 18.2.0
+      react-native: 0.73.6(@babel/core@7.24.0)(@babel/preset-env@7.24.4)(react@18.2.0)
+      recyclerlistview: 4.2.0(react-native@0.73.6)(react@18.2.0)
+      tslib: 2.4.0
     dev: false
 
   /@sideway/address@4.1.5:
@@ -11941,7 +11967,7 @@ packages:
     dependencies:
       object-assign: 4.1.1
       react: 18.2.0
-      react-is: 16.13.1
+      react-is: 18.2.0
     dev: false
 
   /react-style-singleton@2.2.1(@types/react@18.2.74)(react@18.2.0):
@@ -12026,6 +12052,19 @@ packages:
       esprima: 4.0.1
       source-map: 0.6.1
       tslib: 2.6.2
+    dev: false
+
+  /recyclerlistview@4.2.0(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-uuBCi0c+ggqHKwrzPX4Z/mJOzsBbjZEAwGGmlwpD/sD7raXixdAbdJ6BTcAmuWG50Cg4ru9p12M94Njwhr/27A==}
+    peerDependencies:
+      react: '>= 15.2.1'
+      react-native: '>= 0.30.0'
+    dependencies:
+      lodash.debounce: 4.0.8
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-native: 0.73.6(@babel/core@7.24.0)(@babel/preset-env@7.24.4)(react@18.2.0)
+      ts-object-utils: 0.0.5
     dev: false
 
   /redis-errors@1.2.0:
@@ -13148,6 +13187,10 @@ packages:
       yn: 3.1.1
     dev: true
 
+  /ts-object-utils@0.0.5:
+    resolution: {integrity: sha512-iV0GvHqOmilbIKJsfyfJY9/dNHCs969z3so90dQWsO1eMMozvTpnB1MEaUbb3FYtZTGjv5sIy/xmslEz0Rg2TA==}
+    dev: false
+
   /tsconfig-paths@3.15.0:
     resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}
     dependencies:
@@ -13159,6 +13202,10 @@ packages:
   /tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
     dev: true
+
+  /tslib@2.4.0:
+    resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
+    dev: false
 
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
