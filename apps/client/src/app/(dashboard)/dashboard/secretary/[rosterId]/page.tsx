@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { unstable_cache as cache } from "next/cache";
 import { Loader2 } from "lucide-react";
 
-import { client } from "@local/eden";
+import { client } from "@/lib/eden";
 import {
   Breadcrumb,
   BreadcrumbItem,

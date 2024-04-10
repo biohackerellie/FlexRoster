@@ -3,7 +3,7 @@ import { unstable_cache as cache } from "next/cache";
 import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
-import { client } from "@local/eden";
+import { client } from "@/lib/eden";
 import { DataTable } from "@local/ui/data-table";
 
 import { columns } from "./_components/rosterTable";

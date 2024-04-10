@@ -2,7 +2,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
 
 import { auth } from "@local/auth";
-import { client } from "@local/eden";
+import { client } from "@/lib/eden";
 import {
   Breadcrumb,
   BreadcrumbItem,

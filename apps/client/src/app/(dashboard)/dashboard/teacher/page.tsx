@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { unstable_cache as cache } from "next/cache";
 
 import { auth } from "@local/auth";
-import { client } from "@local/eden";
+import { client } from "@/lib/eden";
 import { Skeleton } from "@local/ui/skeleton";
 
 import { chatHrefConstructor } from "@/lib/utils";

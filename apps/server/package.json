@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "@local/server",
   "private": true,
   "type": "module",
   "exports": {
