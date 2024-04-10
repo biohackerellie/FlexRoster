@@ -40,5 +40,8 @@
     "editor.tabSize": 4
   },
   "cSpell.words": ["elysia", "jiti"],
-  "python.analysis.typeCheckingMode": "basic"
+  "python.analysis.typeCheckingMode": "basic",
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  }
 }
