@@ -23,7 +23,8 @@
     "lint:fix": "turbo lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
     "postinstall": "pnpm lint:ws",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "ui-add": "pnpm -F ui ui-add"
   },
   "devDependencies": {
     "@local/prettier-config": "workspace:*",

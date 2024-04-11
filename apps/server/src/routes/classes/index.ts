@@ -1,7 +1,7 @@
 import { Elysia, t } from "elysia";
 
 import { classroomsWithRosterCount } from "~/lib/sql";
-import { getClassById, getClasses } from "./handlers";
+import { getClassById, getClasses, resetOneClass } from "./handlers";
 
 export const classRoutes = new Elysia({ prefix: "/classes" })
 
@@ -11,4 +11,9 @@ export const classRoutes = new Elysia({ prefix: "/classes" })
       id: t.String(),
     }),
   })
-  .get("/secretary", () => classroomsWithRosterCount());
+  .get("/secretary", () => classroomsWithRosterCount())
+  .post("/refresh/:id", ({ params: { id } }) => resetOneClass(id), {
+    params: t.Object({
+      id: t.String(),
+    }),
+  });

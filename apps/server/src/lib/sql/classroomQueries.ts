@@ -1,13 +1,17 @@
+/**
+ * SQL queries for classrooms table
+ */
+
 import type { AnyColumn } from "@local/db";
 import { db, eq, schema, sql } from "@local/db";
 
-export const classroomsQuery = db
+export const classroomsQuery = db // get all classrooms and associated teacher
   .select()
   .from(schema.classrooms)
   .innerJoin(schema.users, eq(schema.classrooms.teacherId, schema.users.id))
   .prepare("classrooms");
 
-export const roomByIdQuery = db
+export const roomByIdQuery = db // get classroom by userId
   .select({
     id: schema.classrooms.id,
     roomNumber: schema.classrooms.roomNumber,
@@ -20,7 +24,7 @@ export const roomByIdQuery = db
   .where(eq(schema.classrooms.id, sql.placeholder("id")))
   .prepare("roomById");
 
-export const getClassroomIdByTeacher = db
+export const getClassroomIdByTeacher = db // returns classroomId by teacherId
   .select({
     classroomId: schema.classrooms.id,
   })

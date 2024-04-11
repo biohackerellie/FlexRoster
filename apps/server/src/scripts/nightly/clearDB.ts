@@ -7,17 +7,22 @@ export async function clearDB() {
     console.info("No classrooms to delete");
     process.exit(0);
   }
+
   console.info(`Deleting ${classroomsToDelete.length} classrooms ...`);
   let count = 0;
+
   try {
     await db.transaction(async (tx) => {
       for (const i of classroomsToDelete) {
         await tx
           .delete(schema.classrooms)
           .where(eq(schema.classrooms.id, i.id));
+
         count++;
         console.info(`Deleted ${count} classrooms`);
       }
+      await tx.delete(schema.classRosters);
+      console.info("Deleted class rosters");
     });
     console.info("Database cleared");
     process.exit(0);
