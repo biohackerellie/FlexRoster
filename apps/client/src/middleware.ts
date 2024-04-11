@@ -12,7 +12,7 @@ export default middleware((req) => {
   const now = new Date();
   const hours = now.getHours();
   const daysOfWeek = now.getDay();
-  console.log(hours);
+
   if (hours >= 17 || hours < 7 || daysOfWeek === 0 || daysOfWeek === 6) {
     return NextResponse.redirect(new URL("/404", req.url));
   }

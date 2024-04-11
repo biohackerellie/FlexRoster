@@ -1,0 +1,8 @@
+services:
+  builder:
+    container_name: docker.laurel.k12.mt.us/custom-builder
+    image: test-builder
+    build:
+      context: ../..
+      dockerfile: ./docker/Builder/Dockerfile
+    restart: unless-stopped

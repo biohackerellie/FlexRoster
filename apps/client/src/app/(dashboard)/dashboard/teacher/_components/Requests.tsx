@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -16,9 +15,49 @@ import { ScrollArea } from "@local/ui/scroll-area";
 import { Separator } from "@local/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@local/ui/tabs";
 
+import { useRequestNotifications } from "@/hooks";
 import { pusherClient } from "@/lib/pusher";
 import { toPusherKey } from "@/lib/utils";
 import { RequestApproval } from "../actions";
+
+interface RequestsComponentProps {
+  requests:
+    | {
+        incomingRequests: Request[] | null;
+        outgoingRequests: Request[] | null;
+      }
+    | null
+    | undefined;
+  userId: string;
+}
+
+const NewRequestsComponent: React.FC<RequestsComponentProps> = ({
+  userId,
+  requests,
+}) => {
+  useRequestNotifications(userId);
+  let incoming = null;
+  let outgoing = null;
+  if (requests) {
+    if (requests.incomingRequests && requests.incomingRequests.length > 0) {
+      incoming = requests.incomingRequests.filter((request) => {
+        return request.status === "pending";
+      });
+    }
+    if (requests.outgoingRequests && requests.outgoingRequests.length > 0) {
+      outgoing = requests.outgoingRequests;
+    }
+  }
+  return (
+    <div className="flex h-full max-h-[calc(100vh-6rem)] w-fit flex-1 flex-col content-center items-center justify-center align-middle">
+      <Requests
+        incomingRequests={incoming}
+        outgoing={outgoing}
+        userId={userId}
+      />
+    </div>
+  );
+};
 
 interface RequestsProps {
   incomingRequests: Request[] | null;
@@ -202,4 +241,4 @@ const Approval = async (
   }
 };
 
-export default Requests;
+export default NewRequestsComponent;
