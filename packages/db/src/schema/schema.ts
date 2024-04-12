@@ -51,6 +51,26 @@ export const rosterRelations = relations(classRosters, ({ one }) => ({
   }),
 }));
 
+export const requests = pgTable("requests", {
+  id: serial("id").primaryKey().notNull(),
+  requester: text("requester").notNull(),
+  toTeacher: text("toTeacher").notNull(),
+  currentTeacher: text("currentTeacher").notNull(),
+  dateRequested: timestamp("dateRequested", { precision: 3, mode: "string" }),
+  approved: boolean("approved"),
+  arrived: text("arrived")
+    .$type<"arrived" | "did not arrive" | "not marked">()
+    .default("not marked")
+    .notNull(),
+});
+
+export const requestRelations = relations(requests, ({ one }) => ({
+  users: one(users, {
+    fields: [requests.requester, requests.toTeacher, requests.currentTeacher],
+    references: [users.id, users.id, users.id],
+  }),
+}));
+
 export const transferLogs = pgTable("transferLogs", {
   id: serial("id").primaryKey().notNull(),
   studentEmail: text("studentEmail").notNull(),
@@ -61,28 +81,13 @@ export const transferLogs = pgTable("transferLogs", {
   teacherName: text("teacherName").notNull(),
 });
 
-export const prismaMigrations = pgTable("_prisma_migrations", {
-  id: varchar("id", { length: 36 }).primaryKey().notNull(),
-  checksum: varchar("checksum", { length: 64 }).notNull(),
-  finishedAt: timestamp("finished_at", { withTimezone: true, mode: "string" }),
-  migrationName: varchar("migration_name", { length: 255 }).notNull(),
-  logs: text("logs"),
-  rolledBackAt: timestamp("rolled_back_at", {
-    withTimezone: true,
-    mode: "string",
-  }),
-  startedAt: timestamp("started_at", { withTimezone: true, mode: "string" })
-    .defaultNow()
-    .notNull(),
-  appliedStepsCount: integer("applied_steps_count").default(0).notNull(),
-});
-
 export const classrooms = pgTable("classrooms", {
   id: text("id").primaryKey().notNull(),
   roomNumber: text("roomNumber").notNull(),
   teacherName: text("teacherName").notNull(),
   teacherId: text("teacherId"),
   available: boolean("available").default(true).notNull(),
+  comment: text("comment"),
 });
 
 export const classroomRelations = relations(classrooms, ({ many, one }) => ({

@@ -50,6 +50,13 @@
       "when": 1712150481050,
       "tag": "0006_faithful_rafael_vega",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1712940964238,
+      "tag": "0007_overconfident_mole_man",
+      "breakpoints": true
     }
   ]
 }
