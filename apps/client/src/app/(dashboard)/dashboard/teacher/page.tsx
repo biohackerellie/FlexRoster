@@ -26,6 +26,7 @@ import {
 import { DataTable } from "@local/ui/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@local/ui/tabs";
 
+import { ModeToggle } from "@/components/darkmodeToggle";
 import { client } from "@/lib/eden";
 import { chatHrefConstructor } from "@/lib/utils";
 import AlertComponent from "./_components/AlertComponent";
@@ -78,6 +79,7 @@ export default async function TeacherDashboardPage() {
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
+                <ModeToggle />
               </div>
             </div>
             <TabsContent value="roster">
