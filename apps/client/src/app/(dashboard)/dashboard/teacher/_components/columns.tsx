@@ -13,7 +13,7 @@ import {
   TooltipTrigger,
 } from "@local/ui/tooltip";
 
-import { TeacherTable } from "@/lib/types";
+import type { TeacherTable } from "@/lib/types";
 import { Attendance } from "../actions";
 
 export const columns: ColumnDef<TeacherTable>[] = [
