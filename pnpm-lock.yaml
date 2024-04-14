@@ -163,8 +163,8 @@ importers:
         specifier: ^0.9.0
         version: 0.9.0
       '@azure/identity':
-        specifier: ^4.0.1
-        version: 4.0.1
+        specifier: ^4.1.0
+        version: 4.1.0
       '@elysiajs/cors':
         specifier: ^1.0.2
         version: 1.0.2(elysia@1.0.13)
@@ -179,7 +179,7 @@ importers:
         version: link:../../packages/db
       '@microsoft/microsoft-graph-client':
         specifier: ^3.0.7
-        version: 3.0.7(@azure/identity@4.0.1)
+        version: 3.0.7(@azure/identity@4.1.0)
       '@sinclair/typebox':
         specifier: ^0.32.20
         version: 0.32.20
@@ -709,8 +709,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@azure/identity@4.0.1:
-    resolution: {integrity: sha512-yRdgF03SFLqUMZZ1gKWt0cs0fvrDIkq2bJ6Oidqcoo5uM85YMBnXWMzYKK30XqIT76lkFyAaoAAy5knXhrG4Lw==}
+  /@azure/identity@4.1.0:
+    resolution: {integrity: sha512-BhYkF8Xr2gXjyDxocm0pc9RI5J5a1jw8iW0dw6Bx95OGdYbuMyFZrrwNw4eYSqQ2BB6FZOqpJP3vjsAqRcvDhw==}
     engines: {node: '>=18.0.0'}
     dependencies:
       '@azure/abort-controller': 1.1.0
@@ -1604,7 +1604,7 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
-  /@microsoft/microsoft-graph-client@3.0.7(@azure/identity@4.0.1):
+  /@microsoft/microsoft-graph-client@3.0.7(@azure/identity@4.1.0):
     resolution: {integrity: sha512-/AazAV/F+HK4LIywF9C+NYHcJo038zEnWkteilcxC1FM/uK/4NVGDKGrxx7nNq1ybspAroRKT4I1FHfxQzxkUw==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -1622,7 +1622,7 @@ packages:
       stream-browserify:
         optional: true
     dependencies:
-      '@azure/identity': 4.0.1
+      '@azure/identity': 4.1.0
       '@babel/runtime': 7.24.4
       tslib: 2.6.2
     dev: false
