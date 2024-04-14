@@ -21,7 +21,7 @@
     "@local/db": "workspace:*",
     "@local/validators": "workspace:*",
     "@t3-oss/env-nextjs": "^0.9.2",
-    "@tanstack/react-table": "^8.15.3",
+    "@tanstack/react-table": "^8.16.0",
     "axios": "^1.6.8",
     "date-fns": "^3.6.0",
     "elysia": "^1.0.13",
