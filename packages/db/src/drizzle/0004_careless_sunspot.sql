@@ -1,1 +1,0 @@
-ALTER TABLE "session" ADD COLUMN "id" text NOT NULL;

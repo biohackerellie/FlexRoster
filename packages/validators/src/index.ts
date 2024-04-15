@@ -11,12 +11,7 @@ export const messageArrayValidator = z.array(messageValidator);
 
 export type Message = z.infer<typeof messageValidator>;
 
-const requestStatusSchema = z.enum([
-  "pending",
-  "approved",
-  "denied",
-  "checked in",
-]);
+const requestStatusSchema = z.enum(["pending", "approved", "denied"]);
 
 export const requestValidator = z.object({
   id: z.string(),
@@ -26,8 +21,10 @@ export const requestValidator = z.object({
   currentTeacherName: z.string(),
   newTeacher: z.string(),
   newTeacherName: z.string(),
+  dateRequested: z.string().datetime(),
   status: requestStatusSchema,
-  timestamp: z.number(),
+  arrived: z.boolean(),
+  timestamp: z.string().datetime(),
 });
 
 export const requestArrayValidator = z.array(requestValidator);

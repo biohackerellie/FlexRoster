@@ -5,57 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1711553285971,
-      "tag": "0000_quiet_rhino",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1711651707700,
-      "tag": "0001_absurd_goblin_queen",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1711652891244,
-      "tag": "0002_unique_hemingway",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1712081321529,
-      "tag": "0003_smart_lord_hawal",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1712081929218,
-      "tag": "0004_careless_sunspot",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1712082080097,
-      "tag": "0005_tranquil_obadiah_stane",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1712150481050,
-      "tag": "0006_faithful_rafael_vega",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "5",
-      "when": 1712940964238,
-      "tag": "0007_overconfident_mole_man",
+      "when": 1713189360152,
+      "tag": "0000_overconfident_lifeguard",
       "breakpoints": true
     }
   ]

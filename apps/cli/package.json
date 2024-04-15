@@ -16,7 +16,7 @@
   },
   "scripts": {
     "typecheck": "tsc",
-    "build": "tsup",
+    "builds": "tsup",
     "devv": "tsup --watch",
     "clean": "rm -rf dist .turbo node_modules",
     "start": "node dist/index.js",

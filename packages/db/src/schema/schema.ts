@@ -31,10 +31,6 @@ export const classRosters = pgTable("classRosters", {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
-  attendance: text("attendance")
-    .$type<"present" | "absent" | "not marked">()
-    .default("not marked")
-    .notNull(),
   transferred: boolean("transferred").default(false).notNull(),
   arrived: boolean("arrived").default(false).notNull(),
   id: serial("id").primaryKey().notNull(),
@@ -53,20 +49,24 @@ export const rosterRelations = relations(classRosters, ({ one }) => ({
 
 export const requests = pgTable("requests", {
   id: serial("id").primaryKey().notNull(),
-  requester: text("requester").notNull(),
-  toTeacher: text("toTeacher").notNull(),
+  studentId: text("requester").notNull(),
+  studentName: text("studentName").notNull(),
+  newTeacher: text("newTeacher").notNull(),
+  newTeacherName: text("newTeacherName").notNull(),
   currentTeacher: text("currentTeacher").notNull(),
-  dateRequested: timestamp("dateRequested", { precision: 3, mode: "string" }),
-  approved: boolean("approved"),
-  arrived: text("arrived")
-    .$type<"arrived" | "did not arrive" | "not marked">()
-    .default("not marked")
+  currentTeacherName: text("currentTeacherName").notNull(),
+  dateRequested: text("dateRequested").notNull(),
+  status: text("status")
+    .$type<"pending" | "approved" | "denied">()
+    .default("pending")
     .notNull(),
+  arrived: boolean("arrived").default(false).notNull(),
+  timestamp: text("timestamp").notNull(),
 });
 
 export const requestRelations = relations(requests, ({ one }) => ({
   users: one(users, {
-    fields: [requests.requester, requests.toTeacher, requests.currentTeacher],
+    fields: [requests.studentId, requests.newTeacher, requests.currentTeacher],
     references: [users.id, users.id, users.id],
   }),
 }));
