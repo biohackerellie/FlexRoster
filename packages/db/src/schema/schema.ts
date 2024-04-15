@@ -49,7 +49,7 @@ export const rosterRelations = relations(classRosters, ({ one }) => ({
 
 export const requests = pgTable("requests", {
   id: serial("id").primaryKey().notNull(),
-  studentId: text("requester").notNull(),
+  studentId: integer("studentId").notNull(),
   studentName: text("studentName").notNull(),
   newTeacher: text("newTeacher").notNull(),
   newTeacherName: text("newTeacherName").notNull(),
