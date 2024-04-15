@@ -1,5 +1,6 @@
 "use client";
 
+import type { TeacherTable } from "@/lib/types";
 import type { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { ArrowUpDown, CheckCircle, MessageSquare, XCircle } from "lucide-react";
@@ -13,7 +14,6 @@ import {
   TooltipTrigger,
 } from "@local/ui/tooltip";
 
-import { TeacherTable } from "@/lib/types";
 import { Attendance } from "../actions";
 
 export const columns: ColumnDef<TeacherTable>[] = [

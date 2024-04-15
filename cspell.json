@@ -1,9 +1,13 @@
 {
     "version": "0.2",
-    "ignorePaths": ["./packages/api/**"],
+    "ignorePaths": [
+        "./packages/api/**"
+    ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
-    "words": [],
+    "words": [
+        "datetime"
+    ],
     "ignoreWords": [],
     "import": []
 }

@@ -5,6 +5,7 @@ import { db, eq, schema, sql } from "@local/db";
 import {
   createClient,
   getRequestKV,
+  removeSingleRequest,
   setClassRoomKV,
   setRequestKV,
 } from "~/lib/redis";
@@ -102,10 +103,26 @@ export async function getTeacherRoster(userId: string) {
 
 export async function setAttendance(rosterId: number) {
   try {
-    await db
-      .update(schema.classRosters)
-      .set({ arrived: true })
-      .where(eq(schema.classRosters.id, rosterId));
+    const updated = await db.transaction(async (tx) => {
+      await tx
+        .update(schema.classRosters)
+        .set({ arrived: true })
+        .where(eq(schema.classRosters.id, rosterId));
+
+      const [updatedRequest] = await tx
+        .select({
+          timestamp: schema.requests.timestamp,
+          newTeacher: schema.requests.newTeacher,
+          currentTeacher: schema.requests.currentTeacher,
+        })
+        .from(schema.requests)
+        .where(eq(schema.requests.studentId, rosterId));
+      return updatedRequest!;
+    });
+
+    await removeSingleRequest(rosterId, updated.timestamp);
+    await removeSingleRequest(updated.newTeacher, updated.timestamp);
+    await removeSingleRequest(updated.currentTeacher, updated.timestamp);
 
     return new Response("OK", { status: 200 });
   } catch (e) {

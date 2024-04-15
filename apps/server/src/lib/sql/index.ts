@@ -8,3 +8,4 @@ export * from "./rosterQueries";
 export * from "./userQueries";
 export * from "./classroomQueries";
 export * from "./logQueries";
+export * from "./requestQueries";

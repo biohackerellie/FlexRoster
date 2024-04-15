@@ -11,23 +11,20 @@ export const messageArrayValidator = z.array(messageValidator);
 
 export type Message = z.infer<typeof messageValidator>;
 
-const requestStatusSchema = z.enum([
-  "pending",
-  "approved",
-  "denied",
-  "checked in",
-]);
+const requestStatusSchema = z.enum(["pending", "approved", "denied"]);
 
 export const requestValidator = z.object({
-  id: z.string(),
+  id: z.union([z.string(), z.number()]),
   studentId: z.number(),
   studentName: z.string(),
   currentTeacher: z.string(),
   currentTeacherName: z.string(),
   newTeacher: z.string(),
   newTeacherName: z.string(),
+  dateRequested: z.string().datetime(),
   status: requestStatusSchema,
-  timestamp: z.number(),
+  arrived: z.boolean().optional(),
+  timestamp: z.string().datetime(),
 });
 
 export const requestArrayValidator = z.array(requestValidator);

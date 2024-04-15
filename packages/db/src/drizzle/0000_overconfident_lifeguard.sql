@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS "classRosters" (
 	"studentEmail" text NOT NULL,
 	"studentName" text NOT NULL,
 	"classroomId" text NOT NULL,
-	"attendance" text DEFAULT 'not marked' NOT NULL,
 	"transferred" boolean DEFAULT false NOT NULL,
 	"arrived" boolean DEFAULT false NOT NULL,
 	"id" serial PRIMARY KEY NOT NULL,
@@ -35,7 +34,8 @@ CREATE TABLE IF NOT EXISTS "classrooms" (
 	"roomNumber" text NOT NULL,
 	"teacherName" text NOT NULL,
 	"teacherId" text,
-	"available" boolean DEFAULT true NOT NULL
+	"available" boolean DEFAULT true NOT NULL,
+	"comment" text
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "logs" (
@@ -45,15 +45,18 @@ CREATE TABLE IF NOT EXISTS "logs" (
 	"action" text NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "_prisma_migrations" (
-	"id" varchar(36) PRIMARY KEY NOT NULL,
-	"checksum" varchar(64) NOT NULL,
-	"finished_at" timestamp with time zone,
-	"migration_name" varchar(255) NOT NULL,
-	"logs" text,
-	"rolled_back_at" timestamp with time zone,
-	"started_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"applied_steps_count" integer DEFAULT 0 NOT NULL
+CREATE TABLE IF NOT EXISTS "requests" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"requester" text NOT NULL,
+	"studentName" text NOT NULL,
+	"newTeacher" text NOT NULL,
+	"newTeacherName" text NOT NULL,
+	"currentTeacher" text NOT NULL,
+	"currentTeacherName" text NOT NULL,
+	"dateRequested" text NOT NULL,
+	"status" text DEFAULT 'pending' NOT NULL,
+	"arrived" boolean DEFAULT false NOT NULL,
+	"timestamp" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "session" (

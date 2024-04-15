@@ -29,3 +29,10 @@ export async function getKeys(pattern: string) {
   await client.quit();
   return result;
 }
+
+export async function clearKV(key: string): Promise<number> {
+  const client = createClient();
+  const result = await client.del(key);
+  await client.quit();
+  return result;
+}

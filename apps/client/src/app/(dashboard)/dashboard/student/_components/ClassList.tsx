@@ -205,8 +205,9 @@ const columns: ColumnDef<StudentTable>[] = [
  * @param teacherName - string - The teacher's name.
  */
 async function handleTransfer(teacherId: string) {
+  const date = new Date().toLocaleDateString();
   try {
-    const res = await RequestRoom(teacherId);
+    const res = await RequestRoom(teacherId, date);
     if (res === 200) {
       toast.info("Your request has been sent", {
         position: "top-center",

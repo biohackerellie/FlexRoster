@@ -1,5 +1,5 @@
 {
-  "id": "7000b324-48b1-47f9-a1be-7104c9f524b9",
+  "id": "252e7ea3-5e46-4d04-be83-43b0e0f4356a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -117,13 +117,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "attendance": {
-          "name": "attendance",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'not marked'"
-        },
         "transferred": {
           "name": "transferred",
           "type": "boolean",
@@ -200,6 +193,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": true
+        },
+        "comment": {
+          "name": "comment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -252,59 +251,77 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "_prisma_migrations": {
-      "name": "_prisma_migrations",
+    "requests": {
+      "name": "requests",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(36)",
+          "type": "serial",
           "primaryKey": true,
           "notNull": true
         },
-        "checksum": {
-          "name": "checksum",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "finished_at": {
-          "name": "finished_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "migration_name": {
-          "name": "migration_name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "logs": {
-          "name": "logs",
+        "requester": {
+          "name": "requester",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "rolled_back_at": {
-          "name": "rolled_back_at",
-          "type": "timestamp with time zone",
+        "studentName": {
+          "name": "studentName",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "started_at": {
-          "name": "started_at",
-          "type": "timestamp with time zone",
+        "newTeacher": {
+          "name": "newTeacher",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "newTeacherName": {
+          "name": "newTeacherName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "currentTeacher": {
+          "name": "currentTeacher",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "currentTeacherName": {
+          "name": "currentTeacherName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dateRequested": {
+          "name": "dateRequested",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "default": "now()"
+          "default": "'pending'"
         },
-        "applied_steps_count": {
-          "name": "applied_steps_count",
-          "type": "integer",
+        "arrived": {
+          "name": "arrived",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": true,
-          "default": 0
+          "default": false
+        },
+        "timestamp": {
+          "name": "timestamp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
