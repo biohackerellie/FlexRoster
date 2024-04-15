@@ -10,8 +10,8 @@
     "cssVariables": true
   },
   "aliases": {
-    "components": "src/",
     "utils": "@local/ui",
+    "components": "src/",
     "ui": "src/"
   }
 }

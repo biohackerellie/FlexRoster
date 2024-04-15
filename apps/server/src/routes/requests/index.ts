@@ -4,14 +4,11 @@ import { getRequests, newRequest, requestApproval } from "./handlers";
 
 export const requestRoutes = new Elysia({ prefix: "/requests" })
   .get(
-    "/user/:userId",
-    ({ params: { userId }, body: { userRole } }) =>
-      getRequests(userId, userRole),
+    "/user/:userId/:userRole",
+    ({ params: { userId, userRole } }) => getRequests(userId, userRole),
     {
       params: t.Object({
         userId: t.String(),
-      }),
-      body: t.Object({
         userRole: t.Union([
           t.Literal("student"),
           t.Literal("teacher"),

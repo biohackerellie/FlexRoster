@@ -191,7 +191,7 @@ function ApprovalMenu({
   teacherId,
   newTeacherId,
 }: {
-  requestId: string;
+  requestId: string | number;
   studentId: number;
   teacherId: string;
   newTeacherId: string;
@@ -222,7 +222,7 @@ function ApprovalMenu({
 }
 
 const Approval = async (
-  requestId: string,
+  requestId: string | number,
   studentId: number,
   teacherId: string,
   newTeacherId: string,

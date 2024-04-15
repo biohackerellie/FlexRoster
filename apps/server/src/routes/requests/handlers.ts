@@ -25,10 +25,8 @@ interface newRequestProps {
   dateRequested: string;
 }
 
+type selectRequest = typeof schema.requests.$inferSelect;
 type insertRequest = typeof schema.requests.$inferInsert;
-
-
-
 
 export async function newRequest({
   userId,
@@ -36,7 +34,6 @@ export async function newRequest({
   dateRequested,
 }: newRequestProps) {
   try {
-
     const res = await getRequestSet(userId);
     if (res && res.length > 0) {
       const status = res[0]?.status!;
@@ -96,8 +93,8 @@ export async function getRequests(
   userRole: "student" | "teacher" | "admin" | "secretary",
 ) {
   try {
-    let incomingRequests = [];
-    let outgoingRequests = [];
+    const incomingRequests = [];
+    const outgoingRequests = [];
     const cacheRequests = await getRequestSet(userId);
     if (cacheRequests) {
       if (userRole === "teacher") {

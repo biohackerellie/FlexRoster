@@ -37,6 +37,7 @@ export default async function TeacherDashboardPage() {
   const session = await auth();
   const firstName = session?.user?.name!.split(" ")[0] ?? "Teacher";
   const teacherId = session?.user?.id!;
+  const userRole = session?.user?.roles!;
 
   const { roster, messages, requests } = await AllData(teacherId);
 
@@ -125,7 +126,7 @@ export default async function TeacherDashboardPage() {
                     fallback={<Loader2 className="h-8 w-8 animate-spin" />}
                   >
                     <NewRequestsComponent
-                      requests={requests}
+                      requests={{ incomingRequests: [], outgoingRequests: [] }}
                       userId={teacherId}
                     />
                   </React.Suspense>
@@ -210,8 +211,9 @@ const cachedRequests = cache(
 
 async function getRequests(teacherId: string) {
   const { data, error } = await client.api.requests
-    .user({ userId: teacherId })
+    .user({ userId: teacherId })({ userRole: "teacher" })
     .get();
+
   if (error) {
     console.error(error);
   }
