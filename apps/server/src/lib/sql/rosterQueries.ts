@@ -11,6 +11,7 @@ export const rosterByIDQuery = db
   .select()
   .from(schema.students)
   .where(eq(schema.students.id, sql.placeholder("id")))
+
   .prepare("rosterByID");
 
 export const rosterByTeacherId = db

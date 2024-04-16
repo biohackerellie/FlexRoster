@@ -5,6 +5,7 @@ import { db, eq, schema } from "@local/db";
 import {
   createClient,
   getRequestKV,
+  getRequestSet,
   removeSingleRequest,
   setClassRoomKV,
   setRequestKV,
@@ -17,6 +18,7 @@ import {
   userByRosterId,
   userRosterQuery,
 } from "~/lib/sql";
+import { getRequests } from "../requests/handlers";
 
 export async function getRosters() {
   try {
@@ -39,27 +41,9 @@ export async function getRostersById(id: string) {
 
 export async function getStudentRoster(userId: string) {
   try {
-    let teacherName = "";
-    let roomNumber = "";
-    let message = "";
-    const client = createClient();
-
-    const request = await client.hgetall(`request:${userId}`);
-
-    if (Object.keys(request).length > 0) {
-      const teacherID = request.newTeacher!;
-      const result = await teacherQuery.execute({ id: teacherID });
-      const teacher = result[0];
-      teacherName = teacher?.user?.name!;
-      roomNumber = teacher?.classrooms?.roomNumber!;
-      message = `You transfered to FLEX room ${roomNumber} with ${teacherName}`;
-    } else {
-      const result = await userRosterQuery.execute({ id: userId });
-      const roster = result[0];
-      teacherName = roster?.classrooms?.teacherName!;
-      roomNumber = roster?.classrooms?.roomNumber!;
-      message = `Your FLEX class today is with ${teacherName} in room ${roomNumber}`;
-    }
+    const [student] = await userRosterQuery.execute({ id: userId });
+    if (!student) throw new NotFoundError("No roster found with that userId");
+    const message = `Your FLEX class today is with ${student?.classrooms?.teacherName} in room ${student?.classrooms?.roomNumber}`;
     return message;
   } catch (e) {
     console.error(e);
@@ -119,7 +103,7 @@ export async function setAttendance(rosterId: number) {
       return updatedRequest!;
     });
 
-    await removeSingleRequest(student?.id!, updated.timestamp);
+    await removeSingleRequest(student?.id, updated.timestamp);
     await removeSingleRequest(updated.newTeacher, updated.timestamp);
     await removeSingleRequest(updated.currentTeacher, updated.timestamp);
 
