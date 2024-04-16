@@ -1,7 +1,0 @@
-version: "3.3"
-services:
-  agile-python-app:
-    image: localhost:5000/agile-python-app
-    build:
-      context: ./
-      dockerfile: ./Dockerfile.yml
