@@ -21,38 +21,23 @@ import { toPusherKey } from "@/lib/utils";
 import { RequestApproval } from "../actions";
 
 interface RequestsComponentProps {
-  requests:
-    | {
-        incomingRequests: Request[] | null;
-        outgoingRequests: Request[] | null;
-      }
-    | null
-    | undefined;
+  incomingRequests: Request[] | null | undefined;
+  outgoingRequests: Request[] | null | undefined;
   userId: string;
 }
 
 const NewRequestsComponent: React.FC<RequestsComponentProps> = ({
   userId,
-  requests,
+  incomingRequests,
+  outgoingRequests,
 }) => {
   useRequestNotifications(userId);
-  let incoming = null;
-  let outgoing = null;
-  if (requests) {
-    if (requests.incomingRequests && requests.incomingRequests.length > 0) {
-      incoming = requests.incomingRequests.filter((request) => {
-        return request.status === "pending";
-      });
-    }
-    if (requests.outgoingRequests && requests.outgoingRequests.length > 0) {
-      outgoing = requests.outgoingRequests;
-    }
-  }
+
   return (
     <div className="flex h-full max-h-[calc(100vh-6rem)] w-fit flex-1 flex-col content-center items-center justify-center align-middle">
       <Requests
-        incomingRequests={incoming}
-        outgoing={outgoing}
+        incomingRequests={incomingRequests}
+        outgoing={outgoingRequests}
         userId={userId}
       />
     </div>
@@ -60,8 +45,8 @@ const NewRequestsComponent: React.FC<RequestsComponentProps> = ({
 };
 
 interface RequestsProps {
-  incomingRequests: Request[] | null;
-  outgoing: Request[] | null;
+  incomingRequests: Request[] | null | undefined;
+  outgoing: Request[] | null | undefined;
 
   userId: string;
 }
@@ -71,11 +56,11 @@ const Requests: React.FC<RequestsProps> = ({
   outgoing,
   userId,
 }) => {
-  const [requests, setRequests] = React.useState<Request[] | null>(
+  const [requests, setRequests] = React.useState<Request[] | null | undefined>(
     incomingRequests,
   );
   const [outgoingRequests, setOutgoingRequests] = React.useState<
-    Request[] | null
+    Request[] | null | undefined
   >(outgoing);
   React.useEffect(() => {
     pusherClient.subscribe(toPusherKey(`request:${userId}`));
@@ -110,7 +95,7 @@ const Requests: React.FC<RequestsProps> = ({
         <TabsContent value="requests">
           <div className="flex h-48 w-auto items-center justify-center ">
             <ScrollArea>
-              {requests ? (
+              {requests && requests.length > 0 ? (
                 requests.map((request, index) => {
                   return (
                     <div key={index}>
@@ -131,7 +116,7 @@ const Requests: React.FC<RequestsProps> = ({
         </TabsContent>
         <TabsContent value="outgoing">
           <ScrollArea>
-            {outgoingRequests ? (
+            {outgoingRequests && outgoingRequests.length > 0 ? (
               outgoingRequests.map((request, index) => {
                 return (
                   <div key={index}>
@@ -192,7 +177,7 @@ function ApprovalMenu({
   newTeacherId,
 }: {
   requestId: string | number;
-  studentId: number;
+  studentId: string;
   teacherId: string;
   newTeacherId: string;
 }) {
@@ -223,7 +208,7 @@ function ApprovalMenu({
 
 const Approval = async (
   requestId: string | number,
-  studentId: number,
+  studentId: string,
   teacherId: string,
   newTeacherId: string,
   status: "approved" | "denied",

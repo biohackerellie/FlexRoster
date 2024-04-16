@@ -6,7 +6,7 @@ services:
     ports:
       - "3030:3030"
     deploy:
-      replicas: 3 # You can adjust the number of replicas as needed
+      replicas: 3
       restart_policy:
         condition: on-failure
     networks:
@@ -17,7 +17,7 @@ services:
     ports:
       - "3000:3000"
     deploy:
-      replicas: 3 # Adjust based on your needs
+      replicas: 3
       restart_policy:
         condition: on-failure
     networks:

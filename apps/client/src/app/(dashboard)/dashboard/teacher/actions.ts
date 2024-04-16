@@ -7,7 +7,7 @@ import { client } from "@/lib/eden";
 export async function RequestApproval(
   requestId: string | number,
   status: "approved" | "denied",
-  studentId: number,
+  studentId: string,
   teacherId: string,
   newTeacherId: string,
 ) {

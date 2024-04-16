@@ -15,4 +15,4 @@ export type User = PrismaModels["User"];
 export type Account = PrismaModels["Account"];
 export type UserRole = ["admin", "student", "teacher", "secretary"];
 export type classrooms = PrismaModels["classrooms"];
-export type classRosters = PrismaModels["classRosters"];
+export type students = PrismaModels["students"];

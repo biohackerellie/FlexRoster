@@ -19,10 +19,9 @@ export const role = pgEnum("Role", [
 ]);
 
 /**
- * should have gone with classStudents instead of classRosters
- * @description classRosters is a table that holds the relationship between a student and a classroom
+ * @description students is a table that holds the relationship between an InfiniteCampus student and classrooms, and AD users
  */
-export const classRosters = pgTable("classRosters", {
+export const students = pgTable("students", {
   studentEmail: text("studentEmail").notNull().unique(),
   studentName: text("studentName").notNull(),
   classroomId: text("classroomId")
@@ -36,20 +35,20 @@ export const classRosters = pgTable("classRosters", {
   id: serial("id").primaryKey().notNull(),
 });
 
-export const rosterRelations = relations(classRosters, ({ one }) => ({
+export const studentRelations = relations(students, ({ one }) => ({
   classroom: one(classrooms, {
-    fields: [classRosters.classroomId],
+    fields: [students.classroomId],
     references: [classrooms.id],
   }),
   users: one(users, {
-    fields: [classRosters.studentEmail],
+    fields: [students.studentEmail],
     references: [users.email],
   }),
 }));
 
 export const requests = pgTable("requests", {
   id: serial("id").primaryKey().notNull(),
-  studentId: integer("studentId").notNull(),
+  studentId: text("studentId").notNull(),
   studentName: text("studentName").notNull(),
   newTeacher: text("newTeacher").notNull(),
   newTeacherName: text("newTeacherName").notNull(),
@@ -60,26 +59,16 @@ export const requests = pgTable("requests", {
     .$type<"pending" | "approved" | "denied">()
     .default("pending")
     .notNull(),
-  arrived: boolean("arrived").default(false).notNull(),
+  arrived: boolean("arrived").default(false),
   timestamp: text("timestamp").notNull(),
 });
 
 export const requestRelations = relations(requests, ({ one }) => ({
   users: one(users, {
-    fields: [requests.studentId, requests.newTeacher, requests.currentTeacher],
+    fields: [requests.newTeacher, requests.currentTeacher, requests.studentId],
     references: [users.id, users.id, users.id],
   }),
 }));
-
-export const transferLogs = pgTable("transferLogs", {
-  id: serial("id").primaryKey().notNull(),
-  studentEmail: text("studentEmail").notNull(),
-  createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
-    .defaultNow()
-    .notNull(),
-  roomNumber: text("roomNumber").notNull(),
-  teacherName: text("teacherName").notNull(),
-});
 
 export const classrooms = pgTable("classrooms", {
   id: text("id").primaryKey().notNull(),
@@ -91,7 +80,7 @@ export const classrooms = pgTable("classrooms", {
 });
 
 export const classroomRelations = relations(classrooms, ({ many, one }) => ({
-  classRosters: many(classRosters),
+  students: many(students),
   users: one(users, {
     fields: [classrooms.teacherId],
     references: [users.id],
@@ -113,9 +102,9 @@ export const users = pgTable("user", {
 export type SelectUser = typeof users.$inferSelect;
 
 export const userRelations = relations(users, ({ one, many }) => ({
-  classRosters: one(classRosters, {
+  students: one(students, {
     fields: [users.email],
-    references: [classRosters.studentEmail],
+    references: [students.studentEmail],
   }),
   classrooms: one(classrooms),
   logs: many(logs),

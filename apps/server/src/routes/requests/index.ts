@@ -1,20 +1,24 @@
 import { Elysia, t } from "elysia";
 
-import { getRequests, newRequest, requestApproval } from "./handlers";
+import {
+  getRequests,
+  getTeacherRequests,
+  newRequest,
+  requestApproval,
+} from "./handlers";
 
 export const requestRoutes = new Elysia({ prefix: "/requests" })
+  .get("/student/:userId/", ({ params: { userId } }) => getRequests(userId), {
+    params: t.Object({
+      userId: t.String(),
+    }),
+  })
   .get(
-    "/user/:userId/:userRole",
-    ({ params: { userId, userRole } }) => getRequests(userId, userRole),
+    "/teacher/:userId",
+    ({ params: { userId } }) => getTeacherRequests(userId),
     {
       params: t.Object({
         userId: t.String(),
-        userRole: t.Union([
-          t.Literal("student"),
-          t.Literal("teacher"),
-          t.Literal("admin"),
-          t.Literal("secretary"),
-        ]),
       }),
     },
   )
@@ -42,7 +46,7 @@ export const requestRoutes = new Elysia({ prefix: "/requests" })
         requestId: t.String(),
       }),
       body: t.Object({
-        studentId: t.Number(),
+        studentId: t.String(),
         teacherId: t.String(),
         newTeacherId: t.String(),
         status: t.Union([t.Literal("approved"), t.Literal("denied")]),

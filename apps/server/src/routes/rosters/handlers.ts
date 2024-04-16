@@ -1,6 +1,6 @@
 import { NotFoundError } from "elysia";
 
-import { db, eq, schema, sql } from "@local/db";
+import { db, eq, schema } from "@local/db";
 
 import {
   createClient,
@@ -14,6 +14,7 @@ import {
   rosterByTeacherId,
   rosterQuery,
   teacherQuery,
+  userByRosterId,
   userRosterQuery,
 } from "~/lib/sql";
 
@@ -81,11 +82,7 @@ export async function setStudentRoster(
     }
     await setClassRoomKV(email, `Room ${roomNumber} with ${teacherName}`);
     await setRequestKV(email);
-    await db.insert(schema.transferLogs).values({
-      studentEmail: email,
-      roomNumber: roomNumber,
-      teacherName: teacherName,
-    });
+
     return new Response("OK", { status: 200 });
   } catch (e) {
     throw new NotFoundError("No roster found with that email");
@@ -103,11 +100,13 @@ export async function getTeacherRoster(userId: string) {
 
 export async function setAttendance(rosterId: number) {
   try {
+    const studentRaw = await userByRosterId.execute({ id: rosterId });
+    const student = studentRaw[0]!;
     const updated = await db.transaction(async (tx) => {
       await tx
-        .update(schema.classRosters)
+        .update(schema.students)
         .set({ arrived: true })
-        .where(eq(schema.classRosters.id, rosterId));
+        .where(eq(schema.students.id, rosterId));
 
       const [updatedRequest] = await tx
         .select({
@@ -116,11 +115,11 @@ export async function setAttendance(rosterId: number) {
           currentTeacher: schema.requests.currentTeacher,
         })
         .from(schema.requests)
-        .where(eq(schema.requests.studentId, rosterId));
+        .where(eq(schema.requests.studentId, student?.id));
       return updatedRequest!;
     });
 
-    await removeSingleRequest(rosterId, updated.timestamp);
+    await removeSingleRequest(student?.id!, updated.timestamp);
     await removeSingleRequest(updated.newTeacher, updated.timestamp);
     await removeSingleRequest(updated.currentTeacher, updated.timestamp);
 

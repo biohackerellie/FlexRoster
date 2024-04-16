@@ -47,10 +47,10 @@ const customCount = (column?: AnyColumn) => {
 
 export const countRosterByClassroomId = db
   .select({
-    count: customCount(schema.classRosters.classroomId),
+    count: customCount(schema.students.classroomId),
   })
-  .from(schema.classRosters)
-  .where(eq(schema.classRosters.classroomId, sql.placeholder("classroomId")))
+  .from(schema.students)
+  .where(eq(schema.students.classroomId, sql.placeholder("classroomId")))
   .prepare("countRosterByClassroomId");
 
 export async function classroomsWithRosterCount() {

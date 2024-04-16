@@ -1,6 +1,6 @@
 import * as React from "react";
 import { unstable_cache as cache } from "next/cache";
-import { File, ListFilter, Loader2, PlusCircle, Search } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
 import {
@@ -37,7 +37,6 @@ export default async function TeacherDashboardPage() {
   const session = await auth();
   const firstName = session?.user?.name!.split(" ")[0] ?? "Teacher";
   const teacherId = session?.user?.id!;
-  const userRole = session?.user?.roles!;
 
   const { roster, messages, requests } = await AllData(teacherId);
 
@@ -126,7 +125,8 @@ export default async function TeacherDashboardPage() {
                     fallback={<Loader2 className="h-8 w-8 animate-spin" />}
                   >
                     <NewRequestsComponent
-                      requests={{ incomingRequests: [], outgoingRequests: [] }}
+                      incomingRequests={requests?.incomingRequests ?? undefined}
+                      outgoingRequests={requests?.outgoingRequests ?? undefined}
                       userId={teacherId}
                     />
                   </React.Suspense>
@@ -144,7 +144,7 @@ async function AllData(teacherId: string) {
   const [roster, messages, requests] = await Promise.all([
     cachedData(teacherId),
     getMessages(teacherId),
-    cachedRequests(teacherId),
+    getRequests(teacherId),
   ]);
   return { roster, messages, requests };
 }
@@ -200,23 +200,12 @@ async function getMessages(teacherId: string) {
   return data;
 }
 
-const cachedRequests = cache(
-  async (teacherId: string) => getRequests(teacherId),
-  ["requests"],
-  {
-    revalidate: 60,
-    tags: ["requests"],
-  },
-);
-
 async function getRequests(teacherId: string) {
   const { data, error } = await client.api.requests
-    .user({ userId: teacherId })({ userRole: "teacher" })
+    .teacher({ userId: teacherId })
     .get();
-
   if (error) {
     console.error(error);
   }
-
   return data;
 }

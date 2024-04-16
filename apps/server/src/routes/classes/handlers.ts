@@ -12,7 +12,7 @@ import {
 } from "~/lib/sql";
 import { fetcher, icAuth } from "~/lib/utils";
 
-type insertClassRoster = typeof schema.classRosters.$inferInsert;
+type insertClassRoster = typeof schema.students.$inferInsert;
 
 export async function getClasses() {
   try {
@@ -82,9 +82,9 @@ export async function resetOneClass(userId: string) {
     }
     await db.transaction(async (tx) => {
       await tx
-        .delete(schema.classRosters)
-        .where(eq(schema.classRosters.classroomId, id));
-      await tx.insert(schema.classRosters).values(defaultRoster);
+        .delete(schema.students)
+        .where(eq(schema.students.classroomId, id));
+      await tx.insert(schema.students).values(defaultRoster);
     });
   } catch (e) {
     console.error(e instanceof Error ? e.message : e);

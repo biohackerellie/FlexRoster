@@ -4,16 +4,14 @@ import type { Logs, Request } from "@local/validators";
 import { db, eq, schema, sql } from "@local/db";
 
 import {
-  getHash,
-  getKeys,
   getRequestSet,
   newLog,
   newRequestSet,
   removeSingleRequest,
-  setHash,
 } from "~/lib/redis";
 import {
   getClassroomIdByTeacher,
+  userByRosterId,
   userQuery,
   userRequestQuery,
   userRosterQuery,
@@ -57,8 +55,8 @@ export async function newRequest({
       const timestamp = Date.now().toString();
       const requestData: insertRequest = {
         status: "pending",
-        studentName: student?.user?.name!,
-        studentId: student?.classRosters?.id!,
+        studentName: student?.user.name!,
+        studentId: student?.user.id!,
         dateRequested,
         currentTeacher,
         currentTeacherName,
@@ -88,27 +86,20 @@ export async function newRequest({
   }
 }
 
-export async function getRequests(
-  userId: string,
-  userRole: "student" | "teacher" | "admin" | "secretary",
-) {
+export async function getTeacherRequests(userId: string) {
   try {
     const incomingRequests = [];
     const outgoingRequests = [];
     const cacheRequests = await getRequestSet(userId);
     if (cacheRequests) {
-      if (userRole === "teacher") {
-        for (const request of cacheRequests) {
-          if (request.newTeacher === userId) {
-            incomingRequests.push(request);
-          } else if (request.currentTeacher === userId) {
-            outgoingRequests.push(request);
-          }
+      for (const request of cacheRequests) {
+        if (request.newTeacher === userId) {
+          incomingRequests.push(request);
+        } else if (request.currentTeacher === userId) {
+          outgoingRequests.push(request);
         }
-        return { incomingRequests, outgoingRequests };
-      } else {
-        return cacheRequests;
       }
+      return { incomingRequests, outgoingRequests };
     } else {
       const requests = await userRequestQuery.execute({ userId: userId });
 
@@ -116,8 +107,8 @@ export async function getRequests(
         return;
       }
       for (const request of requests) {
-        await newRequestSet(userId, request);
-        if (userRole === "teacher") {
+        if (request.status === "pending") {
+          await newRequestSet(userId, request);
           if (request.newTeacher === userId) {
             incomingRequests.push(request);
           } else if (request.currentTeacher === userId) {
@@ -125,11 +116,33 @@ export async function getRequests(
           }
         }
       }
-      if (userRole === "teacher") {
-        return { incomingRequests, outgoingRequests };
-      } else {
-        return requests;
+      return { incomingRequests, outgoingRequests };
+    }
+  } catch (e) {
+    console.error(e);
+    if (e instanceof Error) {
+      throw new Error(e.message);
+    } else {
+      throw new Error("Unknown error");
+    }
+  }
+}
+
+export async function getRequests(userId: string) {
+  try {
+    const cacheRequests = await getRequestSet(userId);
+
+    if (cacheRequests) {
+      return cacheRequests;
+    } else {
+      const requests = await userRequestQuery.execute({ userId: userId });
+      if (requests.length === 0) {
+        return;
       }
+      for (const request of requests) {
+        await newRequestSet(userId, request);
+      }
+      return requests;
     }
   } catch (e) {
     console.error(e);
@@ -147,14 +160,17 @@ export async function getRequests(
 
 export async function requestApproval(
   requestId: string,
-  studentId: number,
+  studentId: string,
   teacherId: string,
   newTeacherId: string,
   status: "approved" | "denied",
 ) {
   try {
     // clear student request cache
-    await removeSingleRequest(studentId);
+
+    const [student] = await userRosterQuery.execute({ id: studentId });
+    if (!student) throw new NotFoundError("No student found with that ID");
+    await removeSingleRequest(student.user.id);
 
     // get new teacher's roster
     const newClassroomId = await getClassroomIdByTeacher.execute({
@@ -168,9 +184,9 @@ export async function requestApproval(
       if (status === "approved") {
         // if approved update student's classroomId in db
         await tx
-          .update(schema.classRosters)
+          .update(schema.students)
           .set({ classroomId: newClassroomId[0]?.classroomId })
-          .where(eq(schema.classRosters.id, studentId));
+          .where(eq(schema.students.studentEmail, student.user.email));
       }
       // update request status in db
       await tx
@@ -190,7 +206,7 @@ export async function requestApproval(
     const log: Logs = {
       user: newTeacherId,
       type: "request",
-      action: `User ${newTeacherId} ${status} request ${requestId} for student ${studentId} from teacher ${teacherId} to teacher ${newTeacherId}`,
+      action: `User ${newTeacherId} ${status} request ${requestId} for student ${student.user.id} from teacher ${teacherId} to teacher ${newTeacherId}`,
     };
     await newLog(log);
 

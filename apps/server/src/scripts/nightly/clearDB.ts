@@ -21,7 +21,7 @@ export async function clearDB() {
         count++;
         console.info(`Deleted ${count} classrooms`);
       }
-      await tx.delete(schema.classRosters);
+      await tx.delete(schema.students);
       console.info("Deleted class rosters");
     });
     console.info("Database cleared");

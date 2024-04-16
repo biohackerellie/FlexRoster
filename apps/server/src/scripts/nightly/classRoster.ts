@@ -41,7 +41,7 @@ export async function RosterSync() {
         count++;
       }
     }
-    await db.insert(schema.classRosters).values(rosterData);
+    await db.insert(schema.students).values(rosterData);
     console.log(`Completed. ${count} students added to roster.`);
     process.exit(0);
   } catch (error: any) {

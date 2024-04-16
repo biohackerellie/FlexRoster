@@ -1,6 +1,8 @@
 import { db, eq, schema } from "@local/db";
 
+import type { RosterResponse } from "~/lib/types";
 import { env } from "~/env";
+import { fetcher, icAuth } from "~/lib/utils";
 
 type SyncTeachers = {
   email: string;

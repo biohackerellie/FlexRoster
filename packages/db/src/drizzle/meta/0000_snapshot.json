@@ -1,5 +1,5 @@
 {
-  "id": "252e7ea3-5e46-4d04-be83-43b0e0f4356a",
+  "id": "02d59c73-9b25-4b51-8374-c0280f200a75",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -94,70 +94,6 @@
         }
       },
       "uniqueConstraints": {}
-    },
-    "classRosters": {
-      "name": "classRosters",
-      "schema": "",
-      "columns": {
-        "studentEmail": {
-          "name": "studentEmail",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "studentName": {
-          "name": "studentName",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "classroomId": {
-          "name": "classroomId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "transferred": {
-          "name": "transferred",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
-        "arrived": {
-          "name": "arrived",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "classRosters_classroomId_classrooms_id_fk": {
-          "name": "classRosters_classroomId_classrooms_id_fk",
-          "tableFrom": "classRosters",
-          "tableTo": "classrooms",
-          "columnsFrom": ["classroomId"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "classRosters_studentEmail_unique": {
-          "name": "classRosters_studentEmail_unique",
-          "nullsNotDistinct": false,
-          "columns": ["studentEmail"]
-        }
-      }
     },
     "classrooms": {
       "name": "classrooms",
@@ -261,9 +197,9 @@
           "primaryKey": true,
           "notNull": true
         },
-        "requester": {
-          "name": "requester",
-          "type": "text",
+        "studentId": {
+          "name": "studentId",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -314,7 +250,7 @@
           "name": "arrived",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": false
         },
         "timestamp": {
@@ -367,46 +303,69 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "transferLogs": {
-      "name": "transferLogs",
+    "students": {
+      "name": "students",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
         "studentEmail": {
           "name": "studentEmail",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "roomNumber": {
-          "name": "roomNumber",
+        "studentName": {
+          "name": "studentName",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "teacherName": {
-          "name": "teacherName",
+        "classroomId": {
+          "name": "classroomId",
           "type": "text",
           "primaryKey": false,
+          "notNull": true
+        },
+        "transferred": {
+          "name": "transferred",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "arrived": {
+          "name": "arrived",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
           "notNull": true
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "students_classroomId_classrooms_id_fk": {
+          "name": "students_classroomId_classrooms_id_fk",
+          "tableFrom": "students",
+          "tableTo": "classrooms",
+          "columnsFrom": ["classroomId"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "students_studentEmail_unique": {
+          "name": "students_studentEmail_unique",
+          "nullsNotDistinct": false,
+          "columns": ["studentEmail"]
+        }
+      }
     },
     "user": {
       "name": "user",
