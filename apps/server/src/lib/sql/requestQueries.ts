@@ -1,4 +1,4 @@
-import { db, eq, or, schema, sql } from "@local/db";
+import { db, eq, gte, or, schema, sql } from "@local/db";
 
 export const userRequestQuery = db
   .select()
@@ -11,3 +11,21 @@ export const userRequestQuery = db
     ),
   )
   .prepare("userRequestQuery");
+
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+export const studentRequestsQuery = db
+  .select()
+  .from(schema.requests)
+  .innerJoin(schema.users, eq(schema.requests.studentId, schema.users.id))
+  .innerJoin(
+    schema.students,
+    eq(schema.users.email, schema.students.studentEmail),
+  )
+  .leftJoin(
+    schema.classrooms,
+    eq(schema.requests.newTeacher, schema.classrooms.teacherId),
+  )
+  .where(gte(schema.requests.dateRequested, today.toISOString()))
+  .prepare("studentRequestsQuery");

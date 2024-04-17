@@ -15,6 +15,8 @@ async function syncRoster() {
   try {
     const token = await icAuth();
 
+    const existingClassrooms = await db.select().from(schema.classrooms);
+
     const data = await fetcher<ClassResponse>(`${env.IC_CLASS_QUERY}`, {
       method: "GET",
       headers: {
@@ -24,6 +26,7 @@ async function syncRoster() {
       },
     });
 
+    // #todo - change class title to env/config variable #153
     // Swap out STEAM value either STEAM-A for first semester or STEAM-B for second semester
 
     const filteredClasses = data.classes.filter((cls) =>
@@ -41,8 +44,19 @@ async function syncRoster() {
       where: eq(schema.users.role, "teacher"),
     });
 
+    const classroomsToDelete = existingClassrooms.filter((classroom) => {
+      return !classTitles.some((c) => c.id === classroom.id);
+    });
+
     let count = 0;
+    let deletedCount = 0;
     await db.transaction(async (tx) => {
+      for (const i of classroomsToDelete) {
+        await tx
+          .delete(schema.classrooms)
+          .where(eq(schema.classrooms.id, i.id));
+        deletedCount++;
+      }
       for (const room of classTitles) {
         // if room.teacher contains "Brandi Fox" in any order, skip entry
         if (
@@ -67,16 +81,19 @@ async function syncRoster() {
 
         // get teacher id from users table for corresponding teacher name
 
-        await tx.insert(schema.classrooms).values({
-          id: room.id,
-          roomNumber: room.roomNumber,
-          teacherName: teacherName,
-          teacherId: user,
-        });
-        count++;
-        console.log(count);
+        await tx
+          .insert(schema.classrooms)
+          .values({
+            id: room.id,
+            roomNumber: room.roomNumber,
+            teacherName: teacherName,
+            teacherId: user,
+          })
+          .onConflictDoNothing();
       }
     });
+    console.log(`Deleted ${count} classrooms`);
+    console.log(`Added ${count} classrooms`);
     console.log("Completed");
     process.exit(0);
   } catch (error) {

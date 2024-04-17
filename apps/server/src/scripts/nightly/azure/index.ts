@@ -42,7 +42,6 @@ async function fetchAllUsers(
 async function azureTeachers(): Promise<AzureUser[]> {
   try {
     const token = await azureAuth();
-    console.log("token", token);
     const staffLink: string | undefined = env.AZURE_TEACHER_QUERY;
     const helpdeskLink: string | undefined = env.AZURE_HELPDESK_QUERY;
     const staffPromise = fetchAllUsers(staffLink, token);
@@ -53,7 +52,6 @@ async function azureTeachers(): Promise<AzureUser[]> {
       helpdeskPromise,
     ]);
     // Fetch all classrooms from the database
-    console.log("helpdeskData", helpdeskData);
     let teacherCount = 0;
     let helpdeskCount = 0;
     // Use a transaction to insert all the users into the database at the same time

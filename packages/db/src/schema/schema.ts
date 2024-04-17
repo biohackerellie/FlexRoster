@@ -108,6 +108,7 @@ export const userRelations = relations(users, ({ one, many }) => ({
   }),
   classrooms: one(classrooms),
   logs: many(logs),
+  requests: many(requests),
 }));
 
 export const accounts = pgTable(
