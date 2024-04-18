@@ -23,7 +23,7 @@ export const studentRequestsQuery = db
     schema.students,
     eq(schema.users.email, schema.students.studentEmail),
   )
-  .leftJoin(
+  .innerJoin(
     schema.classrooms,
     eq(schema.requests.newTeacher, schema.classrooms.teacherId),
   )

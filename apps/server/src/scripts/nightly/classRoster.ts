@@ -28,8 +28,7 @@ export async function RosterSync() {
     );
     const rosterData: Roster[] = []; // Initialize array to store IC roster data
     const studentsWithRequestToday: SelectClassRoster[] = []; // Initialize array to store students with requests for today
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const today = new Date().toISOString().split("T")[0]!;
     const requests = await studentRequestsQuery.execute({}); // Gets all requests with the related student data from the database
 
     let studentsUpdated = 0;
@@ -61,14 +60,16 @@ export async function RosterSync() {
       });
     }
 
+    const rosterEmails = new Set(rosterData.map((r) => r.studentEmail));
+    const ignoredEmails = new Set(ignoredStudentUsers);
+
     /**
      * Compares todays date with date on each request, if they match, the student is added to the studentsWithRequestToday array
      */
     if (requests && requests.length > 0) {
       for (const r of requests) {
         if (
-          new Date(r.requests.dateRequested).setHours(0, 0, 0, 0) ===
-            today.getTime() &&
+          r.requests.dateRequested === today &&
           r.requests.status === "approved"
         ) {
           studentsWithRequestToday.push({
@@ -80,29 +81,15 @@ export async function RosterSync() {
         }
       }
     }
-    /**
-     * Postgres transaction to update, insert, or delete students in the local database
-     * we use transactions to ensure that all operations are completed successfully
-     * @see https://orm.drizzle.team/docs/transactions
-     */
-    await db.transaction(async (tx) => {
-      // Update students with requests for today with their requested classroom
-      for (const s of studentsWithRequestToday) {
-        await tx
-          .update(schema.students)
-          .set({
-            ...s,
-          })
-          .where(eq(schema.students.studentEmail, s.studentEmail));
-        studentsUpdated++;
-      }
-    });
+    const studentsWiReqTodayEmails = new Set(
+      studentsWithRequestToday.map((r) => r.studentEmail),
+    );
+    console.info("students with requests today: ", studentsWiReqTodayEmails);
 
     // variable for students that exist in the db but not in the roster
     const studentsToDelete = allStudents.filter(
       (s) =>
-        !rosterData.some((r) => r.studentEmail === s.studentEmail) &&
-        !ignoredStudentUsers.includes(s.studentEmail),
+        !rosterEmails.has(s.studentEmail) && !ignoredEmails.has(s.studentEmail),
     );
 
     // ignore rosterData for students with requests today, and set other students back to default
@@ -110,42 +97,61 @@ export async function RosterSync() {
     const studentsToUpdate = rosterData.filter(
       (s) =>
         existingStudentEmails.has(s.studentEmail) &&
-        !studentsWithRequestToday.some(
-          (r) => r.studentEmail === s.studentEmail,
-        ),
+        !studentsWiReqTodayEmails.has(s.studentEmail),
     );
     // new students to insert
     const studentsToInsert = rosterData.filter(
       (s) =>
         !existingStudentEmails.has(s.studentEmail) &&
-        !studentsWithRequestToday.some(
-          (r) => r.studentEmail === s.studentEmail,
-        ),
+        !studentsWiReqTodayEmails.has(s.studentEmail),
     );
-
+    /**
+     * Postgres transaction to update, insert, or delete students in the local database
+     * we use transactions to ensure that all operations are completed successfully
+     * @see https://orm.drizzle.team/docs/transactions
+     */
     await db.transaction(async (tx) => {
-      for (const s of studentsToUpdate) {
-        await tx
-          .update(schema.students)
-          .set({
-            classroomId: s.classroomId,
-            arrived: false,
-            transferred: false,
-          })
-          .where(eq(schema.students.studentEmail, s.studentEmail));
-        studentsUpdated++;
-      }
-      if (studentsToInsert.length > 0) {
-        await tx.insert(schema.students).values(studentsToInsert);
-        studentsAdded = studentsToInsert.length;
-      }
-      if (studentsToDelete.length > 0) {
-        for (const s of studentsToDelete) {
+      try {
+        // Update students with requests for today with their requested classroom
+        for (const s of studentsWithRequestToday) {
           await tx
-            .delete(schema.students)
+            .update(schema.students)
+            .set({
+              classroomId: s.classroomId,
+              transferred: s.transferred,
+              arrived: s.arrived,
+            })
             .where(eq(schema.students.studentEmail, s.studentEmail));
-          studentsDeleted++;
+          studentsUpdated++;
         }
+        if (studentsToUpdate.length > 0) {
+          for (const s of studentsToUpdate) {
+            await tx
+              .update(schema.students)
+              .set({
+                classroomId: s.classroomId,
+                arrived: false,
+                transferred: false,
+              })
+              .where(eq(schema.students.studentEmail, s.studentEmail));
+            studentsUpdated++;
+          }
+        }
+        if (studentsToDelete.length > 0) {
+          for (const s of studentsToDelete) {
+            await tx
+              .delete(schema.students)
+              .where(eq(schema.students.studentEmail, s.studentEmail));
+            studentsDeleted++;
+          }
+        }
+        if (studentsToInsert.length > 0) {
+          await tx.insert(schema.students).values(studentsToInsert);
+          studentsAdded = studentsToInsert.length;
+        }
+      } catch (error) {
+        console.error(error);
+        await tx.rollback();
       }
     });
     console.info(

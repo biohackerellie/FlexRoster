@@ -263,7 +263,9 @@ const columns: ColumnDef<StudentTable>[] = [
       const chatId = row.getValue("chatId") as string;
       return (
         <Button asChild variant="outline">
-          <Link href={chatId}>chat</Link>
+          <Link prefetch={false} href={chatId}>
+            chat
+          </Link>
         </Button>
       );
     },

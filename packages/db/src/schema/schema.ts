@@ -65,9 +65,20 @@ export const requests = pgTable("requests", {
 });
 
 export const requestRelations = relations(requests, ({ one }) => ({
-  users: one(users, {
-    fields: [requests.newTeacher, requests.currentTeacher, requests.studentId],
-    references: [users.id, users.id, users.id],
+  student: one(users, {
+    fields: [requests.studentId],
+    references: [users.id],
+    relationName: "student",
+  }),
+  newTeacher: one(users, {
+    fields: [requests.newTeacher],
+    references: [users.id],
+    relationName: "newTeacher",
+  }),
+  currentTeacher: one(users, {
+    fields: [requests.currentTeacher],
+    references: [users.id],
+    relationName: "currentTeacher",
   }),
 }));
 
@@ -109,7 +120,9 @@ export const userRelations = relations(users, ({ one, many }) => ({
   }),
   classrooms: one(classrooms),
   logs: many(logs),
-  requests: many(requests),
+  studentRequests: many(requests, { relationName: "student" }),
+  newTeacherRequests: many(requests, { relationName: "newTeacher" }),
+  currentTeacherRequests: many(requests, { relationName: "currentTeacher" }),
 }));
 
 export const accounts = pgTable(
