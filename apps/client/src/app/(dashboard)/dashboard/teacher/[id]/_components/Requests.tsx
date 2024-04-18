@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -83,7 +84,7 @@ const Requests: React.FC<RequestsProps> = ({
       pusherClient.unbind("new-request", requestHandler);
       pusherClient.unbind("new-outgoing", outgoingHandler);
     };
-  }, [userId]);
+  }, [userId, incomingRequests, outgoing]);
 
   return (
     <div className="inset-0  h-auto w-full  items-center justify-between">
@@ -93,12 +94,13 @@ const Requests: React.FC<RequestsProps> = ({
           <TabsTrigger value="outgoing">Outgoing</TabsTrigger>
         </TabsList>
         <TabsContent value="requests">
-          <div className="flex h-48 w-auto items-center justify-center ">
-            <ScrollArea>
+          <div className="flex items-center justify-center border">
+            <div className="grid h-auto w-full grid-cols-3 grid-rows-3  gap-x-5 ">
+              {/* <ScrollArea> */}
               {requests && requests.length > 0 ? (
                 requests.map((request, index) => {
                   return (
-                    <div key={index}>
+                    <div className="" key={index}>
                       <RequestComponent {...request} />
                       <Separator />
                     </div>
@@ -111,7 +113,8 @@ const Requests: React.FC<RequestsProps> = ({
                   </h1>
                 </div>
               )}
-            </ScrollArea>
+            </div>
+            {/* </ScrollArea> */}
           </div>
         </TabsContent>
         <TabsContent value="outgoing">
@@ -149,13 +152,13 @@ function RequestComponent(request: Request) {
   };
 
   return (
-    <div className="flex w-full justify-between p-2">
+    <div className=" justify-between p-2">
       <div>
         <div className="text-sm font-semibold">
           {request.studentName} from {request.currentTeacherName}'s room
         </div>
         <div className="flex justify-between">
-          {formatTimestamp(request.timestamp)}
+          Requested {format(request.dateRequested, "PPP")}
           <div className="cursor-pointer ">
             <ApprovalMenu
               requestId={request.id}
@@ -181,6 +184,8 @@ function ApprovalMenu({
   teacherId: string;
   newTeacherId: string;
 }) {
+  const router = useRouter();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="animate-pulse hover:cursor-pointer">
@@ -188,16 +193,18 @@ function ApprovalMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem
-          onClick={() =>
-            Approval(requestId, studentId, teacherId, newTeacherId, "approved")
-          }
+          onClick={() => {
+            Approval(requestId, studentId, teacherId, newTeacherId, "approved");
+            router.refresh();
+          }}
         >
           Approve
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() =>
-            Approval(requestId, studentId, teacherId, newTeacherId, "denied")
-          }
+          onClick={() => {
+            Approval(requestId, studentId, teacherId, newTeacherId, "denied");
+            router.refresh();
+          }}
         >
           Deny
         </DropdownMenuItem>

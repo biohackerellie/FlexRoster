@@ -49,7 +49,7 @@ export default async function StudentDashboard() {
 
   const greeting = getRandomGreeting();
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+    <div className="flex min-h-screen w-full flex-col ">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <div className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
           <h1 className="z-20 bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text text-2xl font-bold">
@@ -57,44 +57,21 @@ export default async function StudentDashboard() {
           </h1>
         </div>
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          <Tabs defaultValue="roster">
+          <Tabs defaultValue="flex">
             <div className="flex items-center">
               <TabsList>
-                <TabsTrigger value="roster">Roster</TabsTrigger>
-                <TabsTrigger value="messages">Messages</TabsTrigger>
+                <TabsTrigger value="flex">Flex</TabsTrigger>
+
                 <TabsTrigger value="requests">Requests</TabsTrigger>
               </TabsList>
               <div className="ml-auto flex items-center gap-2">
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button size="sm" className="h-8 gap-1">
-                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                        Reset Roster
-                      </span>
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Reset Roster</AlertDialogTitle>
-                    </AlertDialogHeader>
-                    <AlertDialogDescription>
-                      This will reset your roster to your class default. <br />{" "}
-                      <strong>This action cannot be undone</strong>.
-                    </AlertDialogDescription>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction>Reset</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
                 <ModeToggle />
               </div>
             </div>
-            <TabsContent value="roster">
+            <TabsContent value="flex">
               <Card>
                 <CardHeader>
-                  <CardTitle>Today's Roster</CardTitle>
-                  <CardDescription>{currentClass}</CardDescription>
+                  <CardTitle>{currentClass}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <React.Suspense
@@ -106,18 +83,7 @@ export default async function StudentDashboard() {
                 <CardFooter></CardFooter>
               </Card>
             </TabsContent>
-            <TabsContent value="messages">
-              <Card>
-                <CardHeader>
-                  <CardTitle>New Messages</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <React.Suspense
-                    fallback={<Loader2 className="h-8 w-8 animate-spin" />}
-                  ></React.Suspense>
-                </CardContent>
-              </Card>
-            </TabsContent>
+
             <TabsContent value="requests">
               <Card>
                 <CardHeader>
@@ -151,7 +117,7 @@ async function getData(email: string, userId: string) {
   if (error) {
     return [];
   }
-  console.log(data);
+
   const mappedData = data.map((rooms) => {
     const formattedTeacherName = formatTeacherNames(
       rooms.classrooms.teacherName,
@@ -182,7 +148,7 @@ async function getClass(userId: string) {
   const { data, error } = await client.api.rosters.student
     .id({ userId: userId })
     .get();
-
+  console.log(data);
   if (error) {
     console.error(error);
   }

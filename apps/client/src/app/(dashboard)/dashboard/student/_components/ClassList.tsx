@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { StudentTable } from "@/lib/types";
@@ -56,15 +57,13 @@ export function ClassListComponent({ data }: ClassListProps) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   if (isDesktop) {
     return (
-      <div className=" leading-tight">
-        <div className="flex items-center text-xl">
-          <span className="mr-3 font-semibold text-neutral-400">
-            Steam Classes
-          </span>
-        </div>
+      <>
+        <span className="mr-3 font-semibold text-neutral-400">
+          Steam Classes
+        </span>
 
         <DataTable columns={columns} data={data} />
-      </div>
+      </>
     );
   }
   return (

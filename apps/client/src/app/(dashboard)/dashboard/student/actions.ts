@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@local/auth";
-import { requestFormType } from "@local/validators";
+import type { requestFormType } from "@local/validators";
 
 import { client } from "@/lib/eden";
 import { pusherServer } from "@/lib/pusher";

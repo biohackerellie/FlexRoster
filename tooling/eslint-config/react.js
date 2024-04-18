@@ -12,6 +12,7 @@ export default [
     rules: {
       ...reactPlugin.configs["jsx-runtime"].rules,
       ...hooksPlugin.configs.recommended.rules,
+      "react-hooks/rules-of-hooks": "warn",
     },
     languageOptions: {
       globals: {

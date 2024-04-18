@@ -16,6 +16,7 @@ import {
   rosterQuery,
   teacherQuery,
   userByRosterId,
+  userQuery,
   userRosterQuery,
 } from "~/lib/sql";
 import { getRequests } from "../requests/handlers";
@@ -82,15 +83,15 @@ export async function getTeacherRoster(userId: string) {
   }
 }
 
-export async function setAttendance(rosterId: number) {
+export async function setAttendance(studentId: string) {
   try {
-    const studentRaw = await userByRosterId.execute({ id: rosterId });
+    const studentRaw = await userQuery.execute({ id: studentId });
     const student = studentRaw[0]!;
     const updated = await db.transaction(async (tx) => {
       await tx
         .update(schema.students)
         .set({ arrived: true })
-        .where(eq(schema.students.id, rosterId));
+        .where(eq(schema.students.studentEmail, student?.email));
 
       const [updatedRequest] = await tx
         .select({

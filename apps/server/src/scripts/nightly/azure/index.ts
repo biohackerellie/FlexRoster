@@ -64,6 +64,7 @@ async function azureTeachers(): Promise<AzureUser[]> {
 
     await db.transaction(async (tx) => {
       for (const teacher of newTeachers) {
+        console.log("adding: ", teacher.userPrincipalName);
         let role: "teacher" | "secretary" = "teacher";
         if (
           secretaries.includes(
@@ -80,19 +81,15 @@ async function azureTeachers(): Promise<AzureUser[]> {
             email: teacher.userPrincipalName,
             role: role,
           })
-          .returning({ newID: schema.users.id })
-          .onConflictDoNothing();
-
-        const dbClassRooms = await db.query.classrooms.findFirst({
-          where: like(schema.classrooms.teacherName, teacher.displayName),
-        });
-        if (dbClassRooms) {
-          await tx.update(schema.classrooms).set({
-            teacherId: teacher.id,
+          .onConflictDoUpdate({
+            target: schema.users.id,
+            set: {
+              name: teacher.displayName,
+              email: teacher.userPrincipalName,
+              role: role,
+            },
           });
-          if (role !== "secretary") {
-          }
-        }
+
         teacherCount++;
       }
 

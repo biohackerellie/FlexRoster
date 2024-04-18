@@ -69,6 +69,6 @@ export interface TeacherTable {
   arrived: boolean;
   studentName: string;
   studentEmail: string;
-  studentId: number;
+  studentId: string | null;
   chatId: string | null;
 }

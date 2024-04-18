@@ -36,11 +36,11 @@ export const userQuery = db
 export const userRosterQuery = db
   .select()
   .from(schema.users)
-  .leftJoin(
+  .innerJoin(
     schema.students,
     eq(schema.students.studentEmail, schema.users.email),
   )
-  .leftJoin(
+  .innerJoin(
     schema.classrooms,
     eq(schema.students.classroomId, schema.classrooms.id),
   )

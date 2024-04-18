@@ -89,14 +89,14 @@ export const columns: ColumnDef<TeacherTable>[] = [
       //eslint-disable-next-line
       const arrived = row.getValue("arrived") as boolean;
       //eslint-disable-next-line
-      const id = row.getValue("studentId") as number;
+      const id = row.getValue("studentId") as string;
       if (!transferred) {
         return <div className="font-thin text-gray-400">N/A</div>;
       } else if (transferred === true) {
         if (!arrived) {
           return (
             <>
-              <div className="font-thin text-green-500">Transfer status:</div>
+              <div className="font-thin text-green-500">{id}</div>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger
@@ -136,9 +136,9 @@ export const columns: ColumnDef<TeacherTable>[] = [
   },
 ];
 
-const setAttendance = async (rosterId: number) => {
+const setAttendance = async (studentId: string) => {
   try {
-    const response = await Attendance(rosterId);
+    const response = await Attendance(studentId);
     return response;
   } catch (e) {
     console.error(e);
