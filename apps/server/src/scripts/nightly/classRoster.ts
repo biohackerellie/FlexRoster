@@ -100,7 +100,9 @@ export async function RosterSync() {
 
     // variable for students that exist in the db but not in the roster
     const studentsToDelete = allStudents.filter(
-      (s) => !rosterData.some((r) => r.studentEmail === s.studentEmail),
+      (s) =>
+        !rosterData.some((r) => r.studentEmail === s.studentEmail) &&
+        !ignoredStudentUsers.includes(s.studentEmail),
     );
 
     // ignore rosterData for students with requests today, and set other students back to default
@@ -156,3 +158,5 @@ export async function RosterSync() {
 }
 
 RosterSync();
+
+const ignoredStudentUsers = ["elliana_kerns@laurel.k12.mt.us"];

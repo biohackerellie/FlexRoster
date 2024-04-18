@@ -1,6 +1,7 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
+  date,
   integer,
   pgEnum,
   pgTable,
@@ -54,7 +55,7 @@ export const requests = pgTable("requests", {
   newTeacherName: text("newTeacherName").notNull(),
   currentTeacher: text("currentTeacher").notNull(),
   currentTeacherName: text("currentTeacherName").notNull(),
-  dateRequested: text("dateRequested").notNull(),
+  dateRequested: date("dateRequested").notNull(),
   status: text("status")
     .$type<"pending" | "approved" | "denied">()
     .default("pending")

@@ -1,9 +1,10 @@
 import { NotFoundError } from "elysia";
 
-import type { Logs, Request } from "@local/validators";
+import type { Logs, Request, requestFormType } from "@local/validators";
 import { db, eq, schema, sql } from "@local/db";
 
 import {
+  deleteSet,
   getRequestSet,
   newLog,
   newRequestSet,
@@ -17,10 +18,8 @@ import {
   userRosterQuery,
 } from "~/lib/sql";
 
-interface newRequestProps {
+interface newRequestProps extends requestFormType {
   userId: string;
-  teacherId: string;
-  dateRequested: string;
 }
 
 type selectRequest = typeof schema.requests.$inferSelect;
@@ -32,11 +31,21 @@ export async function newRequest({
   dateRequested,
 }: newRequestProps) {
   try {
-    const res = await getRequestSet(userId);
-    if (res && res.length > 0) {
-      const status = res[0]?.status!;
-      if (status !== "denied") {
-        return new Response("Invalid", { status: 401 });
+    console.log("hit");
+    console.log("date", dateRequested);
+    await deleteSet(userId);
+    const dbRequests = await getRequests(userId);
+    if (dbRequests && dbRequests.length > 0) {
+      for (const r of dbRequests) {
+        if (r.dateRequested === dateRequested) {
+          if (r.status !== "denied") {
+            const response = new Response("Request already sent", {
+              status: 401,
+            });
+            console.log(response);
+            return response;
+          }
+        }
       }
     } else {
       const studentRaw = await userRosterQuery.execute({ id: userId });

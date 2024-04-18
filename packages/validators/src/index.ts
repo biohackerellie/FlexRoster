@@ -13,6 +13,13 @@ export type Message = z.infer<typeof messageValidator>;
 
 const requestStatusSchema = z.enum(["pending", "approved", "denied"]);
 
+export const requestParser = z.object({
+  teacherId: z.string(),
+  dateRequested: z.string().datetime(),
+});
+
+export type requestFormType = z.infer<typeof requestParser>;
+
 export const requestValidator = z.object({
   id: z.union([z.string(), z.number()]),
   studentId: z.string(),

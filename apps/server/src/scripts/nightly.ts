@@ -27,15 +27,6 @@ if (azure.exitCode === 1) {
 }
 await $`echo "Azure users synced"`;
 
-await $`echo "Clearing database IC tables..."`;
-
-const clearDB = await $`bun ./nightly/clearDB.ts`;
-if (clearDB.exitCode === 1) {
-  console.error(clearDB.stderr);
-  process.exit(1);
-}
-await $`echo "Database cleared of IC tables"`;
-
 const rosterSync = await $`bun ./nightly/syncRoster.ts`;
 if (rosterSync.exitCode === 1) {
   console.error(rosterSync.stderr);

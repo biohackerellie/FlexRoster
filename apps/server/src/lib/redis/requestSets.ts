@@ -23,6 +23,21 @@ export async function newRequestSet(userId: string, request: Request) {
   }
 }
 
+export async function deleteSet(userId: string) {
+  try {
+    const client = createClient();
+    await client.del(`${userId}:request`);
+    await client.quit();
+  } catch (e) {
+    console.error(e);
+    if (e instanceof Error) {
+      throw new Error(e.message);
+    } else {
+      throw new Error("Unknown error");
+    }
+  }
+}
+
 export async function getRequestSet(
   userId: string,
 ): Promise<Request[] | undefined> {
