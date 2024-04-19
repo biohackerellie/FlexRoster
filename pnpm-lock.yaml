@@ -30,8 +30,8 @@ importers:
         specifier: ^0.3.2
         version: 0.3.4
       '@clack/prompts':
-        specifier: ^0.6.3
-        version: 0.6.3
+        specifier: ^0.7.0
+        version: 0.7.0
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.2.1
         version: 4.2.1(prettier@3.2.5)
@@ -830,8 +830,8 @@ packages:
   '@clack/core@0.3.4':
     resolution: {integrity: sha512-H4hxZDXgHtWTwV3RAVenqcC4VbJZNegbBjlPvzOzCouXtS2y3sDvlO3IsbrPNWuLWPPlYVYPghQdSF64683Ldw==}
 
-  '@clack/prompts@0.6.3':
-    resolution: {integrity: sha512-AM+kFmAHawpUQv2q9+mcB6jLKxXGjgu/r2EQjEwujgpCdzrST6BJqYw00GRn56/L/Izw5U7ImoLmy00X/r80Pw==}
+  '@clack/prompts@0.7.0':
+    resolution: {integrity: sha512-0MhX9/B4iL6Re04jPrttDm+BsP8y6mS7byuv0BvXgdXhbV5PdlsHt55dvNsuBCPZ7xq1oTAOOuotR9NFbQyMSA==}
     bundledDependencies:
       - is-unicode-supported
 
@@ -5329,7 +5329,7 @@ snapshots:
       picocolors: 1.0.0
       sisteransi: 1.0.5
 
-  '@clack/prompts@0.6.3':
+  '@clack/prompts@0.7.0':
     dependencies:
       '@clack/core': 0.3.4
       picocolors: 1.0.0
