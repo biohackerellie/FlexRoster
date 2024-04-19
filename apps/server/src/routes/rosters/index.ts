@@ -34,9 +34,9 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
       }),
     },
   )
-  .post("/attendance/", ({ body: { rosterId } }) => setAttendance(rosterId), {
+  .post("/attendance/", ({ body: { studentId } }) => setAttendance(studentId), {
     body: t.Object({
-      rosterId: t.Number(),
+      studentId: t.String(),
     }),
   })
 

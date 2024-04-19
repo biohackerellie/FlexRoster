@@ -1,28 +1,29 @@
 "use server";
 
+import type { requestFormType } from "@local/validators";
 import { auth } from "@local/auth";
 
 import { client } from "@/lib/eden";
 import { pusherServer } from "@/lib/pusher";
 import { toPusherKey } from "@/lib/utils";
 
-export async function RequestRoom(teacherId: string, dateRequested: string) {
+export async function RequestRoom(data: requestFormType) {
   const session = await auth();
   const studentId = session?.user?.id!;
-
+  console.log(data);
   const res = await client.api.requests.new.post({
     userId: studentId,
-    teacherId: teacherId,
-    dateRequested: dateRequested,
+    teacherId: data.teacherId,
+    dateRequested: data.dateRequested,
   });
 
   if (res?.error) {
     return res?.error.status;
   } else {
     await pusherServer.trigger(
-      toPusherKey(`request:${teacherId}`),
+      toPusherKey(`request:${data.teacherId}`),
       "new-request",
-      { studentId, teacherId, dateRequested },
+      { studentId, data },
     );
 
     return res.status;

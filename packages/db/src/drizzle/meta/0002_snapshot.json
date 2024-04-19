@@ -1,6 +1,6 @@
 {
-  "id": "02d59c73-9b25-4b51-8374-c0280f200a75",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "2d918556-dc73-4e15-809d-e353592a9d1a",
+  "prevId": "99912052-7425-4026-894b-61c2374441ce",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -199,7 +199,7 @@
         },
         "studentId": {
           "name": "studentId",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -235,9 +235,9 @@
         },
         "dateRequested": {
           "name": "dateRequested",
-          "type": "text",
+          "type": "date",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "status": {
           "name": "status",

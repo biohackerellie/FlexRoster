@@ -6,7 +6,7 @@ import { db, eq, schema } from "@local/db";
 
 async function removeDuplicates() {
   try {
-    const users = await db.query.classRosters.findMany({});
+    const users = await db.query.students.findMany({});
     const emails = users.map((user) => user.studentEmail);
     const duplicateEmails = emails.filter(
       (email, index) =>
@@ -22,9 +22,7 @@ async function removeDuplicates() {
       for (const email of duplicateEmails) {
         const user = users.find((user) => user.studentEmail === email)!;
         const id = user.id;
-        await tx
-          .delete(schema.classRosters)
-          .where(eq(schema.classRosters.id, id));
+        await tx.delete(schema.students).where(eq(schema.students.id, id));
         count++;
       }
     });

@@ -1,28 +1,25 @@
 import { NotFoundError } from "elysia";
 
-import type { Logs, Request } from "@local/validators";
+import type { Logs, Request, requestFormType } from "@local/validators";
 import { db, eq, schema, sql } from "@local/db";
 
 import {
-  getHash,
-  getKeys,
+  deleteSet,
   getRequestSet,
   newLog,
   newRequestSet,
   removeSingleRequest,
-  setHash,
 } from "~/lib/redis";
 import {
   getClassroomIdByTeacher,
+  userByRosterId,
   userQuery,
   userRequestQuery,
   userRosterQuery,
 } from "~/lib/sql";
 
-interface newRequestProps {
+interface newRequestProps extends requestFormType {
   userId: string;
-  teacherId: string;
-  dateRequested: string;
 }
 
 type selectRequest = typeof schema.requests.$inferSelect;
@@ -34,50 +31,60 @@ export async function newRequest({
   dateRequested,
 }: newRequestProps) {
   try {
-    const res = await getRequestSet(userId);
-    if (res && res.length > 0) {
-      const status = res[0]?.status!;
-      if (status !== "denied") {
-        return new Response("Invalid", { status: 401 });
+    console.log("hit");
+    console.log("date", dateRequested);
+    await deleteSet(userId);
+    const dbRequests = await getRequests(userId);
+    if (dbRequests && dbRequests.length > 0) {
+      for (const r of dbRequests) {
+        if (r.dateRequested === dateRequested) {
+          if (r.status !== "denied") {
+            const response = new Response("Request already sent", {
+              status: 401,
+            });
+            console.log(response);
+            return response;
+          }
+        }
       }
-    } else {
-      const studentRaw = await userRosterQuery.execute({ id: userId });
-      if (studentRaw.length === 0) {
-        throw new NotFoundError("No student found with that ID");
-      }
-      const student = studentRaw[0];
-      const currentTeacher = student?.classrooms?.teacherId!;
-      const currentTeacherName = student?.classrooms?.teacherName!;
-      const newTeacherRaw = await userQuery.execute({ id: teacherId });
-      if (newTeacherRaw.length === 0) {
-        throw new NotFoundError("No teacher found with that ID");
-      }
-      const newTeacher = newTeacherRaw[0];
-
-      const timestamp = Date.now().toString();
-      const requestData: insertRequest = {
-        status: "pending",
-        studentName: student?.user?.name!,
-        studentId: student?.classRosters?.id!,
-        dateRequested,
-        currentTeacher,
-        currentTeacherName,
-        newTeacher: teacherId,
-        newTeacherName: newTeacher?.name!,
-        timestamp,
-      };
-      const insertRequest = async (request: insertRequest) => {
-        return db.insert(schema.requests).values(request);
-      };
-      await insertRequest(requestData);
-      const log: Logs = {
-        type: "request",
-        action: `${student?.user?.name} requested to transfer to ${newTeacher?.name} from ${currentTeacherName} at ${timestamp}`,
-        user: userId,
-      };
-      await newLog(log);
-      return Response.json({ message: "Request sent" }, { status: 200 });
     }
+    const studentRaw = await userRosterQuery.execute({ id: userId });
+    if (studentRaw.length === 0) {
+      throw new NotFoundError("No student found with that ID");
+    }
+    const student = studentRaw[0];
+    const currentTeacher = student?.classrooms?.teacherId ?? " ";
+    const currentTeacherName = student?.classrooms?.teacherName ?? " ";
+    const newTeacherRaw = await userQuery.execute({ id: teacherId });
+    if (newTeacherRaw.length === 0) {
+      throw new NotFoundError("No teacher found with that ID");
+    }
+    const newTeacher = newTeacherRaw[0];
+
+    const timestamp = Date.now().toString();
+    const requestData: insertRequest = {
+      status: "pending",
+      studentName: student?.user.name!,
+      studentId: student?.user.id!,
+      dateRequested,
+      currentTeacher: currentTeacher,
+      currentTeacherName,
+      newTeacher: teacherId,
+      newTeacherName: newTeacher?.name!,
+      timestamp,
+    };
+    console.log("requestData", requestData);
+    const insertRequest = async (request: insertRequest) => {
+      return db.insert(schema.requests).values(request);
+    };
+    await insertRequest(requestData);
+    const log: Logs = {
+      type: "request",
+      action: `${student?.user?.name} requested to transfer to ${newTeacher?.name} from ${currentTeacherName} at ${timestamp}`,
+      user: userId,
+    };
+    await newLog(log);
+    return Response.json({ message: "Request sent" }, { status: 200 });
   } catch (e) {
     if (e instanceof Error) {
       console.error(e);
@@ -88,48 +95,63 @@ export async function newRequest({
   }
 }
 
-export async function getRequests(
-  userId: string,
-  userRole: "student" | "teacher" | "admin" | "secretary",
-) {
+export async function getTeacherRequests(userId: string) {
   try {
     const incomingRequests = [];
     const outgoingRequests = [];
-    const cacheRequests = await getRequestSet(userId);
-    if (cacheRequests) {
-      if (userRole === "teacher") {
-        for (const request of cacheRequests) {
-          if (request.newTeacher === userId) {
-            incomingRequests.push(request);
-          } else if (request.currentTeacher === userId) {
-            outgoingRequests.push(request);
-          }
+    // const cacheRequests = await getRequestSet(userId);
+    // console.log("cacheRequests", cacheRequests);
+    // if (cacheRequests) {
+    //   for (const request of cacheRequests) {
+    //     if (request.newTeacher === userId) {
+    //       incomingRequests.push(request);
+    //     } else if (request.currentTeacher === userId) {
+    //       outgoingRequests.push(request);
+    //     }
+    //   }
+    //   return { incomingRequests, outgoingRequests };
+    // } else {
+    const requests = await userRequestQuery.execute({ userId: userId });
+    console.log("requests", requests);
+    if (requests.length === 0) {
+      return;
+    }
+    for (const request of requests) {
+      if (request.status === "pending") {
+        await newRequestSet(userId, request);
+        if (request.newTeacher === userId) {
+          incomingRequests.push(request);
+        } else if (request.currentTeacher === userId) {
+          outgoingRequests.push(request);
         }
-        return { incomingRequests, outgoingRequests };
-      } else {
-        return cacheRequests;
       }
+    }
+    return { incomingRequests, outgoingRequests };
+  } catch (e) {
+    console.error(e);
+    if (e instanceof Error) {
+      throw new Error(e.message);
+    } else {
+      throw new Error("Unknown error");
+    }
+  }
+}
+
+export async function getRequests(userId: string) {
+  try {
+    const cacheRequests = await getRequestSet(userId);
+
+    if (cacheRequests) {
+      return cacheRequests;
     } else {
       const requests = await userRequestQuery.execute({ userId: userId });
-
       if (requests.length === 0) {
         return;
       }
       for (const request of requests) {
         await newRequestSet(userId, request);
-        if (userRole === "teacher") {
-          if (request.newTeacher === userId) {
-            incomingRequests.push(request);
-          } else if (request.currentTeacher === userId) {
-            outgoingRequests.push(request);
-          }
-        }
       }
-      if (userRole === "teacher") {
-        return { incomingRequests, outgoingRequests };
-      } else {
-        return requests;
-      }
+      return requests;
     }
   } catch (e) {
     console.error(e);
@@ -147,14 +169,16 @@ export async function getRequests(
 
 export async function requestApproval(
   requestId: string,
-  studentId: number,
+  studentId: string,
   teacherId: string,
   newTeacherId: string,
   status: "approved" | "denied",
 ) {
   try {
     // clear student request cache
-    await removeSingleRequest(studentId);
+
+    const [student] = await userRosterQuery.execute({ id: studentId });
+    if (!student) throw new NotFoundError("No student found with that ID");
 
     // get new teacher's roster
     const newClassroomId = await getClassroomIdByTeacher.execute({
@@ -168,9 +192,12 @@ export async function requestApproval(
       if (status === "approved") {
         // if approved update student's classroomId in db
         await tx
-          .update(schema.classRosters)
-          .set({ classroomId: newClassroomId[0]?.classroomId })
-          .where(eq(schema.classRosters.id, studentId));
+          .update(schema.students)
+          .set({
+            classroomId: newClassroomId[0]?.classroomId,
+            transferred: true,
+          })
+          .where(eq(schema.students.studentEmail, student.user.email));
       }
       // update request status in db
       await tx
@@ -183,14 +210,15 @@ export async function requestApproval(
         .where(eq(schema.requests.id, parseInt(requestId)));
       return request?.timestamp;
     });
-    // clear teacher request cache
+    // clear request cache
+    await removeSingleRequest(student.user.id, updated);
     await removeSingleRequest(teacherId, updated);
     await removeSingleRequest(newTeacherId, updated);
     // log request approval
     const log: Logs = {
       user: newTeacherId,
       type: "request",
-      action: `User ${newTeacherId} ${status} request ${requestId} for student ${studentId} from teacher ${teacherId} to teacher ${newTeacherId}`,
+      action: `User ${newTeacherId} ${status} request ${requestId} for student ${student.user.id} from teacher ${teacherId} to teacher ${newTeacherId}`,
     };
     await newLog(log);
 

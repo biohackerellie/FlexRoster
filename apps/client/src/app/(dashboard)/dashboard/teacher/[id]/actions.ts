@@ -7,7 +7,7 @@ import { client } from "@/lib/eden";
 export async function RequestApproval(
   requestId: string | number,
   status: "approved" | "denied",
-  studentId: number,
+  studentId: string,
   teacherId: string,
   newTeacherId: string,
 ) {
@@ -33,9 +33,9 @@ export async function RequestApproval(
   revalidatePath("/(dashboard)/dashboard", "layout");
 }
 
-export async function Attendance(rosterId: number) {
+export async function Attendance(studentId: string) {
   const { data: res, error } = await client.api.rosters.attendance[""].post({
-    rosterId: rosterId,
+    studentId: studentId,
   });
 
   if (error) {
@@ -47,5 +47,5 @@ export async function Attendance(rosterId: number) {
   }
 
   revalidateTag("roster");
-  revalidatePath("/(dashboard)/dashboard", "layout");
+  revalidatePath("/(dashboard)/dashboard/teacher", "layout");
 }

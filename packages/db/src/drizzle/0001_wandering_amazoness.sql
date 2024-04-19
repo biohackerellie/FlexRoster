@@ -1,0 +1,1 @@
+ALTER TABLE "requests" ALTER COLUMN "studentId" SET DATA TYPE text;

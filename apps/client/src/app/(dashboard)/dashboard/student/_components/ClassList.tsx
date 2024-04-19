@@ -4,11 +4,24 @@ import type { StudentTable } from "@/lib/types";
 import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
 import Link from "next/link";
-import { ArrowUpDown } from "lucide-react";
+import { format } from "date-fns";
+import { ArrowUpDown, CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
 
+import type { requestFormType } from "@local/validators";
+import { cn } from "@local/ui";
 import { Button } from "@local/ui/button";
+import { Calendar } from "@local/ui/calendar";
 import { DataTable } from "@local/ui/data-table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@local/ui/dialog";
 import {
   Drawer,
   DrawerContent,
@@ -17,6 +30,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@local/ui/drawer";
+import { Popover, PopoverContent, PopoverTrigger } from "@local/ui/popover";
 import { ScrollArea, ScrollBar } from "@local/ui/scroll-area";
 import { Separator } from "@local/ui/separator";
 
@@ -42,15 +56,13 @@ export function ClassListComponent({ data }: ClassListProps) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   if (isDesktop) {
     return (
-      <div className=" leading-tight">
-        <div className="flex items-center text-xl">
-          <span className="mr-3 font-semibold text-neutral-400">
-            Steam Classes
-          </span>
-        </div>
+      <>
+        <span className="mr-3 font-semibold text-neutral-400">
+          Steam Classes
+        </span>
 
         <DataTable columns={columns} data={data} />
-      </div>
+      </>
     );
   }
   return (
@@ -104,7 +116,7 @@ const ClassList = ({ data }: { data: StudentTable[] }) => {
                   variant="outline"
                   size="sm"
                   disabled={!room.available}
-                  onClick={() => handleTransfer(room.teacherId)}
+                  // onClick={() => handleTransfer(room.teacherId)}
                 >
                   {room.available ? "Join" : "Unavailable"}
                 </Button>
@@ -174,13 +186,71 @@ const columns: ColumnDef<StudentTable>[] = [
     header: "Transfer",
     cell: ({ row, column }) => {
       const teacherId: string = row.getValue("teacherId");
-
+      const today = new Date().toISOString().split("T")[0]!;
+      console.log("today", today);
+      const [selectedDate, setSelectedDate] = React.useState<Date>();
       const available: boolean = row.getValue("available");
-      return (
-        <Button disabled={!available} onClick={() => handleTransfer(teacherId)}>
-          Transfer
-        </Button>
-      );
+      const data = {
+        teacherId,
+        dateRequested: selectedDate
+          ? selectedDate.toISOString().split("T")[0]!
+          : today,
+      };
+      if (!available) {
+        return (
+          <Button variant="outline" disabled>
+            Transfer
+          </Button>
+        );
+      } else {
+        return (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button disabled={!available}>Transfer</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <Popover>
+                <DialogHeader>
+                  <DialogTitle>Pick a day</DialogTitle>
+                  <DialogDescription>
+                    Please select the day you would like to transfer.
+                  </DialogDescription>
+                </DialogHeader>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-[280px] justify-start text-left font-normal",
+                      !selectedDate && "text-muted-foreground",
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {selectedDate ? (
+                      format(selectedDate, "PPP")
+                    ) : (
+                      <span> Pick a date</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={setSelectedDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+                <DialogFooter>
+                  <Button onClick={() => handleTransfer(data)}>Submit</Button>
+                </DialogFooter>
+              </Popover>
+            </DialogContent>
+          </Dialog>
+          // <Button disabled={!available} onClick={() => handleTransfer(teacherId)}>
+          //   Transfer
+          // </Button>
+        );
+      }
     },
   },
   {
@@ -191,7 +261,9 @@ const columns: ColumnDef<StudentTable>[] = [
       const chatId = row.getValue("chatId") as string;
       return (
         <Button asChild variant="outline">
-          <Link href={chatId}>chat</Link>
+          <Link prefetch={false} href={chatId}>
+            chat
+          </Link>
         </Button>
       );
     },
@@ -204,15 +276,14 @@ const columns: ColumnDef<StudentTable>[] = [
  * @param roomNumber - string - The room number of the class.
  * @param teacherName - string - The teacher's name.
  */
-async function handleTransfer(teacherId: string) {
-  const date = new Date().toLocaleDateString();
+async function handleTransfer(data: requestFormType) {
   try {
-    const res = await RequestRoom(teacherId, date);
+    const res = await RequestRoom(data);
     if (res === 200) {
       toast.info("Your request has been sent", {
         position: "top-center",
       });
-    } else if (res === 500) {
+    } else if (res === 401) {
       toast.error("You have already transferred today", {
         position: "top-center",
       });

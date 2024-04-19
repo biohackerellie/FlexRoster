@@ -20,6 +20,7 @@ export default middleware((req) => {
   }
 
   const role = token.user?.roles || "student";
+  const id = token.user?.id || "0";
 
   switch (role) {
     case "student":
@@ -35,18 +36,29 @@ export default middleware((req) => {
       break;
     case "teacher":
       if (path === "/dashboard") {
-        return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
+        return NextResponse.redirect(
+          new URL(`/dashboard/teacher/${id}`, req.url),
+        );
       }
       if (path === "/dashboard/student") {
-        return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
+        return NextResponse.redirect(
+          new URL(`/dashboard/teacher/${id}`, req.url),
+        );
       }
       if (path === "/dashboard/secretary") {
-        return NextResponse.redirect(new URL("/dashboard/teacher", req.url));
+        return NextResponse.redirect(
+          new URL(`/dashboard/teacher/${id}`, req.url),
+        );
       }
       break;
     case "admin":
       if (path === "/dashboard") {
         return NextResponse.redirect(new URL("/dashboard/secretary", req.url));
+      }
+      if (path === "/dashboard/teacher") {
+        return NextResponse.redirect(
+          new URL(`/dashboard/teacher/${id}`, req.url),
+        );
       }
       break;
     case "secretary":

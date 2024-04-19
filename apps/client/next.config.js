@@ -19,15 +19,11 @@ const nextConfig = {
   ],
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-
-  webpack: (config, { webpack }) => {
-    config.plugins.push(
-      new webpack.IgnorePlugin({
-        resourceRegExp: /^pg-native$|^cloudflare:sockets$/,
-      }),
-    );
-
-    return config;
+  experimental: {
+    staleTimes: {
+      dynamic: 30,
+      static: 180,
+    },
   },
 };
 

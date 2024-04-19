@@ -1,10 +1,11 @@
 import { NotFoundError } from "elysia";
 
-import { db, eq, schema, sql } from "@local/db";
+import { db, eq, schema } from "@local/db";
 
 import {
   createClient,
   getRequestKV,
+  getRequestSet,
   removeSingleRequest,
   setClassRoomKV,
   setRequestKV,
@@ -14,8 +15,11 @@ import {
   rosterByTeacherId,
   rosterQuery,
   teacherQuery,
+  userByRosterId,
+  userQuery,
   userRosterQuery,
 } from "~/lib/sql";
+import { getRequests } from "../requests/handlers";
 
 export async function getRosters() {
   try {
@@ -38,27 +42,9 @@ export async function getRostersById(id: string) {
 
 export async function getStudentRoster(userId: string) {
   try {
-    let teacherName = "";
-    let roomNumber = "";
-    let message = "";
-    const client = createClient();
-
-    const request = await client.hgetall(`request:${userId}`);
-
-    if (Object.keys(request).length > 0) {
-      const teacherID = request.newTeacher!;
-      const result = await teacherQuery.execute({ id: teacherID });
-      const teacher = result[0];
-      teacherName = teacher?.user?.name!;
-      roomNumber = teacher?.classrooms?.roomNumber!;
-      message = `You transfered to FLEX room ${roomNumber} with ${teacherName}`;
-    } else {
-      const result = await userRosterQuery.execute({ id: userId });
-      const roster = result[0];
-      teacherName = roster?.classrooms?.teacherName!;
-      roomNumber = roster?.classrooms?.roomNumber!;
-      message = `Your FLEX class today is with ${teacherName} in room ${roomNumber}`;
-    }
+    const [student] = await userRosterQuery.execute({ id: userId });
+    if (!student) throw new NotFoundError("No roster found with that userId");
+    const message = `Your FLEX class today is with ${student?.classrooms?.teacherName} in room ${student?.classrooms?.roomNumber}`;
     return message;
   } catch (e) {
     console.error(e);
@@ -81,11 +67,7 @@ export async function setStudentRoster(
     }
     await setClassRoomKV(email, `Room ${roomNumber} with ${teacherName}`);
     await setRequestKV(email);
-    await db.insert(schema.transferLogs).values({
-      studentEmail: email,
-      roomNumber: roomNumber,
-      teacherName: teacherName,
-    });
+
     return new Response("OK", { status: 200 });
   } catch (e) {
     throw new NotFoundError("No roster found with that email");
@@ -101,13 +83,15 @@ export async function getTeacherRoster(userId: string) {
   }
 }
 
-export async function setAttendance(rosterId: number) {
+export async function setAttendance(studentId: string) {
   try {
+    const studentRaw = await userQuery.execute({ id: studentId });
+    const student = studentRaw[0]!;
     const updated = await db.transaction(async (tx) => {
       await tx
-        .update(schema.classRosters)
+        .update(schema.students)
         .set({ arrived: true })
-        .where(eq(schema.classRosters.id, rosterId));
+        .where(eq(schema.students.studentEmail, student?.email));
 
       const [updatedRequest] = await tx
         .select({
@@ -116,11 +100,11 @@ export async function setAttendance(rosterId: number) {
           currentTeacher: schema.requests.currentTeacher,
         })
         .from(schema.requests)
-        .where(eq(schema.requests.studentId, rosterId));
+        .where(eq(schema.requests.studentId, student?.id));
       return updatedRequest!;
     });
 
-    await removeSingleRequest(rosterId, updated.timestamp);
+    await removeSingleRequest(student?.id, updated.timestamp);
     await removeSingleRequest(updated.newTeacher, updated.timestamp);
     await removeSingleRequest(updated.currentTeacher, updated.timestamp);
 

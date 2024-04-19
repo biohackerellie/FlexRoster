@@ -19,16 +19,6 @@ CREATE TABLE IF NOT EXISTS "account" (
 	CONSTRAINT "account_provider_providerAccountId_pk" PRIMARY KEY("provider","providerAccountId")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "classRosters" (
-	"studentEmail" text NOT NULL,
-	"studentName" text NOT NULL,
-	"classroomId" text NOT NULL,
-	"transferred" boolean DEFAULT false NOT NULL,
-	"arrived" boolean DEFAULT false NOT NULL,
-	"id" serial PRIMARY KEY NOT NULL,
-	CONSTRAINT "classRosters_studentEmail_unique" UNIQUE("studentEmail")
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "classrooms" (
 	"id" text PRIMARY KEY NOT NULL,
 	"roomNumber" text NOT NULL,
@@ -47,7 +37,7 @@ CREATE TABLE IF NOT EXISTS "logs" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "requests" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"requester" text NOT NULL,
+	"studentId" integer NOT NULL,
 	"studentName" text NOT NULL,
 	"newTeacher" text NOT NULL,
 	"newTeacherName" text NOT NULL,
@@ -55,7 +45,7 @@ CREATE TABLE IF NOT EXISTS "requests" (
 	"currentTeacherName" text NOT NULL,
 	"dateRequested" text NOT NULL,
 	"status" text DEFAULT 'pending' NOT NULL,
-	"arrived" boolean DEFAULT false NOT NULL,
+	"arrived" boolean DEFAULT false,
 	"timestamp" text NOT NULL
 );
 --> statement-breakpoint
@@ -65,12 +55,14 @@ CREATE TABLE IF NOT EXISTS "session" (
 	"expires" timestamp NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "transferLogs" (
-	"id" serial PRIMARY KEY NOT NULL,
+CREATE TABLE IF NOT EXISTS "students" (
 	"studentEmail" text NOT NULL,
-	"createdAt" timestamp(3) DEFAULT now() NOT NULL,
-	"roomNumber" text NOT NULL,
-	"teacherName" text NOT NULL
+	"studentName" text NOT NULL,
+	"classroomId" text NOT NULL,
+	"transferred" boolean DEFAULT false NOT NULL,
+	"arrived" boolean DEFAULT false NOT NULL,
+	"id" serial PRIMARY KEY NOT NULL,
+	CONSTRAINT "students_studentEmail_unique" UNIQUE("studentEmail")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user" (
@@ -97,12 +89,6 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "classRosters" ADD CONSTRAINT "classRosters_classroomId_classrooms_id_fk" FOREIGN KEY ("classroomId") REFERENCES "classrooms"("id") ON DELETE cascade ON UPDATE cascade;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
  ALTER TABLE "logs" ADD CONSTRAINT "logs_user_user_id_fk" FOREIGN KEY ("user") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -110,6 +96,12 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "session" ADD CONSTRAINT "session_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "students" ADD CONSTRAINT "students_classroomId_classrooms_id_fk" FOREIGN KEY ("classroomId") REFERENCES "classrooms"("id") ON DELETE cascade ON UPDATE cascade;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

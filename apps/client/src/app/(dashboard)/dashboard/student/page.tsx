@@ -1,10 +1,32 @@
 import type { StudentTable } from "@/lib/types";
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import { unstable_cache as cache } from "next/cache";
+import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
-import { Skeleton } from "@local/ui/skeleton";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@local/ui/alert-dialog";
+import { Button } from "@local/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@local/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@local/ui/tabs";
 
+import { ModeToggle } from "@/components/darkmodeToggle";
 import { greetings } from "@/lib/constants";
 import { client } from "@/lib/eden";
 import { chatHrefConstructor, formatTeacherNames } from "@/lib/utils";
@@ -27,17 +49,55 @@ export default async function StudentDashboard() {
 
   const greeting = getRandomGreeting();
   return (
-    <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between sm:container">
-      <h1 className="pb-2 text-center text-4xl font-semibold text-neutral-300  ">
-        {greeting} {firstName}!
-      </h1>
-      <p className="text-neutral-30 pb-2 text-center text-2xl font-medium">
-        {currentClass}
-      </p>
-      <div className="max-h-2xl flex flex-col  justify-center  p-4 sm:flex-row">
-        <Suspense fallback={<Skeleton className="h-full w-full" />}>
-          <ClassListComponent data={availableClasses} />
-        </Suspense>
+    <div className="flex min-h-screen w-full flex-col ">
+      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+        <div className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+          <h1 className="z-20 bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text text-2xl font-bold">
+            {greeting} {firstName}!
+          </h1>
+        </div>
+        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+          <Tabs defaultValue="flex">
+            <div className="flex items-center">
+              <TabsList>
+                <TabsTrigger value="flex">Flex</TabsTrigger>
+
+                <TabsTrigger value="requests">Requests</TabsTrigger>
+              </TabsList>
+              <div className="ml-auto flex items-center gap-2">
+                <ModeToggle />
+              </div>
+            </div>
+            <TabsContent value="flex">
+              <Card>
+                <CardHeader>
+                  <CardTitle>{currentClass}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <React.Suspense
+                    fallback={<Loader2 className="h-8 w-8 animate-spin" />}
+                  >
+                    <ClassListComponent data={availableClasses} />
+                  </React.Suspense>
+                </CardContent>
+                <CardFooter></CardFooter>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="requests">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Requests</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <React.Suspense
+                    fallback={<Loader2 className="h-8 w-8 animate-spin" />}
+                  ></React.Suspense>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </main>
       </div>
     </div>
   );
@@ -57,6 +117,7 @@ async function getData(email: string, userId: string) {
   if (error) {
     return [];
   }
+
   const mappedData = data.map((rooms) => {
     const formattedTeacherName = formatTeacherNames(
       rooms.classrooms.teacherName,
@@ -87,7 +148,7 @@ async function getClass(userId: string) {
   const { data, error } = await client.api.rosters.student
     .id({ userId: userId })
     .get();
-
+  console.log(data);
   if (error) {
     console.error(error);
   }

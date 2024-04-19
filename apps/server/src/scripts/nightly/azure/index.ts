@@ -42,7 +42,6 @@ async function fetchAllUsers(
 async function azureTeachers(): Promise<AzureUser[]> {
   try {
     const token = await azureAuth();
-    console.log("token", token);
     const staffLink: string | undefined = env.AZURE_TEACHER_QUERY;
     const helpdeskLink: string | undefined = env.AZURE_HELPDESK_QUERY;
     const staffPromise = fetchAllUsers(staffLink, token);
@@ -53,12 +52,19 @@ async function azureTeachers(): Promise<AzureUser[]> {
       helpdeskPromise,
     ]);
     // Fetch all classrooms from the database
-    console.log("helpdeskData", helpdeskData);
     let teacherCount = 0;
     let helpdeskCount = 0;
     // Use a transaction to insert all the users into the database at the same time
+    const existingUsers = await db
+      .select({ id: schema.users.id })
+      .from(schema.users)
+      .where(eq(schema.users.role, "teacher"));
+    const existingIds = new Set(existingUsers.map((u) => u.id));
+    const newTeachers = staffData.filter((u) => !existingIds.has(u.id));
+
     await db.transaction(async (tx) => {
-      for (const teacher of staffData) {
+      for (const teacher of newTeachers) {
+        console.log("adding: ", teacher.userPrincipalName);
         let role: "teacher" | "secretary" = "teacher";
         if (
           secretaries.includes(
@@ -75,18 +81,15 @@ async function azureTeachers(): Promise<AzureUser[]> {
             email: teacher.userPrincipalName,
             role: role,
           })
-          .returning({ newID: schema.users.id })
-          .onConflictDoNothing();
-        const dbClassRooms = await db.query.classrooms.findFirst({
-          where: like(schema.classrooms.teacherName, teacher.displayName),
-        });
-        if (dbClassRooms) {
-          await tx.update(schema.classrooms).set({
-            teacherId: teacher.id,
+          .onConflictDoUpdate({
+            target: schema.users.id,
+            set: {
+              name: teacher.displayName,
+              email: teacher.userPrincipalName,
+              role: role,
+            },
           });
-          if (role !== "secretary") {
-          }
-        }
+
         teacherCount++;
       }
 
