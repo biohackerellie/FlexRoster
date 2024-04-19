@@ -27,7 +27,7 @@ importers:
   apps/cli:
     dependencies:
       '@clack/core':
-        specifier: ^0.3.2
+        specifier: ^0.3.4
         version: 0.3.4
       '@clack/prompts':
         specifier: ^0.7.0
