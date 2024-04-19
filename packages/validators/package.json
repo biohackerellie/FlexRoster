@@ -27,6 +27,6 @@
   },
   "prettier": "@local/prettier-config",
   "dependencies": {
-    "zod": "^3.22.4"
+    "zod": "^3.22.5"
   }
 }
