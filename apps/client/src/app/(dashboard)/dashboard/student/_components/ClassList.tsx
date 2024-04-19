@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { StudentTable } from "@/lib/types";

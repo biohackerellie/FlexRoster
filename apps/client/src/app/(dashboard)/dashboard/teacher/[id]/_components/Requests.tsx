@@ -1,177 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
-import { format } from "date-fns";
-import { toast } from "sonner";
 
-import type { Request } from "@local/validators";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@local/ui/dropdown-menu";
-import { ScrollArea } from "@local/ui/scroll-area";
-import { Separator } from "@local/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@local/ui/tabs";
 
-import { useRequestNotifications } from "@/hooks";
-import { pusherClient } from "@/lib/pusher";
-import { toPusherKey } from "@/lib/utils";
 import { RequestApproval } from "../actions";
-
-interface RequestsComponentProps {
-  incomingRequests: Request[] | null | undefined;
-  outgoingRequests: Request[] | null | undefined;
-  userId: string;
-}
-
-const NewRequestsComponent: React.FC<RequestsComponentProps> = ({
-  userId,
-  incomingRequests,
-  outgoingRequests,
-}) => {
-  useRequestNotifications(userId);
-
-  return (
-    <div className="flex h-full max-h-[calc(100vh-6rem)] w-fit flex-1 flex-col content-center items-center justify-center align-middle">
-      <Requests
-        incomingRequests={incomingRequests}
-        outgoing={outgoingRequests}
-        userId={userId}
-      />
-    </div>
-  );
-};
-
-interface RequestsProps {
-  incomingRequests: Request[] | null | undefined;
-  outgoing: Request[] | null | undefined;
-
-  userId: string;
-}
-
-const Requests: React.FC<RequestsProps> = ({
-  incomingRequests,
-  outgoing,
-  userId,
-}) => {
-  const [requests, setRequests] = React.useState<Request[] | null | undefined>(
-    incomingRequests,
-  );
-  const [outgoingRequests, setOutgoingRequests] = React.useState<
-    Request[] | null | undefined
-  >(outgoing);
-  React.useEffect(() => {
-    pusherClient.subscribe(toPusherKey(`request:${userId}`));
-    const requestHandler = (request: Request) => {
-      setRequests((prev) => [request, ...(prev ?? [])]);
-      toast(`New request from ${request.studentName}`, {
-        position: "top-center",
-      });
-    };
-    const outgoingHandler = (request: Request) => {
-      setOutgoingRequests((prev) => [request, ...(prev ?? [])]);
-      toast(`${request.studentName} has requested to transfer to a new room`, {
-        position: "top-center",
-      });
-    };
-    pusherClient.bind("new-request", requestHandler);
-    pusherClient.bind("new-outgoing", outgoingHandler);
-    return () => {
-      pusherClient.unsubscribe(toPusherKey(`request:${userId}`));
-      pusherClient.unbind("new-request", requestHandler);
-      pusherClient.unbind("new-outgoing", outgoingHandler);
-    };
-  }, [userId, incomingRequests, outgoing]);
-
-  return (
-    <div className="inset-0  h-auto w-full  items-center justify-between">
-      <Tabs defaultValue="requests">
-        <TabsList>
-          <TabsTrigger value="requests">Requests</TabsTrigger>
-          <TabsTrigger value="outgoing">Outgoing</TabsTrigger>
-        </TabsList>
-        <TabsContent value="requests">
-          <div className="flex items-center justify-center border">
-            <div className="grid h-auto w-full grid-cols-3 grid-rows-3  gap-x-5 ">
-              {/* <ScrollArea> */}
-              {requests && requests.length > 0 ? (
-                requests.map((request, index) => {
-                  return (
-                    <div className="" key={index}>
-                      <RequestComponent {...request} />
-                      <Separator />
-                    </div>
-                  );
-                })
-              ) : (
-                <div className="flex h-fit items-center justify-center">
-                  <h1 className="text-2xl font-semibold text-gray-500">
-                    No requests
-                  </h1>
-                </div>
-              )}
-            </div>
-            {/* </ScrollArea> */}
-          </div>
-        </TabsContent>
-        <TabsContent value="outgoing">
-          <ScrollArea>
-            {outgoingRequests && outgoingRequests.length > 0 ? (
-              outgoingRequests.map((request, index) => {
-                return (
-                  <div key={index}>
-                    <RequestComponent {...request} />
-                    <Separator />
-                  </div>
-                );
-              })
-            ) : (
-              <div className="flex h-48 items-center justify-center">
-                <h1 className="text-2xl font-semibold text-gray-500">
-                  No outgoing requests
-                </h1>
-              </div>
-            )}
-          </ScrollArea>
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-};
-
-function RequestComponent(request: Request) {
-  const formatTimestamp = (timestamp: string | number) => {
-    let time = timestamp;
-    if (typeof timestamp === "string") {
-      time = parseInt(timestamp);
-    }
-    return format(time, "h:mm a");
-  };
-
-  return (
-    <div className=" justify-between p-2">
-      <div>
-        <div className="text-sm font-semibold">
-          {request.studentName} from {request.currentTeacherName}'s room
-        </div>
-        <div className="flex justify-between">
-          Requested {format(request.dateRequested, "PPP")}
-          <div className="cursor-pointer ">
-            <ApprovalMenu
-              requestId={request.id}
-              studentId={request.studentId}
-              teacherId={request.currentTeacher}
-              newTeacherId={request.newTeacher}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function ApprovalMenu({
   requestId,
@@ -184,8 +22,6 @@ function ApprovalMenu({
   teacherId: string;
   newTeacherId: string;
 }) {
-  const router = useRouter();
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="animate-pulse hover:cursor-pointer">
@@ -194,16 +30,26 @@ function ApprovalMenu({
       <DropdownMenuContent>
         <DropdownMenuItem
           onClick={() => {
-            Approval(requestId, studentId, teacherId, newTeacherId, "approved");
-            router.refresh();
+            void Approval(
+              requestId,
+              studentId,
+              teacherId,
+              newTeacherId,
+              "approved",
+            );
           }}
         >
           Approve
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
-            Approval(requestId, studentId, teacherId, newTeacherId, "denied");
-            router.refresh();
+            void Approval(
+              requestId,
+              studentId,
+              teacherId,
+              newTeacherId,
+              "denied",
+            );
           }}
         >
           Deny
@@ -233,4 +79,4 @@ const Approval = async (
   }
 };
 
-export default NewRequestsComponent;
+export default ApprovalMenu;
