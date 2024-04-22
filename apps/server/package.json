@@ -35,7 +35,7 @@
     "ioredis": "^5.4.1",
     "lucia": "^3.1.1",
     "nanoid": "^5.0.7",
-    "zod": "^3.22.5"
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "@local/eslint-config": "workspace:*",

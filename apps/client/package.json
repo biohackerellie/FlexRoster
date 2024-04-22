@@ -40,7 +40,7 @@
     "react-dom": "^18.2.0",
     "superjson": "2.2.1",
     "sonner": "^1.4.41",
-    "zod": "^3.22.5"
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "@local/eslint-config": "workspace:*",
