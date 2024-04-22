@@ -1,10 +1,13 @@
 import dns from "dns";
 import { fileURLToPath } from "url";
+import withBundleAnalyzer from "@next/bundle-analyzer";
 import createJiti from "jiti";
 
 dns.setDefaultResultOrder("ipv4first");
 createJiti(fileURLToPath(import.meta.url))("./src/env");
 createJiti(fileURLToPath(import.meta.url))("@local/auth/env");
+
+const analyze = withBundleAnalyzer({ enabled: false });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -27,4 +30,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default analyze(nextConfig);
