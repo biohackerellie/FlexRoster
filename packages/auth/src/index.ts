@@ -54,7 +54,7 @@ function dumbAdapter(
 }
 export const adapter = DrizzleAdapter(
   db,
-  dumbAdapter as PgTableFn<undefined>,
+
 ) as Adapter;
 
 export const {

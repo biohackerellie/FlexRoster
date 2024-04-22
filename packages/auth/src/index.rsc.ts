@@ -1,5 +1,4 @@
 import type { DefaultSession, NextAuthConfig } from "next-auth";
-
 import { cache } from "react";
 import { Adapter } from "@auth/core/adapters";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
@@ -53,10 +52,7 @@ function dumbAdapter(
       return pgTable(name, columns, extraConfig);
   }
 }
-export const adapter = DrizzleAdapter(
-  db,
-  dumbAdapter as PgTableFn<undefined>,
-) as Adapter;
+export const adapter = DrizzleAdapter(db) as Adapter;
 
 const {
   handlers: { GET, POST },
