@@ -82,8 +82,8 @@ importers:
         specifier: ^8.0.2
         version: 8.0.2(postcss@8.4.38)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))(typescript@5.4.5)
       type-fest:
-        specifier: ^4.15.0
-        version: 4.15.0
+        specifier: ^4.16.0
+        version: 4.16.0
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
@@ -4912,8 +4912,8 @@ packages:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
 
-  type-fest@4.15.0:
-    resolution: {integrity: sha512-tB9lu0pQpX5KJq54g+oHOLumOx+pMep4RaM6liXh2PKmVRFF+/vAtUP0ZaJ0kOySfVNjF6doBWPHhBhISKdlIA==}
+  type-fest@4.16.0:
+    resolution: {integrity: sha512-z7Rf5PXxIhbI6eJBTwdqe5bO02nUUmctq4WqviFSstBAWV0YNtEQRhEnZw73WJ8sZOqgFG6Jdl8gYZu7NBJZnA==}
     engines: {node: '>=16'}
 
   type@2.7.2:
@@ -9535,7 +9535,7 @@ snapshots:
 
   type-fest@0.21.3: {}
 
-  type-fest@4.15.0: {}
+  type-fest@4.16.0: {}
 
   type@2.7.2: {}
 
