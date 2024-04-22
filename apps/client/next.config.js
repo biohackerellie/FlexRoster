@@ -7,7 +7,7 @@ dns.setDefaultResultOrder("ipv4first");
 createJiti(fileURLToPath(import.meta.url))("./src/env");
 createJiti(fileURLToPath(import.meta.url))("@local/auth/env");
 
-const analyze = withBundleAnalyzer({ enabled: process.env.ANALYZE === "true" });
+const analyze = withBundleAnalyzer({ enabled: false });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
