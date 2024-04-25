@@ -2,20 +2,21 @@ import { NotFoundError } from "elysia";
 
 import { db, eq, schema } from "@local/db";
 
+import type { AllStudents } from "~/lib/sql";
 import {
-  createClient,
+  GetCache,
+  getHashKey,
   getRequestKV,
-  getRequestSet,
   removeSingleRequest,
+  SetCache,
   setClassRoomKV,
   setRequestKV,
 } from "~/lib/redis";
 import {
+  allStudentsMap,
   rosterByClassroomId,
   rosterByTeacherId,
   rosterQuery,
-  teacherQuery,
-  userByRosterId,
   userQuery,
   userRosterQuery,
 } from "~/lib/sql";
@@ -23,7 +24,21 @@ import { getRequests } from "../requests/handlers";
 
 export async function getRosters() {
   try {
-    return await rosterQuery.execute();
+    let data: AllStudents[] = [];
+    const cacheKey = getHashKey("ALlStudents");
+    const cachedData = await GetCache(cacheKey);
+    const cacheArray = cachedData ? JSON.parse(cachedData) : [];
+    if (cacheArray && cacheArray.length) {
+      data = cacheArray;
+    } else {
+      const dbData = await allStudentsMap.execute({});
+      if (dbData && dbData.length) {
+        await SetCache(cacheKey, dbData);
+        data = dbData;
+      }
+    }
+    if (!data) throw new NotFoundError("No rosters found");
+    return data;
   } catch (e) {
     throw new NotFoundError("No rosters found");
   }

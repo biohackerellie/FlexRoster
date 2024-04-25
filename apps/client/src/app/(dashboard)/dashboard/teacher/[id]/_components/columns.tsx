@@ -7,6 +7,7 @@ import { ArrowUpDown, CheckCircle, MessageSquare, XCircle } from "lucide-react";
 
 import { Badge } from "@local/ui/badge";
 import { Button } from "@local/ui/button";
+import { DataTableColumnHeader } from "@local/ui/data-table-column-header";
 import {
   Tooltip,
   TooltipContent,
@@ -18,40 +19,38 @@ import { Attendance } from "../actions";
 
 export const columns: ColumnDef<TeacherTable>[] = [
   {
-    accessorKey: "studentName",
+    accessorKey: "userName",
     header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title="Student Name" />;
+    },
+
+    cell: ({ row }) => {
       return (
-        <Button
-          variant="ghost"
-          className="text-lg font-medium"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Student Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className={`text-md max-w-[120px] overflow-ellipsis `}>
+          {row.getValue("userName")}
+        </div>
       );
     },
   },
   {
     accessorKey: "studentEmail",
     header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title="Student Email" />;
+    },
+    cell: ({ row }) => {
       return (
-        <Button
-          variant="ghost"
-          className="text-lg font-medium"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Student Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className={`text-md max-w-[80px] overflow-ellipsis leading-none`}>
+          {row.getValue("studentEmail")}
+        </div>
       );
     },
   },
   {
     accessorKey: "status",
-    header: () => {
-      return <span className="text-lg font-medium">Status</span>;
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title="Status" />;
     },
+
     cell: ({ row }) => {
       //eslint-disable-next-line
       const status = row.getValue("status") as StudentStatus;
@@ -61,9 +60,9 @@ export const columns: ColumnDef<TeacherTable>[] = [
         return <Badge variant="outline">Default</Badge>;
       } else if (status === "transferredN") {
         return (
-          <>
+          <div className="text-md max-w-[80px] overflow-ellipsis leading-none">
             <Tooltip>
-              <TooltipTrigger className="cursor-pointer" asChild>
+              <TooltipTrigger className="cursor-pointer " asChild>
                 <Badge
                   variant="destructive"
                   className="animate-pulse"
@@ -74,12 +73,13 @@ export const columns: ColumnDef<TeacherTable>[] = [
               </TooltipTrigger>
               <TooltipContent>Click when student arrives</TooltipContent>
             </Tooltip>
-          </>
+          </div>
         );
       } else if (status === "transferredA") {
         return <Badge variant="success">Transferred</Badge>;
       } else return <div> </div>;
     },
+    enableSorting: false,
   },
   {
     accessorKey: "chatId",
@@ -91,20 +91,24 @@ export const columns: ColumnDef<TeacherTable>[] = [
 
       if (!chatId) {
         return (
-          <Tooltip>
-            <TooltipTrigger className="cursor-default">
-              <MessageSquare size={20} strokeWidth={1.5} />
-            </TooltipTrigger>
-            <TooltipContent>Chat Unavailable</TooltipContent>
-          </Tooltip>
+          <div className="text-md max-w-[30px] overflow-ellipsis leading-none">
+            <Tooltip>
+              <TooltipTrigger className="cursor-default">
+                <MessageSquare size={20} strokeWidth={1.5} />
+              </TooltipTrigger>
+              <TooltipContent>Chat Unavailable</TooltipContent>
+            </Tooltip>
+          </div>
         );
       } else {
         return (
-          <Button variant="link" asChild>
-            <Link href={chatId}>
-              <MessageSquare size={20} strokeWidth={1.5} />
-            </Link>
-          </Button>
+          <div className="text-md max-w-[30px] overflow-ellipsis leading-none">
+            <Button variant="link" asChild>
+              <Link href={chatId}>
+                <MessageSquare size={20} strokeWidth={1.5} />
+              </Link>
+            </Button>
+          </div>
         );
       }
     },

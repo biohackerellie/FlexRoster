@@ -88,19 +88,21 @@ export function ClassListComponent({ data }: ClassListProps) {
   );
 }
 
+const processedData = (rooms: StudentTable[]) => {
+  return rooms.map((room) => ({
+    room: room.roomNumber,
+    teacher: room.userName,
+    available: room.available,
+    teacherId: room.teacherId,
+    chatId: room.chatId,
+  }));
+};
+
 /**
  * Mobile Class List Component
  */
 const ClassList = ({ data }: { data: StudentTable[] }) => {
-  const rooms = data.map((room) => {
-    return {
-      room: room.roomNumber,
-      teacher: room.teacherName,
-      available: room.available,
-      teacherId: room.teacherId,
-      chatId: room.chatId,
-    };
-  });
+  const rooms = React.useMemo(() => processedData(data), [data]);
   return (
     <ScrollArea className="h-72 w-screen">
       <div className="p-4">
@@ -154,7 +156,7 @@ const columns: ColumnDef<StudentTable>[] = [
     },
   },
   {
-    accessorKey: "teacherName",
+    accessorKey: "userName",
     header: ({ column }) => {
       return (
         <Button

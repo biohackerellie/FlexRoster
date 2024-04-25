@@ -61,7 +61,7 @@ async function getDefaultRoster(teacherId: string) {
 
   const mapped = data.map((student) => {
     return {
-      studentName: student.studentName,
+      userName: student.studentName,
       studentEmail: student.studentEmail,
       status: student.status,
       studentId: student.studentId,
@@ -70,6 +70,7 @@ async function getDefaultRoster(teacherId: string) {
         : null,
     };
   });
+
   return mapped;
 }
 

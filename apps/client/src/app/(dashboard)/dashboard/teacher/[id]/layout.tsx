@@ -29,7 +29,8 @@ export default async function teacherLayout({
     return notFound();
   }
   const navLinks = [
-    { name: "Roster", href: `/dashboard/teacher/${params.id}` },
+    { name: "My Roster", href: `/dashboard/teacher/${params.id}` },
+    { name: "All Students", href: `/dashboard/teacher/${params.id}/students` },
     { name: "Requests", href: `/dashboard/teacher/${params.id}/requests` },
     { name: "Messages", href: `/dashboard/teacher/${params.id}/messages` },
   ];
