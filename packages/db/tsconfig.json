@@ -4,6 +4,6 @@
     "outDir": "dist",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-  "include": ["src", "src/drizzle.config.ts"],
+  "include": ["src", "src/drizzle.config.ts", "../../tmp/schema.ts"],
   "exclude": ["node_modules"]
 }

@@ -90,7 +90,7 @@ export async function setAttendance(studentId: string) {
     const updated = await db.transaction(async (tx) => {
       await tx
         .update(schema.students)
-        .set({ arrived: true })
+        .set({ status: "transferredA" })
         .where(eq(schema.students.studentEmail, student?.email));
 
       const [updatedRequest] = await tx

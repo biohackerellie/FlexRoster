@@ -75,8 +75,7 @@ export async function RosterSync() {
           studentsWithRequestToday.push({
             ...r.students,
             classroomId: r.classrooms?.id!,
-            transferred: true,
-            arrived: false,
+            status: "transferredN",
           });
         }
       }
@@ -118,8 +117,7 @@ export async function RosterSync() {
             .update(schema.students)
             .set({
               classroomId: s.classroomId,
-              transferred: s.transferred,
-              arrived: s.arrived,
+              status: s.status,
             })
             .where(eq(schema.students.studentEmail, s.studentEmail));
           studentsUpdated++;
@@ -130,8 +128,7 @@ export async function RosterSync() {
               .update(schema.students)
               .set({
                 classroomId: s.classroomId,
-                arrived: false,
-                transferred: false,
+                status: "default",
               })
               .where(eq(schema.students.studentEmail, s.studentEmail));
             studentsUpdated++;

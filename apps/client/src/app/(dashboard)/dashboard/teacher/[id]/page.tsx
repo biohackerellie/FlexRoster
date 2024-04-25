@@ -61,17 +61,15 @@ async function getDefaultRoster(teacherId: string) {
 
   const mapped = data.map((student) => {
     return {
-      transferred: student.transferred,
-      arrived: student.arrived,
       studentName: student.studentName,
       studentEmail: student.studentEmail,
+      status: student.status,
       studentId: student.studentId,
       chatId: student.studentId
         ? `/dashboard/chat/${chatHrefConstructor(teacherId, student.studentId)}`
         : null,
     };
   });
-
   return mapped;
 }
 

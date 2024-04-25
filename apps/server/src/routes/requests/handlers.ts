@@ -195,7 +195,7 @@ export async function requestApproval(
           .update(schema.students)
           .set({
             classroomId: newClassroomId[0]?.classroomId,
-            transferred: true,
+            status: "transferredN",
           })
           .where(eq(schema.students.studentEmail, student.user.email));
       }

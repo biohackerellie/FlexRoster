@@ -13,6 +13,8 @@ import {
   TooltipTrigger,
 } from "@local/ui/tooltip";
 
+import { StudentStatus } from "@/lib/types";
+
 interface RosterList {
   count: number;
   id: string;
@@ -69,8 +71,7 @@ const columns: ColumnDef<RosterList>[] = [
 
 interface RosterTable {
   rosterId: number;
-  transferred: boolean;
-  arrived: boolean;
+  status: StudentStatus;
   studentEmail: string;
   studentName: string;
   studentId: string | null;
