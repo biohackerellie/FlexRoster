@@ -18,6 +18,11 @@ export const role = pgEnum("Role", [
   "student",
   "admin",
 ]);
+export const status = pgEnum("Status", [
+  "transferredA",
+  "transferredN",
+  "default",
+]);
 
 /**
  * @description students is a table that holds the relationship between an InfiniteCampus student and classrooms, and AD users
@@ -31,8 +36,7 @@ export const students = pgTable("students", {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
-  transferred: boolean("transferred").default(false).notNull(),
-  arrived: boolean("arrived").default(false).notNull(),
+  status: status("status").default("default").notNull(),
   id: serial("id").primaryKey().notNull(),
 });
 

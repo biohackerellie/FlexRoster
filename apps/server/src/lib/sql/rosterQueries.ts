@@ -17,10 +17,9 @@ export const rosterByIDQuery = db
 export const rosterByTeacherId = db
   .select({
     rosterId: schema.students.id,
-    transferred: schema.students.transferred,
-    arrived: schema.students.arrived,
     studentEmail: schema.students.studentEmail,
     studentName: schema.students.studentName,
+    status: schema.students.status,
     studentId: schema.users.id,
     classroomId: schema.classrooms.id,
     roomNumber: schema.classrooms.roomNumber,
