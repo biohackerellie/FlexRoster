@@ -325,7 +325,7 @@ importers:
         version: 14.3.0-canary.23(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       next-auth:
         specifier: beta
-        version: 5.0.0-beta.16(next@14.3.0-canary.23(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
+        version: 5.0.0-beta.17(next@14.3.0-canary.23(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -500,10 +500,16 @@ importers:
 
   packages/validators:
     dependencies:
+      drizzle-zod:
+        specifier: ^0.5.1
+        version: 0.5.1(drizzle-orm@0.30.9(@types/pg@8.11.5)(@types/react@18.2.79)(bun-types@1.1.4)(pg@8.11.5)(postgres@3.4.4)(react@18.2.0))(zod@3.23.0)
       zod:
         specifier: ^3.23.0
         version: 3.23.0
     devDependencies:
+      '@local/db':
+        specifier: workspace:*
+        version: link:../db
       '@local/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint-config
@@ -2791,6 +2797,12 @@ packages:
       sqlite3:
         optional: true
 
+  drizzle-zod@0.5.1:
+    resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
+    peerDependencies:
+      drizzle-orm: '>=0.23.13'
+      zod: '*'
+
   duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
 
@@ -3906,6 +3918,22 @@ packages:
 
   next-auth@5.0.0-beta.16:
     resolution: {integrity: sha512-dX2snB+ezN23tFzSes3n3uosT9iBf0eILPYWH/R2fd9n3ZzdMQlRzq7JIOPeS1aLc84IuRlyuyXyx9XmmZB6og==}
+    peerDependencies:
+      '@simplewebauthn/browser': ^9.0.1
+      '@simplewebauthn/server': ^9.0.2
+      next: ^14
+      nodemailer: ^6.6.5
+      react: ^18.2.0
+    peerDependenciesMeta:
+      '@simplewebauthn/browser':
+        optional: true
+      '@simplewebauthn/server':
+        optional: true
+      nodemailer:
+        optional: true
+
+  next-auth@5.0.0-beta.17:
+    resolution: {integrity: sha512-XA/7JtAjOgDfAeotJPFUsFZGGItZwzZrxLt9Gc9fE7EchLk6zydZfuZ22Vvwixs3IilkN644D5IoD5tEOAFGCQ==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
@@ -7219,6 +7247,11 @@ snapshots:
       postgres: 3.4.4
       react: 18.2.0
 
+  drizzle-zod@0.5.1(drizzle-orm@0.30.9(@types/pg@8.11.5)(@types/react@18.2.79)(bun-types@1.1.4)(pg@8.11.5)(postgres@3.4.4)(react@18.2.0))(zod@3.23.0):
+    dependencies:
+      drizzle-orm: 0.30.9(@types/pg@8.11.5)(@types/react@18.2.79)(bun-types@1.1.4)(pg@8.11.5)(postgres@3.4.4)(react@18.2.0)
+      zod: 3.23.0
+
   duplexer@0.1.2: {}
 
   eastasianwidth@0.2.0: {}
@@ -8540,6 +8573,12 @@ snapshots:
   next-auth@5.0.0-beta.16(next@14.3.0-canary.23(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0):
     dependencies:
       '@auth/core': 0.28.1
+      next: 14.3.0-canary.23(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react: 18.2.0
+
+  next-auth@5.0.0-beta.17(next@14.3.0-canary.23(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0):
+    dependencies:
+      '@auth/core': 0.30.0
       next: 14.3.0-canary.23(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react: 18.2.0
 

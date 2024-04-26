@@ -9,4 +9,3 @@ export * from "./generickHash";
 export * from "./genericSS";
 export * from "./logStreams";
 export * from "./requestSets";
-export * from "./queryCache.ts";

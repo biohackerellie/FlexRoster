@@ -34,7 +34,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@local/ui/popover";
 import { ScrollArea, ScrollBar } from "@local/ui/scroll-area";
 import { Separator } from "@local/ui/separator";
 
-import { RequestRoom } from "@/app/(dashboard)/dashboard/student/actions";
+import { RequestRoom } from "@/app/dashboard/student/actions";
 import useMediaQuery from "@/hooks/useMediaQuery";
 
 /**

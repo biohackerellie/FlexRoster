@@ -17,7 +17,6 @@ import { client } from "@/lib/eden";
 
 export default async function AllStudentsPage() {
   const roster = await getData();
-  const mapped = new Map(roster.map((item) => [item.rosterId, item]));
 
   return (
     <div>

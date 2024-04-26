@@ -1,45 +1,48 @@
 import { NotFoundError } from "elysia";
 
+import type { AllStudents } from "@local/validators";
 import { db, eq, schema } from "@local/db";
+import { allStudentsArrayValidator } from "@local/validators";
 
-import type { AllStudents } from "~/lib/sql";
 import {
-  GetCache,
-  getHashKey,
+  getKV,
   getRequestKV,
   removeSingleRequest,
-  SetCache,
   setClassRoomKV,
+  setKV,
   setRequestKV,
 } from "~/lib/redis";
 import {
   allStudentsMap,
   rosterByClassroomId,
   rosterByTeacherId,
-  rosterQuery,
   userQuery,
   userRosterQuery,
 } from "~/lib/sql";
-import { getRequests } from "../requests/handlers";
+import { getHashKey } from "~/lib/utils/crypto";
 
 export async function getRosters() {
   try {
     let data: AllStudents[] = [];
     const cacheKey = getHashKey("ALlStudents");
-    const cachedData = await GetCache(cacheKey);
-    const cacheArray = cachedData ? JSON.parse(cachedData) : [];
+    const cachedData: string = (await getKV(cacheKey)) ?? "";
+    const cacheArray = allStudentsArrayValidator.parse(JSON.parse(cachedData));
     if (cacheArray && cacheArray.length) {
       data = cacheArray;
     } else {
       const dbData = await allStudentsMap.execute({});
       if (dbData && dbData.length) {
-        await SetCache(cacheKey, dbData);
-        data = dbData;
+        const parsedData = allStudentsArrayValidator.parse(dbData);
+        await setKV(cacheKey, JSON.stringify(parsedData), 120);
+        data = parsedData;
       }
     }
     if (!data) throw new NotFoundError("No rosters found");
     return data;
   } catch (e) {
+    if (e instanceof Error) {
+      console.error(e.message);
+    }
     throw new NotFoundError("No rosters found");
   }
 }

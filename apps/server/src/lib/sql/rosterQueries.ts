@@ -13,11 +13,7 @@ export const allStudentsMap = db
     studentEmail: schema.students.studentEmail,
     studentName: schema.students.studentName,
     status: schema.students.status,
-    classRoom: {
-      classroomId: schema.students.classroomId,
-      roomNumber: schema.classrooms.roomNumber,
-      teacherName: schema.classrooms.teacherName,
-    },
+    teacherName: schema.classrooms.teacherName,
   })
   .from(schema.students)
   .innerJoin(
@@ -25,18 +21,6 @@ export const allStudentsMap = db
     eq(schema.students.classroomId, schema.classrooms.id),
   )
   .prepare("allStudentsMap");
-
-export interface AllStudents {
-  rosterId: number;
-  studentEmail: string;
-  studentName: string;
-  status: "transferredA" | "transferredN" | "default";
-  classRoom: {
-    classroomId: string;
-    roomNumber: string;
-    teacherName: string;
-  };
-}
 
 export const rosterByIDQuery = db
   .select()

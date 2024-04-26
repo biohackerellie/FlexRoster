@@ -30,7 +30,7 @@ export async function RequestApproval(
 
   revalidateTag("roster");
   revalidateTag("requests");
-  revalidatePath("/(dashboard)/dashboard", "layout");
+  revalidatePath("/dashboard", "layout");
 }
 
 export async function Attendance(studentId: string) {
@@ -47,5 +47,5 @@ export async function Attendance(studentId: string) {
   }
 
   revalidateTag("roster");
-  revalidatePath("/(dashboard)/dashboard/teacher", "layout");
+  revalidatePath("/dashboard/teacher", "layout");
 }

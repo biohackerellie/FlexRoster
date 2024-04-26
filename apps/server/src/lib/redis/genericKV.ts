@@ -9,9 +9,11 @@ import { createClient } from "./client";
 export async function setKV(
   key: string,
   value: string,
+  ex?: number,
 ): Promise<string | Error> {
   const client = createClient();
-  const result = await client.set(key, value);
+  const expires = ex ? ex : 1200;
+  const result = await client.set(key, value, "EX", expires);
   await client.quit();
   return result;
 }

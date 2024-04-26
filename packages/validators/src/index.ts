@@ -54,3 +54,4 @@ export const logArrayValidator = z.array(logValidator);
 export type Logs = z.infer<typeof logValidator>;
 
 export * from "./nameHelpers";
+export * from "./pgValidators"

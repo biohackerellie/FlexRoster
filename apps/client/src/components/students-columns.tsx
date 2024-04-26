@@ -5,12 +5,9 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@local/ui/badge";
 import { DataTableColumnHeader } from "@local/ui/data-table-column-header";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
+import { AllStudents } from "@local/validators";
 
-import { AllStudents } from "~/lib/sql";
-
-type AllStudentsTable = Map<number, AllStudents>;
-
-export const columns: ColumnDef<AllStudentsTable>[] = [
+export const columns: ColumnDef<AllStudents>[] = [
   {
     accessorKey: "userName",
     header: ({ column }) => {

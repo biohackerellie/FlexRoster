@@ -13,7 +13,7 @@ import {
 import { DataTable } from "@local/ui/data-table";
 
 import { client } from "@/lib/eden";
-import { studentColumns } from "../_components/rosterTable";
+import { studentColumns } from "../../_components/rosterTable";
 
 interface PageProps {
   params: {
