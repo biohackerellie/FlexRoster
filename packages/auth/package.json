@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.30.0",
-    "@auth/drizzle-adapter": "^1.0.0",
+    "@auth/drizzle-adapter": "^1.0.1",
     "@local/db": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@t3-oss/env-nextjs": "^0.10.1",
