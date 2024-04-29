@@ -23,7 +23,11 @@ export type User = z.infer<typeof selectUserValidator>;
  * Student Profiles
  */
 
-const studentStatusSchema = z.enum(["default", "transferredA", "transferredN"]);
+export const studentStatusSchema = z.enum([
+  "default",
+  "transferredA",
+  "transferredN",
+]);
 export type StudentStatus = z.infer<typeof studentStatusSchema>;
 
 export const selectStudentValidator = createSelectSchema(schema.students);

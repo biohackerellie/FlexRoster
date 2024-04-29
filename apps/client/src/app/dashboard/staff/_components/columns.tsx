@@ -15,7 +15,7 @@ import {
   TooltipTrigger,
 } from "@local/ui/tooltip";
 
-import { Attendance } from "../actions";
+import { Attendance } from "./actions";
 
 export const columns: ColumnDef<TeacherTable>[] = [
   {

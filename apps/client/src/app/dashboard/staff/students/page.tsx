@@ -1,7 +1,9 @@
+import type { SearchParams } from "@/hooks/types";
 import * as React from "react";
 import { unstable_noStore as noStore } from "next/cache";
 import { Loader2 } from "lucide-react";
 
+import type { TableSearchParams } from "@local/validators";
 import {
   Card,
   CardContent,
@@ -10,14 +12,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@local/ui/card";
-import { DataTable } from "@local/ui/data-table";
+import { searchParamsValidator } from "@local/validators";
 
-import { columns } from "@/components/students-columns";
 import { client } from "@/lib/eden";
+import AllStudentsTable from "../_components/studentTable";
 
-export default async function AllStudentsPage() {
-  const roster = await getData();
-
+export default async function AllStudentsPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const search = searchParamsValidator.parse(searchParams);
+  const roster = getTableData(search);
   return (
     <div>
       <Card>
@@ -28,7 +34,7 @@ export default async function AllStudentsPage() {
           <React.Suspense
             fallback={<Loader2 className="h-8 w-8 animate-spin" />}
           >
-            <DataTable columns={columns} data={roster} />
+            <AllStudentsTable dataPromise={roster} />
           </React.Suspense>
         </CardContent>
         <CardFooter></CardFooter>
@@ -37,7 +43,7 @@ export default async function AllStudentsPage() {
   );
 }
 
-async function getData() {
+export async function getTableData(search: TableSearchParams) {
   noStore();
   const { data, error } = await client.api.rosters.all.get();
 
@@ -45,5 +51,21 @@ async function getData() {
     console.error(error);
     return [];
   }
-  return data;
+  if (!search) {
+    return data;
+  }
+  let result = data;
+
+  if (search.studentName) {
+    const searchLower = search.studentName.toLowerCase();
+    result = result.filter((student) =>
+      student.studentName.toLowerCase().includes(searchLower),
+    );
+  }
+
+  if (search.status) {
+    const statusArray = search.status.split(".");
+    result = result.filter((student) => statusArray.includes(student.status));
+  }
+  return result;
 }

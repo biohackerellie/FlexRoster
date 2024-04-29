@@ -135,7 +135,7 @@ async function getClass(userId: string) {
   const { data, error } = await client.api.rosters.student
     .id({ userId: userId })
     .get();
-  console.log(data);
+
   if (error) {
     console.error(error);
   }

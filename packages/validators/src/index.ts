@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { studentStatusSchema } from "./pgValidators";
+
 export const messageValidator = z.object({
   id: z.string().optional(),
   senderId: z.string(),
@@ -53,5 +55,16 @@ export interface messageAlerts {
 export const logArrayValidator = z.array(logValidator);
 export type Logs = z.infer<typeof logValidator>;
 
+export const searchParamsValidator = z.object({
+  search: z.string().optional(),
+  page: z.number().optional(),
+  limit: z.number().optional(),
+  status: studentStatusSchema.optional(),
+  studentName: z.string().optional(),
+  filter: z.string().optional(),
+});
+
+export type TableSearchParams = z.infer<typeof searchParamsValidator>;
+
 export * from "./nameHelpers";
-export * from "./pgValidators"
+export * from "./pgValidators";

@@ -14,7 +14,7 @@ import { DataTable } from "@local/ui/data-table";
 
 import { client } from "@/lib/eden";
 import { chatHrefConstructor } from "@/lib/utils";
-import { columns } from "./_components/columns";
+import { columns } from "../_components/columns";
 
 export default async function TeacherDashboardPage({
   params,

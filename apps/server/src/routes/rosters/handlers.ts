@@ -25,10 +25,14 @@ export async function getRosters() {
   try {
     let data: AllStudents[] = [];
     const cacheKey = getHashKey("ALlStudents");
-    const cachedData: string = (await getKV(cacheKey)) ?? "";
-    const cacheArray = allStudentsArrayValidator.parse(JSON.parse(cachedData));
-    if (cacheArray && cacheArray.length) {
-      data = cacheArray;
+    const cachedData = await getKV(cacheKey);
+    if (cachedData) {
+      const cacheArray = JSON.parse(cachedData);
+
+      if (cacheArray && cacheArray.length) {
+        const validated = allStudentsArrayValidator.parse(cacheArray);
+        data = validated;
+      }
     } else {
       const dbData = await allStudentsMap.execute({});
       if (dbData && dbData.length) {

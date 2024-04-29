@@ -1,5 +1,5 @@
 import React from "react";
-import { format } from "date-fns";
+import { format, toZonedTime } from "date-fns-tz";
 import { Loader2 } from "lucide-react";
 
 import type { Request } from "@local/validators";
@@ -9,7 +9,7 @@ import { Separator } from "@local/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@local/ui/tabs";
 
 import { client } from "@/lib/eden";
-import ApprovalMenu from "../_components/Requests";
+import ApprovalMenu from "../../_components/Requests";
 
 export default async function RequestsPage({
   params,
@@ -93,9 +93,13 @@ async function getRequests(teacherId: string) {
   if (error) {
     console.error(error);
   }
+
   return data;
 }
 function RequestComponent(request: Request) {
+  const timeZone = "America/Denver";
+  const zonedDate = toZonedTime(request.dateRequested, timeZone);
+
   return (
     <div className=" justify-between p-2">
       <div>
@@ -103,7 +107,7 @@ function RequestComponent(request: Request) {
           {request.studentName} from {request.currentTeacherName}'s room
         </div>
         <div className="flex justify-between">
-          Requested {format(request.dateRequested, "PPP")}
+          Requested {format(zonedDate, "PPP")}
           <div className="cursor-pointer ">
             <ApprovalMenu
               requestId={request.id}
