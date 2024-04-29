@@ -2,10 +2,25 @@
  * Roster table queries
  */
 
-import { db, eq, schema, sql } from "@local/db";
+import { db, eq, InferSelectModel, schema, sql } from "@local/db";
 
 // get all rosters
 export const rosterQuery = db.select().from(schema.students).prepare("roster");
+
+export const allStudentsMap = db
+  .select({
+    rosterId: schema.students.id,
+    studentEmail: schema.students.studentEmail,
+    studentName: schema.students.studentName,
+    status: schema.students.status,
+    teacherName: schema.classrooms.teacherName,
+  })
+  .from(schema.students)
+  .innerJoin(
+    schema.classrooms,
+    eq(schema.students.classroomId, schema.classrooms.id),
+  )
+  .prepare("allStudentsMap");
 
 export const rosterByIDQuery = db
   .select()

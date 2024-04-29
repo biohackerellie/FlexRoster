@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@local/ui/dropdown-menu";
 
-import { RequestApproval } from "../actions";
+import { RequestApproval } from "./actions";
 
 function ApprovalMenu({
   requestId,

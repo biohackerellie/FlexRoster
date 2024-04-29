@@ -28,3 +28,17 @@ export const sidebarOptions = [
     icon: Home,
   },
 ];
+export const statusOptions = [
+  {
+    label: "Default",
+    value: "default",
+  },
+  {
+    label: "Transfer, not arrived",
+    value: "transferredN",
+  },
+  {
+    label: "Transfer, arrived",
+    value: "transferredA",
+  },
+];

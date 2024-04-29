@@ -116,7 +116,10 @@ async function azureTeachers(): Promise<AzureUser[]> {
   }
 }
 
-azureTeachers();
+azureTeachers().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
 
 const secretaries = [
   "rachel_gappa@laurel.k12.mt.us",

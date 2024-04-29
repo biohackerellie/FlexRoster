@@ -5,21 +5,8 @@ import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@local/ui/alert-dialog";
-import { Button } from "@local/ui/button";
-import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -125,7 +112,7 @@ async function getData(email: string, userId: string) {
     const teacherId = rooms.classrooms.teacherId ?? "";
     return {
       roomNumber: rooms.classrooms.roomNumber,
-      teacherName: formattedTeacherName,
+      userName: formattedTeacherName,
       available: rooms.classrooms.available,
       teacherId: teacherId,
       chatId: `/dashboard/chat/${chatHrefConstructor(userId, teacherId)}`,
@@ -148,7 +135,7 @@ async function getClass(userId: string) {
   const { data, error } = await client.api.rosters.student
     .id({ userId: userId })
     .get();
-  console.log(data);
+
   if (error) {
     console.error(error);
   }

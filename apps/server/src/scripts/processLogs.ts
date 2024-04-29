@@ -71,9 +71,12 @@ async function processLogs() {
     console.error(e);
     throw new Error("Failed to process logs");
   } finally {
-    client.quit();
+    await client.quit();
     process.exit(0);
   }
 }
 
-processLogs();
+processLogs().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

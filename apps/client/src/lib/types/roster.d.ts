@@ -58,16 +58,16 @@ export interface ClassUser {
 
 export interface StudentTable {
   roomNumber: string;
-  teacherName: string;
+  userName: string;
   available: boolean;
   teacherId: string;
   chatId: string;
 }
 
 export interface TeacherTable {
-  status: "transferredA" | "transferredN" | "default";
-  studentName: string;
+  userName: string;
   studentEmail: string;
+  status: "transferredA" | "transferredN" | "default";
   studentId: string | null;
   chatId: string | null;
 }

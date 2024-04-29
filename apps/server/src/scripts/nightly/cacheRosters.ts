@@ -35,4 +35,7 @@ export async function CacheRosters() {
     throw new Error(error);
   }
 }
-CacheRosters();
+CacheRosters().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

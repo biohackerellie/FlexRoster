@@ -40,6 +40,7 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
     }),
   })
 
+  //#todo check if we're still using this
   .post(
     "/student/:email",
     ({ params: { email }, body: { roomNumber, teacherName } }) =>

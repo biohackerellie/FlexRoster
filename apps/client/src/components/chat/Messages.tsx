@@ -28,16 +28,13 @@ const Messages: React.FC<MessagesProps> = ({
   useEffect(() => {
     pusherClient.subscribe(toPusherKey(`chat:${chatId}`));
 
-    console.log("subscribed to chat");
     const messageHandler = (message: Message) => {
-      console.log("new message");
       setMessages((prev) => [message, ...prev]);
     };
 
     pusherClient.bind("incoming-message", messageHandler);
 
     return () => {
-      console.log("unsubscribed from chat");
       pusherClient.unsubscribe(toPusherKey(`chat:${chatId}`));
       pusherClient.unbind("incoming-message", messageHandler);
     };

@@ -10,7 +10,7 @@ export default [
       "node_modules/**",
       "src/hooks/**",
       "*.config.*",
-      "src/app/(dashboard)/dashboard/student/_components/ClassList.tsx",
+      "src/app/dashboard/student/_components/ClassList.tsx",
       "../server/**",
     ],
   },

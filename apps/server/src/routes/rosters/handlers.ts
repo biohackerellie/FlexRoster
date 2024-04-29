@@ -1,30 +1,52 @@
 import { NotFoundError } from "elysia";
 
+import type { AllStudents } from "@local/validators";
 import { db, eq, schema } from "@local/db";
+import { allStudentsArrayValidator } from "@local/validators";
 
 import {
-  createClient,
+  getKV,
   getRequestKV,
-  getRequestSet,
   removeSingleRequest,
   setClassRoomKV,
+  setKV,
   setRequestKV,
 } from "~/lib/redis";
 import {
+  allStudentsMap,
   rosterByClassroomId,
   rosterByTeacherId,
-  rosterQuery,
-  teacherQuery,
-  userByRosterId,
   userQuery,
   userRosterQuery,
 } from "~/lib/sql";
-import { getRequests } from "../requests/handlers";
+import { getHashKey } from "~/lib/utils/crypto";
 
 export async function getRosters() {
   try {
-    return await rosterQuery.execute();
+    let data: AllStudents[] = [];
+    const cacheKey = getHashKey("ALlStudents");
+    const cachedData = await getKV(cacheKey);
+    if (cachedData) {
+      const cacheArray = JSON.parse(cachedData);
+
+      if (cacheArray?.length) {
+        const validated = allStudentsArrayValidator.parse(cacheArray);
+        data = validated;
+      }
+    } else {
+      const dbData = await allStudentsMap.execute({});
+      if (dbData?.length) {
+        const parsedData = allStudentsArrayValidator.parse(dbData);
+        await setKV(cacheKey, JSON.stringify(parsedData), 120);
+        data = parsedData;
+      }
+    }
+    if (!data) throw new NotFoundError("No rosters found");
+    return data;
   } catch (e) {
+    if (e instanceof Error) {
+      console.error(e.message);
+    }
     throw new NotFoundError("No rosters found");
   }
 }

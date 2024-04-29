@@ -23,12 +23,16 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "interactive": true
     },
     "clean": {
       "cache": false
     },
     "//#clean": {
+      "cache": false
+    },
+    "clean:outs": {
       "cache": false
     },
     "db": {

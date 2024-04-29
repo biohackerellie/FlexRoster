@@ -10,7 +10,7 @@ import { toPusherKey } from "@/lib/utils";
 export async function RequestRoom(data: requestFormType) {
   const session = await auth();
   const studentId = session?.user?.id!;
-  console.log(data);
+
   const res = await client.api.requests.new.post({
     userId: studentId,
     teacherId: data.teacherId,

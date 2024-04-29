@@ -10,4 +10,7 @@ async function deleteTeacherUsers() {
   }
 }
 
-deleteTeacherUsers();
+deleteTeacherUsers().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
