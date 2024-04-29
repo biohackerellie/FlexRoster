@@ -20,7 +20,7 @@
     "@auth/drizzle-adapter": "^1.0.0",
     "@local/db": "workspace:*",
     "@local/tsconfig": "workspace:*",
-    "@t3-oss/env-nextjs": "^0.10.0",
+    "@t3-oss/env-nextjs": "^0.10.1",
     "next": "14.3.0-canary.23",
     "next-auth": "beta",
     "react": "18.2.0",
