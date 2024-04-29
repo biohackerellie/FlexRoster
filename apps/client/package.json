@@ -14,7 +14,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@elysiajs/eden": "^1.0.11",
+    "@elysiajs/eden": "^1.0.12",
     "@local/auth": "workspace:*",
     "@local/db": "workspace:*",
     "@local/server": "workspace:*",
