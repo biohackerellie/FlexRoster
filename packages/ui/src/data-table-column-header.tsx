@@ -1,3 +1,4 @@
+import type { Column } from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -5,7 +6,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { Column, Header } from "@tanstack/react-table";
+import { Header } from "@tanstack/react-table";
 import { ArrowDownIcon, ArrowUpDown, ArrowUpIcon, EyeOff } from "lucide-react";
 
 import { cn } from ".";

@@ -64,7 +64,7 @@ export function columns(): ColumnDef<AllStudents>[] {
         return <DataTableColumnHeader column={column} title="Details" />;
       },
       cell: ({ row }) => {
-        const id = row.getValue("rosterId") as string;
+        const id = Number(row.getValue("rosterId"));
         return (
           <Button asChild>
             <Link href={`/dashboard/staff/students/${id}`}>Details</Link>

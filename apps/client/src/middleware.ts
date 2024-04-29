@@ -4,6 +4,7 @@ import NextAuth from "next-auth";
 
 import authConfig from "@local/auth/auth.config";
 
+//@ts-expect-error - Next auth typings are terrible
 const { auth: middleware } = NextAuth(authConfig);
 
 export default middleware((req) => {
@@ -11,7 +12,7 @@ export default middleware((req) => {
   const token = req.auth;
 
   const path = req.nextUrl.pathname;
-  if (req.geo && req.geo.country && req.geo.country !== "US") {
+  if (req.geo?.country && req.geo.country !== "US") {
     if (path.startsWith("/dashboard") || path.startsWith("/api")) {
       return notFound();
     }
@@ -24,7 +25,7 @@ export default middleware((req) => {
 
     return NextResponse.next();
   }
-
+  //@ts-expect-error - Next auth typings are terrible
   const role = token.user?.roles || "student";
   const id = token.user?.id || "0";
 

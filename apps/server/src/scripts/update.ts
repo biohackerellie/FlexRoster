@@ -18,4 +18,7 @@ export async function setRoomStatus() {
   }
 }
 
-setRoomStatus();
+setRoomStatus().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

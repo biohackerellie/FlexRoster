@@ -53,7 +53,7 @@ export function DataTable<TData>({ table }: DataTableProps<TData>) {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} width={`${cell.getValue}px`}>
+                    <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

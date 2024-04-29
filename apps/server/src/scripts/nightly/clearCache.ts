@@ -39,4 +39,7 @@ export async function userRedisSync() {
   }
 }
 
-userRedisSync();
+userRedisSync().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

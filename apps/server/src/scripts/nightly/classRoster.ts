@@ -2,7 +2,8 @@
  * Retrieve rosters for each class and insert into database
  */
 
-import { db, eq, gt, or, schema, SelectClassRoster } from "@local/db";
+import type { SelectClassRoster } from "@local/db";
+import { db, eq, gt, or, schema } from "@local/db";
 
 import type { RosterResponse } from "~/lib/types";
 import { env } from "~/env";
@@ -74,7 +75,7 @@ export async function RosterSync() {
         ) {
           studentsWithRequestToday.push({
             ...r.students,
-            classroomId: r.classrooms?.id!,
+            classroomId: r.classrooms?.id,
             status: "transferredN",
           });
         }
@@ -148,7 +149,7 @@ export async function RosterSync() {
         }
       } catch (error) {
         console.error(error);
-        await tx.rollback();
+        tx.rollback();
       }
     });
     console.info(
@@ -160,6 +161,9 @@ export async function RosterSync() {
   }
 }
 
-RosterSync();
+RosterSync().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
 
 const ignoredStudentUsers = ["elliana_kerns@laurel.k12.mt.us"];

@@ -8,9 +8,9 @@ import { DataTable } from "@local/ui/data-table-students";
 import { DataTableToolbar } from "@local/ui/data-table-toolbar";
 import { searchParamsValidator, studentStatusSchema } from "@local/validators";
 
+import type { getTableData } from "./actions";
 import { useDataTable } from "@/hooks/useDataTable";
 import { statusOptions } from "@/lib/constants";
-import { getTableData } from "./actions";
 import { columns } from "./students-columns";
 
 interface TableProps {

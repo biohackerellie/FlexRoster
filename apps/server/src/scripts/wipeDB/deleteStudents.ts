@@ -14,4 +14,7 @@ async function deleteStudentUsers() {
   }
 }
 
-deleteStudentUsers();
+deleteStudentUsers().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

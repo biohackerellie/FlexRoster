@@ -12,6 +12,7 @@
     "build:bun": "pnpm -F server build:bun",
     "dev": "turbo run dev --parallel",
     "clean": "git clean -xdf node_modules",
+    "clean:outs": "turbo run clean:outs",
     "cache:reset": "pnpm -F server cache:reset",
     "nightly": "pnpm -F server nightly",
     "db:push": "pnpm -F db push",

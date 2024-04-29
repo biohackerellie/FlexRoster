@@ -1,5 +1,6 @@
 "use client";
 
+import type { StudentStatus } from "@/lib/types";
 import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
 import Link from "next/link";
@@ -12,8 +13,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@local/ui/tooltip";
-
-import { StudentStatus } from "@/lib/types";
 
 interface RosterList {
   count: number;

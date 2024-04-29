@@ -198,7 +198,10 @@ async function syncClassrooms() {
   }
 }
 
-syncClassrooms();
+syncClassrooms().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
 
 const prefferedNames = [
   { givenName: "Carol Leinwand", prefferedName: "Jeannie Leinwand" },

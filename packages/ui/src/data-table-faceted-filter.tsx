@@ -1,4 +1,5 @@
 import type { Column } from "@tanstack/react-table";
+import * as React from "react";
 import { Check, PlusCircle, PlusCircleIcon } from "lucide-react";
 
 import { cn } from ".";
@@ -33,13 +34,18 @@ export function DataTableFacetedFilter<TData, TValue>({
   title,
   options,
 }: DataTableFacetedFilterProps<TData, TValue>) {
-  console.log(options);
   const selectedValues = new Set(column?.getFilterValue() as string[]);
-  console.log(selectedValues);
+  const [open, setOpen] = React.useState(false);
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 border-dashed">
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 border-dashed"
+          aria-expanded={open}
+          role="combobox"
+        >
           <PlusCircleIcon className="mr-2 size-4" />
           {title}
           {selectedValues.size > 0 && (

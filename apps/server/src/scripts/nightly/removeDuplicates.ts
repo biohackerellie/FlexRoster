@@ -34,4 +34,7 @@ async function removeDuplicates() {
   }
 }
 
-removeDuplicates();
+removeDuplicates().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

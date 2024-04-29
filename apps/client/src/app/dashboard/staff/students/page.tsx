@@ -17,7 +17,7 @@ import { searchParamsValidator } from "@local/validators";
 import { client } from "@/lib/eden";
 import AllStudentsTable from "../_components/studentTable";
 
-export default async function AllStudentsPage({
+export default function AllStudentsPage({
   searchParams,
 }: {
   searchParams: SearchParams;

@@ -31,4 +31,7 @@ export async function clearDB() {
     process.exit(1);
   }
 }
-clearDB();
+clearDB().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

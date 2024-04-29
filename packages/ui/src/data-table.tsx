@@ -1,13 +1,14 @@
 "use client";
 
 import type {
+  Cell,
   ColumnDef,
+  ColumnFiltersState,
   SortingState,
   VisibilityState,
 } from "@tanstack/react-table";
 import * as React from "react";
 import {
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -63,7 +64,22 @@ export function DataTable<TData, TValue>({
       columnVisibility,
     },
   });
+  // calculate cell width in px based on amount of characters in content
+  const cellWidth = (cell: Cell<TData, TValue>) => {
+    const value = cell.getValue();
 
+    // Convert to string for length calculations
+    const strValue =
+      typeof value === "number" ? value.toString() : (value as string);
+
+    // Calculate width based on string length
+    let width = strValue.length * 10;
+
+    // Constrain the width between 50 and 200 pixels
+    width = Math.max(50, Math.min(width, 200));
+
+    return width;
+  };
   return (
     <div>
       <div className="flex items-center py-4">
@@ -109,7 +125,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} width={`${cell.getValue}px`}>
+                    <TableCell key={cell.id} width={cellWidth(cell)}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

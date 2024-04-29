@@ -29,13 +29,13 @@ export async function getRosters() {
     if (cachedData) {
       const cacheArray = JSON.parse(cachedData);
 
-      if (cacheArray && cacheArray.length) {
+      if (cacheArray?.length) {
         const validated = allStudentsArrayValidator.parse(cacheArray);
         data = validated;
       }
     } else {
       const dbData = await allStudentsMap.execute({});
-      if (dbData && dbData.length) {
+      if (dbData?.length) {
         const parsedData = allStudentsArrayValidator.parse(dbData);
         await setKV(cacheKey, JSON.stringify(parsedData), 120);
         data = parsedData;
