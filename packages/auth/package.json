@@ -21,7 +21,7 @@
     "@local/db": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@t3-oss/env-nextjs": "^0.10.1",
-    "next": "14.3.0-canary.23",
+    "next": "14.3.0-canary.30",
     "next-auth": "beta",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
