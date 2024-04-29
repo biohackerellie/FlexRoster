@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.30.0",
-    "@auth/drizzle-adapter": "^1.0.0",
+    "@auth/drizzle-adapter": "^1.0.1",
     "@azure/identity": "^4.1.0",
     "@elysiajs/cors": "^1.0.2",
     "@elysiajs/jwt": "^1.0.2",
