@@ -2,6 +2,14 @@ import type { SearchParams } from "@/hooks/types";
 import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@local/ui/card";
 import { Shell } from "@local/ui/shell";
 import { searchParamsValidator } from "@local/validators";
 
@@ -16,9 +24,14 @@ export default function StaffPage({
   const search = searchParamsValidator.parse(searchParams);
   return (
     <Shell>
-      <Suspense fallback={<Loader2 className="h-2 w-2 animate-spin" />}>
-        <AllRosterTable dataPromise={getRosters(search)} />
-      </Suspense>
+      <Card>
+        <CardHeader>
+          <CardTitle>All Rosters</CardTitle>
+        </CardHeader>
+        <Suspense fallback={<Loader2 className="h-2 w-2 animate-spin" />}>
+          <AllRosterTable dataPromise={getRosters(search)} />
+        </Suspense>
+      </Card>
     </Shell>
   );
 }
