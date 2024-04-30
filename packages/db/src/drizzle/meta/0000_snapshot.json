@@ -1,5 +1,5 @@
 {
-  "id": "02d59c73-9b25-4b51-8374-c0280f200a75",
+  "id": "60cea940-50c2-4474-b366-e934b8a45531",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -199,7 +199,7 @@
         },
         "studentId": {
           "name": "studentId",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -235,7 +235,7 @@
         },
         "dateRequested": {
           "name": "dateRequested",
-          "type": "text",
+          "type": "date",
           "primaryKey": false,
           "notNull": true
         },
@@ -261,7 +261,35 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "requests_studentId_user_id_fk": {
+          "name": "requests_studentId_user_id_fk",
+          "tableFrom": "requests",
+          "tableTo": "user",
+          "columnsFrom": ["studentId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "requests_newTeacher_user_id_fk": {
+          "name": "requests_newTeacher_user_id_fk",
+          "tableFrom": "requests",
+          "tableTo": "user",
+          "columnsFrom": ["newTeacher"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "requests_currentTeacher_user_id_fk": {
+          "name": "requests_currentTeacher_user_id_fk",
+          "tableFrom": "requests",
+          "tableTo": "user",
+          "columnsFrom": ["currentTeacher"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -325,19 +353,12 @@
           "primaryKey": false,
           "notNull": true
         },
-        "transferred": {
-          "name": "transferred",
-          "type": "boolean",
+        "status": {
+          "name": "status",
+          "type": "Status",
           "primaryKey": false,
           "notNull": true,
-          "default": false
-        },
-        "arrived": {
-          "name": "arrived",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
+          "default": "'default'"
         },
         "id": {
           "name": "id",
@@ -462,6 +483,14 @@
         "teacher": "teacher",
         "student": "student",
         "admin": "admin"
+      }
+    },
+    "Status": {
+      "name": "Status",
+      "values": {
+        "transferredA": "transferredA",
+        "transferredN": "transferredN",
+        "default": "default"
       }
     }
   },

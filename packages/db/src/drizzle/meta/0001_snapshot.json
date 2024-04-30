@@ -1,6 +1,6 @@
 {
-  "id": "99912052-7425-4026-894b-61c2374441ce",
-  "prevId": "02d59c73-9b25-4b51-8374-c0280f200a75",
+  "id": "6c7e354d-79b1-4f51-bb5d-a98a7565cf95",
+  "prevId": "60cea940-50c2-4474-b366-e934b8a45531",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -138,7 +138,17 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "classrooms_teacherId_user_id_fk": {
+          "name": "classrooms_teacherId_user_id_fk",
+          "tableFrom": "classrooms",
+          "tableTo": "user",
+          "columnsFrom": ["teacherId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -235,7 +245,7 @@
         },
         "dateRequested": {
           "name": "dateRequested",
-          "type": "text",
+          "type": "date",
           "primaryKey": false,
           "notNull": true
         },
@@ -261,7 +271,35 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "requests_studentId_user_id_fk": {
+          "name": "requests_studentId_user_id_fk",
+          "tableFrom": "requests",
+          "tableTo": "user",
+          "columnsFrom": ["studentId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "requests_newTeacher_user_id_fk": {
+          "name": "requests_newTeacher_user_id_fk",
+          "tableFrom": "requests",
+          "tableTo": "user",
+          "columnsFrom": ["newTeacher"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "requests_currentTeacher_user_id_fk": {
+          "name": "requests_currentTeacher_user_id_fk",
+          "tableFrom": "requests",
+          "tableTo": "user",
+          "columnsFrom": ["currentTeacher"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -325,19 +363,12 @@
           "primaryKey": false,
           "notNull": true
         },
-        "transferred": {
-          "name": "transferred",
-          "type": "boolean",
+        "status": {
+          "name": "status",
+          "type": "Status",
           "primaryKey": false,
           "notNull": true,
-          "default": false
-        },
-        "arrived": {
-          "name": "arrived",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
+          "default": "'default'"
         },
         "id": {
           "name": "id",
@@ -346,7 +377,13 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "email_idx": {
+          "name": "email_idx",
+          "columns": ["studentEmail"],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "students_classroomId_classrooms_id_fk": {
           "name": "students_classroomId_classrooms_id_fk",
@@ -462,6 +499,14 @@
         "teacher": "teacher",
         "student": "student",
         "admin": "admin"
+      }
+    },
+    "Status": {
+      "name": "Status",
+      "values": {
+        "transferredA": "transferredA",
+        "transferredN": "transferredN",
+        "default": "default"
       }
     }
   },

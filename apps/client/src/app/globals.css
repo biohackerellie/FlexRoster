@@ -54,6 +54,7 @@
     @apply border-border;
   }
   body {
+    font-size: 100%;
     @apply bg-background text-foreground;
   }
 }

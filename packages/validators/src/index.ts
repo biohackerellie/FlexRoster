@@ -61,6 +61,7 @@ export const searchParamsValidator = z.object({
   limit: z.number().optional(),
   status: studentStatusSchema.optional(),
   studentName: z.string().optional(),
+  teacherName: z.string().optional(),
   filter: z.string().optional(),
 });
 
