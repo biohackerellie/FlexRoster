@@ -1,19 +1,19 @@
 "use client";
 
+import type { TeacherTable } from "@/lib/types";
 import type { ColumnDef } from "@tanstack/react-table";
-import * as React from "react";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 
-import type { AllStudents } from "@local/validators";
 import { Badge } from "@local/ui/badge";
 import { Button } from "@local/ui/button";
 import { DataTableColumnHeader } from "@local/ui/data-table-column-header";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
 import { statusOptions } from "@/lib/constants";
+import { Attendance } from "./actions";
 
-export function columns(): ColumnDef<AllStudents>[] {
+export function columns(): ColumnDef<TeacherTable>[] {
   return [
     {
       accessorKey: "studentName",
@@ -26,11 +26,13 @@ export function columns(): ColumnDef<AllStudents>[] {
       header: ({ column }) => {
         return <DataTableColumnHeader column={column} title="Status" />;
       },
+
       cell: ({ row }) => {
         const status = statusOptions.find(
           (status) => status.value === row.original.status,
         );
         if (!status) return null;
+        const id: string = row.getValue("studentId");
 
         if (status.value === "default") {
           return <Badge variant="outline">Default</Badge>;
@@ -39,7 +41,11 @@ export function columns(): ColumnDef<AllStudents>[] {
             <div className="text-md max-w-[80px] overflow-ellipsis leading-none">
               <Tooltip>
                 <TooltipTrigger className="cursor-pointer " asChild>
-                  <Badge variant="destructive" className="animate-pulse">
+                  <Badge
+                    variant="destructive"
+                    className="animate-pulse"
+                    onClick={() => setAttendance(id)}
+                  >
                     transfer
                   </Badge>
                 </TooltipTrigger>
@@ -56,27 +62,54 @@ export function columns(): ColumnDef<AllStudents>[] {
       },
     },
     {
-      accessorKey: "teacherName",
+      accessorKey: "chatId",
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Classroom" />;
-      },
-    },
-
-    {
-      accessorKey: "rosterId",
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Details" />;
+        return <DataTableColumnHeader column={column} title="Chat" />;
       },
       cell: ({ row }) => {
-        const id: string = row.getValue("rosterId");
+        const chatId = row.getValue("chatId") ?? undefined;
 
-        return (
-          <Button variant="outline" size="sm" asChild>
-            <Link href={`/dashboard/staff/students/${id}`}>Details</Link>
-          </Button>
-        );
+        if (!chatId) {
+          return (
+            <div className="text-md max-w-[30px] overflow-ellipsis leading-none">
+              <Tooltip>
+                <TooltipTrigger className="cursor-default">
+                  <MessageSquare size={20} strokeWidth={1.5} />
+                </TooltipTrigger>
+                <TooltipContent>Chat Unavailable</TooltipContent>
+              </Tooltip>
+            </div>
+          );
+        } else {
+          return (
+            <div className="text-md max-w-[30px] overflow-ellipsis leading-none">
+              <Button variant="link" asChild>
+                <Link href={chatId}>
+                  <MessageSquare size={20} strokeWidth={1.5} />
+                </Link>
+              </Button>
+            </div>
+          );
+        }
       },
       enableSorting: false,
     },
+
+    {
+      accessorKey: "studentId",
+      header: ({ column }) => {
+        column.toggleVisibility(false);
+        return <></>;
+      },
+    },
   ];
 }
+
+const setAttendance = async (studentId: string) => {
+  try {
+    const response = await Attendance(studentId);
+    return response;
+  } catch (e) {
+    console.error(e);
+  }
+};

@@ -1,4 +1,4 @@
-import { db, eq, gte, or, schema, sql } from "@local/db";
+import { db, desc, eq, gte, or, schema, sql } from "@local/db";
 
 export const userRequestQuery = db
   .select()
@@ -29,3 +29,10 @@ export const studentRequestsQuery = db
   )
   .where(gte(schema.requests.dateRequested, today.toISOString()))
   .prepare("studentRequestsQuery");
+
+export const allStudentRequests = db
+  .select()
+  .from(schema.requests)
+  .where(eq(schema.requests.studentId, sql.placeholder("studentId")))
+  .orderBy(desc(schema.requests.dateRequested))
+  .prepare("allStudentRequests");

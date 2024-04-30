@@ -69,13 +69,13 @@ export const rosterByClassroomId = db
   .where(eq(schema.students.classroomId, sql.placeholder("classroomId")))
   .prepare("rosterByClassroomId");
 
-export const userByRosterId = db
-  .select({
-    id: schema.users.id,
-    email: schema.users.email,
-    name: schema.users.name,
-  })
+export const allStudentDetails = db
+  .select()
   .from(schema.students)
-  .innerJoin(schema.users, eq(schema.students.studentEmail, schema.users.email))
-  .where(eq(schema.students.id, sql.placeholder("rosterId")))
-  .prepare("userByRosterId");
+  .leftJoin(schema.users, eq(schema.students.studentEmail, schema.users.email))
+  .leftJoin(
+    schema.classrooms,
+    eq(schema.students.classroomId, schema.classrooms.id),
+  )
+  .where(eq(schema.students.id, sql.placeholder("id")))
+  .prepare("allStudentDetails");

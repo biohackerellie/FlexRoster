@@ -9,16 +9,50 @@ import { ScrollArea, ScrollBar } from "@local/ui/scroll-area";
 import { useChatNotifications } from "@/hooks";
 
 interface NavProps extends React.HTMLAttributes<HTMLDivElement> {
-  links: {
-    name: string;
-    href: string;
-  }[];
-  userId: string;
+  userId?: string;
+  role?: string;
 }
 
-export function Navbar({ className, links, userId, ...props }: NavProps) {
+export function Navbar({ className, userId, role, ...props }: NavProps) {
+  const teacherLinks = [
+    { name: "Rosters", href: "/dashboard/staff" },
+    { name: "My Roster", href: `/dashboard/staff/${userId}` },
+    { name: "All Students", href: `/dashboard/staff/students` },
+    { name: "Requests", href: `/dashboard/staff/${userId}/requests` },
+    { name: "Messages", href: `/dashboard/staff/${userId}/messages` },
+  ];
+
+  const secLinks = [
+    { name: "Rosters", href: "/dashboard/staff" },
+    { name: "All Students", href: "/dashboard/staff/students" },
+  ];
+
+  const studentLinks = [
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "My Requests", href: "/dashboard/student/requests" },
+  ];
+
   const pathname = usePathname();
-  useChatNotifications(userId);
+  let links = [];
+
+  switch (role) {
+    case "teacher":
+      links = teacherLinks;
+      break;
+    case "secretary":
+      links = secLinks;
+      break;
+    case "admin":
+      links = teacherLinks;
+      break;
+    default:
+      links = studentLinks;
+      break;
+  }
+
+  if (userId) {
+    useChatNotifications(userId!);
+  }
   return (
     <div className="relative">
       <ScrollArea className="max-w-[600px] lg:max-w-none">

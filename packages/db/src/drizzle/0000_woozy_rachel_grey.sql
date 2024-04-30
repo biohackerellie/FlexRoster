@@ -4,6 +4,12 @@ EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "Status" AS ENUM('transferredA', 'transferredN', 'default');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "account" (
 	"userId" text NOT NULL,
 	"type" varchar(255) NOT NULL,
@@ -37,13 +43,13 @@ CREATE TABLE IF NOT EXISTS "logs" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "requests" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"studentId" integer NOT NULL,
+	"studentId" text NOT NULL,
 	"studentName" text NOT NULL,
 	"newTeacher" text NOT NULL,
 	"newTeacherName" text NOT NULL,
 	"currentTeacher" text NOT NULL,
 	"currentTeacherName" text NOT NULL,
-	"dateRequested" text NOT NULL,
+	"dateRequested" date NOT NULL,
 	"status" text DEFAULT 'pending' NOT NULL,
 	"arrived" boolean DEFAULT false,
 	"timestamp" text NOT NULL
@@ -59,8 +65,7 @@ CREATE TABLE IF NOT EXISTS "students" (
 	"studentEmail" text NOT NULL,
 	"studentName" text NOT NULL,
 	"classroomId" text NOT NULL,
-	"transferred" boolean DEFAULT false NOT NULL,
-	"arrived" boolean DEFAULT false NOT NULL,
+	"status" "Status" DEFAULT 'default' NOT NULL,
 	"id" serial PRIMARY KEY NOT NULL,
 	CONSTRAINT "students_studentEmail_unique" UNIQUE("studentEmail")
 );
@@ -90,6 +95,24 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "logs" ADD CONSTRAINT "logs_user_user_id_fk" FOREIGN KEY ("user") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "requests" ADD CONSTRAINT "requests_studentId_user_id_fk" FOREIGN KEY ("studentId") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "requests" ADD CONSTRAINT "requests_newTeacher_user_id_fk" FOREIGN KEY ("newTeacher") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "requests" ADD CONSTRAINT "requests_currentTeacher_user_id_fk" FOREIGN KEY ("currentTeacher") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

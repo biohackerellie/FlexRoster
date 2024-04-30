@@ -12,7 +12,7 @@ export const pusherServer = new PusherServer({
   host:
     env.NODE_ENV === "production"
       ? env.NEXT_PUBLIC_PUSHER_APP_HOST
-      : "10.50.99.84",
+      : "10.20.10.1",
   port: env.NODE_ENV === "production" ? "443" : "6001",
 });
 
@@ -22,7 +22,7 @@ export const pusherClient = new PusherClient("app-key", {
   wsHost:
     env.NODE_ENV === "production"
       ? env.NEXT_PUBLIC_PUSHER_APP_HOST
-      : "10.50.99.84",
+      : "10.20.10.1",
   wsPort: 6001,
   wssPort: 443,
   forceTLS: env.NODE_ENV === "production" ? true : false,

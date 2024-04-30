@@ -11,6 +11,7 @@ export default [
       "src/hooks/**",
       "*.config.*",
       "src/app/dashboard/student/_components/ClassList.tsx",
+      "src/components/navbar.tsx",
       "../server/**",
     ],
   },

@@ -61,3 +61,15 @@ export const AllStudentValidator = z.object({
 export const allStudentsArrayValidator = z.array(AllStudentValidator);
 
 export type AllStudents = z.infer<typeof AllStudentValidator>;
+
+export const selectRequestsValidator = createSelectSchema(schema.requests);
+export const requestsArrayValidator = z.array(selectRequestsValidator);
+export const insertRequestsValidator = createInsertSchema(schema.requests);
+
+export type Requests = z.infer<typeof selectRequestsValidator>;
+
+export interface JoinedStudentUser {
+  students?: Student;
+  user?: User | null | undefined;
+  requests?: Requests[] | null | undefined;
+}

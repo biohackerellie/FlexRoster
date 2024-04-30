@@ -65,11 +65,20 @@ export interface StudentTable {
 }
 
 export interface TeacherTable {
-  userName: string;
+  studentName: string;
   studentEmail: string;
   status: "transferredA" | "transferredN" | "default";
   studentId: string | null;
   chatId: string | null;
+}
+
+export interface SecretaryTable {
+  count: number;
+  id: string;
+  roomNumber: string;
+  teacherName: string;
+  teacherId: string | null;
+  available: boolean;
 }
 
 export type StudentStatus = TeacherTable["status"];

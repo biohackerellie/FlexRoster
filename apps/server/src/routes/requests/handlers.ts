@@ -12,7 +12,6 @@ import {
 } from "~/lib/redis";
 import {
   getClassroomIdByTeacher,
-  userByRosterId,
   userQuery,
   userRequestQuery,
   userRosterQuery,
@@ -31,8 +30,6 @@ export async function newRequest({
   dateRequested,
 }: newRequestProps) {
   try {
-    console.log("hit");
-    console.log("date", dateRequested);
     await deleteSet(userId);
     const dbRequests = await getRequests(userId);
     if (dbRequests && dbRequests.length > 0) {
@@ -42,7 +39,7 @@ export async function newRequest({
             const response = new Response("Request already sent", {
               status: 401,
             });
-            console.log(response);
+
             return response;
           }
         }
@@ -73,7 +70,7 @@ export async function newRequest({
       newTeacherName: newTeacher?.name!,
       timestamp,
     };
-    console.log("requestData", requestData);
+
     const insertRequest = async (request: insertRequest) => {
       return db.insert(schema.requests).values(request);
     };

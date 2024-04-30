@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import {
   boolean,
   date,
+  index,
   integer,
   pgEnum,
   pgTable,
@@ -9,6 +10,7 @@ import {
   serial,
   text,
   timestamp,
+  uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -27,18 +29,26 @@ export const status = pgEnum("Status", [
 /**
  * @description students is a table that holds the relationship between an InfiniteCampus student and classrooms, and AD users
  */
-export const students = pgTable("students", {
-  studentEmail: text("studentEmail").notNull().unique(),
-  studentName: text("studentName").notNull(),
-  classroomId: text("classroomId")
-    .notNull()
-    .references(() => classrooms.id, {
-      onDelete: "cascade",
-      onUpdate: "cascade",
-    }),
-  status: status("status").default("default").notNull(),
-  id: serial("id").primaryKey().notNull(),
-});
+export const students = pgTable(
+  "students",
+  {
+    studentEmail: text("studentEmail").notNull().unique(),
+    studentName: text("studentName").notNull(),
+    classroomId: text("classroomId")
+      .notNull()
+      .references(() => classrooms.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    status: status("status").default("default").notNull(),
+    id: serial("id").primaryKey().notNull(),
+  },
+  (students) => {
+    return {
+      emailIdx: uniqueIndex("email_idx").on(students.studentEmail),
+    };
+  },
+);
 
 export const studentRelations = relations(students, ({ one }) => ({
   classroom: one(classrooms, {
@@ -53,11 +63,17 @@ export const studentRelations = relations(students, ({ one }) => ({
 
 export const requests = pgTable("requests", {
   id: serial("id").primaryKey().notNull(),
-  studentId: text("studentId").notNull(),
+  studentId: text("studentId")
+    .notNull()
+    .references(() => users.id),
   studentName: text("studentName").notNull(),
-  newTeacher: text("newTeacher").notNull(),
+  newTeacher: text("newTeacher")
+    .notNull()
+    .references(() => users.id),
   newTeacherName: text("newTeacherName").notNull(),
-  currentTeacher: text("currentTeacher").notNull(),
+  currentTeacher: text("currentTeacher")
+    .notNull()
+    .references(() => users.id),
   currentTeacherName: text("currentTeacherName").notNull(),
   dateRequested: date("dateRequested").notNull(),
   status: text("status")
@@ -90,7 +106,7 @@ export const classrooms = pgTable("classrooms", {
   id: text("id").primaryKey().notNull(),
   roomNumber: text("roomNumber").notNull(),
   teacherName: text("teacherName").notNull(),
-  teacherId: text("teacherId"),
+  teacherId: text("teacherId").references(() => users.id),
   available: boolean("available").default(true).notNull(),
   comment: text("comment"),
 });
@@ -115,8 +131,6 @@ export const users = pgTable("user", {
     .notNull(),
 });
 
-export type SelectUser = typeof users.$inferSelect;
-
 export const userRelations = relations(users, ({ one, many }) => ({
   students: one(students, {
     fields: [users.email],
@@ -128,7 +142,7 @@ export const userRelations = relations(users, ({ one, many }) => ({
   newTeacherRequests: many(requests, { relationName: "newTeacher" }),
   currentTeacherRequests: many(requests, { relationName: "currentTeacher" }),
 }));
-
+export type SelectUser = typeof users.$inferSelect;
 export const accounts = pgTable(
   "account",
   {

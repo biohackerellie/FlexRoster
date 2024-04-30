@@ -1,49 +1,24 @@
+import type { SearchParams } from "@/hooks/types";
 import { Suspense } from "react";
-import { unstable_cache as cache } from "next/cache";
 import { Loader2 } from "lucide-react";
 
-import { auth } from "@local/auth";
-import { DataTable } from "@local/ui/data-table";
+import { Shell } from "@local/ui/shell";
+import { searchParamsValidator } from "@local/validators";
 
-import { client } from "@/lib/eden";
-import { columns } from "./_components/rosterTable";
+import AllRosterTable from "./_components/AllRosterTable";
+import { getRosters } from "./_components/queries";
 
-export default async function SecretaryPage() {
-  const session = await auth();
-  const firstName = session?.user?.name!.split(" ")[0];
-
-  const data = await getCachedData();
-
+export default function StaffPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const search = searchParamsValidator.parse(searchParams);
   return (
-    <div className=" flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-center">
-      <h1 className="relative z-10 block bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text py-8 text-4xl font-bold text-transparent sm:text-4xl">
-        Hello {firstName}!
-      </h1>
-      <div className="flex flex-col leading-tight">
-        <div className="flex items-center text-xl">
-          <span className="mr-3 font-semibold text-neutral-200">Rosters</span>
-        </div>
-
-        <Suspense fallback={<Loader2 className="h-2 w-2 animate-spin" />}>
-          <DataTable columns={columns} data={data} />
-        </Suspense>
-      </div>
-    </div>
+    <Shell>
+      <Suspense fallback={<Loader2 className="h-2 w-2 animate-spin" />}>
+        <AllRosterTable dataPromise={getRosters(search)} />
+      </Suspense>
+    </Shell>
   );
 }
-
-async function getData() {
-  const { data, error } = await client.api.classes.secretary.get();
-  if (error) {
-    console.error(error);
-  }
-  if (!data) {
-    return [];
-  }
-  return data;
-}
-
-const getCachedData = cache(async () => getData(), ["roster"], {
-  revalidate: 60,
-  tags: ["roster"],
-});

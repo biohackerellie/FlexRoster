@@ -1,6 +1,14 @@
 import { NotFoundError } from "elysia";
 
-import { userQuery, userRosterQuery } from "~/lib/sql";
+import type { Requests, Student, User } from "@local/validators";
+import { db, eq, schema, sql } from "@local/db";
+
+import {
+  allStudentDetails,
+  allStudentRequests,
+  userQuery,
+  userRosterQuery,
+} from "~/lib/sql";
 
 export async function getDBUser(id: string) {
   try {
@@ -28,6 +36,28 @@ export async function getStudent(id: string) {
     }
     return student;
   } catch (e) {
+    throw new NotFoundError("No student found with that ID");
+  }
+}
+
+export async function getStudentDetails(id: string) {
+  try {
+    const studentId = parseInt(id);
+    const [student] = await allStudentDetails.execute({ id: studentId });
+    if (!student) {
+      throw new NotFoundError("No student found with that ID");
+    }
+    let requests: Requests[] = [];
+    if (student.user) {
+      requests = await allStudentRequests.execute({
+        studentId: student.user.id,
+      });
+    }
+    return { student, requests };
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error(e.message, e.cause);
+    }
     throw new NotFoundError("No student found with that ID");
   }
 }
