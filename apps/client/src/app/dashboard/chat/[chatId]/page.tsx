@@ -1,5 +1,8 @@
+import * as React from "react";
+import { Metadata } from "next";
 import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
 import {
@@ -10,6 +13,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@local/ui/breadcrumb";
+import { Skeleton } from "@local/ui/skeleton";
 
 import { ChatInput, Messages } from "@/components/chat";
 import { client } from "@/lib/eden";
@@ -20,30 +24,9 @@ interface PageProps {
   };
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { chatId: string };
-}) {
-  const session = await auth();
-  if (!session) return { title: `Chat` };
-  const [userId1, userId2] = params.chatId.split("--");
-  const { user } = session;
-
-  const chatPartnerId = user.id === userId1 ? userId2! : userId1!;
-
-  const { data: chatPartnerRaw, error } = await client.api
-    .users({ id: chatPartnerId })
-    .get();
-  if (error) {
-    console.error(error);
-  }
-  if (!chatPartnerRaw) {
-    return { title: `Chat` };
-  }
-
-  return { title: `FLEX | ${chatPartnerRaw.name} chat` };
-}
+export const metadata: Metadata = {
+  title: "FLEX | Chat",
+};
 
 export default async function ChatPage({ params }: PageProps) {
   const { chatId } = params;
@@ -69,21 +52,30 @@ export default async function ChatPage({ params }: PageProps) {
           </div>
         </div>
       </div>
-
-      <Messages
-        chatId={chatId}
-        initialMessages={initialMessages}
-        sessionId={userId}
-        chatPartner={chatPartner}
-      />
-      <ChatInput userId={userId} chatId={chatId} chatPartner={chatPartner} />
+      <React.Suspense
+        fallback={
+          <Skeleton className="z-20 flex h-full flex-1 animate-pulse flex-col-reverse gap-4 overflow-y-auto p-3" />
+        }
+      >
+        <Messages
+          chatId={chatId}
+          initialMessages={initialMessages}
+          sessionId={userId}
+          chatPartner={chatPartner}
+        />
+      </React.Suspense>
+      <React.Suspense
+        fallback={<Loader2 className="text-primary-500 h-6 w-6 animate-spin" />}
+      >
+        <ChatInput userId={userId} chatId={chatId} chatPartner={chatPartner} />
+      </React.Suspense>
     </div>
   );
 }
 
 async function getChatMessages(chatId: string) {
+  noStore();
   try {
-    noStore();
     const { data, error } = await client.api.inbox({ chatId: chatId }).get();
 
     if (error) {
