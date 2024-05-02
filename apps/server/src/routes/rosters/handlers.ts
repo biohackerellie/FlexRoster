@@ -65,18 +65,6 @@ export async function getRostersById(id: string) {
   }
 }
 
-export async function getStudentRoster(userId: string) {
-  try {
-    const [student] = await userRosterQuery.execute({ id: userId });
-    if (!student) throw new NotFoundError("No roster found with that userId");
-    const message = `Your FLEX class today is with ${student?.classrooms?.teacherName} in room ${student?.classrooms?.roomNumber}`;
-    return message;
-  } catch (e) {
-    console.error(e);
-    throw new NotFoundError("No roster found with that userId");
-  }
-}
-
 export async function setStudentRoster(
   email: string,
   roomNumber: string,

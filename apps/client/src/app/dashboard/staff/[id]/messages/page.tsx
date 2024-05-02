@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@local/ui/card";
 
 import { client } from "@/lib/eden";
-import AlertComponent from "../../_components/AlertComponent";
+import AlertComponent from "../../../_components/AlertComponent";
 
 export default async function MessagesPage({
   params,

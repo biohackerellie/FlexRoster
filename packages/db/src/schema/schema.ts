@@ -82,7 +82,7 @@ export const requests = pgTable("requests", {
     .notNull()
     .references(() => users.id),
   currentTeacherName: text("currentTeacherName").notNull(),
-  dateRequested: date("dateRequested").notNull(),
+  dateRequested: date("dateRequested", { mode: "date" }).notNull(),
   status: requestStatus("status").default("pending").notNull(),
   arrived: boolean("arrived").default(false),
   timestamp: text("timestamp").notNull(),

@@ -12,8 +12,8 @@ import {
 } from "@local/ui/card";
 import { searchParamsValidator } from "@local/validators";
 
-import { getDefaultRoster } from "../_components/queries";
-import TeacherRosterTable from "../_components/teacherTable";
+import { getDefaultRoster } from "../../_components/logic/queries";
+import TeacherRosterTable from "../../_components/tables/teacherTable";
 
 export default function TeacherDashboardPage({
   params,

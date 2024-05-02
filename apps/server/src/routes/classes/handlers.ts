@@ -1,24 +1,77 @@
 import { NotFoundError } from "elysia";
 
+import type { StudentDashboardData } from "@local/validators";
 import { db, eq, schema } from "@local/db";
+import {
+  formatTeacherNames,
+  studentClassesArrayValidator,
+  StudentDashboardDataValidator,
+} from "@local/validators";
 
 import type { RosterResponse } from "~/lib/types";
 import { env } from "~/env";
-import { clearKV } from "~/lib/redis";
+import { clearKV, getKV, setKV } from "~/lib/redis";
 import {
   classroomsQuery,
   getClassroomIdByTeacher,
   roomByIdQuery,
   rosterByIDQuery,
+  userRosterQuery,
 } from "~/lib/sql";
-import { fetcher, getHashKey, icAuth } from "~/lib/utils";
+import {
+  chatHrefConstructor,
+  fetcher,
+  formatClasses,
+  getHashKey,
+  icAuth,
+} from "~/lib/utils";
 
 type insertClassRoster = typeof schema.students.$inferInsert;
 
-export async function getClasses() {
+export async function getClasses(id: string) {
   try {
-    const res = await classroomsQuery.execute();
-    return res;
+    let returnData: StudentDashboardData = {
+      classes: [],
+      currentClass: "",
+    };
+
+    const studentCacheKey = `StudentCache-${id}`;
+    const cachedStudentData = await getKV(studentCacheKey);
+
+    if (cachedStudentData) {
+      const validatedStudentData = StudentDashboardDataValidator.parse(
+        JSON.parse(cachedStudentData),
+      );
+      return validatedStudentData;
+    }
+
+    const classesKey = `AvailableClasses`;
+    const cachedClasses = await getKV(classesKey);
+
+    if (cachedClasses) {
+      const validatedClasses = studentClassesArrayValidator.parse(
+        JSON.parse(cachedClasses),
+      );
+
+      returnData.classes = formatClasses(validatedClasses, id);
+    } else {
+      const dbData = await classroomsQuery.execute();
+      if (dbData?.length) {
+        const parsedData = studentClassesArrayValidator.parse(dbData);
+        await setKV(classesKey, JSON.stringify(parsedData), 1200);
+        returnData.classes = formatClasses(parsedData, id);
+      }
+    }
+    const [student] = await userRosterQuery.execute({ id: id });
+    if (student) {
+      const teacherName = formatTeacherNames(student.classrooms.teacherName);
+      returnData.currentClass = `Your FLEX class today is room ${student.classrooms.roomNumber} with ${teacherName}`;
+    }
+
+    const validatedReturnData = StudentDashboardDataValidator.parse(returnData);
+    await setKV(studentCacheKey, JSON.stringify(validatedReturnData), 1200);
+
+    return validatedReturnData;
   } catch (e) {
     console.error(e);
     throw new NotFoundError("No classes found");
@@ -95,8 +148,7 @@ export async function resetOneClass(userId: string) {
 
 export async function createComment(id: string, comment: string) {
   try {
-    const cacheKey = getHashKey(`TeacherRoster-${id}`);
-    await clearKV(cacheKey);
+    await clearKV(`TeacherRoster-${id}`);
 
     await db
       .update(schema.classrooms)
@@ -109,9 +161,7 @@ export async function createComment(id: string, comment: string) {
 
 export async function deleteComment(id: string) {
   try {
-    console.log("wtf");
-    const cacheKey = getHashKey(`TeacherRoster-${id}`);
-    await clearKV(cacheKey);
+    await clearKV(`TeacherRoster-${id}`);
     await db
       .update(schema.classrooms)
       .set({ comment: null })
@@ -126,18 +176,17 @@ export async function deleteComment(id: string) {
 }
 
 export async function setAvailability(id: string, status: boolean) {
-	try {
-		const cacheKey = getHashKey(`TeacherRoster-${id}`);
-		await clearKV(cacheKey);
-		await db
-			.update(schema.classrooms)
-			.set({ available: status })
-			.where(eq(schema.classrooms.teacherId, id));
-	} catch (e) {
-		if (e instanceof Error) {
-			console.error(e.message);
-		}
-		console.log("something went wrong 👌");
-		throw e;
-	}
+  try {
+    await clearKV(`TeacherRoster-${id}`);
+    await db
+      .update(schema.classrooms)
+      .set({ available: status })
+      .where(eq(schema.classrooms.teacherId, id));
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error(e.message);
+    }
+    console.log("something went wrong 👌");
+    throw e;
+  }
 }

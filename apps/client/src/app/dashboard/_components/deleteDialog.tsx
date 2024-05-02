@@ -15,7 +15,7 @@ import {
   DialogTrigger,
 } from "@local/ui/dialog";
 
-import { deleteComments } from "./clientActions";
+import { deleteComments } from "./logic/clientActions";
 
 interface DeleteCommentsDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {

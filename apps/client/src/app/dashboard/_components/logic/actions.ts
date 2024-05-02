@@ -6,10 +6,18 @@ import {
   revalidateTag,
 } from "next/cache";
 
-import type { CreateCommentSchema, TableSearchParams } from "@local/validators";
+import type {
+  CreateCommentSchema,
+  DatePickerSchema,
+  requestFormType,
+  TableSearchParams,
+} from "@local/validators";
+import { auth } from "@local/auth";
 
 import { client } from "@/lib/eden";
 import { getErrorMessage } from "@/lib/errorHandler";
+import { pusherServer } from "@/lib/pusher";
+import { toPusherKey } from "@/lib/utils";
 
 export async function Attendance(studentId: string) {
   const { data: res, error } = await client.api.rosters.attendance[""].post({
@@ -26,37 +34,6 @@ export async function Attendance(studentId: string) {
 
   revalidateTag("roster");
   revalidatePath("/dashboard/teacher", "layout");
-}
-
-export async function getTableData(search: TableSearchParams) {
-  const { data, error } = await client.api.rosters.all.get();
-  if (error) {
-    console.error(error);
-    return [];
-  }
-
-  if (search) {
-    if (search.status && !search.studentName) {
-      const statusArray = search.status.split(".");
-      return data.filter((student) => {
-        statusArray.includes(student.status);
-      });
-    } else if (search.studentName && !search.status) {
-      const searchLower = search.studentName.toLowerCase();
-      return data.filter((student) =>
-        student.studentName.toLowerCase().includes(searchLower),
-      );
-    } else if (search.status && search.studentName) {
-      const searchLower = search.studentName.toLowerCase();
-      const statusArray = search.status.split(".");
-      return data.filter(
-        (student) =>
-          student.studentName.toLowerCase().includes(searchLower) &&
-          statusArray.includes(student.status),
-      );
-    }
-  }
-  return data;
 }
 
 export async function RequestApproval(
@@ -133,6 +110,41 @@ export async function setAvailability(id: string, status: boolean) {
     await client.api.classes.availability.post({ id, status });
     revalidatePath("/");
     revalidatePath(`/dashboard/staff/${id}`, `page`);
+  } catch (err) {
+    return {
+      data: null,
+      error: getErrorMessage(err),
+    };
+  }
+}
+
+export async function RequestRoom(
+  input: DatePickerSchema & { teacherId: string },
+) {
+  noStore();
+  try {
+    const session = await auth();
+    const studentId = session?.user?.id!;
+
+    const { data, error } = await client.api.requests.new.post({
+      studentId: studentId,
+      newTeacher: input.teacherId,
+      dateRequested: input.requestedDate,
+    });
+    if (error) {
+      throw error.value;
+    }
+    await pusherServer.trigger(
+      toPusherKey(`request:${input.teacherId}`),
+      "new-request",
+      { studentId },
+    );
+    revalidatePath("/", "layout");
+
+    return {
+      data: null,
+      error: null,
+    };
   } catch (err) {
     return {
       data: null,

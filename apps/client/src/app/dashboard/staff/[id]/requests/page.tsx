@@ -9,7 +9,7 @@ import { Separator } from "@local/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@local/ui/tabs";
 
 import { client } from "@/lib/eden";
-import ApprovalMenu from "../../_components/Requests";
+import ApprovalMenu from "../../../_components/Requests";
 
 export default async function RequestsPage({
   params,
@@ -33,29 +33,29 @@ export default async function RequestsPage({
                 <TabsTrigger value="outgoing">Outgoing</TabsTrigger>
               </TabsList>
               <TabsContent value="requests">
-                <div className="flex items-center justify-center border">
-                  <div className="grid h-auto w-full grid-cols-3 grid-rows-3  gap-x-5 ">
-                    {/* <ScrollArea> */}
-                    {requests?.incomingRequests &&
-                    requests.incomingRequests.length > 0 ? (
-                      requests?.incomingRequests.map((request, index) => {
-                        return (
-                          <div className="" key={index}>
-                            <RequestComponent {...request} />
-                            <Separator />
+                <ScrollArea>
+                  {requests?.incomingRequests &&
+                  requests.incomingRequests.length > 0 ? (
+                    requests?.incomingRequests.map((request, index) => {
+                      return (
+                        <div className="flex items-center justify-center border">
+                          <div className="grid h-auto w-full grid-cols-3 grid-rows-3  gap-x-5 ">
+                            <div className="" key={index}>
+                              <RequestComponent {...request} />
+                              <Separator />
+                            </div>
                           </div>
-                        );
-                      })
-                    ) : (
-                      <div className="flex h-fit items-center justify-center">
-                        <h1 className="text-2xl font-semibold text-gray-500">
-                          No requests
-                        </h1>
-                      </div>
-                    )}
-                  </div>
-                  {/* </ScrollArea> */}
-                </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="flex h-fit items-center justify-center">
+                      <h1 className="text-2xl font-semibold text-gray-500">
+                        No requests
+                      </h1>
+                    </div>
+                  )}
+                </ScrollArea>
               </TabsContent>
               <TabsContent value="outgoing">
                 <ScrollArea>
@@ -63,14 +63,18 @@ export default async function RequestsPage({
                   requests?.outgoingRequests.length > 0 ? (
                     requests.outgoingRequests.map((request, index) => {
                       return (
-                        <div key={index}>
-                          <RequestComponent {...request} />
-                          <Separator />
+                        <div className="flex items-center justify-center border">
+                          <div className="grid h-auto w-full grid-cols-3 grid-rows-3  gap-x-5 ">
+                            <div key={index}>
+                              <RequestComponent {...request} />
+                              <Separator />
+                            </div>
+                          </div>
                         </div>
                       );
                     })
                   ) : (
-                    <div className="flex h-48 items-center justify-center">
+                    <div className="flex h-fit items-center justify-center">
                       <h1 className="text-2xl font-semibold text-gray-500">
                         No outgoing requests
                       </h1>

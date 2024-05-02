@@ -6,9 +6,14 @@ import type { AnyColumn } from "@local/db";
 import { db, eq, schema, sql } from "@local/db";
 
 export const classroomsQuery = db // get all classrooms and associated teacher
-  .select()
+  .select({
+    roomNumber: schema.classrooms.roomNumber,
+    teacherName: schema.classrooms.teacherName,
+    teacherId: schema.classrooms.teacherId,
+    available: schema.classrooms.available,
+    comment: schema.classrooms.comment,
+  })
   .from(schema.classrooms)
-  .innerJoin(schema.users, eq(schema.classrooms.teacherId, schema.users.id))
   .prepare("classrooms");
 
 export const roomByIdQuery = db // get classroom by userId

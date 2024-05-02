@@ -18,7 +18,11 @@ export const classRoutes = new Elysia({ prefix: "/classes" })
       return { error: "No classes found" };
     }
   })
-  .get("/all", () => getClasses())
+  .get("/all/:id", ({ params: { id } }) => getClasses(id), {
+    params: t.Object({
+      id: t.String(),
+    }),
+  })
   .get("/id/:id", ({ params: { id } }) => getClassById(id), {
     params: t.Object({
       id: t.String(),

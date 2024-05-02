@@ -19,8 +19,8 @@ import {
 import { Textarea } from "@local/ui/textarea";
 
 import { getErrorMessage } from "@/lib/errorHandler";
-import { createComment, deleteComment } from "./actions";
-import { deleteComments } from "./clientActions";
+import { createComment, deleteComment } from "./logic/actions";
+import { deleteComments } from "./logic/clientActions";
 
 interface CommentProps {
   comment?: string;

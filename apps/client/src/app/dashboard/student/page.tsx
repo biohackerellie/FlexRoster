@@ -1,144 +1,43 @@
-import type { StudentTable } from "@/lib/types";
-import React, { Suspense } from "react";
-import { unstable_cache as cache } from "next/cache";
+import * as React from "react";
+import { notFound } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@local/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@local/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@local/ui/card";
+import { searchParamsValidator } from "@local/validators";
 
-import { ModeToggle } from "@/components/darkmodeToggle";
-import { greetings } from "@/lib/constants";
-import { client } from "@/lib/eden";
-import { chatHrefConstructor, formatTeacherNames } from "@/lib/utils";
-import { ClassListComponent } from "./_components/ClassList";
+import { SearchParams } from "@/hooks/types";
+import { getStudentClassesData } from "../_components/logic/queries";
+import StudentClassesTable from "../_components/tables/studentClassesTable";
 
-export default async function StudentDashboard() {
-  const session = await auth();
+export default async function StudentDashboard({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const user = await auth();
+  if (!user) {
+    return notFound();
+  }
+  const userId = user?.user.id!;
 
-  const firstName = session?.user?.name!.split(" ")[0];
-  const userId = session?.user?.id!;
-  const email = session?.user?.email!;
-
-  const { availableClasses, currentClass } = await allData(email, userId);
-
-  if (!currentClass) return <div>loading...</div>;
-
-  const getRandomGreeting = () => {
-    return greetings[Math.floor(Math.random() * greetings.length)];
-  };
-
-  const greeting = getRandomGreeting();
+  const search = searchParamsValidator.parse(searchParams);
   return (
-    <div className="flex min-h-screen w-full flex-col ">
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-        <div className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-          <h1 className="z-20 bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text text-2xl font-bold">
-            {greeting} {firstName}!
-          </h1>
-        </div>
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          <Tabs defaultValue="flex">
-            <div className="flex items-center">
-              <TabsList>
-                <TabsTrigger value="flex">Flex</TabsTrigger>
-
-                <TabsTrigger value="requests">Requests</TabsTrigger>
-              </TabsList>
-              <div className="ml-auto flex items-center gap-2">
-                <ModeToggle />
-              </div>
-            </div>
-            <TabsContent value="flex">
-              <Card>
-                <CardHeader>
-                  <CardTitle>{currentClass}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <React.Suspense
-                    fallback={<Loader2 className="h-8 w-8 animate-spin" />}
-                  >
-                    <ClassListComponent data={availableClasses} />
-                  </React.Suspense>
-                </CardContent>
-                <CardFooter></CardFooter>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="requests">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Requests</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <React.Suspense
-                    fallback={<Loader2 className="h-8 w-8 animate-spin" />}
-                  ></React.Suspense>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </main>
-      </div>
+    <div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Available Classes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <React.Suspense
+            fallback={<Loader2 className="h-4 w-4 animate-spin" />}
+          >
+            <StudentClassesTable
+              dataPromise={getStudentClassesData(userId, search)}
+            />
+          </React.Suspense>
+        </CardContent>
+      </Card>
     </div>
   );
-}
-
-async function allData(email: string, userId: string) {
-  const [availableClasses, currentClass] = await Promise.all([
-    cachedData(email, userId),
-    getClass(userId),
-  ]);
-  return { availableClasses, currentClass };
-}
-
-async function getData(email: string, userId: string) {
-  const { data, error } = await client.api.classes.all.get();
-
-  if (error) {
-    return [];
-  }
-
-  const mappedData = data.map((rooms) => {
-    const formattedTeacherName = formatTeacherNames(
-      rooms.classrooms.teacherName,
-    );
-    const teacherId = rooms.classrooms.teacherId ?? "";
-    return {
-      roomNumber: rooms.classrooms.roomNumber,
-      userName: formattedTeacherName,
-      available: rooms.classrooms.available,
-      teacherId: teacherId,
-      chatId: `/dashboard/chat/${chatHrefConstructor(userId, teacherId)}`,
-    };
-  });
-
-  return mappedData as StudentTable[];
-}
-
-const cachedData = cache(
-  async (email: string, userId: string) => getData(email, userId),
-  ["class-list"],
-  {
-    revalidate: 60,
-    tags: ["class-list"],
-  },
-);
-
-async function getClass(userId: string) {
-  const { data, error } = await client.api.rosters.student
-    .id({ userId: userId })
-    .get();
-
-  if (error) {
-    console.error(error);
-  }
-  if (!data) return [];
-  return data;
 }

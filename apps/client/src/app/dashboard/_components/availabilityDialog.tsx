@@ -16,7 +16,7 @@ import {
 } from "@local/ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
-import { updateAvailability } from "./clientActions";
+import { updateAvailability } from "./logic/clientActions";
 
 interface AvailabilityDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {

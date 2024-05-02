@@ -1,5 +1,5 @@
 {
-  "id": "60cea940-50c2-4474-b366-e934b8a45531",
+  "id": "53b4473d-2f8f-4a58-89a2-60c1758eb4c0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -81,8 +81,12 @@
           "name": "account_userId_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "columnsFrom": ["userId"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -90,7 +94,10 @@
       "compositePrimaryKeys": {
         "account_provider_providerAccountId_pk": {
           "name": "account_provider_providerAccountId_pk",
-          "columns": ["provider", "providerAccountId"]
+          "columns": [
+            "provider",
+            "providerAccountId"
+          ]
         }
       },
       "uniqueConstraints": {}
@@ -138,7 +145,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "classrooms_teacherId_user_id_fk": {
+          "name": "classrooms_teacherId_user_id_fk",
+          "tableFrom": "classrooms",
+          "tableTo": "user",
+          "columnsFrom": [
+            "teacherId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -178,8 +199,12 @@
           "name": "logs_user_user_id_fk",
           "tableFrom": "logs",
           "tableTo": "user",
-          "columnsFrom": ["user"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -241,7 +266,7 @@
         },
         "status": {
           "name": "status",
-          "type": "text",
+          "type": "RequestStatus",
           "primaryKey": false,
           "notNull": true,
           "default": "'pending'"
@@ -266,8 +291,12 @@
           "name": "requests_studentId_user_id_fk",
           "tableFrom": "requests",
           "tableTo": "user",
-          "columnsFrom": ["studentId"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "studentId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -275,8 +304,12 @@
           "name": "requests_newTeacher_user_id_fk",
           "tableFrom": "requests",
           "tableTo": "user",
-          "columnsFrom": ["newTeacher"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "newTeacher"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -284,8 +317,12 @@
           "name": "requests_currentTeacher_user_id_fk",
           "tableFrom": "requests",
           "tableTo": "user",
-          "columnsFrom": ["currentTeacher"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "currentTeacher"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -322,8 +359,12 @@
           "name": "session_userId_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "columnsFrom": ["userId"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -367,14 +408,26 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "email_idx": {
+          "name": "email_idx",
+          "columns": [
+            "studentEmail"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "students_classroomId_classrooms_id_fk": {
           "name": "students_classroomId_classrooms_id_fk",
           "tableFrom": "students",
           "tableTo": "classrooms",
-          "columnsFrom": ["classroomId"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "classroomId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -384,7 +437,9 @@
         "students_studentEmail_unique": {
           "name": "students_studentEmail_unique",
           "nullsNotDistinct": false,
-          "columns": ["studentEmail"]
+          "columns": [
+            "studentEmail"
+          ]
         }
       }
     },
@@ -437,7 +492,9 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
         }
       }
     },
@@ -469,13 +526,25 @@
       "compositePrimaryKeys": {
         "verificationToken_identifier_token_pk": {
           "name": "verificationToken_identifier_token_pk",
-          "columns": ["identifier", "token"]
+          "columns": [
+            "identifier",
+            "token"
+          ]
         }
       },
       "uniqueConstraints": {}
     }
   },
   "enums": {
+    "RequestStatus": {
+      "name": "RequestStatus",
+      "values": {
+        "pending": "pending",
+        "approved": "approved",
+        "denied": "denied",
+        "arrived": "arrived"
+      }
+    },
     "Role": {
       "name": "Role",
       "values": {

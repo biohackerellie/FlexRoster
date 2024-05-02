@@ -2,19 +2,11 @@ import type { SearchParams } from "@/hooks/types";
 import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@local/ui/card";
-import { Shell } from "@local/ui/shell";
+import { Card, CardContent, CardHeader, CardTitle } from "@local/ui/card";
 import { searchParamsValidator } from "@local/validators";
 
-import AllRosterTable from "./_components/AllRosterTable";
-import { getRosters } from "./_components/queries";
+import { getRosters } from "../_components/logic/queries";
+import AllRosterTable from "../_components/tables/AllRosterTable";
 
 export default function StaffPage({
   searchParams,

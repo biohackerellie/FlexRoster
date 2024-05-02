@@ -7,11 +7,11 @@ import * as React from "react";
 import { DataTable } from "@local/ui/data-table-students";
 import { DataTableToolbar } from "@local/ui/data-table-toolbar";
 
-import type { getDefaultRoster } from "./queries";
+import type { getDefaultRoster } from "../logic/queries";
 import { useDataTable } from "@/hooks/useDataTable";
 import { statusOptions } from "@/lib/constants";
-import { columns } from "./teacherRoster-columns";
-import { ToolbarActions } from "./toolbarActions";
+import { columns } from "../columns/teacherRoster-columns";
+import { ToolbarActions } from "../toolbarActions";
 
 interface TableProps {
   dataPromise: ReturnType<typeof getDefaultRoster>;

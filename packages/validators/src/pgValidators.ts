@@ -89,3 +89,22 @@ export const TeacherRosterValidator = z.object({
 
 export const teacherRosterArrayValidator = z.array(TeacherRosterValidator);
 export type TeacherRoster = z.infer<typeof TeacherRosterValidator>;
+
+export const StudentClassesValidator = z.object({
+  roomNumber: z.string(),
+  comment: z.string().nullable(),
+  teacherName: z.string(),
+  available: z.boolean(),
+  teacherId: z.string(),
+  chatId: z.string().optional(),
+});
+
+export const studentClassesArrayValidator = z.array(StudentClassesValidator);
+export type StudentClasses = z.infer<typeof StudentClassesValidator>;
+
+export const StudentDashboardDataValidator = z.object({
+  classes: studentClassesArrayValidator,
+  currentClass: z.string(),
+});
+export interface StudentDashboardData
+  extends z.infer<typeof StudentDashboardDataValidator> {}

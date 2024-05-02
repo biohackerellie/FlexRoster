@@ -43,6 +43,7 @@ export const searchParamsValidator = z.object({
   page: z.number().optional(),
   limit: z.number().optional(),
   status: studentStatusSchema.optional(),
+  roomStatus: z.boolean().optional(),
   studentName: z.string().optional(),
   teacherName: z.string().optional(),
   filter: z.string().optional(),
@@ -55,6 +56,13 @@ export const createCommentSchema = z.object({
 });
 
 export type CreateCommentSchema = z.infer<typeof createCommentSchema>;
+
+export const datePickerSchema = z.object({
+  requestedDate: z.date({
+    required_error: "Requested date is required",
+  }),
+});
+export type DatePickerSchema = z.infer<typeof datePickerSchema>;
 
 export * from "./nameHelpers";
 export * from "./pgValidators";

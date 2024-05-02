@@ -3,7 +3,6 @@ import { Elysia, t } from "elysia";
 import {
   getRosters,
   getRostersById,
-  getStudentRoster,
   getTeacherRoster,
   setAttendance,
   setStudentRoster,
@@ -16,15 +15,7 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
       id: t.String(),
     }),
   })
-  .get(
-    "/student/id/:userId",
-    ({ params: { userId } }) => getStudentRoster(userId),
-    {
-      params: t.Object({
-        userId: t.String(),
-      }),
-    },
-  )
+
   .get(
     "/teacher/roster/:userId",
     ({ params: { userId } }) => getTeacherRoster(userId),
@@ -38,20 +29,4 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
     body: t.Object({
       studentId: t.String(),
     }),
-  })
-
-  //#todo check if we're still using this
-  .post(
-    "/student/:email",
-    ({ params: { email }, body: { roomNumber, teacherName } }) =>
-      setStudentRoster(email, roomNumber, teacherName),
-    {
-      params: t.Object({
-        email: t.String(),
-      }),
-      body: t.Object({
-        roomNumber: t.String(),
-        teacherName: t.String(),
-      }),
-    },
-  );
+  });
