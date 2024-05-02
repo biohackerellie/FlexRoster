@@ -69,23 +69,11 @@ export async function getDefaultRoster(
     return [];
   }
 
-  const mapped = data.map((student) => {
-    return {
-      studentName: student.studentName,
-      studentEmail: student.studentEmail,
-      status: student.status,
-      studentId: student.studentId,
-      chatId: student.studentId
-        ? `/dashboard/chat/${chatHrefConstructor(teacherId, student.studentId)}`
-        : null,
-    };
-  });
-
   if (!search) {
-    return mapped;
+    return data;
   }
 
-  let result = mapped;
+  let result = data;
 
   if (search.studentName) {
     const searchLower = search.studentName.toLowerCase();

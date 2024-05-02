@@ -1,8 +1,11 @@
 import { NotFoundError } from "elysia";
 
-import type { AllStudents } from "@local/validators";
+import type { AllStudents, TeacherRoster } from "@local/validators";
 import { db, eq, schema } from "@local/db";
-import { allStudentsArrayValidator } from "@local/validators";
+import {
+  allStudentsArrayValidator,
+  teacherRosterArrayValidator,
+} from "@local/validators";
 
 import {
   getKV,
@@ -19,7 +22,7 @@ import {
   userQuery,
   userRosterQuery,
 } from "~/lib/sql";
-import { getHashKey } from "~/lib/utils/crypto";
+import { chatHrefConstructor, getHashKey } from "~/lib/utils";
 
 export async function getRosters() {
   try {
@@ -98,9 +101,38 @@ export async function setStudentRoster(
 
 export async function getTeacherRoster(userId: string) {
   try {
-    const data = await rosterByTeacherId.execute({ userId: userId });
+    let data: TeacherRoster[] = [];
+    const cacheKey = getHashKey(`TeacherRoster-${userId}`);
+    const cachedData = await getKV(cacheKey);
+    if (cachedData) {
+      const cacheArray = JSON.parse(cachedData);
+      if (cacheArray?.length) {
+        const validated = teacherRosterArrayValidator.parse(cacheArray);
+        data = validated;
+      }
+    } else {
+      const dbData = await rosterByTeacherId.execute({ userId: userId });
+      if (dbData?.length) {
+        const result = dbData.map((student) => {
+          return {
+            ...student,
+            teacherId: userId,
+            chatId: student.studentId
+              ? `/dashboard/chat/${chatHrefConstructor(userId, student.studentId)}`
+              : null,
+          };
+        });
+        const parsedData = teacherRosterArrayValidator.parse(result);
+        await setKV(cacheKey, JSON.stringify(parsedData), 1200);
+        data = parsedData;
+      }
+    }
+    if (!data) throw new NotFoundError("No rosters found");
     return data;
   } catch (e) {
+    if (e instanceof Error) {
+      console.error(e.message);
+    }
     throw new NotFoundError("No roster found with that email");
   }
 }
@@ -114,6 +146,10 @@ export async function setAttendance(studentId: string) {
         .update(schema.students)
         .set({ status: "transferredA" })
         .where(eq(schema.students.studentEmail, student?.email));
+      await tx
+        .update(schema.requests)
+        .set({ status: "arrived" })
+        .where(eq(schema.requests.studentId, studentId));
 
       const [updatedRequest] = await tx
         .select({

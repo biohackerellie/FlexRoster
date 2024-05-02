@@ -1,10 +1,15 @@
 "use server";
 
-import { revalidatePath, revalidateTag } from "next/cache";
+import {
+  unstable_noStore as noStore,
+  revalidatePath,
+  revalidateTag,
+} from "next/cache";
 
-import type { TableSearchParams } from "@local/validators";
+import type { CreateCommentSchema, TableSearchParams } from "@local/validators";
 
 import { client } from "@/lib/eden";
+import { getErrorMessage } from "@/lib/errorHandler";
 
 export async function Attendance(studentId: string) {
   const { data: res, error } = await client.api.rosters.attendance[""].post({
@@ -81,4 +86,44 @@ export async function RequestApproval(
   revalidateTag("roster");
   revalidateTag("requests");
   revalidatePath("/dashboard", "layout");
+}
+
+export async function createComment(
+  input: CreateCommentSchema & { id: string },
+) {
+  noStore();
+  try {
+    const { data, error } = await client.api.classes.comments
+      .create({
+        id: input.id,
+      })
+      .patch({ comment: input.comment });
+
+    revalidatePath(`/dashboard/staff/${input.id}`, `page`);
+    revalidateTag("roster");
+    if (error) {
+      throw new Error(error.value, { cause: error });
+    }
+    return {
+      data: null,
+      error: null,
+    };
+  } catch (err) {
+    return {
+      data: null,
+      error: getErrorMessage(err),
+    };
+  }
+}
+export async function deleteComment(id: string) {
+  try {
+    await client.api.classes.comments.delete.post({ id: id });
+
+    revalidatePath(`/dashboard/staff/${id}`, `page`);
+  } catch (err) {
+    return {
+      data: null,
+      error: getErrorMessage(err),
+    };
+  }
 }

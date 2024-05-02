@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@elysiajs/eden": "^1.0.12",
+    "@hookform/resolvers": "^3.3.4",
     "@local/auth": "workspace:*",
     "@local/db": "workspace:*",
     "@local/server": "workspace:*",
@@ -41,6 +42,7 @@
     "pusher-js": "^8.3.0",
     "react": "19.0.0-beta-4508873393-20240430",
     "react-dom": "19.0.0-beta-4508873393-20240430",
+    "react-hook-form": "^7.51.3",
     "sonner": "^1.4.41",
     "superjson": "2.2.1",
     "ui": "^0.2.4",

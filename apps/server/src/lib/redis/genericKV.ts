@@ -32,9 +32,15 @@ export async function getKeys(pattern: string) {
   return result;
 }
 
-export async function clearKV(key: string): Promise<number> {
+export async function clearKV(key: string): Promise<void> {
   const client = createClient();
-  const result = await client.del(key);
+  let exists = false;
+  if (await client.exists(key)) {
+    exists = true;
+    await client.del(key);
+  }
+  console.log(exists);
+
   await client.quit();
-  return result;
+  return;
 }

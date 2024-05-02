@@ -189,7 +189,7 @@ const columns: ColumnDef<StudentTable>[] = [
     cell: ({ row, column }) => {
       const teacherId: string = row.getValue("teacherId");
       const today = new Date().toISOString().split("T")[0]!;
-      console.log("today", today);
+
       const [selectedDate, setSelectedDate] = React.useState<Date>();
       const available: boolean = row.getValue("available");
       const data = {

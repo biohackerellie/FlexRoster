@@ -22,23 +22,6 @@ export const requestParser = z.object({
 
 export type requestFormType = z.infer<typeof requestParser>;
 
-export const requestValidator = z.object({
-  id: z.union([z.string(), z.number()]),
-  studentId: z.string(),
-  studentName: z.string(),
-  currentTeacher: z.string(),
-  currentTeacherName: z.string(),
-  newTeacher: z.string(),
-  newTeacherName: z.string(),
-  dateRequested: z.string(),
-  status: requestStatusSchema,
-  arrived: z.boolean().nullable(),
-  timestamp: z.string(),
-});
-
-export const requestArrayValidator = z.array(requestValidator);
-export type Request = z.infer<typeof requestValidator>;
-
 const logTypeSchema = z.enum(["error", "request", "attendance", "message"]);
 
 export const logValidator = z.object({
@@ -66,6 +49,12 @@ export const searchParamsValidator = z.object({
 });
 
 export type TableSearchParams = z.infer<typeof searchParamsValidator>;
+
+export const createCommentSchema = z.object({
+  comment: z.string(),
+});
+
+export type CreateCommentSchema = z.infer<typeof createCommentSchema>;
 
 export * from "./nameHelpers";
 export * from "./pgValidators";

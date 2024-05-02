@@ -4,13 +4,14 @@ import { db, eq, schema } from "@local/db";
 
 import type { RosterResponse } from "~/lib/types";
 import { env } from "~/env";
+import { clearKV } from "~/lib/redis";
 import {
   classroomsQuery,
   getClassroomIdByTeacher,
   roomByIdQuery,
   rosterByIDQuery,
 } from "~/lib/sql";
-import { fetcher, icAuth } from "~/lib/utils";
+import { fetcher, getHashKey, icAuth } from "~/lib/utils";
 
 type insertClassRoster = typeof schema.students.$inferInsert;
 
@@ -88,6 +89,38 @@ export async function resetOneClass(userId: string) {
     });
   } catch (e) {
     console.error(e instanceof Error ? e.message : e);
+    throw e;
+  }
+}
+
+export async function createComment(id: string, comment: string) {
+  try {
+    const cacheKey = getHashKey(`TeacherRoster-${id}`);
+    await clearKV(cacheKey);
+
+    await db
+      .update(schema.classrooms)
+      .set({ comment: comment })
+      .where(eq(schema.classrooms.teacherId, id));
+  } catch (e) {
+    throw new NotFoundError();
+  }
+}
+
+export async function deleteComment(id: string) {
+  try {
+    console.log("wtf");
+    const cacheKey = getHashKey(`TeacherRoster-${id}`);
+    await clearKV(cacheKey);
+    await db
+      .update(schema.classrooms)
+      .set({ comment: null })
+      .where(eq(schema.classrooms.teacherId, id));
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error(e.message);
+    }
+    console.log("something went wrong 👌");
     throw e;
   }
 }

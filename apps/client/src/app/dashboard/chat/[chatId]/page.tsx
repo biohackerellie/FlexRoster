@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
 import { Loader2 } from "lucide-react";

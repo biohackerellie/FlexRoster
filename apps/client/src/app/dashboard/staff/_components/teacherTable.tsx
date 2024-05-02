@@ -11,6 +11,7 @@ import type { getDefaultRoster } from "./queries";
 import { useDataTable } from "@/hooks/useDataTable";
 import { statusOptions } from "@/lib/constants";
 import { columns } from "./teacherRoster-columns";
+import { CommentToolbarActions } from "./toolbarActions";
 
 interface TableProps {
   dataPromise: ReturnType<typeof getDefaultRoster>;
@@ -19,6 +20,8 @@ interface TableProps {
 export default function TeacherRosterTable({ dataPromise }: TableProps) {
   const tableColumns = React.useMemo(() => columns(), []);
   const data = React.use(dataPromise);
+  const teacherId = data[0]?.teacherId!;
+  const comment = data[0]?.comment ?? null;
 
   const filterFields: DataTableFilterField<TeacherTable>[] = [
     {
@@ -43,7 +46,13 @@ export default function TeacherRosterTable({ dataPromise }: TableProps) {
   });
   return (
     <div className="w-full space-y-2.5 overflow-auto">
-      <DataTableToolbar table={table} filterFields={filterFields} />
+      <DataTableToolbar table={table} filterFields={filterFields}>
+        <CommentToolbarActions
+          teacherId={teacherId}
+          comment={comment}
+          table={table}
+        />
+      </DataTableToolbar>
       <DataTable table={table} />
     </div>
   );
