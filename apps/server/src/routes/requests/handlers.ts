@@ -1,14 +1,18 @@
 import { NotFoundError } from "elysia";
 
-import type { Logs, Request, requestFormType } from "@local/validators";
+import type { Logs, Request } from "@local/validators";
 import { db, eq, schema, sql } from "@local/db";
+import { requestArrayValidator, requestValidator } from "@local/validators";
 
 import {
+  clearKV,
   deleteSet,
+  getKV,
   getRequestSet,
   newLog,
   newRequestSet,
   removeSingleRequest,
+  setKV,
 } from "~/lib/redis";
 import {
   getClassroomIdByTeacher,
@@ -16,72 +20,68 @@ import {
   userRequestQuery,
   userRosterQuery,
 } from "~/lib/sql";
-
-interface newRequestProps extends requestFormType {
-  userId: string;
-}
+import { getHashKey } from "~/lib/utils";
+import { NoRequestForUError } from "~/lib/utils/Errors";
 
 type selectRequest = typeof schema.requests.$inferSelect;
 type insertRequest = typeof schema.requests.$inferInsert;
+type newRequestProps = Partial<insertRequest>;
 
 export async function newRequest({
-  userId,
-  teacherId,
+  studentId,
+  newTeacher,
   dateRequested,
 }: newRequestProps) {
   try {
-    await deleteSet(userId);
-    const dbRequests = await getRequests(userId);
+    const studentRequestKey = getHashKey(`requests:${studentId}`);
+    await clearKV(studentRequestKey);
+    const dbRequests = await getRequests(studentId!);
     if (dbRequests && dbRequests.length > 0) {
       for (const r of dbRequests) {
-        if (r.dateRequested === dateRequested) {
+        if (r.dateRequested === dateRequested!) {
           if (r.status !== "denied") {
-            const response = new Response("Request already sent", {
-              status: 401,
-            });
-
-            return response;
+            throw new NoRequestForUError(
+              "You already have a request for that date 🤡",
+            );
           }
         }
       }
     }
-    const studentRaw = await userRosterQuery.execute({ id: userId });
+    const studentRaw = await userRosterQuery.execute({ id: studentId });
     if (studentRaw.length === 0) {
       throw new NotFoundError("No student found with that ID");
     }
     const student = studentRaw[0];
     const currentTeacher = student?.classrooms?.teacherId ?? " ";
     const currentTeacherName = student?.classrooms?.teacherName ?? " ";
-    const newTeacherRaw = await userQuery.execute({ id: teacherId });
+    const newTeacherRaw = await userQuery.execute({ id: newTeacher });
     if (newTeacherRaw.length === 0) {
       throw new NotFoundError("No teacher found with that ID");
     }
-    const newTeacher = newTeacherRaw[0];
+    const newTeacherData = newTeacherRaw[0];
 
     const timestamp = Date.now().toString();
     const requestData: insertRequest = {
       status: "pending",
       studentName: student?.user.name!,
       studentId: student?.user.id!,
-      dateRequested,
+      dateRequested: dateRequested!,
       currentTeacher: currentTeacher,
       currentTeacherName,
-      newTeacher: teacherId,
-      newTeacherName: newTeacher?.name!,
+      newTeacher: newTeacher!,
+      newTeacherName: newTeacherData?.name!,
       timestamp,
     };
+    const validatedRequest = requestValidator.parse(requestData);
 
-    const insertRequest = async (request: insertRequest) => {
-      return db.insert(schema.requests).values(request);
-    };
-    await insertRequest(requestData);
+    await db.insert(schema.requests).values(validatedRequest);
+
     const log: Logs = {
       type: "request",
-      action: `${student?.user?.name} requested to transfer to ${newTeacher?.name} from ${currentTeacherName} at ${timestamp}`,
-      user: userId,
+      action: `${student?.user?.name} requested to transfer to ${newTeacherData?.name} from ${currentTeacherName} at ${timestamp}`,
+      user: studentId!,
     };
     await newLog(log);
-    return Response.json({ message: "Request sent" }, { status: 200 });
   } catch (e) {
     if (e instanceof Error) {
       console.error(e);
@@ -136,18 +136,20 @@ export async function getTeacherRequests(userId: string) {
 
 export async function getRequests(userId: string) {
   try {
-    const cacheRequests = await getRequestSet(userId);
+    const cacheRequests = await getKV(`requests:${userId}`);
 
     if (cacheRequests) {
-      return cacheRequests;
+      const validatedData = requestArrayValidator.parse(
+        JSON.parse(cacheRequests),
+      );
+      return validatedData;
     } else {
       const requests = await userRequestQuery.execute({ userId: userId });
       if (requests.length === 0) {
         return;
       }
-      for (const request of requests) {
-        await newRequestSet(userId, request);
-      }
+      const validatedRequests = requestArrayValidator.parse(requests);
+      await setKV(`requests:${userId}`, JSON.stringify(validatedRequests));
       return requests;
     }
   } catch (e) {

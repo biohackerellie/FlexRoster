@@ -69,23 +69,11 @@ export async function getDefaultRoster(
     return [];
   }
 
-  const mapped = data.map((student) => {
-    return {
-      studentName: student.studentName,
-      studentEmail: student.studentEmail,
-      status: student.status,
-      studentId: student.studentId,
-      chatId: student.studentId
-        ? `/dashboard/chat/${chatHrefConstructor(teacherId, student.studentId)}`
-        : null,
-    };
-  });
-
   if (!search) {
-    return mapped;
+    return data;
   }
 
-  let result = mapped;
+  let result = data;
 
   if (search.studentName) {
     const searchLower = search.studentName.toLowerCase();
@@ -122,4 +110,33 @@ export async function getRosters(search: TableSearchParams) {
     );
   }
   return result;
+}
+
+export async function getStudentClassesData(
+  userId: string,
+  search: TableSearchParams,
+) {
+  noStore();
+
+  const { data, error } = await client.api.classes.all({ id: userId }).get();
+  if (error) {
+    console.error(error);
+  }
+  if (!data) {
+    return { tableData: [], currentClass: "" };
+  }
+  const currentClass = data.currentClass;
+  let tableData = data.classes;
+
+  if (search.teacherName) {
+    const searchLower = search.teacherName.toLowerCase();
+    tableData = tableData.filter((student) =>
+      student.teacherName.toLowerCase().includes(searchLower),
+    );
+  }
+  if (search.roomStatus) {
+    tableData = tableData.filter((student) => student.available);
+  }
+
+  return { tableData, currentClass };
 }

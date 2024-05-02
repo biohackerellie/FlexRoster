@@ -1,5 +1,6 @@
 import { Elysia, t } from "elysia";
 
+import { NoRequestForUError } from "~/lib/utils/Errors";
 import {
   getRequests,
   getTeacherRequests,
@@ -8,6 +9,15 @@ import {
 } from "./handlers";
 
 export const requestRoutes = new Elysia({ prefix: "/requests" })
+  .error({ NoRequestForUError })
+  .onError(({ code, set, error }) => {
+    switch (code) {
+      case "NoRequestForUError": {
+        set.status = 401;
+        return error;
+      }
+    }
+  })
   .get("/student/:userId/", ({ params: { userId } }) => getRequests(userId), {
     params: t.Object({
       userId: t.String(),
@@ -24,13 +34,13 @@ export const requestRoutes = new Elysia({ prefix: "/requests" })
   )
   .post(
     "/new",
-    ({ body: { userId, teacherId, dateRequested } }) =>
-      newRequest({ userId, teacherId, dateRequested }),
+    ({ body: { studentId, newTeacher, dateRequested } }) =>
+      newRequest({ studentId, newTeacher, dateRequested }),
     {
       body: t.Object({
-        userId: t.String(),
-        teacherId: t.String(),
-        dateRequested: t.String(),
+        studentId: t.String(),
+        newTeacher: t.String(),
+        dateRequested: t.Date(),
       }),
     },
   )

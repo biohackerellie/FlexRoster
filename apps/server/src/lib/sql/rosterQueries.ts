@@ -31,16 +31,14 @@ export const rosterByIDQuery = db
 
 export const rosterByTeacherId = db
   .select({
-    rosterId: schema.students.id,
     studentEmail: schema.students.studentEmail,
     studentName: schema.students.studentName,
     status: schema.students.status,
     studentId: schema.users.id,
-    classroomId: schema.classrooms.id,
     roomNumber: schema.classrooms.roomNumber,
     teacherName: schema.classrooms.teacherName,
-    teacherId: schema.classrooms.teacherId,
     available: schema.classrooms.available,
+    comment: schema.classrooms.comment,
   })
   .from(schema.students)
   .innerJoin(

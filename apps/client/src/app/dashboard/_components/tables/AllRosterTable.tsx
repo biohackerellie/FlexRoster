@@ -1,40 +1,30 @@
 "use client";
 
 import type { DataTableFilterField } from "@/hooks/types";
+import type { SecretaryTable } from "@/lib/types";
 import * as React from "react";
 
-import type { AllStudents } from "@local/validators";
 import { DataTable } from "@local/ui/data-table-students";
 import { DataTableToolbar } from "@local/ui/data-table-toolbar";
-import { searchParamsValidator, studentStatusSchema } from "@local/validators";
 
-import type { getTableData } from "./actions";
+import type { getRosters } from "../logic/queries";
 import { useDataTable } from "@/hooks/useDataTable";
 import { statusOptions } from "@/lib/constants";
-import { columns } from "./students-columns";
+import { columns } from "../columns/roster-columns";
 
 interface TableProps {
-  dataPromise: ReturnType<typeof getTableData>;
+  dataPromise: ReturnType<typeof getRosters>;
 }
 
-export default function AllStudentsTable({ dataPromise }: TableProps) {
-  const tableColumns = React.useMemo(() => columns(), []);
+export default function AllRosterTable({ dataPromise }: TableProps) {
   const data = React.use(dataPromise);
 
-  const filterFields: DataTableFilterField<AllStudents>[] = [
+  const tableColumns = React.useMemo(() => columns(), []);
+  const filterFields: DataTableFilterField<SecretaryTable>[] = [
     {
       label: "Name",
-      value: "studentName",
+      value: "teacherName",
       placeholder: "Search by name",
-    },
-    {
-      label: "Status",
-      value: "status",
-      options: statusOptions.map((status) => ({
-        label: status?.label.toUpperCase(),
-        value: status?.value,
-        withCount: false,
-      })),
     },
   ];
   const { table } = useDataTable({

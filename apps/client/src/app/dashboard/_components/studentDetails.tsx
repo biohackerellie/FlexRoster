@@ -15,7 +15,7 @@ import {
 import { ScrollArea } from "@local/ui/scroll-area";
 import { Separator } from "@local/ui/separator";
 
-import type { getData } from "./queries";
+import type { getData } from "./logic/queries";
 
 interface StudentDetailsProps {
   dataPromise: ReturnType<typeof getData>;

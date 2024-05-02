@@ -26,6 +26,13 @@ export const status = pgEnum("Status", [
   "default",
 ]);
 
+export const requestStatus = pgEnum("RequestStatus", [
+  "pending",
+  "approved",
+  "denied",
+  "arrived",
+]);
+
 /**
  * @description students is a table that holds the relationship between an InfiniteCampus student and classrooms, and AD users
  */
@@ -75,11 +82,8 @@ export const requests = pgTable("requests", {
     .notNull()
     .references(() => users.id),
   currentTeacherName: text("currentTeacherName").notNull(),
-  dateRequested: date("dateRequested").notNull(),
-  status: text("status")
-    .$type<"pending" | "approved" | "denied">()
-    .default("pending")
-    .notNull(),
+  dateRequested: date("dateRequested", { mode: "date" }).notNull(),
+  status: requestStatus("status").default("pending").notNull(),
   arrived: boolean("arrived").default(false),
   timestamp: text("timestamp").notNull(),
 });

@@ -5,8 +5,8 @@ import { Loader2 } from "lucide-react";
 import { Card } from "@local/ui/card";
 import { Shell } from "@local/ui/shell";
 
-import { getData } from "../../_components/queries";
-import StudentDetails from "../../_components/studentDetails";
+import { getData } from "../../../_components/logic/queries";
+import StudentDetails from "../../../_components/studentDetails";
 
 export const metadata: Metadata = {
   title: "FLEX | Details",

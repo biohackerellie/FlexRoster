@@ -15,8 +15,8 @@ import {
 } from "@local/ui/card";
 import { searchParamsValidator } from "@local/validators";
 
-import { getTableData } from "../_components/queries";
-import AllStudentsTable from "../_components/studentTable";
+import { getTableData } from "../../_components/logic/queries";
+import AllStudentsTable from "../../_components/tables/studentTable";
 
 export const metadata: Metadata = {
   title: "FLEX | All Students",

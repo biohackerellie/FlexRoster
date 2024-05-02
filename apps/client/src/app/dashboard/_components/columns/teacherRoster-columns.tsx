@@ -11,7 +11,7 @@ import { DataTableColumnHeader } from "@local/ui/data-table-column-header";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
 import { statusOptions } from "@/lib/constants";
-import { Attendance } from "./actions";
+import { Attendance } from "../logic/actions";
 
 export function columns(): ColumnDef<TeacherTable>[] {
   return [

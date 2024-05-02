@@ -62,14 +62,49 @@ export const allStudentsArrayValidator = z.array(AllStudentValidator);
 
 export type AllStudents = z.infer<typeof AllStudentValidator>;
 
-export const selectRequestsValidator = createSelectSchema(schema.requests);
-export const requestsArrayValidator = z.array(selectRequestsValidator);
+export const requestValidator = createSelectSchema(schema.requests);
+export const requestArrayValidator = z.array(requestValidator);
 export const insertRequestsValidator = createInsertSchema(schema.requests);
 
-export type Requests = z.infer<typeof selectRequestsValidator>;
+export type Request = z.infer<typeof requestValidator>;
 
 export interface JoinedStudentUser {
   students?: Student;
   user?: User | null | undefined;
-  requests?: Requests[] | null | undefined;
+  requests?: Request[] | null | undefined;
 }
+
+export const TeacherRosterValidator = z.object({
+  studentEmail: z.string(),
+  studentName: z.string(),
+  status: studentStatusSchema,
+  studentId: z.string().nullable(),
+  roomNumber: z.string(),
+  teacherName: z.string(),
+  available: z.boolean(),
+  comment: z.string().nullable(),
+  chatId: z.string().nullable(),
+  teacherId: z.string(),
+});
+
+export const teacherRosterArrayValidator = z.array(TeacherRosterValidator);
+export type TeacherRoster = z.infer<typeof TeacherRosterValidator>;
+
+export const StudentClassesValidator = z.object({
+  roomNumber: z.string(),
+  comment: z.string().nullable(),
+  teacherName: z.string(),
+  available: z.boolean(),
+  teacherId: z.string(),
+  chatId: z.string().optional(),
+});
+
+export const studentClassesArrayValidator = z.array(StudentClassesValidator);
+export type StudentClasses = z.infer<typeof StudentClassesValidator>;
+
+export const StudentDashboardDataValidator = z.object({
+  classes: studentClassesArrayValidator,
+  currentClass: z.string(),
+});
+export interface StudentDashboardData
+  extends z.infer<typeof StudentDashboardDataValidator> {}

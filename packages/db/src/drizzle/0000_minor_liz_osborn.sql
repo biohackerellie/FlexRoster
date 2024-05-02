@@ -1,4 +1,10 @@
 DO $$ BEGIN
+ CREATE TYPE "RequestStatus" AS ENUM('pending', 'approved', 'denied', 'arrived');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  CREATE TYPE "Role" AS ENUM('secretary', 'teacher', 'student', 'admin');
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -50,7 +56,7 @@ CREATE TABLE IF NOT EXISTS "requests" (
 	"currentTeacher" text NOT NULL,
 	"currentTeacherName" text NOT NULL,
 	"dateRequested" date NOT NULL,
-	"status" text DEFAULT 'pending' NOT NULL,
+	"status" "RequestStatus" DEFAULT 'pending' NOT NULL,
 	"arrived" boolean DEFAULT false,
 	"timestamp" text NOT NULL
 );
@@ -87,8 +93,15 @@ CREATE TABLE IF NOT EXISTS "verificationToken" (
 	CONSTRAINT "verificationToken_identifier_token_pk" PRIMARY KEY("identifier","token")
 );
 --> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "email_idx" ON "students" ("studentEmail");--> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "account" ADD CONSTRAINT "account_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "classrooms" ADD CONSTRAINT "classrooms_teacherId_user_id_fk" FOREIGN KEY ("teacherId") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
