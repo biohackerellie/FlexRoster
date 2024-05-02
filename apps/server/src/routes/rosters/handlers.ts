@@ -13,7 +13,6 @@ import {
   removeSingleRequest,
   setClassRoomKV,
   setKV,
-  setRequestKV,
 } from "~/lib/redis";
 import {
   allStudentsMap,
@@ -62,28 +61,6 @@ export async function getRostersById(id: string) {
     return results;
   } catch (e) {
     throw new NotFoundError("No roster found with that ID");
-  }
-}
-
-export async function setStudentRoster(
-  email: string,
-  roomNumber: string,
-  teacherName: string,
-) {
-  try {
-    const previousRequest = await getRequestKV(email);
-    if (previousRequest) {
-      console.error("You have already requested a transfer today");
-      return new Response("You have already requested a transfer today", {
-        status: 301,
-      });
-    }
-    await setClassRoomKV(email, `Room ${roomNumber} with ${teacherName}`);
-    await setRequestKV(email);
-
-    return new Response("OK", { status: 200 });
-  } catch (e) {
-    throw new NotFoundError("No roster found with that email");
   }
 }
 

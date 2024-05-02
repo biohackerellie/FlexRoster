@@ -37,7 +37,7 @@ export async function getClasses(id: string) {
 
     const studentCacheKey = `StudentCache-${id}`;
     const cachedStudentData = await getKV(studentCacheKey);
-
+    console.log(cachedStudentData);
     if (cachedStudentData) {
       const validatedStudentData = StudentDashboardDataValidator.parse(
         JSON.parse(cachedStudentData),
@@ -55,13 +55,15 @@ export async function getClasses(id: string) {
 
       returnData.classes = formatClasses(validatedClasses, id);
     } else {
-      const dbData = await classroomsQuery.execute();
+      const dbData = await classroomsQuery.execute({});
+      console.log(dbData);
       if (dbData?.length) {
         const parsedData = studentClassesArrayValidator.parse(dbData);
         await setKV(classesKey, JSON.stringify(parsedData), 1200);
         returnData.classes = formatClasses(parsedData, id);
       }
     }
+    console.log("now we here");
     const [student] = await userRosterQuery.execute({ id: id });
     if (student) {
       const teacherName = formatTeacherNames(student.classrooms.teacherName);

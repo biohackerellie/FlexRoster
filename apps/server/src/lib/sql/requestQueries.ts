@@ -27,7 +27,7 @@ export const studentRequestsQuery = db
     schema.classrooms,
     eq(schema.requests.newTeacher, schema.classrooms.teacherId),
   )
-  .where(gte(schema.requests.dateRequested, today.toISOString()))
+  .where(gte(schema.requests.dateRequested, today))
   .prepare("studentRequestsQuery");
 
 export const allStudentRequests = db
