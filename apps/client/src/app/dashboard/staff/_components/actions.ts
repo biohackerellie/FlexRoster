@@ -127,3 +127,16 @@ export async function deleteComment(id: string) {
     };
   }
 }
+
+export async function setAvailability(id: string, status: boolean) {
+  try {
+    await client.api.classes.availability.post({ id, status });
+    revalidatePath("/");
+    revalidatePath(`/dashboard/staff/${id}`, `page`);
+  } catch (err) {
+    return {
+      data: null,
+      error: getErrorMessage(err),
+    };
+  }
+}

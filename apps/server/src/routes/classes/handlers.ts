@@ -124,3 +124,20 @@ export async function deleteComment(id: string) {
     throw e;
   }
 }
+
+export async function setAvailability(id: string, status: boolean) {
+	try {
+		const cacheKey = getHashKey(`TeacherRoster-${id}`);
+		await clearKV(cacheKey);
+		await db
+			.update(schema.classrooms)
+			.set({ available: status })
+			.where(eq(schema.classrooms.teacherId, id));
+	} catch (e) {
+		if (e instanceof Error) {
+			console.error(e.message);
+		}
+		console.log("something went wrong 👌");
+		throw e;
+	}
+}

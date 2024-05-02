@@ -7,6 +7,7 @@ import {
   getClassById,
   getClasses,
   resetOneClass,
+  setAvailability,
 } from "./handlers";
 
 export const classRoutes = new Elysia({ prefix: "/classes" })
@@ -46,4 +47,14 @@ export const classRoutes = new Elysia({ prefix: "/classes" })
     body: t.Object({
       id: t.String(),
     }),
-  });
+  })
+  .post(
+    "/availability",
+    ({ body: { id, status } }) => setAvailability(id, status),
+    {
+      body: t.Object({
+        id: t.String(),
+        status: t.Boolean(),
+      }),
+    },
+  );

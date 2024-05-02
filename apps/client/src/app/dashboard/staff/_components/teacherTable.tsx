@@ -11,7 +11,7 @@ import type { getDefaultRoster } from "./queries";
 import { useDataTable } from "@/hooks/useDataTable";
 import { statusOptions } from "@/lib/constants";
 import { columns } from "./teacherRoster-columns";
-import { CommentToolbarActions } from "./toolbarActions";
+import { ToolbarActions } from "./toolbarActions";
 
 interface TableProps {
   dataPromise: ReturnType<typeof getDefaultRoster>;
@@ -22,7 +22,7 @@ export default function TeacherRosterTable({ dataPromise }: TableProps) {
   const data = React.use(dataPromise);
   const teacherId = data[0]?.teacherId!;
   const comment = data[0]?.comment ?? null;
-
+  const status = data[0]?.available!;
   const filterFields: DataTableFilterField<TeacherTable>[] = [
     {
       label: "Name",
@@ -47,10 +47,11 @@ export default function TeacherRosterTable({ dataPromise }: TableProps) {
   return (
     <div className="w-full space-y-2.5 overflow-auto">
       <DataTableToolbar table={table} filterFields={filterFields}>
-        <CommentToolbarActions
+        <ToolbarActions
           teacherId={teacherId}
           comment={comment}
           table={table}
+          currentStatus={status}
         />
       </DataTableToolbar>
       <DataTable table={table} />

@@ -3,19 +3,22 @@
 import type { TeacherTable } from "@/lib/types";
 import { type Table } from "@tanstack/react-table";
 
+import { AvailabilityDialog } from "./availabilityDialog";
 import { CreateCommentDialog } from "./createDialog";
 import { DeleteCommentDialog } from "./deleteDialog";
 
-interface CommentToolbarActionsProps {
+interface ToolbarActionsProps {
   teacherId: string;
   comment: string | null;
   table: Table<TeacherTable>;
+  currentStatus: boolean;
 }
 
-export function CommentToolbarActions({
+export function ToolbarActions({
   teacherId,
   comment,
-}: CommentToolbarActionsProps) {
+  currentStatus,
+}: ToolbarActionsProps) {
   return (
     <div className="flex items-center justify-evenly gap-2 gap-x-4">
       {comment ? (
@@ -31,6 +34,7 @@ export function CommentToolbarActions({
       ) : (
         <CreateCommentDialog teacherId={teacherId} />
       )}
+      <AvailabilityDialog teacherId={teacherId} currentStatus={currentStatus} />
     </div>
   );
 }
