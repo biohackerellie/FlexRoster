@@ -7,20 +7,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@local/ui/card";
 import { searchParamsValidator } from "@local/validators";
 
 import { SearchParams } from "@/hooks/types";
-import { getStudentClassesData } from "../_components/logic/queries";
-import StudentClassesTable from "../_components/tables/studentClassesTable";
+import { getStudentClassesData } from "../../_components/logic/queries";
+import StudentClassesTable from "../../_components/tables/studentClassesTable";
 
 export default async function StudentDashboard({
+  params,
   searchParams,
 }: {
+  params: { id: string };
   searchParams: SearchParams;
 }) {
-  const user = await auth();
-  if (!user) {
-    return notFound();
-  }
-  const userId = user?.user.id!;
-
+  const userId = params.id;
   const search = searchParamsValidator.parse(searchParams);
   return (
     <div>

@@ -25,13 +25,19 @@ export default middleware((req) => {
   switch (role) {
     case "student":
       if (path === "/dashboard") {
-        return NextResponse.redirect(new URL("/dashboard/student", req.url));
+        return NextResponse.redirect(
+          new URL(`/dashboard/student/${id}`, req.url),
+        );
       }
       if (path.startsWith("/dashboard/staff")) {
-        return NextResponse.redirect(new URL("/dashboard/student", req.url));
+        return NextResponse.redirect(
+          new URL(`/dashboard/student/${id}`, req.url),
+        );
       }
       if (path === "/dashboard/admin") {
-        return NextResponse.redirect(new URL("/dashboard/student", req.url));
+        return NextResponse.redirect(
+          new URL(`/dashboard/student/${id}`, req.url),
+        );
       }
       break;
     case "teacher":
