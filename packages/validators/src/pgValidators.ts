@@ -109,8 +109,9 @@ export const StudentDashboardDataValidator = z.object({
   classes: studentClassesArrayValidator,
   currentClass: z.string(),
 });
-export interface StudentDashboardData
-  extends z.infer<typeof StudentDashboardDataValidator> {}
+export type StudentDashboardData = z.infer<
+  typeof StudentDashboardDataValidator
+>;
 
 export const teacherRequestQueryValidator = z.object({
   incomingRequests: z.array(modifiedRequestValidator),

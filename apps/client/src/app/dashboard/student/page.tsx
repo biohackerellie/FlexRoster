@@ -1,3 +1,4 @@
+import type { SearchParams } from "@/hooks/types";
 import * as React from "react";
 import { notFound } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -6,7 +7,6 @@ import { auth } from "@local/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@local/ui/card";
 import { searchParamsValidator } from "@local/validators";
 
-import { SearchParams } from "@/hooks/types";
 import { getStudentClassesData } from "../_components/logic/queries";
 import StudentClassesTable from "../_components/tables/studentClassesTable";
 

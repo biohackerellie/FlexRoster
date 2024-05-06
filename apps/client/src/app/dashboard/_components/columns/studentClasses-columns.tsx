@@ -1,8 +1,8 @@
 "use client";
 
+import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
 import Link from "next/link";
-import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { MessageSquareIcon, MessageSquareOffIcon } from "lucide-react";
 

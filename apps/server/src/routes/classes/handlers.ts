@@ -30,7 +30,7 @@ type insertClassRoster = typeof schema.students.$inferInsert;
 
 export async function getClasses(id: string) {
   try {
-    let returnData: StudentDashboardData = {
+    const returnData: StudentDashboardData = {
       classes: [],
       currentClass: "",
     };

@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
+import { format } from "date-fns-tz";
 import { X } from "lucide-react";
 
-import type { Classroom, Student } from "@local/validators";
 import {
   CardContent,
   CardDescription,
@@ -82,7 +82,9 @@ export default function StudentDetails({ dataPromise }: StudentDetailsProps) {
                 <div key={key} className="text-sm">
                   <div className="flex justify-between">
                     <span className="text-md text-gray-500">
-                      {request.dateRequested}
+                      {format(request.dateRequested, "PPP", {
+                        timeZone: "America/Denver",
+                      })}
                     </span>
                     <span className="text-md text-gray-500">
                       {request.status}

@@ -90,16 +90,16 @@ export function DataTableFacetedFilter<TData, TValue>({
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
               {options.map((option) => {
-                const isSelected = selectedValues.has(option.value as string);
+                const isSelected = selectedValues.has(option.value);
 
                 return (
                   <CommandItem
-                    key={option.value as string}
+                    key={option.value}
                     onSelect={() => {
                       if (isSelected) {
-                        selectedValues.delete(option.value as string);
+                        selectedValues.delete(option.value);
                       } else {
-                        selectedValues.add(option.value as string);
+                        selectedValues.add(option.value);
                       }
                       const filterValues = Array.from(selectedValues);
                       column?.setFilterValue(
