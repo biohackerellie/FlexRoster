@@ -38,7 +38,7 @@
     "@types/node": "^20.12.7",
     "@types/pg": "^8.11.5",
     "dotenv-cli": "^7.4.1",
-    "drizzle-kit": "^0.20.17",
+    "drizzle-kit": "^0.20.18",
     "eslint": "^9.1.1",
     "pg": "^8.11.5",
     "prettier": "^3.2.5",
