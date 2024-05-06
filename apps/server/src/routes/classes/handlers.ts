@@ -64,7 +64,9 @@ export async function getClasses(id: string) {
       }
     }
     console.log("now we here");
+    console.log("id", id);
     const [student] = await userRosterQuery.execute({ id: id });
+    console.log(student);
     if (student) {
       const teacherName = formatTeacherNames(student.classrooms.teacherName);
       returnData.currentClass = `Your FLEX class today is room ${student.classrooms.roomNumber} with ${teacherName}`;
