@@ -17,6 +17,7 @@
     "lint": "bun --bun eslint",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "build": "tsc",
+    "build:local": "bun --env-file=../../.env build ./src/index.ts --outdir ./dist --target bun",
     "build:bun": "/root/.bun/bin/bun build ./src/index.ts --outdir ./dist --target bun",
     "nightly": "bun --env-file=../../.env run ./src/scripts/nightly.ts",
     "cache:reset": "bun --env-file=../../.env run ./src/scripts/nightly/redisInit.ts && bun --env-file=../../.env run ./src/scripts/nightly/cacheRosters.ts",
