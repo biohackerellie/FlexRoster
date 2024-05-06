@@ -1,3 +1,4 @@
+import { Value } from "@sinclair/typebox/value";
 import { Elysia, t } from "elysia";
 
 import { NoRequestForUError } from "~/lib/utils/Errors";

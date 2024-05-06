@@ -43,7 +43,7 @@ export const searchParamsValidator = z.object({
   page: z.number().optional(),
   limit: z.number().optional(),
   status: studentStatusSchema.optional(),
-  roomStatus: z.boolean().optional(),
+  available: z.string().optional(),
   studentName: z.string().optional(),
   teacherName: z.string().optional(),
   filter: z.string().optional(),

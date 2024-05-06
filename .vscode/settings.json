@@ -49,5 +49,11 @@
   },
   "[dotenv]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "workbench.editor.customLabels.patterns": {
+    "apps/**/src/**/page.tsx": "${dirname}/📄",
+    "apps/**/src/**/layout.tsx": "${dirname}/${filename}",
+    "apps/**/src/routes/**/index.ts": "${dirname}/${filename}",
+    "apps/server/src/routes/**/handlers.ts": "${dirname}/${filename}"
   }
 }

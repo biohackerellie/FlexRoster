@@ -42,3 +42,14 @@ export const statusOptions = [
     value: "transferredA",
   },
 ];
+
+export const studentStatusOptions = [
+  {
+    label: "Available",
+    value: "true",
+  },
+  {
+    label: "Not Available",
+    value: "false",
+  },
+];

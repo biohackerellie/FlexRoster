@@ -17,8 +17,6 @@ export async function getClassRoomKV(key: string): Promise<string | null> {
   return result;
 }
 
-
-
 export async function getRequestKV(key: string): Promise<string | null> {
   const client = createClient();
   const result = await client.get(`request:${key}`);

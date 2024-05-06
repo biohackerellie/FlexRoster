@@ -1,7 +1,7 @@
 "use client";
 
 import type { TeacherTable } from "@/lib/types";
-import type {Table} from "@tanstack/react-table";
+import type { Table } from "@tanstack/react-table";
 
 import { AvailabilityDialog } from "./availabilityDialog";
 import { CreateCommentDialog } from "./createDialog";

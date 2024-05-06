@@ -134,8 +134,11 @@ export async function getStudentClassesData(
       student.teacherName.toLowerCase().includes(searchLower),
     );
   }
-  if (search.roomStatus) {
-    tableData = tableData.filter((student) => student.available);
+  if (search.available) {
+    const searchLower = search.available.toLowerCase();
+    tableData = tableData.filter((student) =>
+      student.available.toString().toLowerCase().includes(searchLower),
+    );
   }
 
   return { tableData, currentClass };

@@ -30,14 +30,14 @@ type insertClassRoster = typeof schema.students.$inferInsert;
 
 export async function getClasses(id: string) {
   try {
-    let returnData: StudentDashboardData = {
+    const returnData: StudentDashboardData = {
       classes: [],
       currentClass: "",
     };
 
     const studentCacheKey = `StudentCache-${id}`;
     const cachedStudentData = await getKV(studentCacheKey);
-    console.log(cachedStudentData);
+
     if (cachedStudentData) {
       const validatedStudentData = StudentDashboardDataValidator.parse(
         JSON.parse(cachedStudentData),
@@ -56,15 +56,16 @@ export async function getClasses(id: string) {
       returnData.classes = formatClasses(validatedClasses, id);
     } else {
       const dbData = await classroomsQuery.execute({});
-      console.log(dbData);
+
       if (dbData?.length) {
         const parsedData = studentClassesArrayValidator.parse(dbData);
         await setKV(classesKey, JSON.stringify(parsedData), 1200);
         returnData.classes = formatClasses(parsedData, id);
       }
     }
-    console.log("now we here");
+
     const [student] = await userRosterQuery.execute({ id: id });
+    console.log(student);
     if (student) {
       const teacherName = formatTeacherNames(student.classrooms.teacherName);
       returnData.currentClass = `Your FLEX class today is room ${student.classrooms.roomNumber} with ${teacherName}`;
@@ -97,6 +98,7 @@ export async function getClassById(id: string) {
 
 export async function resetOneClass(userId: string) {
   try {
+    const cacheKey = getHashKey(`TeacherRoster-${userId}`);
     const classroomId = await getClassroomIdByTeacher.execute({
       teacherId: userId,
     });
@@ -136,6 +138,7 @@ export async function resetOneClass(userId: string) {
     for (const s of mappedStudents) {
       defaultRoster.push(s);
     }
+    await clearKV(cacheKey);
     await db.transaction(async (tx) => {
       await tx
         .delete(schema.students)

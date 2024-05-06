@@ -1,6 +1,6 @@
 import { NotFoundError } from "elysia";
 
-import type { Requests, Student, User } from "@local/validators";
+import type { Request, Student, User } from "@local/validators";
 import { db, eq, schema, sql } from "@local/db";
 
 import {
@@ -47,7 +47,7 @@ export async function getStudentDetails(id: string) {
     if (!student) {
       throw new NotFoundError("No student found with that ID");
     }
-    let requests: Requests[] = [];
+    let requests: Request[] = [];
     if (student.user) {
       requests = await allStudentRequests.execute({
         studentId: student.user.id,

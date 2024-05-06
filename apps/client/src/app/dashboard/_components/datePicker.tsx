@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import type { DatePickerSchema } from "@local/validators";
 import { cn } from "@local/ui";
 import { Button } from "@local/ui/button";
 import { Calendar } from "@local/ui/calendar";
@@ -32,7 +31,6 @@ import {
   FormMessage,
 } from "@local/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@local/ui/popover";
-import { datePickerSchema } from "@local/validators";
 
 import { getErrorMessage } from "@/lib/errorHandler";
 import { RequestRoom } from "./logic/actions";
@@ -41,6 +39,13 @@ interface DatePickerFormProps {
   id: string;
 }
 
+const datePickerSchema = z.object({
+  requestedDate: z.date({
+    required_error: "Requested date is required",
+  }),
+});
+type DatePickerSchema = z.infer<typeof datePickerSchema>;
+
 export function DatePickerForm({ id }: DatePickerFormProps) {
   const [open, setOpen] = React.useState(false);
   const [isRequestPending, startRequestTransition] = React.useTransition();
@@ -48,6 +53,11 @@ export function DatePickerForm({ id }: DatePickerFormProps) {
   const form = useForm<DatePickerSchema>({
     resolver: zodResolver(datePickerSchema),
   });
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const futureLimit = new Date();
+  futureLimit.setDate(today.getDate() + 7);
 
   function onSubmit(input: DatePickerSchema) {
     startRequestTransition(() => {
@@ -120,8 +130,11 @@ export function DatePickerForm({ id }: DatePickerFormProps) {
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
+                          date > futureLimit ||
+                          date < today ||
+                          date.getDay() === 6 ||
+                          date.getDay() === 0
+                        } // disable past dates // weekends // and 7 days in advance
                         initialFocus
                       />
                     </PopoverContent>

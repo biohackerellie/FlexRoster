@@ -1,4 +1,5 @@
 import React from "react";
+import { unstable_noStore as noStore } from "next/cache";
 import { format, toZonedTime } from "date-fns-tz";
 import { Loader2 } from "lucide-react";
 
@@ -91,13 +92,14 @@ export default async function RequestsPage({
 }
 
 async function getRequests(teacherId: string) {
+  noStore();
   const { data, error } = await client.api.requests
     .teacher({ userId: teacherId })
     .get();
   if (error) {
     console.error(error);
   }
-
+  console.log("requests", data);
   return data;
 }
 function RequestComponent(request: Request) {
