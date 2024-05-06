@@ -67,7 +67,7 @@ export async function getRostersById(id: string) {
 export async function getTeacherRoster(userId: string) {
   try {
     let data: TeacherRoster[] = [];
-    const cacheKey = getHashKey(`TeacherRoster-${userId}`);
+    const cacheKey = `TeacherRoster-${userId}`
     const cachedData = await getKV(cacheKey);
     if (cachedData) {
       const cacheArray = JSON.parse(cachedData);

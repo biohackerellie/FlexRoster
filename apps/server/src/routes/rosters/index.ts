@@ -5,7 +5,6 @@ import {
   getRostersById,
   getTeacherRoster,
   setAttendance,
-  setStudentRoster,
 } from "./handlers";
 
 export const rosterRoutes = new Elysia({ prefix: "/rosters" })

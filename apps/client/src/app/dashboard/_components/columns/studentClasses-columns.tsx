@@ -10,7 +10,9 @@ import type { StudentClasses } from "@local/validators";
 import { Badge } from "@local/ui/badge";
 import { Button } from "@local/ui/button";
 import { DataTableColumnHeader } from "@local/ui/data-table-column-header";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
+import { studentStatusOptions } from "@/lib/constants";
 import { DatePickerForm } from "../datePicker";
 
 export function columns(): ColumnDef<StudentClasses>[] {
@@ -20,12 +22,14 @@ export function columns(): ColumnDef<StudentClasses>[] {
       header: ({ column }) => {
         return <DataTableColumnHeader column={column} title="Room Number" />;
       },
+      size: 5,
     },
     {
       accessorKey: "teacherName",
       header: ({ column }) => {
         return <DataTableColumnHeader column={column} title="Teacher Name" />;
       },
+      size: 5,
     },
     {
       accessorKey: "available",
@@ -33,41 +37,44 @@ export function columns(): ColumnDef<StudentClasses>[] {
         return <DataTableColumnHeader column={column} title="Available" />;
       },
       cell: ({ row }) => {
-        const available = row.original.available;
-        if (!available) {
+        const available = studentStatusOptions.find(
+          (status) => status.value === row.original.available.toString(),
+        );
+
+        if (available?.value === "false") {
           return <Badge variant="destructive">Not Available</Badge>;
         } else {
-          return (
-            <span className="flex items-center bg-green-600/80">
-              <Badge variant="outline">Available</Badge>
-            </span>
-          );
+          return <Badge variant="success">Available</Badge>;
         }
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
       },
+      size: 5,
     },
-    // {
-    //   accessorKey: "teacherId",
-    //   header: ({ column }) => {
-    //     return <DataTableColumnHeader column={column} title="Transfer" />;
-    //   },
-    //   cell: ({ row }) => {
-    //     const teacherId = row.original.teacherId;
-    //     const available = row.original.available;
-    //     if (!available) {
-    //       return (
-    //         <Button variant="outline" disabled className="cursor-not-allowed">
-    //           Transfer
-    //         </Button>
-    //       );
-    //     } else {
-    //       return <DatePickerForm id={teacherId} />;
-    //     }
-    //   },
-    //   enableSorting: false,
-    // },
+    {
+      accessorKey: "teacherId",
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Transfer" />;
+      },
+      cell: ({ row }) => {
+        const teacherId = row.original.teacherId;
+
+        const available = row.original.available;
+        if (!available) {
+          return (
+            // <DatePickerForm id={teacherId} />
+            <Button variant="outline" disabled className="cursor-not-allowed">
+              Transfer
+            </Button>
+          );
+        } else {
+          return <DatePickerForm id={teacherId} />;
+        }
+      },
+      enableSorting: false,
+      size: 5,
+    },
     {
       accessorKey: "chatId",
       header: ({ column }) => {
@@ -89,6 +96,30 @@ export function columns(): ColumnDef<StudentClasses>[] {
             </Link>
           </Button>
         );
+      },
+      size: 5,
+    },
+    {
+      accessorKey: "comment",
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Note" />;
+      },
+      cell: ({ row }) => {
+        const comment = row.original.comment;
+        if (comment) {
+          return (
+            <Tooltip>
+              <TooltipTrigger className="cursor-pointer" asChild>
+                <span className="text-md text-ellipsis text-nowrap font-normal ">
+                  {comment}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>{comment}</TooltipContent>
+            </Tooltip>
+          );
+        } else {
+          return <div className="text-gray-600">...</div>;
+        }
       },
     },
   ];

@@ -9,7 +9,7 @@ import { DataTableToolbar } from "@local/ui/data-table-toolbar";
 
 import type { getStudentClassesData } from "../logic/queries";
 import { useDataTable } from "@/hooks/useDataTable";
-import { statusOptions } from "@/lib/constants";
+import { studentStatusOptions } from "@/lib/constants";
 import { columns } from "../columns/studentClasses-columns";
 
 interface TableProps {
@@ -29,11 +29,16 @@ export default function StudentClassesTable({ dataPromise }: TableProps) {
     {
       label: "Status",
       value: "available",
-      options: statusOptions.map((status) => ({
-        label: status?.label.toUpperCase(),
-        value: status?.value,
-        withCount: false,
-      })),
+      options: [
+        {
+          label: "Available",
+          value: "true",
+        },
+        {
+          label: "Not Available",
+          value: "false",
+        },
+      ],
     },
   ];
   const { table } = useDataTable({

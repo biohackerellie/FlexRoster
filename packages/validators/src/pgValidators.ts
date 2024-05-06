@@ -63,10 +63,13 @@ export const allStudentsArrayValidator = z.array(AllStudentValidator);
 export type AllStudents = z.infer<typeof AllStudentValidator>;
 
 export const requestValidator = createSelectSchema(schema.requests);
-export const requestArrayValidator = z.array(requestValidator);
+export const modifiedRequestValidator = requestValidator.extend({
+  dateRequested: z.union([z.string().datetime({ offset: true }), z.date()]),
+});
+export const requestArrayValidator = z.array(modifiedRequestValidator);
 export const insertRequestsValidator = createInsertSchema(schema.requests);
 
-export type Request = z.infer<typeof requestValidator>;
+export type Request = z.infer<typeof modifiedRequestValidator>;
 
 export interface JoinedStudentUser {
   students?: Student;
@@ -108,3 +111,10 @@ export const StudentDashboardDataValidator = z.object({
 });
 export interface StudentDashboardData
   extends z.infer<typeof StudentDashboardDataValidator> {}
+
+export const teacherRequestQueryValidator = z.object({
+  incomingRequests: z.array(modifiedRequestValidator),
+  outgoingRequests: z.array(modifiedRequestValidator),
+});
+
+export type TeacherRequestQuery = z.infer<typeof teacherRequestQueryValidator>;

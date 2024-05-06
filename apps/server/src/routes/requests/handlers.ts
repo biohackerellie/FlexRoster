@@ -1,19 +1,14 @@
 import { NotFoundError } from "elysia";
 
-import type { Logs, Request } from "@local/validators";
-import { db, eq, schema, sql } from "@local/db";
-import { requestArrayValidator, requestValidator } from "@local/validators";
-
+import type { Logs, Request, TeacherRequestQuery } from "@local/validators";
+import { db, eq, schema } from "@local/db";
 import {
-  clearKV,
-  deleteSet,
-  getKV,
-  getRequestSet,
-  newLog,
-  newRequestSet,
-  removeSingleRequest,
-  setKV,
-} from "~/lib/redis";
+  requestArrayValidator,
+  requestValidator,
+  teacherRequestQueryValidator,
+} from "@local/validators";
+
+import { clearKV, getKV, newLog, setKV } from "~/lib/redis";
 import {
   getClassroomIdByTeacher,
   userQuery,
@@ -33,11 +28,27 @@ export async function newRequest({
   dateRequested,
 }: newRequestProps) {
   try {
-    const studentRequestKey = getHashKey(`requests:${studentId}`);
-    await clearKV(studentRequestKey);
-    const dbRequests = await getRequests(studentId!);
-    if (dbRequests && dbRequests.length > 0) {
-      for (const r of dbRequests) {
+    const studentRequestKey = `requests:${studentId}`;
+    const teacherRequestKey = `requests:${newTeacher}:teacher`;
+    console.log(
+      "studentId",
+      studentId,
+      "newTeacher",
+      newTeacher,
+      "dateRequested",
+      dateRequested,
+    );
+
+    let requests: Request[] = [];
+
+    const kvRequests = await getKV(studentRequestKey);
+    if (kvRequests) {
+      requests = requestArrayValidator.parse(JSON.parse(kvRequests));
+    } else {
+      requests = await userRequestQuery.execute({ userId: studentId });
+    }
+    if (requests.length > 0) {
+      for (const r of requests) {
         if (r.dateRequested === dateRequested!) {
           if (r.status !== "denied") {
             throw new NoRequestForUError(
@@ -47,6 +58,8 @@ export async function newRequest({
         }
       }
     }
+    await clearKV(studentRequestKey);
+    await clearKV(teacherRequestKey);
     const studentRaw = await userRosterQuery.execute({ id: studentId });
     if (studentRaw.length === 0) {
       throw new NotFoundError("No student found with that ID");
@@ -70,12 +83,13 @@ export async function newRequest({
       currentTeacherName,
       newTeacher: newTeacher!,
       newTeacherName: newTeacherData?.name!,
+      arrived: null,
       timestamp,
+      id: Math.floor(Math.random() * 1000000),
     };
     const validatedRequest = requestValidator.parse(requestData);
-
+    console.log("made it this far");
     await db.insert(schema.requests).values(validatedRequest);
-
     const log: Logs = {
       type: "request",
       action: `${student?.user?.name} requested to transfer to ${newTeacherData?.name} from ${currentTeacherName} at ${timestamp}`,
@@ -93,44 +107,53 @@ export async function newRequest({
 }
 
 export async function getTeacherRequests(userId: string) {
+  const teacherRequestKey = getHashKey(`requests:${userId}:teacher`);
   try {
-    const incomingRequests = [];
-    const outgoingRequests = [];
-    // const cacheRequests = await getRequestSet(userId);
-    // console.log("cacheRequests", cacheRequests);
-    // if (cacheRequests) {
-    //   for (const request of cacheRequests) {
-    //     if (request.newTeacher === userId) {
-    //       incomingRequests.push(request);
-    //     } else if (request.currentTeacher === userId) {
-    //       outgoingRequests.push(request);
-    //     }
-    //   }
-    //   return { incomingRequests, outgoingRequests };
-    // } else {
-    const requests = await userRequestQuery.execute({ userId: userId });
-    console.log("requests", requests);
-    if (requests.length === 0) {
-      return;
+    const cacheRequests = await getKV(teacherRequestKey);
+    if (cacheRequests) {
+      console.log("cacheHit");
+      console.log(JSON.parse(cacheRequests));
+      return teacherRequestQueryValidator.parse(JSON.parse(cacheRequests));
     }
-    for (const request of requests) {
-      if (request.status === "pending") {
-        await newRequestSet(userId, request);
-        if (request.newTeacher === userId) {
-          incomingRequests.push(request);
-        } else if (request.currentTeacher === userId) {
-          outgoingRequests.push(request);
-        }
+  } catch (e) {
+    console.error("Error retrieving from cache", e);
+  }
+  try {
+    console.log("cacheMiss");
+    const requests = await userRequestQuery.execute({ userId: userId });
+    if (requests.length === 0) {
+      return { incomingRequests: [], outgoingRequests: [] };
+    }
+    const incomingRequests: Request[] = [];
+    const outgoingRequests: Request[] = [];
+    const pendingRequests = requests.filter((r) => r.status === "pending");
+
+    for (const request of pendingRequests) {
+      if (request.newTeacher === userId) {
+        incomingRequests.push(request);
+      } else if (request.currentTeacher === userId) {
+        outgoingRequests.push(request);
       }
     }
-    return { incomingRequests, outgoingRequests };
-  } catch (e) {
-    console.error(e);
-    if (e instanceof Error) {
-      throw new Error(e.message);
-    } else {
-      throw new Error("Unknown error");
+
+    const validatedRequests = teacherRequestQueryValidator.parse({
+      incomingRequests,
+      outgoingRequests,
+    });
+
+    try {
+      await setKV(teacherRequestKey, JSON.stringify(validatedRequests));
+    } catch (e) {
+      console.error("Error writing to cache", e);
     }
+    return validatedRequests;
+  } catch (e) {
+    console.error("Error processing requests", e);
+    throw new Error(
+      e instanceof Error
+        ? e.message
+        : "Unknown error during request processing",
+    );
   }
 }
 
@@ -187,7 +210,7 @@ export async function requestApproval(
       throw new NotFoundError("No classroom found with that teacherId");
 
     // update request status
-    const updated: string | undefined = await db.transaction(async (tx) => {
+    await db.transaction(async (tx) => {
       if (status === "approved") {
         // if approved update student's classroomId in db
         await tx
@@ -203,24 +226,24 @@ export async function requestApproval(
         .update(schema.requests)
         .set({ status: status })
         .where(eq(schema.requests.id, parseInt(requestId)));
-      const [request] = await tx
+      await tx
         .select({ timestamp: schema.requests.timestamp })
         .from(schema.requests)
         .where(eq(schema.requests.id, parseInt(requestId)));
-      return request?.timestamp;
     });
-    // clear request cache
-    await removeSingleRequest(student.user.id, updated);
-    await removeSingleRequest(teacherId, updated);
-    await removeSingleRequest(newTeacherId, updated);
-    // log request approval
+
     const log: Logs = {
       user: newTeacherId,
       type: "request",
       action: `User ${newTeacherId} ${status} request ${requestId} for student ${student.user.id} from teacher ${teacherId} to teacher ${newTeacherId}`,
     };
-    await newLog(log);
 
+    await Promise.all([
+      clearKV(`requests:${studentId}`),
+      clearKV(`requests:${teacherId}:teacher`),
+      clearKV(`requests:${newTeacherId}:teacher`),
+      newLog(log),
+    ]);
     return new Response("OK", { status: 200 });
   } catch (e) {
     throw new NotFoundError("No requests found");
