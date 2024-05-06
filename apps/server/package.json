@@ -47,7 +47,7 @@
     "@types/node": "^20.12.10",
     "bun-types": "^1.1.6",
     "dotenv-cli": "^7.4.1",
-    "eslint": "^9.1.1",
+    "eslint": "^9.2.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5"
   },
