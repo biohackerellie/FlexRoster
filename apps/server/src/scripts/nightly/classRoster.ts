@@ -70,7 +70,7 @@ export async function RosterSync() {
     if (requests && requests.length > 0) {
       for (const r of requests) {
         if (
-          r.requests.dateRequested === today &&
+          r.requests.dateRequested.toISOString().split("T")[0] === today &&
           r.requests.status === "approved"
         ) {
           studentsWithRequestToday.push({
