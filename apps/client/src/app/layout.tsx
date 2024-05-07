@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Viewport } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 
@@ -15,6 +16,10 @@ export const metadata: Metadata = {
   creator: "Ellie Kerns",
 };
 
+export const viewport: Viewport = {
+  themeColor: "black",
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -23,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${GeistSans.variable} ${GeistMono.variable} h-full w-full  items-center justify-center  bg-white bg-grid-small-black/[0.2]  dark:bg-black dark:bg-grid-small-white/[0.2]`}
+        className={`${GeistSans.variable} ${GeistMono.variable} h-full max-h-screen w-auto items-center justify-center  bg-white bg-grid-small-black/[0.2]  dark:bg-black dark:bg-grid-small-white/[0.2]`}
       >
         <ThemeProvider
           attribute="class"

@@ -25,18 +25,28 @@ export function DataTableColumnHeader<TData, TValue>({
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
     return (
-      <div className={cn("flex items-center space-x-2 text-lg", className)}>
+      <div
+        className={cn(
+          "flex items-center space-x-2 text-sm sm:text-lg",
+          className,
+        )}
+      >
         {title}
       </div>
     );
   }
 
   return (
-    <div className={cn(`text-lg, flex items-center space-x-2`, className)}>
+    <div
+      className={cn(
+        `items-center text-sm sm:flex sm:space-x-2 sm:text-lg`,
+        className,
+      )}
+    >
       <Button
         variant="ghost"
         size="sm"
-        className="-ml-3 h-8 text-lg  data-[state=open]:bg-accent"
+        className="-ml-3 h-8 text-sm  data-[state=open]:bg-accent  sm:text-lg"
         onClick={() => {
           column.toggleSorting();
         }}

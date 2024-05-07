@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@local/ui/card";
+import { Shell } from "@local/ui/shell";
 import { searchParamsValidator } from "@local/validators";
 
 import { getRosters } from "../_components/logic/queries";

@@ -43,7 +43,7 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
       links = secLinks;
       break;
     case "admin":
-      links = teacherLinks;
+      links = studentLinks;
       break;
     default:
       links = studentLinks;

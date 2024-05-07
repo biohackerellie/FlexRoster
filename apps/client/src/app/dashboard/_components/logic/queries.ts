@@ -143,3 +143,17 @@ export async function getStudentClassesData(
 
   return { tableData, currentClass };
 }
+
+export async function getStudentRequests(userId: string) {
+  noStore();
+  const { data, error } = await client.api.requests
+    .student({ userId: userId })
+    [""].get();
+  if (error) {
+    console.error(error);
+  }
+  if (!data) {
+    return [];
+  }
+  return data;
+}

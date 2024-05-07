@@ -3,8 +3,11 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
 import Link from "next/link";
-import { format } from "date-fns";
-import { MessageSquareIcon, MessageSquareOffIcon } from "lucide-react";
+import {
+  CalendarIcon,
+  MessageSquareIcon,
+  MessageSquareOffIcon,
+} from "lucide-react";
 
 import type { StudentClasses } from "@local/validators";
 import { Badge } from "@local/ui/badge";
@@ -14,27 +17,58 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
 import { studentStatusOptions } from "@/lib/constants";
 import { DatePickerForm } from "../datePicker";
+import TeacherMessage from "../teacherNoteDialog";
 
-export function columns(): ColumnDef<StudentClasses>[] {
+export function columns(desktop: boolean): ColumnDef<StudentClasses>[] {
   return [
     {
       accessorKey: "roomNumber",
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Room Number" />;
+        if (desktop) {
+          return (
+            <DataTableColumnHeader
+              column={column}
+              title={desktop ? "Room Number" : ""}
+            />
+          );
+        } else {
+          column.toggleVisibility(false);
+        }
       },
-      size: 5,
+      size: 1,
     },
     {
       accessorKey: "teacherName",
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Teacher Name" />;
+        return (
+          <DataTableColumnHeader
+            column={column}
+            title={desktop ? "Teacher Name" : ""}
+          />
+        );
       },
-      size: 5,
+      cell: ({ row }) => {
+        const teacherName = lastName(row.original.teacherName)!;
+        const message = row.original.comment;
+        if (desktop) return teacherName;
+        else {
+          if (message) {
+            return (
+              <TeacherMessage teacherName={teacherName} message={message} />
+            );
+          } else return teacherName;
+        }
+      },
+      size: 1,
     },
     {
       accessorKey: "available",
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Available" />;
+        if (desktop) {
+          return <DataTableColumnHeader column={column} title="Available" />;
+        } else {
+          column.toggleVisibility(false);
+        }
       },
       cell: ({ row }) => {
         const available = studentStatusOptions.find(
@@ -50,12 +84,17 @@ export function columns(): ColumnDef<StudentClasses>[] {
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
       },
-      size: 5,
+      size: 1,
     },
     {
       accessorKey: "teacherId",
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Transfer" />;
+        return (
+          <DataTableColumnHeader
+            column={column}
+            title={desktop ? "Transfer" : ""}
+          />
+        );
       },
       cell: ({ row }) => {
         const teacherId = row.original.teacherId;
@@ -64,8 +103,13 @@ export function columns(): ColumnDef<StudentClasses>[] {
         if (!available) {
           return (
             // <DatePickerForm id={teacherId} />
-            <Button variant="outline" disabled className="cursor-not-allowed">
-              Transfer
+            <Button
+              variant="destructive"
+              disabled
+              className="cursor-not-allowed"
+              size={desktop ? "default" : "sm"}
+            >
+              {desktop ? "Transfer" : <CalendarIcon />}
             </Button>
           );
         } else {
@@ -73,12 +117,17 @@ export function columns(): ColumnDef<StudentClasses>[] {
         }
       },
       enableSorting: false,
-      size: 5,
+      size: 1,
     },
     {
       accessorKey: "chatId",
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Chat" />;
+        return (
+          <DataTableColumnHeader
+            column={column}
+            title={desktop ? "Chat" : ""}
+          />
+        );
       },
       cell: ({ row }) => {
         const chatId = row.original.chatId;
@@ -97,12 +146,17 @@ export function columns(): ColumnDef<StudentClasses>[] {
           </Button>
         );
       },
-      size: 5,
+      size: 1,
+      enableSorting: false,
     },
     {
       accessorKey: "comment",
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Note" />;
+        if (desktop) {
+          return <DataTableColumnHeader column={column} title="Note" />;
+        } else {
+          column.toggleVisibility(false);
+        }
       },
       cell: ({ row }) => {
         const comment = row.original.comment;
@@ -121,6 +175,11 @@ export function columns(): ColumnDef<StudentClasses>[] {
           return <div className="text-gray-600">...</div>;
         }
       },
+      size: 1,
     },
   ];
+}
+
+function lastName(name: string) {
+  return name.split(" ")[1];
 }
