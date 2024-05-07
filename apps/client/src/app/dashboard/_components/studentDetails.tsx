@@ -72,6 +72,7 @@ export default function StudentDetails({ dataPromise }: StudentDetailsProps) {
           <div className="text-sm">{status}</div>
         </div>
       </div>
+
       <Separator className="my-4" />
       <CardFooter className="justify-center">
         <ScrollArea className="h-72 w-full rounded-md border shadow-sm">

@@ -102,7 +102,7 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      <div className="flex items-center gap-2">{children}</div>
+      <div className="hidden items-center gap-2 sm:flex">{children}</div>
     </div>
   );
 }

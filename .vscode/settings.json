@@ -6,7 +6,7 @@
   "editor.smoothScrolling": true,
   "workbench.list.smoothScrolling": true,
   "terminal.integrated.smoothScrolling": true,
-  "editor.fontFamily": "FiraCode Nerd Font Mono",
+
   "editor.tabSize": 2,
   "editor.wordWrap": "on",
   "editor.codeActionsOnSave": {
@@ -33,7 +33,10 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.linkedEditing": true,
   "editor.mouseWheelZoom": true,
-  "editor.fontLigatures": true,
+  "editor.fontFamily": "Cascadia Code", // =>
+  "editor.accessibilitySupport": "off",
+  "editor.detectIndentation": false,
+  "editor.fontLigatures": "'calt', 'ss01'",
   "[python]": {
     "editor.insertSpaces": true,
 

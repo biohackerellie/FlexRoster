@@ -3,7 +3,7 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { ArrowLeftRightIcon, CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -87,7 +87,8 @@ export function DatePickerForm({ id }: DatePickerFormProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
-          Transfer
+          <a className="hidden sm:inline-block ">Transfer</a>
+          <CalendarIcon className="sm:hidden" />
         </Button>
       </DialogTrigger>
       <DialogContent>

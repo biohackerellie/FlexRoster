@@ -29,7 +29,7 @@ interface ClassListProps {
 
 export function ClassListComponent({ data }: ClassListProps) {
   const [open, setOpen] = React.useState(false);
-  // const isDesktop = useMediaQuery("(min-width: 768px)");
+  // 
 
   return (
     <>
