@@ -6,7 +6,6 @@ import * as React from "react";
 import type { AllStudents } from "@local/validators";
 import { DataTable } from "@local/ui/data-table-students";
 import { DataTableToolbar } from "@local/ui/data-table-toolbar";
-import { searchParamsValidator, studentStatusSchema } from "@local/validators";
 
 import type { getTableData } from "../logic/queries";
 import { useDataTable } from "@/hooks/useDataTable";

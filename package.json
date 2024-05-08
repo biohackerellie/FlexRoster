@@ -5,7 +5,8 @@
   "workspaces": [
     "packages/*",
     "apps/*",
-    "tooling/*"
+    "tooling/*",
+		"cli"
   ],
   "scripts": {
     "build": "turbo run build",
@@ -29,8 +30,9 @@
     "typecheck": "turbo typecheck",
     "ui-add": "pnpm -F ui ui-add"
   },
-  "devDependencies": {
+  "dependencies": {
     "@local/prettier-config": "workspace:*",
+		"@total-typescript/ts-reset": "^0.5.1",
     "@turbo/gen": "^1.13.3",
     "prettier": "^3.2.5",
     "turbo": "^1.13.3",

@@ -27,27 +27,24 @@ export default async function StudentDashboard({
   const userId = session?.user?.id;
   const search = searchParamsValidator.parse(searchParams);
   return (
-    <div>
-      <Card className="border-none bg-transparent sm:border sm:bg-inherit">
-        <CardHeader>
-          <CardTitle className="hidden sm:inline-block">
-            Available Classes
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid justify-center align-middle sm:inline-block sm:justify-normal">
-          <React.Suspense
-            fallback={<Loader2 className="h-4 w-4 animate-spin" />}
-          >
-            <StudentClassesTable
-              dataPromise={getStudentClassesData(userId, search)}
-            />
-          </React.Suspense>
-          <div className="mt-4 sm:hidden">
+    <div className="flex justify-center align-middle">
+      <Card className=" fixed top-1/4 border-none bg-transparent sm:relative sm:top-0 sm:w-full sm:border sm:bg-inherit">
+        <CardContent className=" xl:gap-y-4">
+          <div className="">
             <React.Suspense
               fallback={<Loader2 className="h-4 w-4 animate-spin" />}
             >
               <StudentRequestsComponent
                 dataPromise={getStudentRequests(userId)}
+              />
+            </React.Suspense>
+          </div>
+          <div>
+            <React.Suspense
+              fallback={<Loader2 className="h-4 w-4 animate-spin" />}
+            >
+              <StudentClassesTable
+                dataPromise={getStudentClassesData(userId, search)}
               />
             </React.Suspense>
           </div>

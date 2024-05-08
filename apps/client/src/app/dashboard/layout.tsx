@@ -15,7 +15,6 @@ import {
 import { Button } from "@local/ui/button";
 import { Shell } from "@local/ui/shell";
 
-import { ModeToggle } from "@/components/darkmodeToggle";
 import { Navbar } from "@/components/navbar";
 import { greetings } from "@/lib/constants";
 
@@ -35,50 +34,15 @@ export default async function staffDashboard({
   const greeting = role === "student" ? getRandomGreeting() : "Hello, ";
   const userId = session?.user?.id;
   const firstName = session?.user?.name!.split(" ")[0] ?? "";
+
   return (
-    <Shell>
-      <div className="flex max-h-screen w-full flex-col   ">
-        <div className="flex flex-col sm:gap-4 sm:py-2 sm:pl-14">
-          <div className=" static top-0 z-30 flex h-14 items-center gap-4 border-b  px-4 sm:h-auto sm:border-0 sm:px-6">
-            <h1 className="z-20 bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text text-2xl font-bold">
-              {greeting} {firstName}
-            </h1>
-          </div>
-          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-            <div className="hidden items-center sm:flex">
-              <Navbar role={role} userId={userId} />
-              <div className="ml-auto flex items-center gap-2">
-                {role === "teacher" && (
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button size="sm" className="h-8 gap-1">
-                        <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                          Reset Roster
-                        </span>
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Reset Roster</AlertDialogTitle>
-                      </AlertDialogHeader>
-                      <AlertDialogDescription>
-                        This will reset your roster to your class default.{" "}
-                        <br /> <strong>This action cannot be undone</strong>.
-                      </AlertDialogDescription>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Reset</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                )}
-                <ModeToggle />
-              </div>
-            </div>
-            {children}
-          </main>
-        </div>
+    <div className="flex min-h-screen w-full flex-col   ">
+      <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+        <Navbar userId={userId} role={role} />
+      </aside>
+      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+        <Shell>{children}</Shell>
       </div>
-    </Shell>
+    </div>
   );
 }
