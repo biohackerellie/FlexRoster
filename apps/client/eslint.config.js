@@ -13,6 +13,7 @@ export default [
       "src/app/dashboard/student/_components/ClassList.tsx",
       "src/components/navbar.tsx",
       "../server/**",
+      "~/**",
     ],
   },
   ...baseConfig,

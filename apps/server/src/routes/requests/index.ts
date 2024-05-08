@@ -19,7 +19,7 @@ export const requestRoutes = new Elysia({ prefix: "/requests" })
       }
     }
   })
-  .get("/student/:userId/", ({ params: { userId } }) => getRequests(userId), {
+  .get("/student/:userId", ({ params: { userId } }) => getRequests(userId), {
     params: t.Object({
       userId: t.String(),
     }),

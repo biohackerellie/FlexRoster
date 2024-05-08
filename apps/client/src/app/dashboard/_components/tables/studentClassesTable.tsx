@@ -31,6 +31,7 @@ interface TableProps {
 
 export default function StudentClassesTable({ dataPromise }: TableProps) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
+
   const tableColumns = React.useMemo(() => columns(isDesktop), []);
   const data = React.use(dataPromise);
 

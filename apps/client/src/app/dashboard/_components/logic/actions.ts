@@ -20,7 +20,7 @@ import { pusherServer } from "@/lib/pusher";
 import { toPusherKey } from "@/lib/utils";
 
 export async function Attendance(studentId: string) {
-  const { data: res, error } = await client.api.rosters.attendance[""].post({
+  const { data: res, error } = await client.api.rosters.attendance.post({
     studentId: studentId,
   });
 

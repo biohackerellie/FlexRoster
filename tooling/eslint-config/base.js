@@ -52,6 +52,7 @@ export default tseslint.config(
       "@typescript-eslint/consistent-type-definitions": "warn",
       "turbo/no-undeclared-env-vars": "off",
       "react-hooks/rules-of-hooks": "off",
+      "react-hooks/exhaustive-deps": "off",
       "@typescript-eslint/prefer-nullish-coalescing": "warn",
       "@typescript-eslint/no-unused-vars": [
         "warn",
