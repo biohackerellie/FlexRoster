@@ -6,7 +6,6 @@ import { notFound } from "next/navigation";
 import type { TableSearchParams } from "@local/validators";
 
 import { client } from "@/lib/eden";
-import { chatHrefConstructor } from "@/lib/utils";
 
 export async function getTableData(search: TableSearchParams) {
   noStore();
@@ -148,7 +147,7 @@ export async function getStudentRequests(userId: string) {
   noStore();
   const { data, error } = await client.api.requests
     .student({ userId: userId })
-    [""].get();
+    .get();
   if (error) {
     console.error(error);
   }

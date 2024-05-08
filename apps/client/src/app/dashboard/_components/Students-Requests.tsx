@@ -28,8 +28,8 @@ import { Input } from "@local/ui/input";
 import { Label } from "@local/ui/label";
 import { ScrollArea, ScrollBar } from "@local/ui/scroll-area";
 
+import type { getStudentRequests } from "./logic/queries";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { getStudentRequests } from "./logic/queries";
 
 export function StudentRequestsComponent({
   dataPromise,

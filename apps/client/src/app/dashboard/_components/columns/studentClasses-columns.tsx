@@ -102,7 +102,6 @@ export function columns(desktop: boolean): ColumnDef<StudentClasses>[] {
         const available = row.original.available;
         if (!available) {
           return (
-            // <DatePickerForm id={teacherId} />
             <Button
               variant="destructive"
               disabled
