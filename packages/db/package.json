@@ -37,7 +37,7 @@
     "@local/tsconfig": "workspace:*",
     "@types/node": "^20.12.10",
     "@types/pg": "^8.11.6",
-    "dotenv-cli": "^7.4.1",
+    "dotenv-cli": "^7.4.2",
     "drizzle-kit": "^0.20.18",
     "eslint": "^9.2.0",
     "pg": "^8.11.5",
