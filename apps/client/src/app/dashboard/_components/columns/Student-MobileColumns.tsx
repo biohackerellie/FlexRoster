@@ -10,49 +10,40 @@ import {
 } from "lucide-react";
 
 import type { StudentClasses } from "@local/validators";
-import { Badge } from "@local/ui/badge";
 import { Button } from "@local/ui/button";
 import { DataTableColumnHeader } from "@local/ui/data-table-column-header";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
-import { studentStatusOptions } from "@/lib/constants";
 import { DatePickerForm } from "../datePicker";
+import TeacherMessage from "../teacherNoteDialog";
 
-export function columns(): ColumnDef<StudentClasses>[] {
+export function mColumns(): ColumnDef<StudentClasses>[] {
   return [
     {
       accessorKey: "roomNumber",
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Room Number" />;
+        column.toggleVisibility(false);
+        return <></>;
       },
       size: 1,
     },
     {
       accessorKey: "teacherName",
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Teacher Name" />;
+        return <DataTableColumnHeader column={column} title="" />;
       },
       cell: ({ row }) => {
-        const teacherName = row.original.teacherName;
-        return teacherName;
+        const teacherName = lastName(row.original.teacherName)!;
+        const message = row.original.comment;
+        if (message) {
+          return <TeacherMessage teacherName={teacherName} message={message} />;
+        } else return teacherName;
       },
       size: 1,
     },
     {
       accessorKey: "available",
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Available" />;
-      },
-      cell: ({ row }) => {
-        const available = studentStatusOptions.find(
-          (status) => status.value === row.original.available.toString(),
-        );
-
-        if (available?.value === "false") {
-          return <Badge variant="destructive">Not Available</Badge>;
-        } else {
-          return <Badge variant="success">Available</Badge>;
-        }
+        column.toggleVisibility(false);
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
@@ -62,7 +53,7 @@ export function columns(): ColumnDef<StudentClasses>[] {
     {
       accessorKey: "teacherId",
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Transfer" />;
+        return <DataTableColumnHeader column={column} title="" />;
       },
       cell: ({ row }) => {
         const teacherId = row.original.teacherId;
@@ -74,6 +65,7 @@ export function columns(): ColumnDef<StudentClasses>[] {
               variant="destructive"
               disabled
               className="cursor-not-allowed"
+              size="sm"
             >
               <CalendarIcon />
             </Button>
@@ -88,7 +80,7 @@ export function columns(): ColumnDef<StudentClasses>[] {
     {
       accessorKey: "chatId",
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Chat" />;
+        return <DataTableColumnHeader column={column} title="" />;
       },
       cell: ({ row }) => {
         const chatId = row.original.chatId;
@@ -113,26 +105,13 @@ export function columns(): ColumnDef<StudentClasses>[] {
     {
       accessorKey: "comment",
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Note" />;
-      },
-      cell: ({ row }) => {
-        const comment = row.original.comment;
-        if (comment) {
-          return (
-            <Tooltip>
-              <TooltipTrigger className="cursor-pointer" asChild>
-                <span className="text-md text-ellipsis text-nowrap font-normal ">
-                  {comment}
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>{comment}</TooltipContent>
-            </Tooltip>
-          );
-        } else {
-          return <div className="text-gray-600">...</div>;
-        }
+        column.toggleVisibility(false);
       },
       size: 1,
     },
   ];
+}
+
+function lastName(name: string) {
+  return name.split(" ")[1];
 }

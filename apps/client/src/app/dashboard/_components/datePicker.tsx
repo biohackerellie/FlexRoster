@@ -87,8 +87,7 @@ export function DatePickerForm({ id }: DatePickerFormProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
-          <a className="hidden sm:inline-block ">Transfer</a>
-          <CalendarIcon className="sm:hidden" />
+          <CalendarIcon />
         </Button>
       </DialogTrigger>
       <DialogContent>

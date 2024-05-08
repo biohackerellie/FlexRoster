@@ -20,9 +20,10 @@ import { Separator } from "@local/ui/separator";
 import { Shell } from "@local/ui/shell";
 
 import type { getStudentClassesData } from "../logic/queries";
+import { ModeToggle } from "@/components/darkmodeToggle";
 import { useDataTable } from "@/hooks/useDataTable";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { studentStatusOptions } from "@/lib/constants";
+import { mColumns } from "../columns/Student-MobileColumns";
 import { columns } from "../columns/studentClasses-columns";
 
 interface TableProps {
@@ -30,9 +31,22 @@ interface TableProps {
 }
 
 export default function StudentClassesTable({ dataPromise }: TableProps) {
+  let tableColumns;
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const desktopColumns = React.useMemo(() => columns(), []);
+  const mobileColumns = React.useMemo(() => mColumns(), []);
+  switch (isDesktop) {
+    case true:
+      tableColumns = desktopColumns;
+      break;
+    case false:
+      tableColumns = mobileColumns;
+      break;
+    default:
+      tableColumns = desktopColumns;
+      break;
+  }
 
-  const tableColumns = React.useMemo(() => columns(isDesktop), []);
   const data = React.use(dataPromise);
 
   const filterFields: DataTableFilterField<StudentClasses>[] = [
@@ -70,6 +84,7 @@ export default function StudentClassesTable({ dataPromise }: TableProps) {
         <>
           <DataTableToolbar table={table} filterFields={filterFields}>
             <h2>{data.currentClass}</h2>
+            <ModeToggle />
           </DataTableToolbar>
           <DataTable table={table} />
         </>
@@ -77,7 +92,7 @@ export default function StudentClassesTable({ dataPromise }: TableProps) {
         <>
           <Drawer open={open} onOpenChange={setOpen}>
             <DrawerTrigger asChild>
-              <Button variant="outline" size="lg" className="text-3xl">
+              <Button variant="outline" size="lg" className="my-4 text-3xl">
                 View Classes
               </Button>
             </DrawerTrigger>

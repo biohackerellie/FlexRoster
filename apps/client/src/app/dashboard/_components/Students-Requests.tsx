@@ -53,7 +53,9 @@ export function StudentRequestsComponent({
             <DialogTitle>My Requests</DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
-          <List data={data} />
+          <div className="flex flex-col ">
+            <List data={data} />
+          </div>
         </DialogContent>
       </Dialog>
     );
@@ -66,7 +68,7 @@ export function StudentRequestsComponent({
           My Requests
         </Button>
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className="h-fit w-fit">
         <DrawerHeader className="text-left">
           <DrawerTitle>My Requests</DrawerTitle>
         </DrawerHeader>
@@ -83,7 +85,7 @@ export function StudentRequestsComponent({
 
 function List({ data, className }: { data: Request[]; className?: string }) {
   return (
-    <ScrollArea className={cn("h-72 w-screen", className)}>
+    <ScrollArea className={cn("h-72 w-auto", className)}>
       <ul className="p-4">
         {data.map((request, index) => (
           <li key={index} className="flex items-center justify-between">

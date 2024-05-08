@@ -1,10 +1,22 @@
 "use client";
 
+import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { set } from "date-fns";
+import {
+  Home,
+  LineChart,
+  MessageCircle,
+  MoonIcon as Moon,
+  Search,
+  SunIcon as Sun,
+  Users2,
+} from "lucide-react";
+import { useTheme } from "next-themes";
 
-import { cn } from "@local/ui";
-import { ScrollArea, ScrollBar } from "@local/ui/scroll-area";
+import { Button } from "@local/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
 import { useChatNotifications } from "@/hooks";
 
@@ -13,27 +25,63 @@ interface NavProps extends React.HTMLAttributes<HTMLDivElement> {
   role?: string;
 }
 
+interface Links {
+  name: string;
+  href: string | any;
+  icon?: React.ReactNode | any;
+}
+
 export function Navbar({ className, userId, role, ...props }: NavProps) {
   const teacherLinks = [
-    { name: "Rosters", href: "/dashboard/staff" },
-    { name: "My Roster", href: `/dashboard/staff/${userId}` },
-    { name: "All Students", href: `/dashboard/staff/students` },
-    { name: "Requests", href: `/dashboard/staff/${userId}/requests` },
-    { name: "Messages", href: `/dashboard/staff/${userId}/messages` },
+    {
+      name: "My Roster",
+      href: `/dashboard/staff/${userId}`,
+      icon: <Home className="h-5 w-5" />,
+    },
+    {
+      name: "Rosters",
+      href: "/dashboard/staff",
+      icon: <Users2 className="h-5 w-5" />,
+    },
+    {
+      name: "All Students",
+      href: `/dashboard/staff/students`,
+      icon: <Search className="h-5 w-5" />,
+    },
+    {
+      name: "Requests",
+      href: `/dashboard/staff/${userId}/requests`,
+      icon: <LineChart className="h-5 w-5" />,
+    },
+    {
+      name: "Messages",
+      href: `/dashboard/staff/${userId}/messages`,
+      icon: <MessageCircle className="h-5 w-5" />,
+    },
   ];
 
   const secLinks = [
-    { name: "Rosters", href: "/dashboard/staff" },
-    { name: "All Students", href: "/dashboard/staff/students" },
+    {
+      name: "Rosters",
+      href: "/dashboard/staff",
+      icon: <Home className="h-5 w-5" />,
+    },
+    {
+      name: "All Students",
+      href: "/dashboard/staff/students",
+      icon: <Users2 className="h-5 w-5" />,
+    },
   ];
 
   const studentLinks = [
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "My Requests", href: "/dashboard/student/requests" },
+    {
+      name: "Home",
+      href: `/dashboard/student`,
+      icon: <Home className="h-5 w-5" />,
+    },
   ];
 
-  const pathname = usePathname();
-  let links = [];
+  let links: Links[];
 
   switch (role) {
     case "teacher":
@@ -43,7 +91,7 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
       links = secLinks;
       break;
     case "admin":
-      links = studentLinks;
+      links = teacherLinks;
       break;
     default:
       links = studentLinks;
@@ -53,33 +101,40 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
   if (userId) {
     useChatNotifications(userId!);
   }
+  const theme = useTheme();
+  const setTheme = theme.setTheme;
+  const [currentTheme, setCurrentTheme] = React.useState(theme.theme);
+
   return (
-    <div className="relative">
-      <ScrollArea className="max-w-[600px] lg:max-w-none">
-        <div
-          className={cn(
-            " inline-flex h-10 items-center justify-center rounded-md bg-muted  p-1",
-            className,
-          )}
-          {...props}
-        >
-          {links.map((link, index) => (
+    <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
+      {links.map((link) => (
+        <Tooltip key={link.name}>
+          <TooltipTrigger asChild>
             <Link
               href={link.href}
-              key={link.href}
-              className={cn(
-                "inline-flex h-7 items-center justify-center whitespace-nowrap  rounded-sm px-3 py-1.5  text-sm font-medium ring-offset-background transition-all ease-in-out hover:text-primary",
-                pathname === link.href || (index === 0 && pathname === "/")
-                  ? "bg-background font-medium text-foreground shadow-sm outline-none ring-2 ring-ring ring-offset-2 "
-                  : "text-muted-foreground ",
-              )}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
             >
-              {link.name}
+              {link.icon}
+              <span className="sr-only">{link.name}</span>
             </Link>
-          ))}
-        </div>
-        <ScrollBar orientation="horizontal" className="invisible" />
-      </ScrollArea>
-    </div>
+          </TooltipTrigger>
+          <TooltipContent side="right">{link.name}</TooltipContent>
+        </Tooltip>
+      ))}
+      {/* <nav>
+        <a
+          variant="ghost"
+          size="icon"
+          className="h-9 w-9"
+          onClick={() => setCurrentTheme}
+        >
+          {currentTheme === "dark" ? (
+            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          ) : (
+            <Sun className="absolute h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          )}
+        </a>
+      </nav> */}
+    </nav>
   );
 }
