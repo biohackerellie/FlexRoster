@@ -482,8 +482,8 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.3(ts-node@10.9.2(@types/node@20.12.10)(typescript@5.4.5)))
       vaul:
-        specifier: ^0.9.0
-        version: 0.9.0(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@19.0.0-beta-b498834eab-20240506(react@18.3.1))(react@18.3.1)
+        specifier: ^0.9.1
+        version: 0.9.1(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@19.0.0-beta-b498834eab-20240506(react@18.3.1))(react@18.3.1)
     devDependencies:
       '@local/eslint-config':
         specifier: workspace:*
@@ -5426,8 +5426,8 @@ packages:
     resolution: {integrity: sha512-YuKoXDAhBYxY7SfOKxHBDoSyENFeW5VvIIQp2TGQuit8gpK6MnWaQelBKxso72DoxTZfZdcP3W90LqpSkgPzLQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
-  vaul@0.9.0:
-    resolution: {integrity: sha512-bZSySGbAHiTXmZychprnX/dE0EsSige88xtyyL3/MCRbrFotRPQZo7UdydGXZWw+CKbNOw5Ow8gwAo93/nB/Cg==}
+  vaul@0.9.1:
+    resolution: {integrity: sha512-fAhd7i4RNMinx+WEm6pF3nOl78DFkAazcN04ElLPFF9BMCNGbY/kou8UMhIcicm0rJCNePJP0Yyza60gGOD0Jw==}
     peerDependencies:
       react: ^16.8 || ^17.0 || ^18.0
       react-dom: ^16.8 || ^17.0 || ^18.0
@@ -10405,7 +10405,7 @@ snapshots:
     dependencies:
       builtins: 5.1.0
 
-  vaul@0.9.0(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@19.0.0-beta-b498834eab-20240506(react@18.3.1))(react@18.3.1):
+  vaul@0.9.1(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@19.0.0-beta-b498834eab-20240506(react@18.3.1))(react@18.3.1):
     dependencies:
       '@radix-ui/react-dialog': 1.0.5(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@19.0.0-beta-b498834eab-20240506(react@18.3.1))(react@18.3.1)
       react: 18.3.1
