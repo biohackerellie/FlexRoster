@@ -4,12 +4,17 @@
  * Teacher names containing "Brandi Fox" are skipped.
  * The teacher names are formatted and stored in the database.
  */
+import {
+  excludedTeachers,
+  prefferedNames,
+  semesterClassName,
+} from "@local/config";
 import { db, eq, schema } from "@local/db";
 import { findUserIdByName, formatTeacherNames } from "@local/validators";
 
 import type { ClassResponse } from "~/lib/types";
 import { env } from "~/env";
-import { fetcher, icAuth } from "../../lib/utils";
+import { fetcher, icAuth, icClassQueryFunction } from "../../lib/utils";
 
 async function syncClassrooms() {
   try {
@@ -25,20 +30,22 @@ async function syncClassrooms() {
     let deletedCount = 0;
     let updatedCount = 0;
 
-    const data = await fetcher<ClassResponse>(`${env.IC_CLASS_QUERY}`, {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        "X-XSRF-TOKEN": env.XSRF_TOKEN,
-        Authorization: `Bearer ${token}`,
+    const data = await fetcher<ClassResponse>(
+      icClassQueryFunction(env.LHS_SOURCE_ID, env.ONEROSTER_APPNAME),
+      {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          "X-XSRF-TOKEN": env.XSRF_TOKEN,
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
-    // #todo - change class title to env/config variable #153
     // Swap out STEAM value either STEAM-A for first semester or STEAM-B for second semester
 
     const filteredClasses = data.classes.filter((cls) =>
-      cls.title.includes("STEAM-B"),
+      cls.title.includes(semesterClassName),
     );
 
     const fetchedClasses = filteredClasses.map((cls) => {
@@ -202,9 +209,3 @@ syncClassrooms().catch((e) => {
   console.error(e);
   process.exit(1);
 });
-
-const prefferedNames = [
-  { givenName: "Carol Leinwand", prefferedName: "Jeannie Leinwand" },
-  { givenName: "Donna Kegel", prefferedName: "Evawn Kegel" },
-];
-const excludedTeachers = ["Brandi Fox", "Fox, Brandi"];

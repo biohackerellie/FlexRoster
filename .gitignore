@@ -40,3 +40,6 @@ yarn-error.log*
 
 # turbo
 .turbo
+
+packages/config/src/**
+packages/config/src/index.ts

@@ -24,6 +24,7 @@ import {
   formatClasses,
   getHashKey,
   icAuth,
+  icStudentQuery,
 } from "~/lib/utils";
 
 type insertClassRoster = typeof schema.students.$inferInsert;
@@ -116,7 +117,7 @@ export async function resetOneClass(userId: string) {
     const defaultRoster: insertClassRoster[] = [];
 
     const data = await fetcher<RosterResponse>(
-      `${env.IC_BASE_QUERY}/classes/${id}/students?limit=100&ext_basic=true`,
+      icStudentQuery(id, env.ONEROSTER_APPNAME),
       {
         method: "GET",
         headers: {

@@ -2,12 +2,13 @@
  * This script is used to fetch all students and teachers from Azure AD and store them in the database.
  */
 
+import { secretaries } from "@local/config";
 import { db, eq, like, schema } from "@local/db";
 
 import type { AzureResponse, AzureUser } from "~/lib/types";
 import { env } from "~/env";
 import azureAuth from "~/lib/azure";
-import { fetcher } from "~/lib/utils";
+import { createAzureQueryString, fetcher } from "~/lib/utils";
 
 /**
  * Helper function to fetch all users from Azure AD.
@@ -42,8 +43,13 @@ async function fetchAllUsers(
 async function azureTeachers(): Promise<AzureUser[]> {
   try {
     const token = await azureAuth();
-    const staffLink: string | undefined = env.AZURE_TEACHER_QUERY;
-    const helpdeskLink: string | undefined = env.AZURE_HELPDESK_QUERY;
+
+    const staffLink: string | undefined = createAzureQueryString(
+      env.AZURE_TEACHER_GROUP,
+    );
+    const helpdeskLink: string | undefined = createAzureQueryString(
+      env.AZURE_HELPDESK_GROUP,
+    );
     const staffPromise = fetchAllUsers(staffLink, token);
 
     const helpdeskPromise = fetchAllUsers(helpdeskLink, token);
@@ -120,14 +126,3 @@ azureTeachers().catch((e) => {
   console.error(e);
   process.exit(1);
 });
-
-const secretaries = [
-  "rachel_gappa@laurel.k12.mt.us",
-  "marita_grammar@laurel.k12.mt.us",
-  "brandi_fox@laurel.k12.mt.us",
-  "hsmessage@laurel.k12.mt.us",
-
-  "admin@laurel.k12.mt.us",
-  "stacy_hall@laurel.k12.mt.us",
-  "john_stilson@laurel.k12.mt.us",
-] as const;
