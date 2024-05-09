@@ -29,7 +29,7 @@
     "@auth/core": "^0.30.0",
     "drizzle-orm": "^0.30.10",
     "postgres": "^3.4.4",
-    "zod": "^3.23.6"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@local/eslint-config": "workspace:*",
