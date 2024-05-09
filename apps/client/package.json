@@ -47,7 +47,7 @@
     "sonner": "^1.4.41",
     "superjson": "2.2.1",
     "ui": "^0.2.4",
-    "zod": "^3.23.6"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@local/eslint-config": "workspace:*",
