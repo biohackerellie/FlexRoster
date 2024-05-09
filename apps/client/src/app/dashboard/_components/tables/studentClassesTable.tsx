@@ -17,10 +17,8 @@ import {
 } from "@local/ui/drawer";
 import { ScrollArea, ScrollBar } from "@local/ui/scroll-area";
 import { Separator } from "@local/ui/separator";
-import { Shell } from "@local/ui/shell";
 
 import type { getStudentClassesData } from "../logic/queries";
-import { ModeToggle } from "@/components/darkmodeToggle";
 import { useDataTable } from "@/hooks/useDataTable";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { mColumns } from "../columns/Student-MobileColumns";
@@ -84,7 +82,6 @@ export default function StudentClassesTable({ dataPromise }: TableProps) {
         <>
           <DataTableToolbar table={table} filterFields={filterFields}>
             <h2>{data.currentClass}</h2>
-            <ModeToggle />
           </DataTableToolbar>
           <DataTable table={table} />
         </>
@@ -103,7 +100,7 @@ export default function StudentClassesTable({ dataPromise }: TableProps) {
                 </DataTableToolbar>
               </DrawerHeader>
               <Separator />
-              <ScrollArea className="h-72 whitespace-nowrap p-4">
+              <ScrollArea className="h-96 whitespace-nowrap p-4">
                 <DataTable table={table} />
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
