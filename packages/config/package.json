@@ -15,6 +15,7 @@
   "devDependencies": {
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
+    "@local/validators": "workspace:*",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5"
   },

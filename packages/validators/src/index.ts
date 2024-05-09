@@ -66,3 +66,23 @@ export type DatePickerSchema = z.infer<typeof datePickerSchema>;
 
 export * from "./nameHelpers";
 export * from "./pgValidators";
+
+type PreferredNames = {
+  givenName: string;
+  preferredName: string;
+};
+
+export const DefaultConfigSchema = z.object({
+  secretaries: z.array(z.string()),
+  preferredNames: z.array(
+    z.object({
+      givenName: z.string(),
+      preferredName: z.string(),
+    }),
+  ),
+  excludedTeachers: z.array(z.string()),
+  semesterClassName: z.string(),
+  isRedisCluster: z.boolean(),
+});
+
+export type ConfigSchema = z.infer<typeof DefaultConfigSchema>;

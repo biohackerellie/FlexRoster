@@ -1,11 +1,11 @@
 {
-  "name": "flexroster-cli",
+  "name": "cli",
   "version": "0.0.1",
   "description": "A command line interface for setting up FlexRoster",
   "type": "module",
   "exports": "./dist/index.js",
   "bin": {
-    "flexroster-cli": "./dist/index.js"
+    "cli": "./dist/index.js"
   },
   "files": [
     "dist",
@@ -16,8 +16,8 @@
   },
   "scripts": {
     "typecheck": "tsc",
-    "builds": "tsup",
-    "devv": "tsup --watch",
+    "build": "tsup",
+    "cli:dev": "tsup --watch",
     "clean": "rm -rf dist .turbo node_modules",
     "start": "node dist/index.js",
     "lint": "eslint",
@@ -39,7 +39,9 @@
     "@local/eslint-config": "workspace:*",
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
+    "@local/validators": "workspace:*",
     "@local/tailwind-config": "workspace:*",
+    "@local/config": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/gradient-string": "^1.1.6",
     "@types/node": "^20.12.11",

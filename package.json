@@ -6,12 +6,13 @@
     "packages/*",
     "apps/*",
     "tooling/*",
-		"cli"
+    "cli"
   ],
   "scripts": {
     "build": "turbo run build",
     "build:bun": "pnpm -F server build:bun",
     "dev": "turbo run dev --parallel",
+    "cli:dev": "pnpm -F cli cli:dev",
     "clean": "git clean -xdf node_modules",
     "clean:outs": "turbo run clean:outs",
     "cache:reset": "pnpm -F server cache:reset",
@@ -32,7 +33,7 @@
   },
   "dependencies": {
     "@local/prettier-config": "workspace:*",
-		"@total-typescript/ts-reset": "^0.5.1",
+    "@total-typescript/ts-reset": "^0.5.1",
     "@turbo/gen": "^1.13.3",
     "prettier": "^3.2.5",
     "turbo": "^1.13.3",

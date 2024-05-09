@@ -1,13 +1,12 @@
-export const secretaries = [];
+import { DefaultConfigSchema } from "@local/validators";
 
-type PreferredNames = {
-  givenName: string;
-  preferredName: string;
-};
+import "./config.json";
 
-export const preferredNames: PreferredNames[] = [];
+import fs from "fs-extra";
 
-export const excludedTeachers = [""];
-
-export const semesterClassName = "";
-export const isRedisCluster: boolean = true;
+// parse config.json file with zod validator
+export default function Config() {
+  const file = fs.readFileSync("config.json");
+  const config = DefaultConfigSchema.parse(file);
+  return config;
+}

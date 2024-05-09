@@ -269,6 +269,9 @@ importers:
         specifier: ^2.10.0
         version: 2.10.0
     devDependencies:
+      '@local/config':
+        specifier: workspace:*
+        version: link:../packages/config
       '@local/eslint-config':
         specifier: workspace:*
         version: link:../tooling/eslint-config
@@ -281,6 +284,9 @@ importers:
       '@local/tsconfig':
         specifier: workspace:*
         version: link:../tooling/tsconfig
+      '@local/validators':
+        specifier: workspace:*
+        version: link:../packages/validators
       '@types/fs-extra':
         specifier: ^11.0.4
         version: 11.0.4
@@ -348,6 +354,9 @@ importers:
       '@local/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/tsconfig
+      '@local/validators':
+        specifier: workspace:*
+        version: link:../validators
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
