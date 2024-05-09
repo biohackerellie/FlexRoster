@@ -101,40 +101,43 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
   if (userId) {
     useChatNotifications(userId!);
   }
-  const theme = useTheme();
-  const setTheme = theme.setTheme;
-  const [currentTheme, setCurrentTheme] = React.useState(theme.theme);
+  const { theme, setTheme } = useTheme();
 
   return (
-    <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-      {links.map((link) => (
-        <Tooltip key={link.name}>
+    <>
+      <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
+        {links.map((link) => (
+          <Tooltip key={link.name}>
+            <TooltipTrigger asChild>
+              <Link
+                href={link.href}
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+              >
+                {link.icon}
+                <span className="sr-only">{link.name}</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right">{link.name}</TooltipContent>
+          </Tooltip>
+        ))}
+      </nav>
+      <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
+        <Tooltip>
           <TooltipTrigger asChild>
-            <Link
-              href={link.href}
+            <Button
+              variant="link"
+              size="icon"
               className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             >
-              {link.icon}
-              <span className="sr-only">{link.name}</span>
-            </Link>
+              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <span className="sr-only">Toggle theme</span>
+            </Button>
           </TooltipTrigger>
-          <TooltipContent side="right">{link.name}</TooltipContent>
+          <TooltipContent side="right">Toggle theme</TooltipContent>
         </Tooltip>
-      ))}
-      {/* <nav>
-        <a
-          variant="ghost"
-          size="icon"
-          className="h-9 w-9"
-          onClick={() => setCurrentTheme}
-        >
-          {currentTheme === "dark" ? (
-            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          ) : (
-            <Sun className="absolute h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          )}
-        </a>
-      </nav> */}
-    </nav>
+      </nav>
+    </>
   );
 }

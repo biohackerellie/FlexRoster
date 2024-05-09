@@ -8,8 +8,10 @@ import { cn } from "@local/ui";
 import { Button } from "@local/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -56,6 +58,13 @@ export function StudentRequestsComponent({
           <div className="flex flex-col ">
             <List data={data} />
           </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline" className="w-full">
+                Cancel
+              </Button>
+            </DialogClose>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     );
@@ -68,7 +77,7 @@ export function StudentRequestsComponent({
           My Requests
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="h-fit w-fit">
+      <DrawerContent className="h-96 w-full">
         <DrawerHeader className="text-left">
           <DrawerTitle>My Requests</DrawerTitle>
         </DrawerHeader>
@@ -85,7 +94,7 @@ export function StudentRequestsComponent({
 
 function List({ data, className }: { data: Request[]; className?: string }) {
   return (
-    <ScrollArea className={cn("h-72 w-auto", className)}>
+    <ScrollArea className={cn("h-96 w-auto", className)}>
       <ul className="p-4">
         {data.map((request, index) => (
           <li key={index} className="flex items-center justify-between">
