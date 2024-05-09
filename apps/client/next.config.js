@@ -1,6 +1,5 @@
 import dns from "dns";
 import { fileURLToPath } from "url";
-
 import createJiti from "jiti";
 
 dns.setDefaultResultOrder("ipv4first");
@@ -17,7 +16,7 @@ const nextConfig = {
     "@local/auth",
     "@local/ui",
     "@local/validators",
-		"@local/config"
+    "@local/config",
   ],
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
@@ -26,4 +25,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig
+export default nextConfig;
