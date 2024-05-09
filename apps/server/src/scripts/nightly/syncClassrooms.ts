@@ -6,7 +6,7 @@
  */
 import {
   excludedTeachers,
-  prefferedNames,
+  preferredNames,
   semesterClassName,
 } from "@local/config";
 import { db, eq, schema } from "@local/db";
@@ -71,11 +71,11 @@ async function syncClassrooms() {
           }
           let teacherName = formatTeacherNames(room.teacher);
           // if teacherName is givenName in prefferedNames, replace teacherName with prefferedName
-          const prefferedName = prefferedNames.find(
+          const preferredName = preferredNames.find(
             (name) => name.givenName === teacherName,
           );
-          if (prefferedName) {
-            teacherName = prefferedName.prefferedName;
+          if (preferredName) {
+            teacherName = preferredName.preferredName;
           }
           let user = null;
           if (teacherName) {
@@ -159,12 +159,12 @@ async function syncClassrooms() {
               continue;
             }
             let teacherName = formatTeacherNames(room.teacher);
-            // if teacherName is givenName in prefferedNames, replace teacherName with prefferedName
-            const prefferedName = prefferedNames.find(
+            // if teacherName is givenName in prefferedNames, replace teacherName with preferredName
+            const preferredName = preferredNames.find(
               (name) => name.givenName === teacherName,
             );
-            if (prefferedName) {
-              teacherName = prefferedName.prefferedName;
+            if (preferredName) {
+              teacherName = preferredName.preferredName;
             }
             let user = null;
             if (teacherName) {
