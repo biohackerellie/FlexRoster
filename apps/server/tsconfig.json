@@ -17,5 +17,5 @@
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": ["."],
-  "exclude": ["node_modules", "dist/**", "tests", "scr/scripts/**", "scripts"]
+  "exclude": ["node_modules", "dist/**", "tests", "scr/scripts/**", "scripts", "bin/**"]
 }
