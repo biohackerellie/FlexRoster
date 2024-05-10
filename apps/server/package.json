@@ -31,19 +31,20 @@
   "dependencies": {
     "@clack/core": "^0.3.4",
     "@clack/prompts": "^0.7.0",
-    "chalk": "5.3.0",
-    "commander": "^12.0.0",
-    "execa": "^8.0.1",
-    "fs-extra": "^11.2.0",
-    "gradient-string": "^2.0.2",
-    "ora": "8.0.1",
     "@elysiajs/cors": "^1.0.2",
     "@elysiajs/swagger": "^1.0.5",
     "@local/db": "workspace:*",
     "@sinclair/typebox": "^0.32.29",
     "@t3-oss/env-core": "^0.10.1",
+    "chalk": "5.3.0",
+    "chalk-animation": "^2.0.3",
+    "commander": "^12.0.0",
     "elysia": "^1.0.17",
+    "execa": "^8.0.1",
+    "fs-extra": "^11.2.0",
+    "gradient-string": "^2.0.2",
     "ioredis": "^5.4.1",
+    "ora": "8.0.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -51,6 +52,7 @@
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@local/validators": "workspace:*",
+    "@types/chalk-animation": "^1.6.3",
     "@types/fs-extra": "^11.0.4",
     "@types/gradient-string": "^1.1.6",
     "@types/node": "^20.12.11",
@@ -58,8 +60,8 @@
     "dotenv-cli": "^7.4.2",
     "eslint": "^9.2.0",
     "prettier": "^3.2.5",
-    "typescript": "^5.4.5",
-    "type-fest": "^4.18.2"
+    "type-fest": "^4.18.2",
+    "typescript": "^5.4.5"
   },
   "prettier": "@local/prettier-config"
 }
