@@ -221,8 +221,8 @@ importers:
         specifier: ^20.12.11
         version: 20.12.11
       bun-types:
-        specifier: ^1.1.7
-        version: 1.1.7
+        specifier: ^1.1.8
+        version: 1.1.8
       dotenv-cli:
         specifier: ^7.4.2
         version: 7.4.2
@@ -365,7 +365,7 @@ importers:
         version: 0.10.1(typescript@5.4.5)(zod@3.23.8)
       drizzle-orm:
         specifier: ^0.30.10
-        version: 0.30.10(@types/pg@8.11.6)(@types/react@18.3.1)(bun-types@1.1.7)(pg@8.11.5)(postgres@3.4.4)(react@18.3.1)
+        version: 0.30.10(@types/pg@8.11.6)(@types/react@18.3.1)(bun-types@1.1.8)(pg@8.11.5)(postgres@3.4.4)(react@18.3.1)
       postgres:
         specifier: ^3.4.4
         version: 3.4.4
@@ -523,7 +523,7 @@ importers:
     dependencies:
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.30.10(@types/pg@8.11.6)(@types/react@18.3.1)(bun-types@1.1.7)(pg@8.11.5)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8)
+        version: 0.5.1(drizzle-orm@0.30.10(@types/pg@8.11.6)(@types/react@18.3.1)(bun-types@1.1.8)(pg@8.11.5)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -590,14 +590,14 @@ importers:
         specifier: ^8.56.10
         version: 8.56.10
       bun-types:
-        specifier: ^1.1.7
-        version: 1.1.7
+        specifier: ^1.1.8
+        version: 1.1.8
       eslint:
         specifier: ^9.2.0
         version: 9.2.0
       eslint-import-resolver-typescript-bun:
         specifier: ^0.0.88
-        version: 0.0.88(@typescript-eslint/parser@7.8.0(eslint@9.2.0)(typescript@5.4.5))(bun-types@1.1.7)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.8.0(eslint@9.2.0)(typescript@5.4.5))(eslint@9.2.0))(eslint@9.2.0)
+        version: 0.0.88(@typescript-eslint/parser@7.8.0(eslint@9.2.0)(typescript@5.4.5))(bun-types@1.1.8)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.8.0(eslint@9.2.0)(typescript@5.4.5))(eslint@9.2.0))(eslint@9.2.0)
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
@@ -669,8 +669,8 @@ importers:
   tooling/tsconfig:
     dependencies:
       bun-types:
-        specifier: ^1.1.7
-        version: 1.1.7
+        specifier: ^1.1.8
+        version: 1.1.8
 
 packages:
 
@@ -2380,8 +2380,8 @@ packages:
   builtins@5.1.0:
     resolution: {integrity: sha512-SW9lzGTLvWTP1AY8xeAMZimqDrIaSdLQUcVr9DMef51niJ022Ri87SwRRKYm4A6iHfkPaiVUu/Duw2Wc4J7kKg==}
 
-  bun-types@1.1.7:
-    resolution: {integrity: sha512-9L1w3dxXrJ5dg9ERd8cc8IJTHZ+0WpSDB9kIo6tVl1s3msNsotsTeh02Wwy8cvd3a4XWEz9+TrJsqhT0dJ6XCQ==}
+  bun-types@1.1.8:
+    resolution: {integrity: sha512-dwhfuUKSGK8hm5Llcvb5+ejRh+4mIt8ibObJVKhZBsi0ScpXmt+AlaS1eDW6uRXCHj084Qt0kIqAJ08/7ZGC9Q==}
 
   bundle-require@4.0.2:
     resolution: {integrity: sha512-jwzPOChofl67PSTW2SGubV9HBQAhhR2i6nskiOThauo9dzwDUgOWQScFVaJkjEfYX+UXiD+LEx8EblQMc2wIag==}
@@ -6790,7 +6790,7 @@ snapshots:
     dependencies:
       semver: 7.6.0
 
-  bun-types@1.1.7:
+  bun-types@1.1.8:
     dependencies:
       '@types/node': 20.12.11
       '@types/ws': 8.5.10
@@ -7162,18 +7162,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.30.10(@types/pg@8.11.6)(@types/react@18.3.1)(bun-types@1.1.7)(pg@8.11.5)(postgres@3.4.4)(react@18.3.1):
+  drizzle-orm@0.30.10(@types/pg@8.11.6)(@types/react@18.3.1)(bun-types@1.1.8)(pg@8.11.5)(postgres@3.4.4)(react@18.3.1):
     optionalDependencies:
       '@types/pg': 8.11.6
       '@types/react': 18.3.1
-      bun-types: 1.1.7
+      bun-types: 1.1.8
       pg: 8.11.5
       postgres: 3.4.4
       react: 18.3.1
 
-  drizzle-zod@0.5.1(drizzle-orm@0.30.10(@types/pg@8.11.6)(@types/react@18.3.1)(bun-types@1.1.7)(pg@8.11.5)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8):
+  drizzle-zod@0.5.1(drizzle-orm@0.30.10(@types/pg@8.11.6)(@types/react@18.3.1)(bun-types@1.1.8)(pg@8.11.5)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8):
     dependencies:
-      drizzle-orm: 0.30.10(@types/pg@8.11.6)(@types/react@18.3.1)(bun-types@1.1.7)(pg@8.11.5)(postgres@3.4.4)(react@18.3.1)
+      drizzle-orm: 0.30.10(@types/pg@8.11.6)(@types/react@18.3.1)(bun-types@1.1.8)(pg@8.11.5)(postgres@3.4.4)(react@18.3.1)
       zod: 3.23.8
 
   duplexer@0.1.2: {}
@@ -7450,9 +7450,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript-bun@0.0.88(@typescript-eslint/parser@7.8.0(eslint@9.2.0)(typescript@5.4.5))(bun-types@1.1.7)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.8.0(eslint@9.2.0)(typescript@5.4.5))(eslint@9.2.0))(eslint@9.2.0):
+  eslint-import-resolver-typescript-bun@0.0.88(@typescript-eslint/parser@7.8.0(eslint@9.2.0)(typescript@5.4.5))(bun-types@1.1.8)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.8.0(eslint@9.2.0)(typescript@5.4.5))(eslint@9.2.0))(eslint@9.2.0):
     dependencies:
-      bun-types: 1.1.7
+      bun-types: 1.1.8
       debug: 4.3.4
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@7.8.0(eslint@9.2.0)(typescript@5.4.5))(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.8.0(eslint@9.2.0)(typescript@5.4.5))(eslint@9.2.0))(eslint@9.2.0)
     transitivePeerDependencies:
