@@ -1,4 +1,4 @@
-FROM node:20.13.0-slim AS base
+FROM node:20.13.1-slim AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable && corepack prepare pnpm@9.0.5 --activate
