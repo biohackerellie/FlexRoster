@@ -1,5 +1,6 @@
 import gradient from "gradient-string";
-import { TITLE_TEXT } from "src/constants";
+
+import { TITLE_TEXT } from "~/cli/constants";
 
 const colorTheme = {
   blue: "#A9DDD6",

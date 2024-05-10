@@ -1,9 +1,11 @@
-import { relations } from "drizzle-orm";
+import { is, relations } from "drizzle-orm";
 import {
   boolean,
   date,
   index,
   integer,
+  json,
+  jsonb,
   pgEnum,
   pgTable,
   primaryKey,
@@ -13,6 +15,8 @@ import {
   uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core";
+
+import type { ConfigSchema } from "@local/validators";
 
 export const role = pgEnum("Role", [
   "secretary",
@@ -213,3 +217,19 @@ export const logRelations = relations(logs, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+type PreferredNames = {
+  givenName: string;
+  preferredName: string;
+};
+export const config = pgTable("config", {
+  secretaries: text("secretaries").array(),
+  preferredNames:
+    json("preferredNames").$type<
+      { givenName: string; preferredName: string }[]
+    >(),
+  excludedTeachers: text("excludedTeachers").array(),
+  semesterClassName: text("semesterClassName"),
+  isRedisCluster: boolean("isRedisCluster").default(true),
+  createdAt: timestamp("createdAt").defaultNow().primaryKey(),
+});

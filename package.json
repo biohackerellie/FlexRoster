@@ -11,7 +11,7 @@
     "build": "turbo run build",
     "build:bun": "pnpm -F server build:bun",
     "dev": "turbo run dev --parallel",
-    "cli:dev": "pnpm -F cli cli:dev",
+    "cli:dev": "pnpm -F server dev:cli",
     "clean": "git clean -xdf node_modules",
     "clean:outs": "turbo run clean:outs",
     "cache:reset": "pnpm -F server cache:reset",
@@ -26,11 +26,12 @@
     "lint": "turbo lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
     "lint:fix": "turbo lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
+    "lint:ws:fix": "pnpm dlx sherif@latest --fix",
     "postinstall": "pnpm lint:ws",
     "typecheck": "turbo typecheck",
     "ui-add": "pnpm -F ui ui-add"
   },
-  "dependencies": {
+  "devDependencies": {
     "@local/prettier-config": "workspace:*",
     "@total-typescript/ts-reset": "^0.5.1",
     "@turbo/gen": "^1.13.3",

@@ -1,9 +1,10 @@
 import * as p from "@clack/prompts";
 import chalk from "chalk";
 import { Command } from "commander";
-import { DEFAULT_APP_NAME } from "src/constants";
-import { getUserPkgManager } from "src/utils/getUserPkgManager";
-import { logger } from "src/utils/logger";
+
+import { getUserPkgManager } from "~/lib/utils/getUserPkgManager";
+import { logger } from "~/lib/utils/logger";
+import { DEFAULT_APP_NAME } from "../constants";
 
 export const runCli = async () => {
   const mainMenu = await p.select({

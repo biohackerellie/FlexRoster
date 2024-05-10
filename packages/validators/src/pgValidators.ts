@@ -62,6 +62,29 @@ export const allStudentsArrayValidator = z.array(AllStudentValidator);
 
 export type AllStudents = z.infer<typeof AllStudentValidator>;
 
+export type PreferredNames = {
+  givenName: string;
+  preferredName: string;
+};
+// export const configArrayValidator = z.array(DefaultConfigSchema);
+export const DefaultConfigSchema = z.object({
+  secretaries: z.array(z.string()).nullable(),
+  preferredNames: z
+    .array(
+      z.object({
+        givenName: z.string(),
+        preferredName: z.string(),
+      }),
+    )
+    .nullable(),
+  excludedTeachers: z.array(z.string()).nullable(),
+  semesterClassName: z.string().nullable(),
+  isRedisCluster: z.boolean().nullable(),
+  createdAt: z.date(),
+});
+
+export type ConfigSchema = z.infer<typeof DefaultConfigSchema>;
+
 export const requestValidator = createSelectSchema(schema.requests);
 export const modifiedRequestValidator = requestValidator.extend({
   dateRequested: z.union([z.string().datetime({ offset: true }), z.date()]),

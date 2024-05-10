@@ -1,6 +1,6 @@
+import { logger } from "../lib/utils/logger";
+import { renderTitle } from "../lib/utils/renderTitle";
 import { runCli } from "./cli";
-import { logger } from "./utils/logger";
-import { renderTitle } from "./utils/renderTitle";
 
 const main = async () => {
   renderTitle();

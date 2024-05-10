@@ -4,7 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
-
+**/.env.config
 bin/*
 # testing
 /coverage
@@ -35,6 +35,7 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+config/config.ts
 # vercel
 .vercel
 

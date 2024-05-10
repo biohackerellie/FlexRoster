@@ -7,7 +7,7 @@ settings:
 importers:
 
   .:
-    dependencies:
+    devDependencies:
       '@local/prettier-config':
         specifier: workspace:*
         version: link:tooling/prettier-config
@@ -38,9 +38,6 @@ importers:
       '@local/auth':
         specifier: workspace:*
         version: link:../../packages/auth
-      '@local/config':
-        specifier: workspace:*
-        version: link:../../packages/config
       '@local/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -189,9 +186,6 @@ importers:
       '@elysiajs/swagger':
         specifier: ^1.0.5
         version: 1.0.5(elysia@1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))
-      '@local/config':
-        specifier: workspace:*
-        version: link:../../packages/config
       '@local/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -309,24 +303,6 @@ importers:
         specifier: ^5.4.5
         version: 5.4.5
 
-  packages/config:
-    devDependencies:
-      '@local/prettier-config':
-        specifier: workspace:*
-        version: link:../../tooling/prettier-config
-      '@local/tsconfig':
-        specifier: workspace:*
-        version: link:../../tooling/tsconfig
-      '@local/validators':
-        specifier: workspace:*
-        version: link:../validators
-      prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
-
   packages/db:
     dependencies:
       '@auth/core':
@@ -354,6 +330,9 @@ importers:
       '@local/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/tsconfig
+      '@local/validators':
+        specifier: workspace:*
+        version: link:../validators
       '@types/node':
         specifier: ^20.12.11
         version: 20.12.11

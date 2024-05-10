@@ -1,7 +1,7 @@
 import type { RedisOptions } from "ioredis";
 import Redis from "ioredis";
 
-import { isRedisCluster } from "@local/config";
+
 
 import { env } from "~/env";
 
