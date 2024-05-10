@@ -31,7 +31,7 @@ importers:
     dependencies:
       '@elysiajs/eden':
         specifier: ^1.0.13
-        version: 1.0.13(elysia@1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))
+        version: 1.0.13(elysia@1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))
       '@hookform/resolvers':
         specifier: ^3.3.4
         version: 3.3.4(react-hook-form@7.51.4(react@18.3.1))
@@ -75,14 +75,14 @@ importers:
         specifier: ^3.1.3
         version: 3.1.3(date-fns@3.6.0)
       elysia:
-        specifier: ^1.0.16
-        version: 1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5)
+        specifier: ^1.0.17
+        version: 1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5)
       framer-motion:
         specifier: ^11.1.9
         version: 11.1.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       geist:
         specifier: ^1.3.0
-        version: 1.3.0(next@14.3.0-canary.51(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        version: 1.3.0(next@14.3.0-canary.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       lucide-react:
         specifier: ^0.378.0
         version: 0.378.0(react@18.3.1)
@@ -93,14 +93,14 @@ importers:
         specifier: ^5.0.7
         version: 5.0.7
       next:
-        specifier: 14.3.0-canary.51
-        version: 14.3.0-canary.51(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 14.3.0-canary.54
+        version: 14.3.0-canary.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-auth:
         specifier: 5.0.0-beta.17
-        version: 5.0.0-beta.17(next@14.3.0-canary.51(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 5.0.0-beta.17(next@14.3.0-canary.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       next-logger:
         specifier: ^4.0.0
-        version: 4.0.0(next@14.3.0-canary.51(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.4.5)
+        version: 4.0.0(next@14.3.0-canary.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.4.5)
       next-themes:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -179,10 +179,10 @@ importers:
     dependencies:
       '@elysiajs/cors':
         specifier: ^1.0.2
-        version: 1.0.2(elysia@1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))
+        version: 1.0.2(elysia@1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))
       '@elysiajs/swagger':
         specifier: ^1.0.5
-        version: 1.0.5(elysia@1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))
+        version: 1.0.5(elysia@1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))
       '@local/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -196,8 +196,8 @@ importers:
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.4.5)(zod@3.23.8)
       elysia:
-        specifier: ^1.0.16
-        version: 1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5)
+        specifier: ^1.0.17
+        version: 1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5)
       ioredis:
         specifier: ^5.4.1
         version: 5.4.1
@@ -324,11 +324,11 @@ importers:
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.4.5)(zod@3.23.8)
       next:
-        specifier: 14.3.0-canary.51
-        version: 14.3.0-canary.51(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 14.3.0-canary.54
+        version: 14.3.0-canary.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-auth:
         specifier: beta
-        version: 5.0.0-beta.17(next@14.3.0-canary.51(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 5.0.0-beta.17(next@14.3.0-canary.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1476,62 +1476,62 @@ packages:
   '@next/bundle-analyzer@14.2.3':
     resolution: {integrity: sha512-Z88hbbngMs7njZKI8kTJIlpdLKYfMSLwnsqYe54AP4aLmgL70/Ynx/J201DQ+q2Lr6FxFw1uCeLGImDrHOl2ZA==}
 
-  '@next/env@14.3.0-canary.51':
-    resolution: {integrity: sha512-4s0CuMFn4t2aAXXpilWbBo29wXBFOczqyn0v/CMG7PFTNNM4KIwDIdnjulXMtmk3TMW1m/sT5aiaezLFXk8H+Q==}
+  '@next/env@14.3.0-canary.54':
+    resolution: {integrity: sha512-1SQxiA1Mr/LQQQs+K9z/RjOKrGWJaQCjhg74XCnv/v3wSvypq0XXuut9SJOqohx7DUQ4ftQdANoDnfDLn8mJQw==}
 
   '@next/eslint-plugin-next@14.2.3':
     resolution: {integrity: sha512-L3oDricIIjgj1AVnRdRor21gI7mShlSwU/1ZGHmqM3LzHhXXhdkrfeNY5zif25Bi5Dd7fiJHsbhoZCHfXYvlAw==}
 
-  '@next/swc-darwin-arm64@14.3.0-canary.51':
-    resolution: {integrity: sha512-y8ZpTeZ57y9cVJcq7QlhOha1ZHbMhJndWC9ehxgAapaEhrephMf5JerbiJBKiINm1EiDNrZjXaKaB4anhUtqMw==}
+  '@next/swc-darwin-arm64@14.3.0-canary.54':
+    resolution: {integrity: sha512-hHppmp+2Ey/I+Ty4Gedqfn1sOlrFOztNhryTppDk1exoEDyBV5EtzwfPHz2J8Uh58mjirxO/8z6mHuN4mmSFtw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
 
-  '@next/swc-darwin-x64@14.3.0-canary.51':
-    resolution: {integrity: sha512-821XPWV5Oa/VTnKahBeInsvHHWpnDpg2Clc6IHUmPkm9W+WMT3H2fOIvAfK0nqais4+415gNkG2TmLmvKn6W0A==}
+  '@next/swc-darwin-x64@14.3.0-canary.54':
+    resolution: {integrity: sha512-TT1bMDDCnSegAf9CgCnumz4YoEZUzNKiV3dihJ2HSyRrDceQ4dGjmvN/jtU3rt7/9BLFK2QZ/G5W32KFUPqmNQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
 
-  '@next/swc-linux-arm64-gnu@14.3.0-canary.51':
-    resolution: {integrity: sha512-dUMrJArBYhBUg1OD2CWcoRF0MpSDKN3EGm5GxQkAgRjmxxgWOdAiEKJzKwSskL7mix454cihBGAVT+2pXW2ugQ==}
+  '@next/swc-linux-arm64-gnu@14.3.0-canary.54':
+    resolution: {integrity: sha512-daf1g5eeVF7YJzrq/mOp31V3gZTrX+vWCqRizrEPTb6v5/ZiKJjjn7akp3QS4PEK/dqNdCQOuiMaAQJj7L4PHg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
 
-  '@next/swc-linux-arm64-musl@14.3.0-canary.51':
-    resolution: {integrity: sha512-e/XZ+U7ZAf9rX87kdGM6RhB5S2k4ODJZqoFImikmSQdSurAQA8wEyWthxUgGwZ4sJSTatNW47WzPRkq4pWW/jA==}
+  '@next/swc-linux-arm64-musl@14.3.0-canary.54':
+    resolution: {integrity: sha512-xPcTzMff+b6eEIZL7OhntWLcmdzVaYt9DiJCY0gTyCIzZ3gj1cGbWIqBNvwT6xtPcpG55Lk+0LKFEnjXG/EPdw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
 
-  '@next/swc-linux-x64-gnu@14.3.0-canary.51':
-    resolution: {integrity: sha512-7M+ChrqCBM8baSkJ/nIn0+g/XNs8yiwrK8TKPfaWlqQCKCFF8FXpKm5Kh8lRvJHHe67LhecUrulR9rKbZ5zPHA==}
+  '@next/swc-linux-x64-gnu@14.3.0-canary.54':
+    resolution: {integrity: sha512-c3AaWZWXmjy8aBdDODg7N7rciq8A5fa7u21rsEMOHAOhLx2jdVjWz0lLk6hpWqdh6lN4JP/zXakFkuSAQsUntA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
 
-  '@next/swc-linux-x64-musl@14.3.0-canary.51':
-    resolution: {integrity: sha512-PBSRtVivBrX0Pd9ep3bc504dOX88ONvUFr6B/6KmzVRRKxCkKG3lG2TvUTTi6tF0U40M+K8Gn8ePgRs48a/CWw==}
+  '@next/swc-linux-x64-musl@14.3.0-canary.54':
+    resolution: {integrity: sha512-2N0NP6XZ38ES49Bh50iWJ1yjJyu8dNXyODl74BGg3/1ttkPpDEdcEdIaUf5Tvt8MbfaNY1t2KBiVn3Ybh4VL2w==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
 
-  '@next/swc-win32-arm64-msvc@14.3.0-canary.51':
-    resolution: {integrity: sha512-QD0aOfl+261wxdMgKxsNDgTCFHkIgvyYjD+NzaVzgg6guwkVhYDvUtn2hyADjTBqrkpEnSA28G5Pg3YmcuwDdQ==}
+  '@next/swc-win32-arm64-msvc@14.3.0-canary.54':
+    resolution: {integrity: sha512-YcQW1cvZnQjukJ5grZITamDDAiGwWAAOq3qjwdxLcv5+2QktzkcSPMMGIjSofjZ76kANRsdu5SkYMOwSvxpqyA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
 
-  '@next/swc-win32-ia32-msvc@14.3.0-canary.51':
-    resolution: {integrity: sha512-/K2fRFVr6gzb4y3LtjXhKpKt2vbAxAFZoCVG2vPTVChKd1IGpdlvM/omFPq0l1eIqoTigKNhOk8nFacqcAAyxA==}
+  '@next/swc-win32-ia32-msvc@14.3.0-canary.54':
+    resolution: {integrity: sha512-mMA01NqTbBeDxK5LYc/KPmifn+GiZuvzlisauVvHLlN2ItYQMIyUJ/guz+b96qUdX3C+LHCjTqaQD4ReUQhmQw==}
     engines: {node: '>= 10'}
     cpu: [ia32]
     os: [win32]
 
-  '@next/swc-win32-x64-msvc@14.3.0-canary.51':
-    resolution: {integrity: sha512-7jaQw/8xVdrpE9jgNDh/P0XP9c0S0oZ88yFav7IyOvUKcq6I7al1qb/oqv6CrTQnapkycHP7tOI1pQfizHb1zw==}
+  '@next/swc-win32-x64-msvc@14.3.0-canary.54':
+    resolution: {integrity: sha512-Tkl8y5OYSNr0Z54l/Bw2aK5VXoqHePFEDHc5zgfvGm+eljLMGRbDzXnHRtdyAB6pyKZblH8Kxek8hQuKvLY9iQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -2860,8 +2860,8 @@ packages:
       typescript:
         optional: true
 
-  elysia@1.0.16:
-    resolution: {integrity: sha512-6TvgaTA8o3GwUkBZ2ulm4NBicUZxSLWS5mRFB8sckKs//ybgM6O5GqOmI6VGqWSopAHI3pXYd8YhII69agCj9A==}
+  elysia@1.0.17:
+    resolution: {integrity: sha512-j6+hR88M4W8WMAdpCFxM1U0iJx3aixrbnitX5yeKjGau7UdMueJABYNsGtmeM91+IhPTEGiB8jcuhLY5/TmPDg==}
     peerDependencies:
       '@sinclair/typebox': '>= 0.31.0'
       openapi-types: '>= 12.0.0'
@@ -3947,8 +3947,8 @@ packages:
   next-tick@1.1.0:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
 
-  next@14.3.0-canary.51:
-    resolution: {integrity: sha512-KfcGnNBQH9SofRSvv8qQRG1K0dfyi/8PhYzyuUwKnkQH8+F+2RXHVQ6ooEbiEtw9J6fDyRHop7BTbzUF9mkgkw==}
+  next@14.3.0-canary.54:
+    resolution: {integrity: sha512-J080ML+aJ9SNHOa17bUp9xDrosY9AxmwtA3ByZb8iFOfec+++0efNoO7MOCdgqMOgT743p5fRu45QqmRLkmlFw==}
     engines: {node: '>=18.17.0'}
     hasBin: true
     peerDependencies:
@@ -5383,23 +5383,23 @@ snapshots:
 
   '@discoveryjs/json-ext@0.5.7': {}
 
-  '@elysiajs/cors@1.0.2(elysia@1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))':
+  '@elysiajs/cors@1.0.2(elysia@1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))':
     dependencies:
-      elysia: 1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5)
+      elysia: 1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5)
 
-  '@elysiajs/eden@1.0.13(elysia@1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))':
+  '@elysiajs/eden@1.0.13(elysia@1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))':
     dependencies:
-      '@elysiajs/stream': 1.0.0-rc.0(elysia@1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))
-      elysia: 1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5)
+      '@elysiajs/stream': 1.0.0-rc.0(elysia@1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))
+      elysia: 1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5)
 
-  '@elysiajs/stream@1.0.0-rc.0(elysia@1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))':
+  '@elysiajs/stream@1.0.0-rc.0(elysia@1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))':
     dependencies:
-      elysia: 1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5)
+      elysia: 1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5)
       nanoid: 5.0.7
 
-  '@elysiajs/swagger@1.0.5(elysia@1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))':
+  '@elysiajs/swagger@1.0.5(elysia@1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5))':
     dependencies:
-      elysia: 1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5)
+      elysia: 1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5)
       lodash.clonedeep: 4.5.0
       openapi-types: 12.1.3
 
@@ -5814,37 +5814,37 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@next/env@14.3.0-canary.51': {}
+  '@next/env@14.3.0-canary.54': {}
 
   '@next/eslint-plugin-next@14.2.3':
     dependencies:
       glob: 10.3.10
 
-  '@next/swc-darwin-arm64@14.3.0-canary.51':
+  '@next/swc-darwin-arm64@14.3.0-canary.54':
     optional: true
 
-  '@next/swc-darwin-x64@14.3.0-canary.51':
+  '@next/swc-darwin-x64@14.3.0-canary.54':
     optional: true
 
-  '@next/swc-linux-arm64-gnu@14.3.0-canary.51':
+  '@next/swc-linux-arm64-gnu@14.3.0-canary.54':
     optional: true
 
-  '@next/swc-linux-arm64-musl@14.3.0-canary.51':
+  '@next/swc-linux-arm64-musl@14.3.0-canary.54':
     optional: true
 
-  '@next/swc-linux-x64-gnu@14.3.0-canary.51':
+  '@next/swc-linux-x64-gnu@14.3.0-canary.54':
     optional: true
 
-  '@next/swc-linux-x64-musl@14.3.0-canary.51':
+  '@next/swc-linux-x64-musl@14.3.0-canary.54':
     optional: true
 
-  '@next/swc-win32-arm64-msvc@14.3.0-canary.51':
+  '@next/swc-win32-arm64-msvc@14.3.0-canary.54':
     optional: true
 
-  '@next/swc-win32-ia32-msvc@14.3.0-canary.51':
+  '@next/swc-win32-ia32-msvc@14.3.0-canary.54':
     optional: true
 
-  '@next/swc-win32-x64-msvc@14.3.0-canary.51':
+  '@next/swc-win32-x64-msvc@14.3.0-canary.54':
     optional: true
 
   '@nodelib/fs.scandir@2.1.5':
@@ -7202,7 +7202,7 @@ snapshots:
       openapi-types: 12.1.3
       typescript: 5.4.5
 
-  elysia@1.0.16(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5):
+  elysia@1.0.17(@sinclair/typebox@0.32.29)(openapi-types@12.1.3)(typescript@5.4.5):
     dependencies:
       '@sinclair/typebox': 0.32.29
       cookie: 0.6.0
@@ -7811,9 +7811,9 @@ snapshots:
 
   functions-have-names@1.2.3: {}
 
-  geist@1.3.0(next@14.3.0-canary.51(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
+  geist@1.3.0(next@14.3.0-canary.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
     dependencies:
-      next: 14.3.0-canary.51(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next: 14.3.0-canary.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   gensync@1.0.0-beta.2: {}
 
@@ -8479,16 +8479,16 @@ snapshots:
 
   netmask@2.0.2: {}
 
-  next-auth@5.0.0-beta.17(next@14.3.0-canary.51(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  next-auth@5.0.0-beta.17(next@14.3.0-canary.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
       '@auth/core': 0.30.0
-      next: 14.3.0-canary.51(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next: 14.3.0-canary.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
 
-  next-logger@4.0.0(next@14.3.0-canary.51(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.4.5):
+  next-logger@4.0.0(next@14.3.0-canary.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.4.5):
     dependencies:
       cosmiconfig: 8.3.6(typescript@5.4.5)
-      next: 14.3.0-canary.51(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next: 14.3.0-canary.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       pino: 8.20.0
     transitivePeerDependencies:
       - typescript
@@ -8505,9 +8505,9 @@ snapshots:
 
   next-tick@1.1.0: {}
 
-  next@14.3.0-canary.51(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next@14.3.0-canary.54(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@next/env': 14.3.0-canary.51
+      '@next/env': 14.3.0-canary.54
       '@swc/helpers': 0.5.11
       busboy: 1.6.0
       caniuse-lite: 1.0.30001616
@@ -8517,15 +8517,15 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       styled-jsx: 5.1.3(react@18.3.1)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 14.3.0-canary.51
-      '@next/swc-darwin-x64': 14.3.0-canary.51
-      '@next/swc-linux-arm64-gnu': 14.3.0-canary.51
-      '@next/swc-linux-arm64-musl': 14.3.0-canary.51
-      '@next/swc-linux-x64-gnu': 14.3.0-canary.51
-      '@next/swc-linux-x64-musl': 14.3.0-canary.51
-      '@next/swc-win32-arm64-msvc': 14.3.0-canary.51
-      '@next/swc-win32-ia32-msvc': 14.3.0-canary.51
-      '@next/swc-win32-x64-msvc': 14.3.0-canary.51
+      '@next/swc-darwin-arm64': 14.3.0-canary.54
+      '@next/swc-darwin-x64': 14.3.0-canary.54
+      '@next/swc-linux-arm64-gnu': 14.3.0-canary.54
+      '@next/swc-linux-arm64-musl': 14.3.0-canary.54
+      '@next/swc-linux-x64-gnu': 14.3.0-canary.54
+      '@next/swc-linux-x64-musl': 14.3.0-canary.54
+      '@next/swc-win32-arm64-msvc': 14.3.0-canary.54
+      '@next/swc-win32-ia32-msvc': 14.3.0-canary.54
+      '@next/swc-win32-x64-msvc': 14.3.0-canary.54
       sharp: 0.33.3
     transitivePeerDependencies:
       - '@babel/core'
