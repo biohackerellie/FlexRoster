@@ -48,7 +48,7 @@
     "@local/prettier-config": "workspace:*",
     "@local/tailwind-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
-    "@types/react": "^18.3.1",
+    "@types/react": "^18.3.2",
     "eslint": "^9.2.0",
     "prettier": "^3.2.5",
     "react": "^18.3.1",
