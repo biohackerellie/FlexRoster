@@ -28,7 +28,7 @@
     "@elysiajs/swagger": "^1.0.5",
     "@local/db": "workspace:*",
     "@local/config": "workspace:*",
-    "@sinclair/typebox": "^0.32.29",
+    "@sinclair/typebox": "^0.32.30",
     "@t3-oss/env-core": "^0.10.1",
     "elysia": "^1.0.17",
     "ioredis": "^5.4.1",
