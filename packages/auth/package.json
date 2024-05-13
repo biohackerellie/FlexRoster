@@ -16,12 +16,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@auth/core": "^0.30.0",
+    "@auth/core": "^0.31.0",
     "@auth/drizzle-adapter": "^1.0.1",
     "@local/db": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@t3-oss/env-nextjs": "^0.10.1",
-    "next": "14.3.0-canary.54",
+    "next": "14.3.0-canary.59",
     "next-auth": "beta",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
