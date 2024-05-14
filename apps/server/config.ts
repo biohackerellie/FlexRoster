@@ -9,7 +9,7 @@
 
 	export const preferredNames = [{givenName: "Donna Kegel", preferredName: "Evawn Kegel"}]; 
 
-	export const excludedTeachers = ["Brandi Fox,Fox, Brandi","me me me","stop it"]; 
+	export const excludedTeachers = ["Brandi Fox,Fox, Brandi"]; 
 
 	export const semesterClassName = "STEAM-B"; 
 

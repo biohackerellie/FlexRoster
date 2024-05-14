@@ -10,6 +10,7 @@
   "scripts": {
     "build": "turbo run build",
     "build:bun": "pnpm -F server build:bun",
+    "build:cli": "pnpm -F server build:cli",
     "dev": "turbo run dev --parallel",
     "cli:dev": "pnpm -F server dev:cli",
     "clean": "git clean -xdf node_modules",

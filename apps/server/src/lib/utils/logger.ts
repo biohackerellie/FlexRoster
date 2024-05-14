@@ -13,4 +13,7 @@ export const logger = {
   success(...args: unknown[]) {
     console.log(chalk.green(...args));
   },
+  debug(...args: unknown[]) {
+    console.log(chalk.magenta(...args));
+  },
 };

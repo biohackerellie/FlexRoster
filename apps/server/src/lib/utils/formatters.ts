@@ -40,6 +40,7 @@ type PreferredNames = {
 
 export function CreateTemplateConfig({ ...args }: ConfigSchema) {
   const secretaries = args?.secretaries?.join('","') ?? "";
+  const excludedTeachers = args?.excludedTeachers?.join('","') ?? "";
   const preferredNames =
     args.preferredNames?.map((names) => {
       return `{givenName: "${names.givenName}", preferredName: "${names.preferredName}"}`;
@@ -51,8 +52,50 @@ export function CreateTemplateConfig({ ...args }: ConfigSchema) {
 	export const secretaries = ["${secretaries}"]; \n
 
 	export const preferredNames = [${preferredNames}]; \n
-	export const excludedTeachers = ["${args.excludedTeachers || ""}"]; \n
+	export const excludedTeachers = ["${excludedTeachers}"]; \n
 	export const semesterClassName = "${args.semesterClassName || ""}"; \n
 	export const isRedisCluster: boolean = ${args.isRedisCluster || true}; \n
 	`;
+}
+
+export function CurrentConfigString({ ...args }: ConfigSchema) {
+  const secretaries = args?.secretaries?.join('","') ?? "";
+  const excludedTeachers = args?.excludedTeachers?.join('","') ?? "";
+  const preferredNames =
+    args.preferredNames?.map((names) => {
+      return `{givenName: "${names.givenName}", preferredName: "${names.preferredName}"}`;
+    }) ?? [];
+
+  return `
+	\n
+	This includes changes you've currently made in this menu. \n
+	Secretaries : "${secretaries}" \n
+	Preferred Names : ${preferredNames} \n
+	Excluded Teachers : "${excludedTeachers}" \n
+	Semester Class Name : ${args.semesterClassName || ""} \n
+	`;
+}
+
+export function removeItemsFromArray<T>({
+  items,
+  itemsToRemove,
+}: {
+  items: T[];
+  itemsToRemove: T[];
+}) {
+  return items.filter((item) => !itemsToRemove.includes(item));
+}
+
+export function addStringsToArray({
+  items,
+  itemsToAdd,
+}: {
+  items: string[];
+  itemsToAdd: string[];
+}) {
+  itemsToAdd.forEach((item) => {
+    if (!items.includes(item.trim()) && item.trim() !== "") {
+      items.push(item.trim());
+    }
+  });
 }

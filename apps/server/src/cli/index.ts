@@ -16,5 +16,6 @@ const main = async () => {
 };
 
 main().catch((err) => {
-  logger.error("fuck 💩");
+  logger.error("fuck 💩", err);
+  process.exit(1);
 });

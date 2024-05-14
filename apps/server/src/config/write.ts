@@ -21,11 +21,14 @@ export async function main() {
 
   const config = CreateTemplateConfig(data);
 
+  logger.info(data);
+
+  logger.info("Config data parsed successfully");
   await Bun.write(envFile, config);
   process.exit(0);
 }
 
 main().catch((err) => {
   logger.error("Error parsing config data", err);
-  throw new Error("Error parsing config data");
+  process.exit(1);
 });

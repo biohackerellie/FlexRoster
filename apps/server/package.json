@@ -18,10 +18,11 @@
     "clean": "rm -rf .turbo node_modules dist",
     "clean:outs": "rm -rf dist",
     "start": "bun run dist/index.js",
+    "start:cli": "bun --env-file=../../.env run bin/index.js",
     "lint": "bun --bun eslint",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "build": "tsc",
-    "build:cli": "bun --env-file=../../.env build ./src/cli/index.ts --outdir ./bin --target bun",
+    "build:cli": "tsup",
     "build:local": "bun --env-file=../../.env build ./src/index.ts --outdir ./dist --target bun",
     "build:bun": "/root/.bun/bin/bun build ./src/index.ts --outdir ./dist --target bun",
     "nightly": "bun --env-file=../../.env run ./src/scripts/nightly.ts",
@@ -38,6 +39,7 @@
     "@t3-oss/env-core": "^0.10.1",
     "chalk": "5.3.0",
     "chalk-animation": "^2.0.3",
+    "cli-spinners": "^3.0.0",
     "commander": "^12.0.0",
     "elysia": "^1.0.18",
     "execa": "^8.0.1",
@@ -45,6 +47,7 @@
     "gradient-string": "^2.0.2",
     "ioredis": "^5.4.1",
     "ora": "8.0.1",
+    "tsup": "^8.0.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
