@@ -83,7 +83,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) View() string {
 	s := m.header + "\n\n"
 
-	for i, chocie := range m.choices {
+	for i, choice := range m.choices {
 		cursor := " "
 		if m.cursor == i {
 			cursor = focusedStyle.Render(">")
@@ -93,7 +93,7 @@ func (m model) View() string {
 			checked = focusedStyle.Render("x")
 		}
 
-		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, chocie)
+		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, choice)
 	}
 	s += fmt.Sprintf("\nPress %s to confirm your slection.\n", focusedStyle.Render("y"))
 	return s

@@ -1,0 +1,13 @@
+{
+  "name": "@flexroster/cli",
+  "bin": {
+    "cli": "./bin/cli"
+  },
+  "engines": {
+    "go": ">=1.22.3"
+  },
+  "scripts": {
+    "build": "go build -o bin/cli ",
+    "start": "./bin/cli"
+  }
+}
