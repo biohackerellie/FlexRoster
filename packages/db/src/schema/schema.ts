@@ -16,8 +16,6 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import type { ConfigSchema } from "@local/validators";
-
 export const role = pgEnum("Role", [
   "secretary",
   "teacher",
