@@ -1,7 +1,7 @@
 {
   "name": "@flexroster/cli",
   "bin": {
-    "cli": "./bin/cli"
+    "cli": "./bin/"
   },
   "engines": {
     "go": ">=1.22.3"

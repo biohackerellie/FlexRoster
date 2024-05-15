@@ -4,4 +4,4 @@ export const secretaries = [""];
 export const preferredNames = [{ givenName: "", preferredName: "" }];
 export const excludedTeachers = [""];
 export const semesterClassName = "";
-export const isRedisCluster: boolean = true;
+export const isRedisCluster = true;

@@ -8,18 +8,12 @@
       "default": "./src/index.ts"
     }
   },
-  "bin": {
-    "cli": "./src/cli/index.ts"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun --env-file=../../.env run --watch src/index.ts",
-    "dev:cli": "bun --env-file=../../.env run --watch src/cli/index.ts",
     "clean": "rm -rf .turbo node_modules dist",
     "clean:outs": "rm -rf dist",
     "start": "bun run dist/index.js",
-    "start:cli": "bun --env-file=../../.env run bin/index.js",
-    "lint": "bun --bun eslint",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "build": "tsc",
     "build:cli": "tsup",

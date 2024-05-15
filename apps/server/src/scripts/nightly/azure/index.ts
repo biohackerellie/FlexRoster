@@ -2,7 +2,6 @@
  * This script is used to fetch all students and teachers from Azure AD and store them in the database.
  */
 
-
 import { db, eq, like, schema } from "@local/db";
 
 import type { AzureResponse, AzureUser } from "~/lib/types";

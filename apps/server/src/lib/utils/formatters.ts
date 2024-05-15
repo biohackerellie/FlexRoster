@@ -33,10 +33,10 @@ export function icClassQueryFunction(
   return `${icQuery(appName)}/classes?filter=school.sourceId%3D%27${IC_SchoolSourceId}%27&limit=1200`;
 }
 
-type PreferredNames = {
+interface PreferredNames {
   givenName: string;
   preferredName: string;
-};
+}
 
 export function CreateTemplateConfig({ ...args }: ConfigSchema) {
   const secretaries = args?.secretaries?.join('","') ?? "";

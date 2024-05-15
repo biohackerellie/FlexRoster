@@ -275,6 +275,8 @@ importers:
         specifier: ^5.4.5
         version: 5.4.5
 
+  cli: {}
+
   packages/auth:
     dependencies:
       '@auth/core':

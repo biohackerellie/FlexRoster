@@ -62,10 +62,10 @@ export const allStudentsArrayValidator = z.array(AllStudentValidator);
 
 export type AllStudents = z.infer<typeof AllStudentValidator>;
 
-export type PreferredNames = {
+export interface PreferredNames {
   givenName: string;
   preferredName: string;
-};
+}
 // export const configArrayValidator = z.array(DefaultConfigSchema);
 export const DefaultConfigSchema = z.object({
   secretaries: z.array(z.string()).nullable(),

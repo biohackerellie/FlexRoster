@@ -216,10 +216,10 @@ export const logRelations = relations(logs, ({ one }) => ({
   }),
 }));
 
-type PreferredNames = {
+interface PreferredNames {
   givenName: string;
   preferredName: string;
-};
+}
 export const config = pgTable("config", {
   secretaries: text("secretaries").array(),
   preferredNames:
