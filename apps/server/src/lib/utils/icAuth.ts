@@ -31,7 +31,7 @@ async function fetchNewToken(): Promise<TokenResponse> {
     client_secret: env.ONEROSTER_CLIENT_SECRET,
   });
   const data = await fetcher<TokenResponse>(
-    "https://mtdecloud2.infinitecampus.org/campus/oauth2/token?appName=laurel",
+    `https://mtdecloud2.infinitecampus.org/campus/oauth2/token?appName=${env.ONEROSTER_APPNAME}`,
     {
       method: "POST",
       headers: {

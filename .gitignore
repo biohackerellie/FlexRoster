@@ -18,6 +18,7 @@ tmp/
 # production
 build
 dist/
+bin/
 # misc
 .DS_Store
 *.pem
@@ -40,3 +41,9 @@ yarn-error.log*
 
 # turbo
 .turbo
+
+packages/config/src/**
+packages/config/src/index.ts
+
+cli/configs/config.json
+**/config.json

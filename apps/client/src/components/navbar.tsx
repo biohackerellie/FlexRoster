@@ -2,8 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { set } from "date-fns";
 import {
   Home,
   LineChart,
@@ -15,7 +13,6 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 
-import { Button } from "@local/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
 import { useChatNotifications } from "@/hooks";
@@ -123,17 +120,13 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
       </nav>
       <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
         <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="link"
-              size="icon"
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            >
-              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">Toggle theme</span>
-            </Button>
+          <TooltipTrigger
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          >
+            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">Toggle theme</span>
           </TooltipTrigger>
           <TooltipContent side="right">Toggle theme</TooltipContent>
         </Tooltip>

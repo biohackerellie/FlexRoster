@@ -16,7 +16,6 @@ const nextConfig = {
     "@local/auth",
     "@local/ui",
     "@local/validators",
-    "@local/config",
   ],
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },

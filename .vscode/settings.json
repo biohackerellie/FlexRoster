@@ -58,5 +58,8 @@
     "apps/**/src/**/layout.tsx": "${dirname}/${filename}",
     "apps/**/src/routes/**/index.ts": "${dirname}/${filename}",
     "apps/server/src/routes/**/handlers.ts": "${dirname}/${filename}"
+  },
+  "[ignore]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
   }
 }

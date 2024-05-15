@@ -66,3 +66,8 @@ export type DatePickerSchema = z.infer<typeof datePickerSchema>;
 
 export * from "./nameHelpers";
 export * from "./pgValidators";
+
+interface PreferredNames {
+  givenName: string;
+  preferredName: string;
+}

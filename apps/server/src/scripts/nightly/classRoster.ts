@@ -8,7 +8,7 @@ import { db, eq, gt, or, schema } from "@local/db";
 import type { RosterResponse } from "~/lib/types";
 import { env } from "~/env";
 import { rosterQuery, studentRequestsQuery } from "~/lib/sql";
-import { fetcher, icAuth } from "~/lib/utils";
+import { fetcher, icAuth, icStudentQuery } from "~/lib/utils";
 
 interface Roster {
   studentEmail: string;
@@ -42,7 +42,7 @@ export async function RosterSync() {
     for (const c of classes) {
       const id = c.id;
       const data = await fetcher<RosterResponse>(
-        `${env.IC_BASE_QUERY}/classes/${id}/students?limit=100&ext_basic=true`,
+        icStudentQuery(id, env.ONEROSTER_APPNAME),
         {
           method: "GET",
           headers: {
