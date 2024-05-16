@@ -25,7 +25,7 @@ type FlexConfig struct {
 
 // var currentPath, _ = os.Getwd()
 // fmt.Println(currentPath)
-func readJSONFile(filePath string) FlexConfig {
+func readJSONFile(filePath string) *FlexConfig {
 	var config FlexConfig
 	content, err := os.ReadFile(filePath)
 	if err != nil {
@@ -35,10 +35,10 @@ func readJSONFile(filePath string) FlexConfig {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return config
+	return &config
 }
 
-func writeJSONFile(filePath string, config FlexConfig) {
+func writeJSONFile(filePath string, config *FlexConfig) {
 	content, err := json.MarshalIndent(config, "", "	")
 	if err != nil {
 		log.Fatal(err)
@@ -49,7 +49,7 @@ func writeJSONFile(filePath string, config FlexConfig) {
 	}
 }
 
-func updateTypeScriptFile(config FlexConfig, filePath string) {
+func updateTypeScriptFile(config *FlexConfig, filePath string) {
 	content := fmt.Sprintf(`export const secretaries = %s;
 export const preferredNames = %s;
 export const excludedTeachers = %s;
@@ -84,13 +84,13 @@ func toPreferredNamesJSONArray(data []PreferredNames) string {
 	return fmt.Sprintf("[%s]", strings.Join(result, ", "))
 }
 
-func GetConfig() FlexConfig {
-	Content := readJSONFile("config.json")
-	return Content
+func GetConfig() *FlexConfig {
+	return readJSONFile("config.json")
+
 }
 
 // update the config based on passed in args
-func WriteConfig(args FlexConfig) {
+func WriteConfig(args *FlexConfig) {
 	config := GetConfig()
 
 	if len(args.Secretaries) > 0 {
