@@ -40,6 +40,7 @@ async function fetchAllUsers(
  */
 
 async function azureTeachers(): Promise<AzureUser[]> {
+  const secretaries = env.SECRETARIES;
   try {
     const token = await azureAuth();
 
