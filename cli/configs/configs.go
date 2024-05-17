@@ -7,7 +7,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
+
+	"github.com/joho/godotenv"
 )
 
 type PreferredNames struct {
@@ -23,9 +26,26 @@ type FlexConfig struct {
 	IsRedisCluster    bool             `json:"isRedisCluster"`
 }
 
+// same as FlexConfig but with the env variables instead of json
+type FlexConfigEnv struct {
+	Secretaries       []string         `env:"SECRETARIES"`
+	PreferredNames    []PreferredNames `env:"PREFERRED_NAMES"`
+	ExcludedTeachers  []string         `env:"EXCLUDED_TEACHERS"`
+	SemesterClassName string           `env:"SEMESTER_CLASS_NAME"`
+	IsRedisCluster    bool             `env:"IS_REDIS_CLUSTER"`
+}
+
+func readEnvFile(filePath string) map[string]string {
+	envMap, err := godotenv.Read(filePath)
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	return envMap
+}
+
 // var currentPath, _ = os.Getwd()
 // fmt.Println(currentPath)
-func readJSONFile(filePath string) FlexConfig {
+func readJSONFile(filePath string) *FlexConfig {
 	var config FlexConfig
 	content, err := os.ReadFile(filePath)
 	if err != nil {
@@ -35,10 +55,10 @@ func readJSONFile(filePath string) FlexConfig {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return config
+	return &config
 }
 
-func writeJSONFile(filePath string, config FlexConfig) {
+func writeJSONFile(filePath string, config *FlexConfig) {
 	content, err := json.MarshalIndent(config, "", "	")
 	if err != nil {
 		log.Fatal(err)
@@ -47,14 +67,15 @@ func writeJSONFile(filePath string, config FlexConfig) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
 
-func updateTypeScriptFile(config FlexConfig, filePath string) {
-	content := fmt.Sprintf(`export const secretaries = %s;
-export const preferredNames = %s;
-export const excludedTeachers = %s;
-export const semesterClassName = "%s";
-export const isRedisCluster: boolean = %v;
+func updateTypeScriptFile(config *FlexConfig, filePath string) {
+	content := fmt.Sprintf(`export const secretaries = %s
+export const preferredNames = %s
+export const excludedTeachers = %s
+export const semesterClassName = "%s"
+export const isRedisCluster: boolean = %v
 `,
 		toJSONArray(config.Secretaries),
 		toPreferredNamesJSONArray(config.PreferredNames),
@@ -84,13 +105,54 @@ func toPreferredNamesJSONArray(data []PreferredNames) string {
 	return fmt.Sprintf("[%s]", strings.Join(result, ", "))
 }
 
-func GetConfig() FlexConfig {
-	Content := readJSONFile("config.json")
-	return Content
+func envToFlexConfig(envMap map[string]string) *FlexConfig {
+	var config FlexConfig
+
+	if secretaries, ok := envMap["SECRETARIES"]; ok {
+		if err := json.Unmarshal([]byte(secretaries), &config.Secretaries); err != nil {
+			log.Fatalf("Error parsing REACT_APP_SECRETARIES: %v", err)
+		}
+	}
+
+	if preferredNames, ok := envMap["PREFERRED_NAMES"]; ok {
+		if err := json.Unmarshal([]byte(preferredNames), &config.PreferredNames); err != nil {
+			log.Fatalf("Error parsing REACT_APP_PREFERRED_NAMES: %v", err)
+		}
+	}
+
+	if excludedTeachers, ok := envMap["EXCLUDED_TEACHERS"]; ok {
+		if err := json.Unmarshal([]byte(excludedTeachers), &config.ExcludedTeachers); err != nil {
+			log.Fatalf("Error parsing REACT_APP_EXCLUDED_TEACHERS: %v", err)
+		}
+	}
+
+	if semesterClassName, ok := envMap["SEMESTER_CLASS_NAME"]; ok {
+		config.SemesterClassName = semesterClassName
+	}
+
+	if isRedisCluster, ok := envMap["IS_REDIS_CLUSTER"]; ok {
+		config.IsRedisCluster = strings.ToLower(isRedisCluster) == "true"
+	}
+
+	return &config
+}
+
+func GetConfig() *FlexConfig {
+	configPath, err := setWorkingDirectory()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return envToFlexConfig(readEnvFile(filepath.Join(configPath, ".env.config")))
+	// return readJSONFile(filepath.Join(configPath, "config.json"))
+
 }
 
 // update the config based on passed in args
-func WriteConfig(args FlexConfig) {
+func WriteConfig(args *FlexConfig) {
+	configPath, err := setWorkingDirectory()
+	if err != nil {
+		log.Fatal(err)
+	}
 	config := GetConfig()
 
 	if len(args.Secretaries) > 0 {
@@ -108,7 +170,21 @@ func WriteConfig(args FlexConfig) {
 	if args.IsRedisCluster {
 		config.IsRedisCluster = args.IsRedisCluster
 	}
-	writeJSONFile("config.json", config)
-	updateTypeScriptFile(config, "config.ts")
+
+	writeJSONFile(filepath.Join(configPath, "config.json"), config)
+	updateTypeScriptFile(config, filepath.Join(configPath, "config.ts"))
 	fmt.Println("Config updated successfully!")
+}
+
+func setWorkingDirectory() (string, error) {
+	exe, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+	rootDir := filepath.Dir(filepath.Dir(exe))
+	err = os.Chdir(rootDir)
+	if err != nil {
+		return "", err
+	}
+	return rootDir, nil
 }

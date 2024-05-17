@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/biohackerellie/FlexRoster/cli/cmd/ui/multiInput"
+	"github.com/biohackerellie/FlexRoster/cli/cmd/ui/mainMenu"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
@@ -17,14 +17,6 @@ func init() {
 	rootCmd.AddCommand(configCmd)
 }
 
-type listOptions struct {
-	options []string
-}
-
-type Options struct {
-	MenuOptions *multiInput.Selection
-}
-
 var configCmd = &cobra.Command{
 	Use:   "config",
 	Short: "Edit flexroster configuration",
@@ -32,19 +24,7 @@ var configCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 
-		options := Options{
-			MenuOptions: &multiInput.Selection{},
-		}
-
-		listOfStuff := listOptions{
-			options: []string{
-				"",
-				"Option 2",
-				"Option 3",
-			},
-		}
-
-		tprogram := tea.NewProgram(multiInput.InitialModelMulti(listOfStuff.options, options.MenuOptions, "What is your project Type"))
+		tprogram := tea.NewProgram(mainMenu.RootScreen(), tea.WithAltScreen())
 		if _, err := tprogram.Run(); err != nil {
 			cobra.CheckErr(err)
 		}
