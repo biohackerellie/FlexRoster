@@ -1,9 +1,18 @@
 package mainMenu
 
 import (
+	"io"
+
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
+)
+
+var (
+	itemStyle = lipgloss.NewStyle().Padding(0, 1).Foreground(lipgloss.Color("#FFFDF5")).
+			Background(lipgloss.Color("#25A065"))
+	selectedItemStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("205")).Background(lipgloss.Color("236")).Padding(1, 2)
 )
 
 type delegateKeyMap struct {
@@ -11,8 +20,16 @@ type delegateKeyMap struct {
 	remove key.Binding
 }
 
+type itemDelegate struct {
+	list.DefaultDelegate
+	keys *delegateKeyMap
+}
+
 func newItemDelegate(keys *delegateKeyMap) list.DefaultDelegate {
-	d := list.NewDefaultDelegate()
+	d := itemDelegate{
+		DefaultDelegate: list.NewDefaultDelegate(),
+		keys:            keys,
+	}
 
 	d.UpdateFunc = func(msg tea.Msg, m *list.Model) tea.Cmd {
 		var title string
@@ -41,6 +58,7 @@ func newItemDelegate(keys *delegateKeyMap) list.DefaultDelegate {
 	}
 
 	help := []key.Binding{keys.choose, keys.remove}
+
 	d.ShortHelpFunc = func() []key.Binding {
 		return help
 	}
@@ -48,11 +66,28 @@ func newItemDelegate(keys *delegateKeyMap) list.DefaultDelegate {
 	d.FullHelpFunc = func() [][]key.Binding {
 		return [][]key.Binding{help}
 	}
-	return d
+	return d.DefaultDelegate
+}
+
+func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
+	it, ok := listItem.(item)
+	if !ok {
+		return
+	}
+	str := it.title
+
+	var rendered string
+	if index == m.Index() {
+		rendered = selectedItemStyle.Render("> " + str)
+	} else {
+		rendered = itemStyle.Render(str)
+	}
+	io.WriteString(w, rendered)
 }
 
 func (d delegateKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{
+
 		d.choose,
 		d.remove,
 	}

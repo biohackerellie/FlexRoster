@@ -99,8 +99,8 @@ func updateChoices(msg tea.Msg, m *MenuModel) (tea.Model, tea.Cmd) {
 func updateChosen(msg tea.Msg, m *MenuModel) (tea.Model, tea.Cmd) {
 	switch m.Choice {
 	case 0:
-		secretaries_screen := InitialSecModel()
-		return RootScreen().SwitchScreen(&secretaries_screen)
+		secretariesScreen := InitialSecModel()
+		return secretariesScreen, secretariesScreen.Init()
 	case 1:
 		return m, nil
 	case 2:

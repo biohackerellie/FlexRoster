@@ -4,15 +4,11 @@
  * Teacher names containing "Brandi Fox" are skipped.
  * The teacher names are formatted and stored in the database.
  */
-// import {
-//   excludedTeachers,
-//   preferredNames,
-//   semesterClassName,
-// } from "@local/config";
 import { db, eq, schema } from "@local/db";
 import { findUserIdByName, formatTeacherNames } from "@local/validators";
 
 import type { ClassResponse } from "~/lib/types";
+import { excludedTeachers, preferredNames, semesterClassName } from "~/config";
 import { env } from "~/env";
 import { fetcher, icAuth, icClassQueryFunction } from "../../lib/utils";
 

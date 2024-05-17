@@ -9,26 +9,10 @@ type RootScreenModel struct {
 }
 
 func RootScreen() RootScreenModel {
-	var rootModel tea.Model
 
 	homeScreen := MainMenuModel()
-	if !homeScreen.Chosen {
-		rootModel = &homeScreen
-	} else {
-		switch homeScreen.Choice {
-		case 0:
-			secScreen := InitialSecModel()
-			rootModel = &secScreen
-		case 1:
 
-		case 2:
-
-		case 3:
-
-		}
-	}
-
-	return RootScreenModel{model: rootModel}
+	return RootScreenModel{model: &homeScreen}
 }
 
 func (m RootScreenModel) Init() tea.Cmd {

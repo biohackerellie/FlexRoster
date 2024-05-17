@@ -34,6 +34,25 @@ export const env = createEnv({
     AZURE_STUDENT_GROUP: z.string(),
     AZURE_TEACHER_GROUP: z.string(),
     AZURE_HELPDESK_GROUP: z.string(),
+    SECRETARIES: z.preprocess(
+      (val) => JSON.parse(val as string),
+      z.array(z.string()),
+    ),
+    PREFERRED_NAMES: z.preprocess(
+      (val) => JSON.parse(val as string),
+      z.array(
+        z.object({
+          givenName: z.string(),
+          preferredName: z.string(),
+        }),
+      ),
+    ),
+    EXCLUDED_TEACHERS: z.preprocess(
+      (val) => JSON.parse(val as string),
+      z.array(z.string()),
+    ),
+    SEMESTER_CLASS_NAME: z.string(),
+    IS_REDIS_CLUSTER: z.preprocess((val) => val === "true", z.boolean()),
   },
 
   runtimeEnv: {
@@ -62,6 +81,12 @@ export const env = createEnv({
     AZURE_STUDENT_GROUP: process.env.AZURE_STUDENT_GROUP,
     AZURE_TEACHER_GROUP: process.env.AZURE_TEACHER_GROUP,
     AZURE_HELPDESK_GROUP: process.env.AZURE_HELPDESK_GROUP,
+
+    SECRETARIES: process.env.SECRETARIES,
+    PREFERRED_NAMES: process.env.PREFERRED_NAMES,
+    EXCLUDED_TEACHERS: process.env.EXCLUDED_TEACHERS,
+    SEMESTER_CLASS_NAME: process.env.SEMESTER_CLASS_NAME,
+    IS_REDIS_CLUSTER: process.env.IS_REDIS_CLUSTER,
   },
   skipValidation:
     !!process.env.CI ||
