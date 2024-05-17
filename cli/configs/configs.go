@@ -26,14 +26,14 @@ type FlexConfig struct {
 	IsRedisCluster    bool             `json:"isRedisCluster"`
 }
 
-// same as FlexConfig but with the env variables instead of json
-type FlexConfigEnv struct {
-	Secretaries       []string         `env:"SECRETARIES"`
-	PreferredNames    []PreferredNames `env:"PREFERRED_NAMES"`
-	ExcludedTeachers  []string         `env:"EXCLUDED_TEACHERS"`
-	SemesterClassName string           `env:"SEMESTER_CLASS_NAME"`
-	IsRedisCluster    bool             `env:"IS_REDIS_CLUSTER"`
-}
+const (
+	envFilePath          = ".env.config"
+	secretariesKey       = "SECRETARIES"
+	preferredNamesKey    = "PREFERRED_NAMES"
+	excludedTeachersKey  = "EXCLUDED_TEACHERS"
+	semesterClassNameKey = "SEMESTER_CLASS_NAME"
+	isRedisClusterKey    = "IS_REDIS_CLUSTER"
+)
 
 func readEnvFile(filePath string) map[string]string {
 	envMap, err := godotenv.Read(filePath)
@@ -43,94 +43,44 @@ func readEnvFile(filePath string) map[string]string {
 	return envMap
 }
 
-// var currentPath, _ = os.Getwd()
-// fmt.Println(currentPath)
-func readJSONFile(filePath string) *FlexConfig {
-	var config FlexConfig
-	content, err := os.ReadFile(filePath)
-	if err != nil {
-		log.Fatal(err)
+func writeEnvFile(filePath string, envMap map[string]string) {
+	var lines []string
+	for k, v := range envMap {
+		lines = append(lines, fmt.Sprintf("%s=%s", k, v))
 	}
-	err = json.Unmarshal(content, &config)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return &config
-}
-
-func writeJSONFile(filePath string, config *FlexConfig) {
-	content, err := json.MarshalIndent(config, "", "	")
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = os.WriteFile(filePath, content, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-}
-
-func updateTypeScriptFile(config *FlexConfig, filePath string) {
-	content := fmt.Sprintf(`export const secretaries = %s
-export const preferredNames = %s
-export const excludedTeachers = %s
-export const semesterClassName = "%s"
-export const isRedisCluster: boolean = %v
-`,
-		toJSONArray(config.Secretaries),
-		toPreferredNamesJSONArray(config.PreferredNames),
-		toJSONArray(config.ExcludedTeachers),
-		config.SemesterClassName,
-		config.IsRedisCluster)
-
+	content := strings.Join(lines, "\n")
 	err := os.WriteFile(filePath, []byte(content), 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func toJSONArray(data []string) string {
-	result := make([]string, len(data))
-	for i, v := range data {
-		result[i] = fmt.Sprintf(`"%s"`, v)
-	}
-	return fmt.Sprintf("[%s]", strings.Join(result, ", "))
-}
-
-func toPreferredNamesJSONArray(data []PreferredNames) string {
-	result := make([]string, len(data))
-	for i, v := range data {
-		result[i] = fmt.Sprintf(`{ givenName: "%s", preferredName: "%s" }`, v.GivenName, v.PreferredName)
-	}
-	return fmt.Sprintf("[%s]", strings.Join(result, ", "))
-}
-
 func envToFlexConfig(envMap map[string]string) *FlexConfig {
 	var config FlexConfig
 
-	if secretaries, ok := envMap["SECRETARIES"]; ok {
+	if secretaries, ok := envMap[secretariesKey]; ok {
 		if err := json.Unmarshal([]byte(secretaries), &config.Secretaries); err != nil {
-			log.Fatalf("Error parsing REACT_APP_SECRETARIES: %v", err)
+			log.Fatalf("Error parsing %s: %v", secretariesKey, err)
 		}
 	}
 
-	if preferredNames, ok := envMap["PREFERRED_NAMES"]; ok {
+	if preferredNames, ok := envMap[preferredNamesKey]; ok {
 		if err := json.Unmarshal([]byte(preferredNames), &config.PreferredNames); err != nil {
-			log.Fatalf("Error parsing REACT_APP_PREFERRED_NAMES: %v", err)
+			log.Fatalf("Error parsing %s: %v", preferredNamesKey, err)
 		}
 	}
 
-	if excludedTeachers, ok := envMap["EXCLUDED_TEACHERS"]; ok {
+	if excludedTeachers, ok := envMap[excludedTeachersKey]; ok {
 		if err := json.Unmarshal([]byte(excludedTeachers), &config.ExcludedTeachers); err != nil {
-			log.Fatalf("Error parsing REACT_APP_EXCLUDED_TEACHERS: %v", err)
+			log.Fatalf("Error parsing %s: %v", excludedTeachersKey, err)
 		}
 	}
 
-	if semesterClassName, ok := envMap["SEMESTER_CLASS_NAME"]; ok {
+	if semesterClassName, ok := envMap[semesterClassNameKey]; ok {
 		config.SemesterClassName = semesterClassName
 	}
 
-	if isRedisCluster, ok := envMap["IS_REDIS_CLUSTER"]; ok {
+	if isRedisCluster, ok := envMap[isRedisClusterKey]; ok {
 		config.IsRedisCluster = strings.ToLower(isRedisCluster) == "true"
 	}
 
@@ -142,19 +92,41 @@ func GetConfig() *FlexConfig {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return envToFlexConfig(readEnvFile(filepath.Join(configPath, ".env.config")))
-	// return readJSONFile(filepath.Join(configPath, "config.json"))
-
+	return envToFlexConfig(readEnvFile(filepath.Join(configPath, envFilePath)))
 }
 
 // update the config based on passed in args
 func WriteConfig(args *FlexConfig) {
 	configPath, err := setWorkingDirectory()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error setting working directory: %v", err)
 	}
-	config := GetConfig()
+	configMap := readEnvFile(filepath.Join(configPath, envFilePath))
+	config := envToFlexConfig(configMap)
 
+	updateConfigFields(config, args)
+
+	for k, v := range envMapFromFlexConfig(config) {
+		configMap[k] = v
+	}
+	writeEnvFile(filepath.Join(configPath, envFilePath), configMap)
+	fmt.Println("Config updated successfully!")
+}
+
+func setWorkingDirectory() (string, error) {
+	exe, err := os.Executable()
+	if err != nil {
+		return "", fmt.Errorf("could not get executable path: %w", err)
+	}
+	rootDir := filepath.Dir(filepath.Dir(exe))
+	err = os.Chdir(rootDir)
+	if err != nil {
+		return "", fmt.Errorf("could not change working directory: %w", err)
+	}
+	return rootDir, nil
+}
+
+func updateConfigFields(config, args *FlexConfig) {
 	if len(args.Secretaries) > 0 {
 		config.Secretaries = args.Secretaries
 	}
@@ -170,21 +142,40 @@ func WriteConfig(args *FlexConfig) {
 	if args.IsRedisCluster {
 		config.IsRedisCluster = args.IsRedisCluster
 	}
-
-	writeJSONFile(filepath.Join(configPath, "config.json"), config)
-	updateTypeScriptFile(config, filepath.Join(configPath, "config.ts"))
-	fmt.Println("Config updated successfully!")
 }
 
-func setWorkingDirectory() (string, error) {
-	exe, err := os.Executable()
-	if err != nil {
-		return "", err
+func envMapFromFlexConfig(config *FlexConfig) map[string]string {
+	envMap := make(map[string]string)
+
+	if len(config.Secretaries) > 0 {
+		secretaries, err := json.Marshal(config.Secretaries)
+		if err != nil {
+			log.Fatalf("Error marshalling secretaries: %v", err)
+		}
+		envMap[secretariesKey] = string(secretaries)
 	}
-	rootDir := filepath.Dir(filepath.Dir(exe))
-	err = os.Chdir(rootDir)
-	if err != nil {
-		return "", err
+
+	if len(config.PreferredNames) > 0 {
+		preferredNames, err := json.Marshal(config.PreferredNames)
+		if err != nil {
+			log.Fatalf("Error marshalling preferredNames: %v", err)
+		}
+		envMap[preferredNamesKey] = string(preferredNames)
 	}
-	return rootDir, nil
+
+	if len(config.ExcludedTeachers) > 0 {
+		excludedTeachers, err := json.Marshal(config.ExcludedTeachers)
+		if err != nil {
+			log.Fatalf("Error marshalling excludedTeachers: %v", err)
+		}
+		envMap[excludedTeachersKey] = string(excludedTeachers)
+	}
+
+	if config.SemesterClassName != "" {
+		envMap[semesterClassNameKey] = config.SemesterClassName
+	}
+
+	envMap[isRedisClusterKey] = fmt.Sprintf("%v", config.IsRedisCluster)
+
+	return envMap
 }
