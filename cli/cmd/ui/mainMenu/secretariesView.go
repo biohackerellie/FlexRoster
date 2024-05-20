@@ -10,13 +10,12 @@ import (
 )
 
 var (
-	appStyle = lipgloss.NewStyle().Padding(1, 2).Align(lipgloss.Center)
+	appStyle = lipgloss.NewStyle().Padding(1, 2)
 
 	titleStyle = lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#FFFDF5")).
 			Background(lipgloss.Color("#25A065")).
-			Padding(1, 1)
-
+			Padding(0, 1)
 	statusMessageStyle = lipgloss.NewStyle().
 				Foreground(lipgloss.AdaptiveColor{Light: "#04B575", Dark: "#04B575"}).
 				Render
@@ -26,18 +25,17 @@ type item struct {
 	title string
 }
 
+type redrawMsg struct{}
+
 func (i item) Title() string       { return i.title }
 func (i item) Description() string { return "" }
 func (i item) FilterValue() string { return i.title }
 
 type ListKeyMap struct {
-	ToggleSpinner    key.Binding
-	ToggleTitleBar   key.Binding
-	ToggleStatusBar  key.Binding
-	TogglePagination key.Binding
-	ToggleHelpMenu   key.Binding
-	insertItem       key.Binding
-	toggleFocus      key.Binding
+	insertItem  key.Binding
+	toggleFocus key.Binding
+	deleteItem  key.Binding
+	back        key.Binding
 }
 
 func newListKeyMap() *ListKeyMap {
@@ -46,80 +44,67 @@ func newListKeyMap() *ListKeyMap {
 			key.WithKeys("enter"),
 			key.WithHelp("enter", "add item"),
 		),
-		ToggleSpinner: key.NewBinding(
-			key.WithKeys("s"),
-			key.WithHelp("s", "toggle spinner"),
-		),
-		ToggleTitleBar: key.NewBinding(
-			key.WithKeys("t"),
-			key.WithHelp("t", "toggle title bar"),
-		),
-		ToggleStatusBar: key.NewBinding(
-			key.WithKeys("S"),
-			key.WithHelp("S", "toggle status bar"),
-		),
-		TogglePagination: key.NewBinding(
-			key.WithKeys("p"),
-			key.WithHelp("p", "toggle pagination"),
-		),
-		ToggleHelpMenu: key.NewBinding(
-			key.WithKeys("?"),
-			key.WithHelp("?", "toggle help menu"),
-		),
 		toggleFocus: key.NewBinding(
 			key.WithKeys("i"),
 			key.WithHelp("i", "toggle input focus"),
+		),
+		deleteItem: func() key.Binding {
+			b := &key.Binding{}
+			for _, opt := range []key.BindingOpt{key.WithKeys("x", "backspace"), key.WithHelp("x", "delete item")} {
+				opt(b)
+			}
+			return *b
+		}(),
+		back: key.NewBinding(
+			key.WithKeys("q", "esc"),
+			key.WithHelp("q", "back"),
 		),
 	}
 }
 
 type model struct {
-	list         list.Model
-	Config       *configs.FlexConfig
-	keys         *ListKeyMap
-	delegateKeys *delegateKeyMap
-	textInput    textinput.Model
-	textFocus    bool
+	list      list.Model
+	config    *configs.FlexConfig
+	keys      *ListKeyMap
+	textInput textinput.Model
+	textFocus bool
 }
 
 func InitialSecModel() model {
 	var (
-		delagateKeys = newDelegateKeyMap()
-		listKeys     = newListKeyMap()
+		listKeys = newListKeyMap()
+		config   = configs.GetConfig()
 	)
-	config = configs.GetConfig()
 	secretaries := config.Secretaries
 	items := make([]list.Item, len(secretaries))
 	for i := range secretaries {
 		items[i] = item{title: secretaries[i]}
 	}
+	d := list.NewDefaultDelegate()
 
-	delegate := newItemDelegate(delagateKeys)
-
-	secretaryList := list.New(items, delegate, 20, 20)
+	secretaryList := list.New(items, d, 50, 25)
+	secretaryList.SetShowHelp(false)
 	secretaryList.Title = "Secretaries"
 	secretaryList.Styles.Title = titleStyle
 	secretaryList.AdditionalFullHelpKeys = func() []key.Binding {
 		return []key.Binding{
-			listKeys.ToggleSpinner,
-			listKeys.ToggleTitleBar,
-			listKeys.ToggleStatusBar,
-			listKeys.TogglePagination,
-			listKeys.ToggleHelpMenu,
+
 			listKeys.toggleFocus,
 			listKeys.insertItem,
+			listKeys.deleteItem,
+			listKeys.back,
 		}
 	}
 	ti := textinput.New()
 	ti.Placeholder = "Add a new secretary"
 	ti.Blur()
 	return model{
-		list:         secretaryList,
-		Config:       config,
-		keys:         listKeys,
-		delegateKeys: delagateKeys,
-		textInput:    ti,
-		textFocus:    false,
+		list:   secretaryList,
+		config: config,
+		keys:   listKeys,
+
+		textInput: ti,
+		textFocus: false,
 	}
 }
 
@@ -127,19 +112,12 @@ func (m model) Init() tea.Cmd {
 	return nil
 }
 
-func (m *model) refreshList() {
-	secretaries := m.Config.Secretaries
-	items := make([]list.Item, len(secretaries))
-	for i := range secretaries {
-		items[i] = item{title: secretaries[i]}
-	}
-	m.list.SetItems(items)
-}
-
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 
 	switch msg := msg.(type) {
+	case redrawMsg:
+		return m, tea.ClearScreen
 
 	case tea.WindowSizeMsg:
 		h, v := appStyle.GetFrameSize()
@@ -154,16 +132,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch {
 			case key.Matches(msg, m.keys.insertItem):
 				if m.textInput.Value() != "" {
-					m.delegateKeys.remove.SetEnabled(true)
 					newItem := m.New()
-					insCmd := m.list.InsertItem(-1, newItem)
-					statusCmd := m.list.NewStatusMessage(statusMessageStyle("Added " + newItem.Title()))
+					m.list.InsertItem(-1, newItem)
 					m.textInput.SetValue("")
 					m.textFocus = false
 					m.textInput.Blur()
 					m.list.SetFilteringEnabled(false)
 					m.list.SetShowPagination(true)
-					return m, tea.Batch(statusCmd, insCmd)
+					return m, func() tea.Msg { return redrawMsg{} } // bug - UI currently renders over itself here
 				}
 			case key.Matches(msg, key.NewBinding(key.WithKeys("esc"))):
 				m.textFocus = false
@@ -172,33 +148,22 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		} else {
 			switch {
-			case key.Matches(msg, m.keys.ToggleSpinner):
-				cmd := m.list.ToggleSpinner()
-				return m, cmd
+			case key.Matches(msg, m.keys.deleteItem):
+				index := m.list.Index()
+				i := m.list.Items()[index].(item)
 
-			case key.Matches(msg, m.keys.ToggleTitleBar):
-				v := !m.list.ShowTitle()
-				m.list.SetShowTitle(v)
-				m.list.SetShowFilter(v)
-				m.list.SetFilteringEnabled(v)
-				return m, nil
-
-			case key.Matches(msg, m.keys.ToggleStatusBar):
-				m.list.SetShowStatusBar(!m.list.ShowStatusBar())
-				return m, nil
-
-			case key.Matches(msg, m.keys.TogglePagination):
-				m.list.SetShowPagination(!m.list.ShowPagination())
-				return m, nil
-
-			case key.Matches(msg, m.keys.ToggleHelpMenu):
-				m.list.SetShowHelp(!m.list.ShowHelp())
-				return m, nil
-
+				if len(m.list.Items()) == 0 {
+					m.keys.deleteItem.SetEnabled(false)
+				}
+				m.Delete(index, i)
+				return m, func() tea.Msg { return redrawMsg{} }
 			case key.Matches(msg, m.keys.toggleFocus):
 				m.textFocus = true
 				m.textInput.Focus()
 				return m, nil
+			case key.Matches(msg, m.keys.back):
+				homeScreen := MainMenuModel()
+				return RootScreen().SwitchScreen(&homeScreen)
 			}
 		}
 	}
@@ -215,22 +180,35 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, tea.Batch(cmds...)
 }
 func (m model) View() string {
+	var view string
 	if m.textFocus {
-		return appStyle.Render(m.textInput.View())
+		view = appStyle.Render(m.textInput.View())
 	} else {
-		return appStyle.Render(m.list.View())
+		view = appStyle.Render(m.list.View())
 	}
 
-}
+	view += "\n" + subtleStyle.Render("i: insert") + dotStyle + " " + subtleStyle.Render("x: delete") + dotStyle + " " + subtleStyle.Render("q: back")
 
-// add a new secretary to the config.Secretaries
+	return view
+}
 
 func (m *model) New() item {
 	i := item{
 		title: m.textInput.Value(),
 	}
 
-	m.Config.Secretaries = append(m.Config.Secretaries, i.title)
-	configs.WriteConfig(m.Config)
+	m.config.Secretaries = append(m.config.Secretaries, i.title)
+	configs.WriteConfig(m.config)
 	return i
+}
+func (m *model) Delete(index int, i item) tea.Cmd {
+	for j, s := range m.config.Secretaries {
+		if s == i.title {
+			m.config.Secretaries = append(m.config.Secretaries[:j], m.config.Secretaries[j+1:]...)
+			break
+		}
+	}
+	configs.WriteConfig(m.config)
+	m.list.RemoveItem(index)
+	return nil
 }
