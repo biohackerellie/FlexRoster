@@ -3,7 +3,6 @@ package mainMenu
 import (
 	"github.com/biohackerellie/FlexRoster/cli/configs"
 	"github.com/charmbracelet/bubbles/table"
-	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -13,11 +12,8 @@ var tableBaseStyle = lipgloss.NewStyle().
 	BorderForeground(lipgloss.Color("240"))
 
 type NamesTable struct {
-	table       table.Model
-	config      *configs.FlexConfig
-	inputs      []textinput.Model
-	textFocused bool
-	focused     int
+	table  table.Model
+	config *configs.FlexConfig
 }
 
 func (m NamesTable) Init() tea.Cmd {
@@ -79,13 +75,12 @@ func (m *NamesTable) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "x":
 			i := m.table.SelectedRow()
 			m.Delete(i)
+
 			return m, func() tea.Msg { return redrawMsg{} }
 
 		case "i":
-			m.table.Blur()
-			m.textFocused = true
-			m.inputs[gn].Focus()
-			return m, nil
+			addScreen := AddNamesModel()
+			return RootScreen().SwitchScreen(&addScreen)
 		case "q", "esc":
 			homeScreen := MainMenuModel()
 			return RootScreen().SwitchScreen(&homeScreen)
@@ -100,10 +95,12 @@ func (m *NamesTable) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m NamesTable) View() string {
-	return tableBaseStyle.Render(m.table.View()) + "\n" + subtleStyle.Render("esc: back") + dotStyle + " " + subtleStyle.Render("q: quit")
+
+	return tableBaseStyle.Render(m.table.View()) + "\n" + subtleStyle.Render("esc: back") + dotStyle + " " + subtleStyle.Render("q: quit") + dotStyle + " " + subtleStyle.Render("i: insert") + dotStyle + " " + subtleStyle.Render("x: delete")
 }
 
 func (m *NamesTable) Delete(r table.Row) tea.Cmd {
+	var rows []table.Row
 	for i, name := range m.config.PreferredNames {
 		if name.GivenName == r[0] && name.PreferredName == r[1] {
 			m.config.PreferredNames = append(m.config.PreferredNames[:i], m.config.PreferredNames[i+1:]...)
@@ -112,16 +109,9 @@ func (m *NamesTable) Delete(r table.Row) tea.Cmd {
 		}
 	}
 	configs.WriteConfig(m.config)
+	for _, name := range m.config.PreferredNames {
+		rows = append(rows, table.Row{name.GivenName, name.PreferredName})
+	}
+	m.table.SetRows(rows)
 	return nil
-}
-
-func (m *NamesTable) New(gn, pn string) tea.Cmd {
-
-	m.config.PreferredNames = append(m.config.PreferredNames, configs.PreferredNames{GivenName: gn, PreferredName: pn})
-	configs.WriteConfig(m.config)
-	return nil
-}
-
-func (m *NamesTable) nextInput() {
-	m.focused = (m.focused + 1) % len(m.inputs)
 }

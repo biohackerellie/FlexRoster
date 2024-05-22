@@ -127,7 +127,6 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.list.FilterState() == list.Filtering {
 			break
 		}
-
 		if m.textFocus {
 			switch {
 			case key.Matches(msg, m.keys.insertItem):
@@ -139,7 +138,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.textInput.Blur()
 					m.list.SetFilteringEnabled(false)
 					m.list.SetShowPagination(true)
-					return m, func() tea.Msg { return redrawMsg{} } // bug - UI currently renders over itself here
+					return m, func() tea.Msg { return redrawMsg{} }
 				}
 			case key.Matches(msg, key.NewBinding(key.WithKeys("esc"))):
 				m.textFocus = false

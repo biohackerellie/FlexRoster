@@ -54,17 +54,29 @@ func (m AddNamesForm) Init() tea.Cmd {
 
 func (m *AddNamesForm) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd = make([]tea.Cmd, len(m.inputs))
-
+	namesMenu := PreferredNamesTable()
 	switch msg := msg.(type) {
+
+	case redrawMsg:
+		return m, tea.ClearScreen
+
 	case tea.KeyMsg:
+		switch msg.String() {
+		case "q":
+			return RootScreen().SwitchScreen(&namesMenu)
+		}
 		switch msg.Type {
 		case tea.KeyEnter:
 			if m.focused == len(m.inputs)-1 {
-				return m, tea.Quit
+				m.Submit(m.inputs[pn].Value(), m.inputs[gn].Value())
+				m.inputs[pn].SetValue("")
+				m.inputs[gn].SetValue("")
+				return m, func() tea.Msg { return redrawMsg{} }
 			}
 			m.nextInput()
 		case tea.KeyCtrlC, tea.KeyEsc:
 			return m, tea.Quit
+
 		case tea.KeyShiftTab, tea.KeyCtrlP:
 			m.prevInput()
 		case tea.KeyTab, tea.KeyCtrlN:
@@ -91,15 +103,12 @@ func (m *AddNamesForm) View() string {
  %s  
  %s  
 
- %s
 `,
 		inputStyle.Width(30).Render("Given Name"),
 		m.inputs[gn].View(),
 		inputStyle.Width(30).Render("Preferred Name"),
 		m.inputs[pn].View(),
-
-		"Press 'Enter' to submit",
-	) + "\n"
+	) + "\n" + subtleStyle.Render("tab: next field") + dotStyle + " " + subtleStyle.Render("enter: submit") + dotStyle + " " + subtleStyle.Render("q: back")
 }
 
 // nextInput focuses the next input field
@@ -113,5 +122,26 @@ func (m *AddNamesForm) prevInput() {
 	// Wrap around
 	if m.focused < 0 {
 		m.focused = len(m.inputs) - 1
+	}
+}
+
+func (m *AddNamesForm) Submit(pn, gn string) tea.Cmd {
+	errChan := make(chan error)
+	if pn == "" || gn == "" {
+		return func() tea.Msg {
+			return tea.Msg("Both fields must be filled in")
+		}
+	}
+	go func() {
+		m.config.PreferredNames = append(m.config.PreferredNames, configs.PreferredNames{GivenName: gn, PreferredName: pn})
+		errChan <- configs.WriteConfig(m.config)
+		close(errChan)
+	}()
+
+	return func() tea.Msg {
+		if err := <-errChan; err != nil {
+			return tea.Msg(fmt.Sprintf("Error writing config: %v", err))
+		}
+		return nil
 	}
 }

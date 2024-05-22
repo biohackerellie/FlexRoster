@@ -15,9 +15,10 @@ var (
 	subtleStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("241"))
 	checkboxStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("39")).Bold(true)
 	dotStyle      = lipgloss.NewStyle().Foreground(lipgloss.Color("236")).Render(dotChar)
-
-	mainStyle = lipgloss.NewStyle().MarginLeft(2)
-	config    *configs.FlexConfig
+	quitViewStyle = lipgloss.NewStyle().Padding(1).Border(lipgloss.RoundedBorder()).BorderForeground(lipgloss.Color("170"))
+	mainStyle     = lipgloss.NewStyle().MarginLeft(2)
+	choiceStyle   = lipgloss.NewStyle().PaddingLeft(1).Foreground(lipgloss.Color("241"))
+	config        *configs.FlexConfig
 )
 
 type MenuModel struct {
@@ -39,6 +40,7 @@ func MainMenuModel() MenuModel {
 	config = configs.GetConfig()
 	s := spinner.New()
 	s.Spinner = spinner.Dot
+
 	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
 	return MenuModel{
 		Choice:   0,
@@ -76,21 +78,21 @@ func (m *MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				namesScreen := PreferredNamesTable()
 				return RootScreen().SwitchScreen(&namesScreen)
 			case 2:
-				return m, nil
+				excludesScreen := ExcludedTeachers()
+				return RootScreen().SwitchScreen(&excludesScreen)
 			case 3:
-				return m, nil
+				semesterScreen := SemesterClassName()
+				return RootScreen().SwitchScreen(&semesterScreen)
 			}
 		}
 	}
 	return m, nil
 }
 
-func (m MenuModel) View() string {
+func (m *MenuModel) View() string {
 	var s string
 	c := m.Choice
-	if m.Quitting {
-		return "Quitting..."
-	}
+
 	tpl := "Edit Configuration\n\n"
 	tpl += "%s\n\n"
 	tpl += subtleStyle.Render("j/k, up/down: select") + dotStyle +

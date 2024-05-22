@@ -43,7 +43,7 @@ func readEnvFile(filePath string) map[string]string {
 	return envMap
 }
 
-func writeEnvFile(filePath string, envMap map[string]string) {
+func writeEnvFile(filePath string, envMap map[string]string) error {
 	var lines []string
 	for k, v := range envMap {
 		lines = append(lines, fmt.Sprintf("%s=%s", k, v))
@@ -51,8 +51,9 @@ func writeEnvFile(filePath string, envMap map[string]string) {
 	content := strings.Join(lines, "\n")
 	err := os.WriteFile(filePath, []byte(content), 0644)
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("error writing to env file!", err)
 	}
+	return nil
 }
 
 func envToFlexConfig(envMap map[string]string) *FlexConfig {
@@ -88,7 +89,7 @@ func envToFlexConfig(envMap map[string]string) *FlexConfig {
 }
 
 func GetConfig() *FlexConfig {
-	configPath, err := setWorkingDirectory()
+	configPath, err := SetWorkingDirectory()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -96,10 +97,10 @@ func GetConfig() *FlexConfig {
 }
 
 // update the config based on passed in args
-func WriteConfig(args *FlexConfig) {
-	configPath, err := setWorkingDirectory()
+func WriteConfig(args *FlexConfig) error {
+	configPath, err := SetWorkingDirectory()
 	if err != nil {
-		log.Fatalf("Error setting working directory: %v", err)
+		return fmt.Errorf("error setting working directory: %v", err)
 	}
 	configMap := readEnvFile(filepath.Join(configPath, envFilePath))
 	config := envToFlexConfig(configMap)
@@ -109,16 +110,20 @@ func WriteConfig(args *FlexConfig) {
 	for k, v := range envMapFromFlexConfig(config) {
 		configMap[k] = v
 	}
-	writeEnvFile(filepath.Join(configPath, envFilePath), configMap)
+	err = writeEnvFile(filepath.Join(configPath, envFilePath), configMap)
+	if err != nil {
+		return fmt.Errorf("error writing to env file: %v", err)
+	}
 	fmt.Println("Config updated successfully!")
+	return nil
 }
 
-func setWorkingDirectory() (string, error) {
+func SetWorkingDirectory() (string, error) {
 	exe, err := os.Executable()
 	if err != nil {
 		return "", fmt.Errorf("could not get executable path: %w", err)
 	}
-	rootDir := filepath.Dir(filepath.Dir(exe))
+	rootDir := filepath.Dir(filepath.Dir(filepath.Dir(exe)))
 	err = os.Chdir(rootDir)
 	if err != nil {
 		return "", fmt.Errorf("could not change working directory: %w", err)
