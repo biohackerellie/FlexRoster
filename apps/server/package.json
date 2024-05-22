@@ -35,7 +35,7 @@
     "chalk-animation": "^2.0.3",
     "cli-spinners": "^3.0.0",
     "commander": "^12.1.0",
-    "elysia": "^1.0.20",
+    "elysia": "^1.0.21",
     "execa": "^9.1.0",
     "fs-extra": "^11.2.0",
     "gradient-string": "^2.0.2",
