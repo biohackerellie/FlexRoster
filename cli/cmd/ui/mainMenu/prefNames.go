@@ -8,18 +8,6 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-const (
-	gn = iota
-	pn
-)
-
-const (
-	hotPink  = lipgloss.Color("#FF06B7")
-	darkGray = lipgloss.Color("#767676")
-)
-
-var inputStyle = lipgloss.NewStyle().Foreground(hotPink)
-
 var tableBaseStyle = lipgloss.NewStyle().
 	BorderStyle(lipgloss.NormalBorder()).
 	BorderForeground(lipgloss.Color("240"))
@@ -37,18 +25,6 @@ func (m NamesTable) Init() tea.Cmd {
 }
 
 func PreferredNamesTable() NamesTable {
-	var inputs []textinput.Model = make([]textinput.Model, 2)
-	inputs[gn] = textinput.New()
-	inputs[gn].Placeholder = "Milly Bobbie Brown"
-	inputs[gn].Blur()
-	inputs[gn].Width = 30
-	inputs[gn].Prompt = ""
-
-	inputs[pn] = textinput.New()
-	inputs[pn].Placeholder = "Milly Bonilly"
-	inputs[pn].Blur()
-	inputs[pn].Width = 30
-	inputs[pn].Prompt = ""
 
 	config := configs.GetConfig()
 	names := config.PreferredNames
@@ -84,11 +60,8 @@ func PreferredNamesTable() NamesTable {
 	t.SetStyles(s)
 
 	return NamesTable{
-		inputs:      inputs,
-		table:       t,
-		config:      config,
-		textFocused: false,
-		focused:     0,
+		table:  t,
+		config: config,
 	}
 }
 
@@ -99,56 +72,30 @@ func (m *NamesTable) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, tea.ClearScreen
 
 	case tea.KeyMsg:
-		if m.textFocused {
-			switch msg.Type {
-			case tea.KeyEnter:
-				if m.focused == len(m.inputs)-1 {
-					m.New(m.inputs[gn].Value(), m.inputs[pn].Value())
-					return m, func() tea.Msg { return redrawMsg{} }
-				}
-				m.nextInput()
-			case tea.KeyEscape:
-				m.textFocused = false
-				for i := range m.inputs {
-					m.inputs[i].Blur()
-				}
-			case tea.KeyTab:
-				m.nextInput()
-			}
-			for i := range m.inputs {
-				m.inputs[i].Blur()
-			}
-			m.inputs[m.focused].Focus()
-			return m, nil
-		} else {
-			switch msg.String() {
-			case "ctrl+c":
-				return m, tea.Quit
-			case "x":
-				i := m.table.SelectedRow()
-				m.Delete(i)
-				return m, func() tea.Msg { return redrawMsg{} }
 
-			case "i":
-				m.table.Blur()
-				m.textFocused = true
-				m.inputs[gn].Focus()
-				return m, nil
-			case "q", "esc":
-				homeScreen := MainMenuModel()
-				return RootScreen().SwitchScreen(&homeScreen)
-			}
+		switch msg.String() {
+		case "ctrl+c":
+			return m, tea.Quit
+		case "x":
+			i := m.table.SelectedRow()
+			m.Delete(i)
+			return m, func() tea.Msg { return redrawMsg{} }
+
+		case "i":
+			m.table.Blur()
+			m.textFocused = true
+			m.inputs[gn].Focus()
+			return m, nil
+		case "q", "esc":
+			homeScreen := MainMenuModel()
+			return RootScreen().SwitchScreen(&homeScreen)
+
 		}
 	}
-	if m.textFocused {
-		newInputsModel, cmd := m.inputs[m.focused].Update(msg)
-		m.inputs[m.focused] = newInputsModel
-		cmds = append(cmds, cmd)
-	} else {
-		newTableModel, cmd := m.table.Update(msg)
-		m.table = newTableModel
-		cmds = append(cmds, cmd)
-	}
+	newTableModel, cmd := m.table.Update(msg)
+	m.table = newTableModel
+	cmds = append(cmds, cmd)
+
 	return m, tea.Batch(cmds...)
 }
 
