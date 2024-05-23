@@ -8,6 +8,8 @@ type RootScreenModel struct {
 	model tea.Model
 }
 
+type forceRedrawMsg struct{}
+
 func RootScreen() RootScreenModel {
 
 	homeScreen := MainMenuModel()
@@ -29,5 +31,5 @@ func (m RootScreenModel) View() string {
 
 func (m RootScreenModel) SwitchScreen(model tea.Model) (tea.Model, tea.Cmd) {
 	m.model = model
-	return m.model, m.model.Init()
+	return m.model, tea.Batch(m.model.Init(), func() tea.Msg { return forceRedrawMsg{} })
 }

@@ -1,6 +1,6 @@
 module github.com/biohackerellie/FlexRoster/cli
 
-go 1.22.3
+go 1.22
 
 require (
 	github.com/charmbracelet/bubbles v0.18.0
@@ -9,6 +9,7 @@ require (
 	github.com/charmbracelet/lipgloss v0.10.0
 	github.com/joho/godotenv v1.5.1
 	github.com/spf13/cobra v1.8.0
+
 )
 
 require (
