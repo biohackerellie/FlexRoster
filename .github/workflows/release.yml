@@ -1,11 +1,11 @@
 # .github/workflows/release.yml
-name: goreleaser
+name: Release
 
 on:
   pull_request:
   push:
-    tags:
-      - "*"
+    branches:
+      - main
 
 permissions:
   contents: write
