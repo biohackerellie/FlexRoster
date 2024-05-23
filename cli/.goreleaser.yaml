@@ -1,31 +1,34 @@
-
 before:
   hooks:
-    - go mod tidy
+    # - go mod download
+    # - go mod tidy
 
 builds:
+  - main: ./main.go
+    id: flex
   - env:
       - CGO_ENABLED=0
     goos:
       - linux
       - windows
-  binary: flex
-  
-
+      - darwin
+    ldflags:
+      - -s -w -X github.com/biohackerellie/FlexRoster/cli/cmd.flexCliVersion={{.Version}}
 release:
   prerelease: auto
-  github:
-    owner: biohackerellie
-    name: FlexRoster
+
 universal_binaries:
   - replace: true
+
 archives:
+  - id: flexArch
+    builds: [flex]
   - name_template: >-
       {{- .ProjectName }}_ {{- .Version }}_ {{- title .Os }}_ {{- if eq .Arch "amd64" }}x86_64 {{- else if eq .Arch "386" }}i386 {{- else }}{{ .Arch }}{{ end }} {{- if .Arm }}v{{ .Arm }}{{ end -}}
     format_overrides:
       - goos: windows
         format: zip
+    allow_different_binary_count: true
     builds_info:
       group: root
       owner: root
-
