@@ -6,6 +6,8 @@ runs:
   steps:
     - uses: pnpm/action-setup@v2
     - uses: oven-sh/setup-bun@v1
+
+    - uses: actions/setup-go@v5
     - uses: actions/setup-node@v4
       with:
         node-version: "18"
