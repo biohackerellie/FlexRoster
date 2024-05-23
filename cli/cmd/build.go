@@ -17,10 +17,9 @@ var buildCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 
-		tprogram := tea.NewProgram(build.Builder(), tea.WithAltScreen())
+		tprogram := tea.NewProgram(build.Builder())
 		if _, err := tprogram.Run(); err != nil {
 			cobra.CheckErr(err)
 		}
-
 	},
 }
