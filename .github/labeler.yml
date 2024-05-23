@@ -1,0 +1,5 @@
+"📌 area: cli":
+  - any: ["cli/**/*"]
+
+"📌 area: ci":
+  - any: [".github/**/*"]

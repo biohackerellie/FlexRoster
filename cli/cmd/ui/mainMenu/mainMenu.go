@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/biohackerellie/FlexRoster/cli/configs"
+	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -11,14 +12,13 @@ import (
 const dotChar = "•"
 
 var (
-	keywordStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("211"))
 	subtleStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("241"))
-	ticksStyle    = lipgloss.NewStyle().Foreground(lipgloss.Color("79"))
-	checkboxStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("212"))
+	checkboxStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("39")).Bold(true)
 	dotStyle      = lipgloss.NewStyle().Foreground(lipgloss.Color("236")).Render(dotChar)
-
-	mainStyle = lipgloss.NewStyle().MarginLeft(2)
-	config    *configs.FlexConfig
+	quitViewStyle = lipgloss.NewStyle().Padding(1).Border(lipgloss.RoundedBorder()).BorderForeground(lipgloss.Color("170"))
+	mainStyle     = lipgloss.NewStyle().MarginLeft(2)
+	choiceStyle   = lipgloss.NewStyle().PaddingLeft(1).Foreground(lipgloss.Color("241"))
+	config        *configs.FlexConfig
 )
 
 type MenuModel struct {
@@ -28,54 +28,37 @@ type MenuModel struct {
 	Frames   int
 	Progress float64
 	Loaded   bool
+	spinner  spinner.Model
 	Config   *configs.FlexConfig
 }
 
 func (m MenuModel) Init() tea.Cmd {
-	return nil
+	return tea.Batch(m.spinner.Tick, tea.SetWindowTitle("Be Gay, Do Crime 🏳️‍🌈🏴‍☠️"))
 }
 
 func MainMenuModel() MenuModel {
 	config = configs.GetConfig()
+	s := spinner.New()
+	s.Spinner = spinner.Dot
+
+	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
 	return MenuModel{
 		Choice:   0,
 		Chosen:   false,
 		Quitting: false,
 		Config:   config,
+		spinner:  s,
 	}
 }
 
 func (m *MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	if msg, ok := msg.(tea.KeyMsg); ok {
-		k := msg.String()
-		if k == "q" || k == "esc" || k == "ctrl+c" {
-			m.Quitting = true
-			return m, tea.Quit
-		}
-	}
-	if !m.Chosen {
-		return updateChoices(msg, m)
-	}
 
-	return updateChosen(msg, m)
-
-}
-
-func (m MenuModel) View() string {
-	var s string
-	if m.Quitting {
-		return "Quitting..."
-	}
-
-	s = choicesView(m)
-
-	return mainStyle.Render("\n" + s + "\n\n")
-}
-
-func updateChoices(msg tea.Msg, m *MenuModel) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
+		case "q", "esc", "ctrl+c":
+			m.Quitting = true
+			return m, tea.Quit
 		case "j", "down":
 			m.Choice++
 			if m.Choice > 3 {
@@ -87,31 +70,27 @@ func updateChoices(msg tea.Msg, m *MenuModel) (tea.Model, tea.Cmd) {
 				m.Choice = 3
 			}
 		case "enter":
-			m.Chosen = true
-			return m, nil
+			switch m.Choice {
+			case 0:
+				secretariesScreen := InitialSecModel()
+				return RootScreen().SwitchScreen(&secretariesScreen)
+			case 1:
+				namesScreen := PreferredNamesTable()
+				return RootScreen().SwitchScreen(&namesScreen)
+			case 2:
+				excludesScreen := ExcludedTeachers()
+				return RootScreen().SwitchScreen(&excludesScreen)
+			case 3:
+				semesterScreen := SemesterClassName()
+				return RootScreen().SwitchScreen(&semesterScreen)
+			}
 		}
-
-	}
-
-	return m, nil
-}
-
-func updateChosen(msg tea.Msg, m *MenuModel) (tea.Model, tea.Cmd) {
-	switch m.Choice {
-	case 0:
-		secretariesScreen := InitialSecModel()
-		return secretariesScreen, secretariesScreen.Init()
-	case 1:
-		return m, nil
-	case 2:
-		return m, nil
-	case 3:
-		return m, nil
 	}
 	return m, nil
 }
 
-func choicesView(m MenuModel) string {
+func (m *MenuModel) View() string {
+	var s string
 	c := m.Choice
 
 	tpl := "Edit Configuration\n\n"
@@ -127,12 +106,14 @@ func choicesView(m MenuModel) string {
 		checkbox("Excluded Teachers", c == 2),
 		checkbox("Semester Class Name", c == 3),
 	)
-	return fmt.Sprintf(tpl, choices)
+	s = fmt.Sprintf(tpl, choices)
+
+	return mainStyle.Render("\n" + s + "\n\n")
 }
 
 func checkbox(label string, checked bool) string {
 	if checked {
-		return checkboxStyle.Render("[x] " + label)
+		return checkboxStyle.Render("(•) " + label)
 	}
-	return fmt.Sprintf("[ ] %s", label)
+	return fmt.Sprintf("( ) %s", label)
 }

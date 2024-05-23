@@ -16,7 +16,7 @@ next-env.d.ts
 
 tmp/
 # production
-build
+
 dist/
 bin/
 # misc
