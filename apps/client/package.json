@@ -53,7 +53,7 @@
     "@local/prettier-config": "workspace:*",
     "@local/tailwind-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
-    "@types/react": "^18.3.2",
+    "@types/react": "^18.3.3",
     "@types/node": "^20.12.12",
     "autoprefixer": "^10.4.19",
     "dotenv-cli": "^7.4.2",
