@@ -38,7 +38,7 @@
     "react-day-picker": "^8.10.1",
     "react-hook-form": "^7.51.4",
     "sonner": "^1.4.41",
-    "react": "^18.3.1",
+    "react": "19.0.0-rc-4c2e457c7c-20240522",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.1"
@@ -51,7 +51,7 @@
     "@types/react": "^18.3.2",
     "eslint": "^9.3.0",
     "prettier": "^3.2.5",
-    "react": "^18.3.1",
+    "react": "19.0.0-rc-4c2e457c7c-20240522",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5",
     "zod": "^3.23.8"
