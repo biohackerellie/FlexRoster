@@ -1,32 +1,41 @@
 #!/bin/bash
 
+# Function to handle cleanup and exit
 cleanup() {
   echo "Operation cancelled."
   exit 1
 }
 
+# Trap the SIGINT signal (Ctrl + C)
 trap cleanup SIGINT
 
+# Get the type of change
 TYPE=$(gum choose "fix" "feat" "docs" "style" "refactor" "test" "chore" "revert")
 
+# Get the summary and description for the commit
 SUMMARY=$(gum input --value "$TYPE: " --placeholder "Summary of this change")
 DESCRIPTION=$(gum write --placeholder "Details of this change")
-if gum confirm "Commit changes?"; then
-  git add -A && git commit -m "$SUMMARY" -m "$DESCRIPTION"
-else
+
+# Confirm the commit
+if ! gum confirm "Commit changes?"; then
   cleanup
 fi
 
-LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
-LATEST_TAG=${LATEST_TAG:-v0.0.0}
-
+# Get the type of version bump
 VERSION_TYPE=$(gum choose "major" "minor" "patch")
+
+# Get the latest tag
+LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+LATEST_TAG=${LATEST_TAG:-v0.0.0} # Default to v0.0.0 if no tags are found
+
+# Extract the major, minor, and patch numbers
 IFS='.' read -r -a VERSION_PARTS <<<"${LATEST_TAG//v/}"
 
 MAJOR=${VERSION_PARTS[0]}
 MINOR=${VERSION_PARTS[1]}
 PATCH=${VERSION_PARTS[2]}
 
+# Increment the version numbers based on the chosen version type
 case $VERSION_TYPE in
 major)
   MAJOR=$((MAJOR + 1))
@@ -46,9 +55,13 @@ esac
 NEW_TAG="v$MAJOR.$MINOR.$PATCH"
 
 # Confirm the new tag
-if gum confirm "Tag this commit as $NEW_TAG?"; then
-  git tag "$NEW_TAG"
-  git push origin "$NEW_TAG"
-else
+if ! gum confirm "Tag this commit as $NEW_TAG?"; then
   cleanup
 fi
+
+# Execute all commands after user confirmation
+git add -A
+git commit -m "$SUMMARY" -m "$DESCRIPTION"
+git push origin HEAD # Push changes to the current branch
+git tag "$NEW_TAG"
+git push origin "$NEW_TAG" # Push the new tag
