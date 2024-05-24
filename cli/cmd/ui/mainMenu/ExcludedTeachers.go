@@ -144,7 +144,10 @@ func (m *ExcludesModel) New() item {
 	}
 
 	m.config.ExcludedTeachers = append(m.config.ExcludedTeachers, i.title)
-	configs.WriteConfig(m.config)
+	err := configs.WriteConfig(m.config)
+	if err != nil {
+		return item{title: err.Error()}
+	}
 	return i
 }
 func (m *ExcludesModel) Delete(index int, i item) tea.Cmd {
@@ -154,7 +157,10 @@ func (m *ExcludesModel) Delete(index int, i item) tea.Cmd {
 			break
 		}
 	}
-	configs.WriteConfig(m.config)
+	err := configs.WriteConfig(m.config)
+	if err != nil {
+		return func() tea.Msg { return err }
+	}
 	m.list.RemoveItem(index)
 	return nil
 }

@@ -15,11 +15,27 @@ var (
 	subtleStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("241"))
 	checkboxStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("39")).Bold(true)
 	dotStyle      = lipgloss.NewStyle().Foreground(lipgloss.Color("236")).Render(dotChar)
-	quitViewStyle = lipgloss.NewStyle().Padding(1).Border(lipgloss.RoundedBorder()).BorderForeground(lipgloss.Color("170"))
 	mainStyle     = lipgloss.NewStyle().MarginLeft(2)
-	choiceStyle   = lipgloss.NewStyle().PaddingLeft(1).Foreground(lipgloss.Color("241"))
 	config        *configs.FlexConfig
+	logoStyle     = lipgloss.NewStyle().
+			BorderStyle(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("212")).
+			Margin(1).
+			Padding(1, 2).
+			Foreground(lipgloss.Color("212"))
 )
+
+var Logo = logoStyle.Render(`
+ ________  __                      _______                         __                         
+/        |/  |                    /       \                       /  |                        
+$$$$$$$$/ $$ |  ______   __    __ $$$$$$$  |  ______    _______  _$$ |_     ______    ______  
+$$ |__    $$ | /      \ /  \  /  |$$ |__$$ | /      \  /       |/ $$   |   /      \  /      \ 
+$$    |   $$ |/$$$$$$  |$$  \/$$/ $$    $$< /$$$$$$  |/$$$$$$$/ $$$$$$/   /$$$$$$  |/$$$$$$  |
+$$$$$/    $$ |$$    $$ | $$  $$<  $$$$$$$  |$$ |  $$ |$$      \   $$ | __ $$    $$ |$$ |  $$/ 
+$$ |      $$ |$$$$$$$$/  /$$$$  \ $$ |  $$ |$$ \__$$ | $$$$$$  |  $$ |/  |$$$$$$$$/ $$ |      
+$$ |      $$ |$$       |/$$/ $$  |$$ |  $$ |$$    $$/ /     $$/   $$  $$/ $$       |$$ |      
+$$/       $$/  $$$$$$$/ $$/   $$/ $$/   $$/  $$$$$$/  $$$$$$$/     $$$$/   $$$$$$$/ $$/       
+`)
 
 type MenuModel struct {
 	Choice   int
@@ -28,6 +44,7 @@ type MenuModel struct {
 	Frames   int
 	Progress float64
 	Loaded   bool
+	Logo     string
 	spinner  spinner.Model
 	Config   *configs.FlexConfig
 }
@@ -48,6 +65,7 @@ func MainMenuModel() MenuModel {
 		Quitting: false,
 		Config:   config,
 		spinner:  s,
+		Logo:     Logo,
 	}
 }
 
@@ -61,13 +79,13 @@ func (m *MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case "j", "down":
 			m.Choice++
-			if m.Choice > 3 {
+			if m.Choice > 4 {
 				m.Choice = 0
 			}
 		case "k", "up":
 			m.Choice--
 			if m.Choice < 0 {
-				m.Choice = 3
+				m.Choice = 4
 			}
 		case "enter":
 			switch m.Choice {
@@ -83,6 +101,9 @@ func (m *MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case 3:
 				semesterScreen := SemesterClassName()
 				return RootScreen().SwitchScreen(&semesterScreen)
+			case 4:
+				buildScreen := Builder()
+				return RootScreen().SwitchScreen(&buildScreen)
 			}
 		}
 	}
@@ -100,15 +121,16 @@ func (m *MenuModel) View() string {
 		subtleStyle.Render("q: quit")
 
 	choices := fmt.Sprintf(
-		"%s\n%s\n%s\n%s",
+		"%s\n%s\n%s\n%s\n%s",
 		checkbox("Secretaries", c == 0),
 		checkbox("Preferred Names", c == 1),
 		checkbox("Excluded Teachers", c == 2),
 		checkbox("Semester Class Name", c == 3),
+		checkbox("Build and Deploy Changes", c == 4),
 	)
 	s = fmt.Sprintf(tpl, choices)
 
-	return mainStyle.Render("\n" + s + "\n\n")
+	return mainStyle.Render("\n", Logo+"\n"+s+"\n\n")
 }
 
 func checkbox(label string, checked bool) string {

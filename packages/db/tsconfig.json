@@ -2,7 +2,7 @@
   "extends": "@local/tsconfig/internal-package.json",
   "compilerOptions": {
     "outDir": "dist",
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+    "tsBuildInfoFile": ".turbo/.cache/tsbuildinfo.json"
   },
   "include": ["src", "src/drizzle.config.ts", "../../tmp/schema.ts"],
   "exclude": ["node_modules"]
