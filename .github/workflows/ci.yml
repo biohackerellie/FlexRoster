@@ -26,11 +26,20 @@ jobs:
       - name: Copy env
         shell: bash
         run: cp .env.example .env
-      - name: Go Setup
-        uses: ./tooling/github/setup/goAction
       - name: Lint
         run: pnpm lint && pnpm lint:ws
-
+  golint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - name: golangci-ling
+        uses: golangci/golangci-lint-action@v6
+        with:
+          working-directory: ./cli
+          version: v1.58
   format:
     runs-on: ubuntu-latest
     steps:
