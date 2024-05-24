@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 0
       - name: Verify conditions
         run: |
-          if [[ "${{ github.ref }}" != "refs/heads/main" || ! "${{ github.ref }}" =~ ^refs/tags/v ]] || ! ${{github.actor}} == 'biohackerellie'; then
+          if [[ "${{ github.ref }}" != "refs/heads/main" || ! ${{github.actor}} == 'biohackerellie'; then
             echo "This workflow can only run on tagged commits in the main branch."
             exit 1
           fi
