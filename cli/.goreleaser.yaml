@@ -6,31 +6,13 @@ before:
     - go mod tidy
     - go generate ./...
 builds:
-  - main: ./main.go
-    id: flex
-  - env:
+  - id: "blah"
+    binary: cli
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
-      - windows
-      - darwin
     goarch:
       - amd64
-      - arm
-      - arm64
-      - 386
-
     ldflags: -s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}
-release:
-  prerelease: auto
-
-universal_binaries:
-  - replace: true
-
-archives:
-  - id: flexArch
-    builds: [flex]
-  - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
-    format: binary
-    replacements:
-      armv6: arm
+    no_unique_dist_dir: true
