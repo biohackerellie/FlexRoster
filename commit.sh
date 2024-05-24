@@ -62,6 +62,5 @@ fi
 # Execute all commands after user confirmation
 git add -A
 git commit -m "$SUMMARY" -m "$DESCRIPTION"
-git push origin HEAD # Push changes to the current branch
 git tag "$NEW_TAG"
-git push origin "$NEW_TAG" # Push the new tag
+git push origin HEAD --tags #
