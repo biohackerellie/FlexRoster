@@ -4,7 +4,7 @@ before:
   hooks:
     # - go mod download
     - go mod tidy
-
+    - go generate ./...
 builds:
   - main: ./main.go
     id: flex
@@ -12,6 +12,13 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm
+      - arm64
+      - 386
 
     ldflags: -s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}
 release:
@@ -23,10 +30,7 @@ universal_binaries:
 archives:
   - id: flexArch
     builds: [flex]
-  - name_template: >-
-      {{- .ProjectName }}_ {{- .Version }}_ {{- title .Os }}_ {{- if eq .Arch "amd64" }}x86_64 {{- else if eq .Arch "386" }}i386 {{- else }}{{ .Arch }}{{ end }} {{- if .Arm }}v{{ .Arm }}{{ end -}}
-    wrap_in_directory: true
-    allow_different_binary_count: true
-    builds_info:
-      group: root
-      owner: root
+  - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    format: binary
+    replacements:
+      armv6: arm
