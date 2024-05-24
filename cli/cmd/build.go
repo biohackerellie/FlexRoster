@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/biohackerellie/FlexRoster/cli/cmd/ui/build"
+	"github.com/biohackerellie/FlexRoster/cli/cmd/ui/mainMenu"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 )
@@ -17,7 +17,7 @@ var buildCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 
-		tprogram := tea.NewProgram(build.Builder())
+		tprogram := tea.NewProgram(mainMenu.Builder())
 		if _, err := tprogram.Run(); err != nil {
 			cobra.CheckErr(err)
 		}

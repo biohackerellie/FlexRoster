@@ -12,7 +12,7 @@
         "name": "next"
       }
     ],
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "tsBuildInfoFile": ".turbo/.cache/tsbuildinfo.json",
     "module": "esnext"
   },
   "include": [".", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

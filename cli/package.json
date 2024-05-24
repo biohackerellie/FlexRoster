@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "go build -o bin/ ",
-    "start": "./bin/cli"
+    "start": "./bin/cli",
+    "lint": "golangci-lint run"
   }
 }

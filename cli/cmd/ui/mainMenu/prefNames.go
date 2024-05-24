@@ -104,11 +104,17 @@ func (m *NamesTable) Delete(r table.Row) tea.Cmd {
 	for i, name := range m.config.PreferredNames {
 		if name.GivenName == r[0] && name.PreferredName == r[1] {
 			m.config.PreferredNames = append(m.config.PreferredNames[:i], m.config.PreferredNames[i+1:]...)
-			configs.WriteConfig(m.config)
+			err := configs.WriteConfig(m.config)
+			if err != nil {
+				return func() tea.Msg { return err }
+			}
 			break
 		}
 	}
-	configs.WriteConfig(m.config)
+	err := configs.WriteConfig(m.config)
+	if err != nil {
+		return func() tea.Msg { return err }
+	}
 	for _, name := range m.config.PreferredNames {
 		rows = append(rows, table.Row{name.GivenName, name.PreferredName})
 	}

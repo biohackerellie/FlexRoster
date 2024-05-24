@@ -1,4 +1,4 @@
-package build
+package mainMenu
 
 import (
 	"os/exec"
@@ -9,30 +9,30 @@ import (
 
 var (
 	helpStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("241")).Render
-	mainStyle = lipgloss.NewStyle().MarginLeft(1)
 )
 
-type model struct {
+type BuilderModel struct {
 	err error
 }
 
-func Builder() model {
+func Builder() BuilderModel {
 
-	return model{}
+	return BuilderModel{}
 }
 
-func (m model) Init() tea.Cmd {
+func (m BuilderModel) Init() tea.Cmd {
 	return runScript("./scripts/test.sh")
 }
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m BuilderModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "a":
 			return m, runScript("./scripts/test.sh")
 		case "ctrl+c", "q":
-			return m, tea.Quit
+			mainScreen := MainMenuModel()
+			return RootScreen().SwitchScreen(&mainScreen)
 		}
 	case editorFinishedMsg:
 		if msg.err != nil {
@@ -43,11 +43,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m model) View() string {
+func (m BuilderModel) View() string {
 	if m.err != nil {
 		return "Error: " + m.err.Error() + "\n"
 	}
-	return helpStyle("Press 'a' to run the script\n")
+	return helpStyle("Press q to go back") + "\n"
 }
 
 type editorFinishedMsg struct{ err error }
@@ -59,15 +59,3 @@ func runScript(filePath string) tea.Cmd {
 		return editorFinishedMsg{err}
 	})
 }
-
-// type customOutput struct{}
-
-// func (c customOutput) Write(p []byte) (int, error) {
-// 	fmt.Println(randomEmoji(), string(p))
-// 	return len(p), nil
-// }
-
-// func randomEmoji() string {
-// 	emojis := []rune("🍦🧋🍡🤠👾😭🦊🐯🦆🥨🎏🍔🍒🍥🎮📦🦁🐶🐸🍕🥐🧲🚒🥇🏆🌽")
-// 	return string(emojis[rand.Intn(len(emojis))]) // nolint:gosec
-// }

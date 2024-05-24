@@ -19,7 +19,7 @@
     },
     "nightly": {
       "dependsOn": ["^topo"],
-      "outputs": ["node_modules/.cache/.nightlycache"]
+      "outputs": [".turbo/.cache/.nightlycache"]
     },
     "dev": {
       "cache": false,
@@ -39,16 +39,16 @@
       "cache": false
     },
     "format": {
-      "outputs": ["node_modules/.cache/.prettiercache"],
+      "outputs": [".turbo/.cache/.prettiercache"],
       "outputMode": "new-only"
     },
     "lint": {
       "dependsOn": ["^topo"],
-      "outputs": ["node_modules/.cache/.eslintcache"]
+      "outputs": [".turbo/.cache/.eslintcache"]
     },
     "typecheck": {
       "dependsOn": ["^topo"],
-      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
+      "outputs": [".turbo/.cache/tsbuildinfo.json"]
     }
   },
   "globalEnv": [
