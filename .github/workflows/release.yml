@@ -28,6 +28,8 @@ jobs:
           go-version: stable
       # More assembly might be required: Docker logins, GPG, etc.
       # It all depends on your needs.
+      - name: Copy Env
+        run: cp .env.config.example .env.config
       - name: Tidy Go Modules
         run: go mod tidy
         working-directory: ./cli/
