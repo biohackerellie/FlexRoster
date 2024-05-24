@@ -2,10 +2,10 @@
 name: Release
 
 on:
-  pull_request:
   push:
-    branches:
-      - main
+    branches: [main]
+    tags: ["v*"]
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{github.ref != 'refs/heads/main'}}
@@ -17,13 +17,19 @@ permissions:
 
 jobs:
   goreleaser:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor == 'biohackerellie'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Verify conditions
+        run: |
+          if [[ "${{ github.ref }}" != "refs/heads/main" || ! "${{ github.ref }}" =~ ^refs/tags/v ]] || ! ${{github.actor}} == 'biohackerellie'; then
+            echo "This workflow can only run on tagged commits in the main branch."
+            exit 1
+          fi
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
