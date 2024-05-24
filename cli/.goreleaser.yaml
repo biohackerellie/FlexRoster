@@ -1,7 +1,9 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema-pro.json
+
 before:
   hooks:
     # - go mod download
-    # - go mod tidy
+    - go mod tidy
 
 builds:
   - main: ./main.go
@@ -10,10 +12,8 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
-      - windows
-      - darwin
-    ldflags:
-      - -s -w -X github.com/biohackerellie/FlexRoster/cli/cmd.flexCliVersion={{.Version}}
+
+    ldflags: -s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}
 release:
   prerelease: auto
 
@@ -25,9 +25,7 @@ archives:
     builds: [flex]
   - name_template: >-
       {{- .ProjectName }}_ {{- .Version }}_ {{- title .Os }}_ {{- if eq .Arch "amd64" }}x86_64 {{- else if eq .Arch "386" }}i386 {{- else }}{{ .Arch }}{{ end }} {{- if .Arm }}v{{ .Arm }}{{ end -}}
-    format_overrides:
-      - goos: windows
-        format: zip
+    wrap_in_directory: true
     allow_different_binary_count: true
     builds_info:
       group: root

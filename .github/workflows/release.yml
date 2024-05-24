@@ -4,8 +4,8 @@ name: Release
 on:
   pull_request:
   push:
-    tags:
-      - "*"
+    branches:
+      - main
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{github.ref != 'refs/heads/main'}}
@@ -17,6 +17,7 @@ permissions:
 
 jobs:
   goreleaser:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor == 'biohackerellie'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
