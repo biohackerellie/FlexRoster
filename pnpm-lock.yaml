@@ -30,8 +30,8 @@ importers:
   apps/client:
     dependencies:
       '@elysiajs/eden':
-        specifier: ^1.0.13
-        version: 1.0.13(elysia@1.0.21(@sinclair/typebox@0.32.30)(openapi-types@12.1.3)(typescript@5.4.5))
+        specifier: ^1.0.14
+        version: 1.0.14(elysia@1.0.21(@sinclair/typebox@0.32.30)(openapi-types@12.1.3)(typescript@5.4.5))
       '@hookform/resolvers':
         specifier: ^3.4.2
         version: 3.4.2(react-hook-form@7.51.4(react@18.3.1))
@@ -781,15 +781,15 @@ packages:
     peerDependencies:
       elysia: '>= 1.0.2'
 
-  '@elysiajs/eden@1.0.13':
-    resolution: {integrity: sha512-QqwGdmowvlEo6AOIaJxO1Y+9o3Eu/jSMpdT3Q72C2tmsn0H0WIJJ/05Gyq7pFBhhXPjUT5oWQ8gOK9G36a0CCA==}
+  '@elysiajs/eden@1.0.14':
+    resolution: {integrity: sha512-ZFJ5f0UczWi+T8JtRD0rehUS7troTyJ3p7tGoBvjZxhnkINU0hFdB4P8tR8fkglAtv/uLpvZfPggv7UOV3DD3Q==}
+    peerDependencies:
+      elysia: '>= 1.0.22'
+
+  '@elysiajs/stream@1.0.2':
+    resolution: {integrity: sha512-/+cgqgxf8bGtRkdTIRRHsaucNfvrnIpAkpdAdTPsE2zjH8lpfcu9LuvbNlQ1dY1ztDxytKK+Izg6xRtjj31UhQ==}
     peerDependencies:
       elysia: '>= 1.0.2'
-
-  '@elysiajs/stream@1.0.0-rc.0':
-    resolution: {integrity: sha512-4VxHaDG/JngphW1j7eIIRxui+znZKugZG6999e2LlJUunj0co2Ud4WUAk6pks8izI3SO4EO/nyjhRp72GmS4lA==}
-    peerDependencies:
-      elysia: '>= 1.0.0-rc.0'
 
   '@elysiajs/swagger@1.0.5':
     resolution: {integrity: sha512-DEy5iwLMiathyRcCteJYrK+VITiDODQPt4ahKC0Qyqg09Yuo0JKz7/nBGTbm1ogmfdzCopgLxB1QcWore1C1/A==}
@@ -3411,6 +3411,7 @@ packages:
 
   inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
 
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
@@ -5429,12 +5430,12 @@ snapshots:
     dependencies:
       elysia: 1.0.21(@sinclair/typebox@0.32.30)(openapi-types@12.1.3)(typescript@5.4.5)
 
-  '@elysiajs/eden@1.0.13(elysia@1.0.21(@sinclair/typebox@0.32.30)(openapi-types@12.1.3)(typescript@5.4.5))':
+  '@elysiajs/eden@1.0.14(elysia@1.0.21(@sinclair/typebox@0.32.30)(openapi-types@12.1.3)(typescript@5.4.5))':
     dependencies:
-      '@elysiajs/stream': 1.0.0-rc.0(elysia@1.0.21(@sinclair/typebox@0.32.30)(openapi-types@12.1.3)(typescript@5.4.5))
+      '@elysiajs/stream': 1.0.2(elysia@1.0.21(@sinclair/typebox@0.32.30)(openapi-types@12.1.3)(typescript@5.4.5))
       elysia: 1.0.21(@sinclair/typebox@0.32.30)(openapi-types@12.1.3)(typescript@5.4.5)
 
-  '@elysiajs/stream@1.0.0-rc.0(elysia@1.0.21(@sinclair/typebox@0.32.30)(openapi-types@12.1.3)(typescript@5.4.5))':
+  '@elysiajs/stream@1.0.2(elysia@1.0.21(@sinclair/typebox@0.32.30)(openapi-types@12.1.3)(typescript@5.4.5))':
     dependencies:
       elysia: 1.0.21(@sinclair/typebox@0.32.30)(openapi-types@12.1.3)(typescript@5.4.5)
       nanoid: 5.0.7
