@@ -68,7 +68,7 @@ git push origin HEAD --tags #
 if gum confirm "Merge dev into main and tag the commit in main?"; then
   git checkout main
   git pull --rebase
-  git merge dev
+  git merge develop
   MERGE_COMMIT=$(git rev-parse HEAD) # Get the merge commit hash
   git tag -a "$NEW_TAG" "$MERGE_COMMIT" -m "Tagging $NEW_TAG in main"
   git push origin main --tags
