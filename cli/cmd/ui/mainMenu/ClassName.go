@@ -21,10 +21,6 @@ type Output struct {
 	Output string
 }
 
-func (o *Output) update(val string) {
-	o.Output = val
-}
-
 type semesterModel struct {
 	textInput     textinput.Model
 	err           error

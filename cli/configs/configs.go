@@ -51,7 +51,7 @@ func writeEnvFile(filePath string, envMap map[string]string) error {
 	content := strings.Join(lines, "\n")
 	err := os.WriteFile(filePath, []byte(content), 0644)
 	if err != nil {
-		return fmt.Errorf("error writing to env file!", err)
+		return fmt.Errorf("error writing file: %v", err)
 	}
 	return nil
 }

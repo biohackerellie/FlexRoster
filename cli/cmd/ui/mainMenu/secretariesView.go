@@ -16,9 +16,6 @@ var (
 			Foreground(lipgloss.Color("#FFFDF5")).
 			Background(lipgloss.Color("#25A065")).
 			Padding(0, 1)
-	statusMessageStyle = lipgloss.NewStyle().
-				Foreground(lipgloss.AdaptiveColor{Light: "#04B575", Dark: "#04B575"}).
-				Render
 )
 
 type item struct {
@@ -197,7 +194,10 @@ func (m *model) New() item {
 	}
 
 	m.config.Secretaries = append(m.config.Secretaries, i.title)
-	configs.WriteConfig(m.config)
+	err := configs.WriteConfig(m.config)
+	if err != nil {
+		return item{title: err.Error()}
+	}
 	return i
 }
 func (m *model) Delete(index int, i item) tea.Cmd {
@@ -207,7 +207,10 @@ func (m *model) Delete(index int, i item) tea.Cmd {
 			break
 		}
 	}
-	configs.WriteConfig(m.config)
+	err := configs.WriteConfig(m.config)
+	if err != nil {
+		return func() tea.Msg { return err }
+	}
 	m.list.RemoveItem(index)
 	return nil
 }
