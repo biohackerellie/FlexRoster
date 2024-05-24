@@ -32,7 +32,19 @@ jobs:
         run: cp .env.example .env
       - name: Lint
         run: pnpm lint && pnpm lint:ws
-
+  golangci:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          working-directory: ./cli
+          version: v1.58
   format:
     runs-on: ubuntu-latest
     steps:
