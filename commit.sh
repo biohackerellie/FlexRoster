@@ -64,3 +64,11 @@ git add -A
 git commit -m "$SUMMARY" -m "$DESCRIPTION"
 git tag "$NEW_TAG"
 git push origin HEAD --tags #
+
+if gum confirm "Merge dev into main and tag the commit in main?"; then
+  git checkout main
+  git merge dev
+  MERGE_COMMIT=$(git rev-parse HEAD) # Get the merge commit hash
+  git tag -a "$NEW_TAG" "$MERGE_COMMIT" -m "Tagging $NEW_TAG in main"
+  git push origin main --tags
+fi
