@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - main
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{github.ref != 'refs/heads/main'}}
@@ -17,34 +16,8 @@ permissions:
   # issues: write
 
 jobs:
-  autoTag:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Generate Git Tag
-        id: gen_tag
-        run: |
-          VERSION_PREFIX="v"
-          VERSION_MAJOR_MINOR="1.0"
-          VERSION_PATCH=$(git tag --list "${VERSION_PREFIX}${VERSION_MAJOR_MINOR}.*" --sort=-version:refname | head -n 1 | grep -oE '[0-9]+$')
-          if [ -z "$VERSION_PATCH" ]; then
-            VERSION_PATCH=0
-          else
-            VERSION_PATCH=$((VERSION_PATCH + 1))
-          fi
-          NEW_TAG="${VERSION_PREFIX}${VERSION_MAJOR_MINOR}.${VERSION_PATCH}"
-          echo "Generated new tag: $NEW_TAG"
-          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
-      - name: Push Git Tag
-        run: |
-          git config user.name "biohackerellie"
-          git config user.email "epkerns@gmail.com"
-          git tag $NEW_TAG
-          git push origin $NEW_TAG
   goreleaser:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor == 'biohackerellie'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
