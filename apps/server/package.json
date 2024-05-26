@@ -57,7 +57,7 @@
     "dotenv-cli": "^7.4.2",
     "eslint": "^9.3.0",
     "prettier": "^3.2.5",
-    "type-fest": "^4.18.2",
+    "type-fest": "^4.18.3",
     "typescript": "^5.4.5"
   },
   "prettier": "@local/prettier-config"
