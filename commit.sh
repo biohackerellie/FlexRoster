@@ -53,24 +53,32 @@ esac
 
 # Create the new tag
 NEW_TAG="v$MAJOR.$MINOR.$PATCH"
-
+TAG=true
 # Confirm the new tag
 if ! gum confirm "Tag this commit as $NEW_TAG?"; then
-  cleanup
+  TAG=false
 fi
 
 # Execute all commands after user confirmation
 git add -A
 git commit -m "$SUMMARY" -m "$DESCRIPTION"
-git tag "$NEW_TAG"
-git push origin HEAD --tags #
+if [ "$TAG" = true ]; then
+  git tag "$NEW_TAG"
+  git push origin HEAD --tags #
+else
+  git push origin HEAD
+fi
 
 if gum confirm "Merge dev into main and tag the commit in main?"; then
   git checkout main
   git pull --rebase
   git merge develop
   MERGE_COMMIT=$(git rev-parse HEAD) # Get the merge commit hash
-  git tag -a "$NEW_TAG" "$MERGE_COMMIT" -m "Tagging $NEW_TAG in main"
-  git push origin main --tags
+  if [ "$TAG" = true ]; then
+    git tag -a "$NEW_TAG" "$MERGE_COMMIT" -m "Tagging $NEW_TAG in main"
+    git push origin main --tags
+  else
+    git push origin main
+  fi
   git checkout develop
 fi

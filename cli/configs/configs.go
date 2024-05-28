@@ -119,14 +119,14 @@ func WriteConfig(args *FlexConfig) error {
 }
 
 func SetWorkingDirectory() (string, error) {
-	exe, err := os.Executable()
-	if err != nil {
-		return "", fmt.Errorf("could not get executable path: %w", err)
+
+	rootDir := os.Getenv("FLEXROOT")
+	if rootDir == "" {
+		return "", fmt.Errorf("FLEXROOT environment variable not set")
 	}
-	rootDir := filepath.Dir(filepath.Dir(filepath.Dir(exe)))
-	err = os.Chdir(rootDir)
+	err := os.Chdir(rootDir)
 	if err != nil {
-		return "", fmt.Errorf("could not change working directory: %w", err)
+		return "", fmt.Errorf("error changing directory: %v", err)
 	}
 	return rootDir, nil
 }
