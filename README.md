@@ -13,33 +13,47 @@ FlexRoster is a comprehensive full-stack application designed to manage flex sch
 - **Dockerized PostgreSQL and Redis**: Robust database management with Drizzle ORM and efficient caching/logging with Redis.
 - **Eden and Socketi**: Facilitating real-time communication and data exchange across services.
 - **OneRoster API Integration**: Ensures up-to-date class rosters and seamless data synchronization.
-- **TBD**: May develop an expo version for students to use on their phones.
+- **GO Cli**: Included CLI tool for easy setup and configuration.
 
-## Architecture
+## Getting Started
 
-FlexRoster is designed as a monolithic repository containing:
+### Prerequisites
 
-- A Next.js-based client application for frontend interactions.
-- A backend web server running on ElysiaJS and Bun.js for high performance and efficiency.
-- Shared packages including AuthJS for authentication, Eden for client-server communication, and Socketi for real-time chat capabilities.
-- Microservices architecture supporting Dockerized PostgreSQL, Redis clusters, and more for scalability and resilience.
+- OneRoster API credentials from Infinite Campus
+- Azure AD application with SAML integration
+- Docker - `https://docs.docker.com/get-docker/`
+- Nodejs - `https://nodejs.org/en/`
+- Pnpm - `https://pnpm.io/installation`
+- Turborepo - `https://turbo.build/repo/docs`
+- If you wish to compile the CLI from source, you will need Go installed - `https://golang.org/doc/install`
 
-## Setup and Configuration
+### Installation
 
-Note: Currently, FlexRoster is in active development. Detailed setup and configuration instructions will be provided as the project approaches version 1.0.
+1. Clone the repository
+2. Copy `.env.example` and `.env.config.example` to `.env` and `.env.config` respectively, and fill in the required values. _`.env` is for the backend and `.env.config` is for the CLI._
 
-## Contributing
+3. Run the deploy.sh script to deploy the stack to docker. This will handle building the front end, back end, redis, postgres, and socketi services and deploying the containers to the server.
 
-As FlexRoster is still in active development, contributions are not requested at this time. However, feedback and suggestions are always welcome.
+```bash
+sudo ./deploy.sh
+```
 
-## Acknowledgements
+4. Download the Cli tar from github releases and extract it to your local machine. _Make sure to replace the version number with the latest release._
 
-Special thanks to the open source community and technologies that made FlexRoster possible. This project leverages several cutting-edge technologies and frameworks to provide a seamless and efficient experience for managing flex schedules in schools.
+```bash
+curl -L https://github.com/biohackerellie/FlexRoster/releases/download/v1.1.17/FlexRoster_1.1.17_linux_amd64.tar.gz
+sudo tar -C /usr/local/bin -xzf FlexRoster_1.1.17_linux_amd64.tar.gz
+```
 
-## License
+5. You need to add 2 lines to your profile at `.bashrc/.zshrc` or globally at `/etc/profile` to allow the CLI to be run from anywhere.
 
-This project is licensed under the GNU General Public License. Please see the LICENSE file for more details.
+```bash
+export PATH=$PATH:/usr/local/bin // Likely already in your profile
+export FLEXROOT=/path/to/your/flexroster/repo
+```
 
----
+6. Party! You're all set up! 🎉
 
-Thank you for your interest in FlexRoster. For updates and more information, stay tuned as the project evolves.
+## Usage
+
+You can now run the cli tool to adjust any settings you need to. The env.config file contains all of the fields likely to change during production such as admin users, semester dates, and the school name. The CLI tool will allow you to adjust these settings as needed. just run `flex` to see the available commands.
