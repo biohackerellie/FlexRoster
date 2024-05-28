@@ -7,7 +7,6 @@
     "go": ">=1.22.3"
   },
   "scripts": {
-    "build": "go build -o bin/ ",
     "start": "./bin/cli"
   }
 }
