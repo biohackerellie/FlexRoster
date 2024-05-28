@@ -62,10 +62,10 @@ fi
 # Execute all commands after user confirmation
 git add -A
 git commit -m "$SUMMARY" -m "$DESCRIPTION"
-if [ "$TAG" = true ]; then
-  git tag "$NEW_TAG"
-  git push origin HEAD --tags #
-else
+# if [ "$TAG" = true ]; then
+#   git tag "$NEW_TAG"
+#   git push origin HEAD --tags #
+# else
   git push origin HEAD
 fi
 

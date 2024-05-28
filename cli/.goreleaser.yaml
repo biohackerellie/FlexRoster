@@ -7,7 +7,7 @@ before:
     - go generate ./...
 builds:
   - id: "blah"
-    binary: cli
+    binary: flex
     env:
       - CGO_ENABLED=0
     goos:
