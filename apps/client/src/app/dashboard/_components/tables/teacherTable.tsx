@@ -18,7 +18,7 @@ interface TableProps {
 }
 
 export default function TeacherRosterTable({ dataPromise }: TableProps) {
-  const tableColumns = React.useMemo(() => columns(), []);
+  const tableColumns = columns();
   const data = React.use(dataPromise);
   const teacherId = data[0]?.teacherId!;
   const comment = data[0]?.comment ?? null;

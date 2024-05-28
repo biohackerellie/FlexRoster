@@ -15,6 +15,7 @@ export default function StaffPage({
   searchParams: SearchParams;
 }) {
   const search = searchParamsValidator.parse(searchParams);
+
   return (
     <div>
       <Card>

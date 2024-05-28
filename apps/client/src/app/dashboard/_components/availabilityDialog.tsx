@@ -66,9 +66,7 @@ export function AvailabilityDialog({
           <DialogTrigger asChild>
             <TooltipTrigger>
               <span className={statusVars.bg}>
-                <Button variant="link" size="sm">
-                  <statusVars.icon className="size-4" />
-                </Button>
+                <statusVars.icon className="size-4" />
               </span>
             </TooltipTrigger>
           </DialogTrigger>
