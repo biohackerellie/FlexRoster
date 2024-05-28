@@ -66,8 +66,7 @@ git commit -m "$SUMMARY" -m "$DESCRIPTION"
 #   git tag "$NEW_TAG"
 #   git push origin HEAD --tags #
 # else
-  git push origin HEAD
-fi
+git push origin HEAD
 
 if gum confirm "Merge dev into main and tag the commit in main?"; then
   git checkout main
