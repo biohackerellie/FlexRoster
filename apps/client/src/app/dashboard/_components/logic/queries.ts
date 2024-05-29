@@ -1,4 +1,4 @@
-import "server-only";
+// import "server-only";
 
 import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
@@ -85,7 +85,7 @@ export async function getDefaultRoster(
     const statusArray = search.status.split(".");
     result = result.filter((student) => statusArray.includes(student.status));
   }
-
+  console.log(result);
   return result;
 }
 

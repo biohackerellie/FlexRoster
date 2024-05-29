@@ -10,9 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@local/ui/card";
-import { searchParamsValidator } from "@local/validators";
+import { searchParamsValidator, TableSearchParams } from "@local/validators";
 
-import { getDefaultRoster } from "../../_components/logic/queries";
+import { client } from "@/lib/eden";
+// import { getDefaultRoster } from "../../_components/logic/queries";
 import TeacherRosterTable from "../../_components/tables/teacherTable";
 
 export default function TeacherDashboardPage({
@@ -47,4 +48,37 @@ export default function TeacherDashboardPage({
       </Card>
     </div>
   );
+}
+
+async function getDefaultRoster(teacherId: string, search: TableSearchParams) {
+  const { data, error } = await client.api.rosters.teacher
+    .roster({ userId: teacherId })
+    .get();
+
+  if (error) {
+    console.error(error);
+  }
+  if (!data) {
+    return [];
+  }
+
+  if (!search) {
+    return data;
+  }
+
+  let result = data;
+
+  if (search.studentName) {
+    const searchLower = search.studentName.toLowerCase();
+    result = result.filter((student) =>
+      student.studentName.toLowerCase().includes(searchLower),
+    );
+  }
+
+  if (search.status) {
+    const statusArray = search.status.split(".");
+    result = result.filter((student) => statusArray.includes(student.status));
+  }
+  console.log(result);
+  return result;
 }
