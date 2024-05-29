@@ -10,13 +10,15 @@ import { findUserIdByName, formatTeacherNames } from "@local/validators";
 import type { ClassResponse } from "~/lib/types";
 import { excludedTeachers, preferredNames, semesterClassName } from "~/config";
 import { env } from "~/env";
+import { classroomsQuery } from "~/lib/sql";
 import { fetcher, icAuth, icClassQueryFunction } from "../../lib/utils";
 
 async function syncClassrooms() {
   try {
     const token = await icAuth();
 
-    const existingClassrooms = await db.select().from(schema.classrooms);
+    const existingClassrooms = await classroomsQuery.execute({});
+
     const allTeachers = await db
       .select()
       .from(schema.users)
@@ -37,8 +39,6 @@ async function syncClassrooms() {
         },
       },
     );
-
-    // Swap out STEAM value either STEAM-A for first semester or STEAM-B for second semester
 
     const filteredClasses = data.classes.filter((cls) =>
       cls.title.includes(semesterClassName),
@@ -66,7 +66,7 @@ async function syncClassrooms() {
             continue;
           }
           let teacherName = formatTeacherNames(room.teacher);
-          // if teacherName is givenName in prefferedNames, replace teacherName with prefferedName
+          // if teacherName is givenName in preferredNames, replace teacherName with preferredName
           const preferredName = preferredNames.find(
             (name) => name.givenName === teacherName,
           );
@@ -104,13 +104,15 @@ async function syncClassrooms() {
       console.log("Completed");
       process.exit(0);
     } else {
-      // classes that exist in local db but no longer in Infinite Campus
-      const existingClassIds = new Set(existingClassrooms.map((c) => c.id));
-      const existingClassNumbers = new Set(
-        existingClassrooms.map((c) => c.roomNumber),
+      const availableClassrooms = existingClassrooms.filter(
+        (c) => c.available === true,
       );
+      const availableSet = new Set(availableClassrooms.map((c) => c.id));
+      const existingClassIds = new Set(existingClassrooms.map((c) => c.id));
+      const fetchedClassIds = new Set(fetchedClasses.map((c) => c.id));
+      // delete classroom ids that arent in fetchedClassIds
       const classroomsToDelete = existingClassrooms.filter(
-        (classroom) => !fetchedClasses.some((c) => c.id === classroom.id),
+        (c) => !fetchedClassIds.has(c.id),
       );
 
       // Get classes that need to be updated if a teacher has changed their room number
@@ -118,13 +120,14 @@ async function syncClassrooms() {
         existingClassrooms.some(
           (existingClass) =>
             existingClass.id === fetchedClass.id &&
-            existingClass.roomNumber !== fetchedClass.roomNumber,
+            existingClass.roomNumber !== fetchedClass.roomNumber &&
+            !availableSet.has(existingClass.id),
         ),
       );
 
-      const classesToInsert = fetchedClasses.filter((c) => {
-        !existingClassrooms.some((classroom) => classroom.id === c.id);
-      });
+      const classesToInsert = fetchedClasses.filter(
+        (fetchedClass) => !existingClassIds.has(fetchedClass.id),
+      );
 
       await db.transaction(async (tx) => {
         if (classroomsToDelete.length > 0) {

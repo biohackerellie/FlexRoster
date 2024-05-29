@@ -5,12 +5,14 @@ import {
   revalidatePath,
   revalidateTag,
 } from "next/cache";
+import { DateRange } from "react-day-picker";
 
 import type {
   CreateCommentSchema,
   DatePickerSchema,
   requestFormType,
   TableSearchParams,
+  TeacherDatePickerSchema,
 } from "@local/validators";
 import { auth } from "@local/auth";
 
@@ -105,11 +107,26 @@ export async function deleteComment(id: string) {
   }
 }
 
-export async function setAvailability(id: string, status: boolean) {
+export async function setAvailability(range: DateRange, classroomId: string) {
   try {
-    await client.api.classes.availability.post({ id, status });
+    //calculate all of the dates in the date range from date.from to date.to
+    const dates = [];
+    if (!range.to) {
+      dates.push(range.from!);
+    } else {
+      for (
+        let date = range.from!;
+        date <= range.to;
+        date.setDate(date.getDate() + 1)
+      ) {
+        dates.push(new Date(date));
+      }
+    }
+    await client.api.classes.availability.post({
+      id: classroomId,
+      dates: dates,
+    });
     revalidatePath("/");
-    revalidatePath(`/dashboard/staff/${id}`, `page`);
   } catch (err) {
     return {
       data: null,

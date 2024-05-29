@@ -6,8 +6,8 @@ import { format } from "date-fns";
 import { ArrowLeftRightIcon, CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 
+import type { DatePickerSchema } from "@local/validators";
 import { cn } from "@local/ui";
 import { Button } from "@local/ui/button";
 import { Calendar } from "@local/ui/calendar";
@@ -31,6 +31,7 @@ import {
   FormMessage,
 } from "@local/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@local/ui/popover";
+import { datePickerSchema } from "@local/validators";
 
 import { getErrorMessage } from "@/lib/errorHandler";
 import { RequestRoom } from "./logic/actions";
@@ -38,13 +39,6 @@ import { RequestRoom } from "./logic/actions";
 interface DatePickerFormProps {
   id: string;
 }
-
-const datePickerSchema = z.object({
-  requestedDate: z.date({
-    required_error: "Requested date is required",
-  }),
-});
-type DatePickerSchema = z.infer<typeof datePickerSchema>;
 
 export function DatePickerForm({ id }: DatePickerFormProps) {
   const [open, setOpen] = React.useState(false);

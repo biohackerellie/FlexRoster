@@ -181,18 +181,37 @@ export async function deleteComment(id: string) {
   }
 }
 
-export async function setAvailability(id: string, status: boolean) {
+export async function setAvailability(id: string, dates: Date[]) {
   try {
     await clearKV(`TeacherRoster-${id}`);
-    await db
-      .update(schema.classrooms)
-      .set({ available: status })
-      .where(eq(schema.classrooms.teacherId, id));
+    console.log(dates);
+    await db.transaction(async (tx) => {
+      for (const date of dates) {
+        await tx.insert(schema.availability).values({
+          classroomId: id,
+          date: date,
+          available: true,
+        });
+      }
+    });
   } catch (e) {
     if (e instanceof Error) {
       console.error(e.message);
     }
     console.log("something went wrong 👌");
     throw e;
+  }
+}
+
+export async function getAvailability(id: string) {
+  try {
+    const result = await db
+      .select()
+      .from(schema.availability)
+      .where(eq(schema.availability.teacherId, id));
+    console.log(result);
+    return result;
+  } catch (e) {
+    throw new NotFoundError("No availability found");
   }
 }

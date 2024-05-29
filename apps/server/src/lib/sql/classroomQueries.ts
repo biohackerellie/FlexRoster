@@ -3,18 +3,32 @@
  */
 
 import type { AnyColumn } from "@local/db";
-import { db, eq, schema, sql } from "@local/db";
+import { and, db, eq, schema, sql } from "@local/db";
+
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+export const todaysAvailability = db
+  .select({
+    available: schema.availability.available,
+    id: schema.availability.classroomId,
+  })
+  .from(schema.availability)
+  .where(eq(schema.availability.date, today))
+  .as("todaysAvailability");
 
 export const classroomsQuery = db // get all classrooms and associated teacher
   .select({
+    id: schema.classrooms.id,
     roomNumber: schema.classrooms.roomNumber,
     teacherName: schema.classrooms.teacherName,
     teacherId: schema.classrooms.teacherId,
-    available: schema.classrooms.available,
+    available: sql<boolean>`${schema.availability.available ?? false}`,
     comment: schema.classrooms.comment,
   })
   .from(schema.classrooms)
-  .prepare("classrooms");
+  .leftJoin(todaysAvailability, eq(schema.classrooms.id, todaysAvailability.id))
+  .prepare("classroomsQuery");
 
 export const roomByIdQuery = db // get classroom by userId
   .select({
@@ -22,10 +36,11 @@ export const roomByIdQuery = db // get classroom by userId
     roomNumber: schema.classrooms.roomNumber,
     teacherName: schema.users.name,
     teacherId: schema.users.id,
-    available: schema.classrooms.available,
+    available: sql<boolean>`${schema.availability.available ?? false}`,
   })
   .from(schema.classrooms)
   .innerJoin(schema.users, eq(schema.classrooms.teacherId, schema.users.id))
+  .leftJoin(todaysAvailability, eq(schema.classrooms.id, todaysAvailability.id))
   .where(eq(schema.classrooms.id, sql.placeholder("id")))
   .prepare("roomById");
 
@@ -61,6 +76,7 @@ export const countRosterByClassroomId = db
 export async function classroomsWithRosterCount() {
   const classrooms = [];
   const rawClassrooms = await allClassrooms.execute();
+  console.log("rawClassrooms", rawClassrooms);
   for (const room of rawClassrooms) {
     const countData = await countRosterByClassroomId.execute({
       classroomId: room.id,
@@ -72,3 +88,9 @@ export async function classroomsWithRosterCount() {
   }
   return classrooms;
 }
+
+export const ClassroomScheduleQuery = db
+  .select()
+  .from(schema.availability)
+  .where(eq(schema.availability.classroomId, sql.placeholder("classroomId")))
+  .prepare("ClassroomScheduleQuery");

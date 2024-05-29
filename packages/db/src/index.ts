@@ -1,3 +1,4 @@
+import type { PgSelect as Select } from "drizzle-orm/pg-core";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
@@ -19,3 +20,5 @@ export type SelectUser = typeof schema.users.$inferSelect;
 export interface ClassRoomWithUsers extends SelectClassroom {
   users: SelectUser[];
 }
+
+export type PgSelect = Select;

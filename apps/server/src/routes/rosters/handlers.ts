@@ -77,6 +77,7 @@ export async function getTeacherRoster(userId: string) {
       }
     } else {
       const dbData = await rosterByTeacherId.execute({ userId: userId });
+      console.log(dbData);
       if (dbData?.length) {
         const result = dbData.map((student) => {
           return {

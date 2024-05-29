@@ -1,10 +1,8 @@
 {
-  "id": "5e3f4a12-c3bb-42ca-beb0-017e689536ab",
-  "prevId": "f2653329-fc92-43d8-8c13-0a46accbd586",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "account": {
+    "public.account": {
       "name": "account",
       "schema": "",
       "columns": {
@@ -80,22 +78,29 @@
         "account_userId_user_id_fk": {
           "name": "account_userId_user_id_fk",
           "tableFrom": "account",
+          "columnsFrom": [
+            "userId"
+          ],
           "tableTo": "user",
-          "columnsFrom": ["userId"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
         "account_provider_providerAccountId_pk": {
           "name": "account_provider_providerAccountId_pk",
-          "columns": ["provider", "providerAccountId"]
+          "columns": [
+            "provider",
+            "providerAccountId"
+          ]
         }
       },
       "uniqueConstraints": {}
     },
-    "classrooms": {
+    "public.classrooms": {
       "name": "classrooms",
       "schema": "",
       "columns": {
@@ -142,17 +147,21 @@
         "classrooms_teacherId_user_id_fk": {
           "name": "classrooms_teacherId_user_id_fk",
           "tableFrom": "classrooms",
+          "columnsFrom": [
+            "teacherId"
+          ],
           "tableTo": "user",
-          "columnsFrom": ["teacherId"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "config": {
+    "public.config": {
       "name": "config",
       "schema": "",
       "columns": {
@@ -200,7 +209,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "logs": {
+    "public.logs": {
       "name": "logs",
       "schema": "",
       "columns": {
@@ -235,17 +244,21 @@
         "logs_user_user_id_fk": {
           "name": "logs_user_user_id_fk",
           "tableFrom": "logs",
+          "columnsFrom": [
+            "user"
+          ],
           "tableTo": "user",
-          "columnsFrom": ["user"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "requests": {
+    "public.requests": {
       "name": "requests",
       "schema": "",
       "columns": {
@@ -323,35 +336,47 @@
         "requests_studentId_user_id_fk": {
           "name": "requests_studentId_user_id_fk",
           "tableFrom": "requests",
+          "columnsFrom": [
+            "studentId"
+          ],
           "tableTo": "user",
-          "columnsFrom": ["studentId"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "requests_newTeacher_user_id_fk": {
           "name": "requests_newTeacher_user_id_fk",
           "tableFrom": "requests",
+          "columnsFrom": [
+            "newTeacher"
+          ],
           "tableTo": "user",
-          "columnsFrom": ["newTeacher"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "requests_currentTeacher_user_id_fk": {
           "name": "requests_currentTeacher_user_id_fk",
           "tableFrom": "requests",
+          "columnsFrom": [
+            "currentTeacher"
+          ],
           "tableTo": "user",
-          "columnsFrom": ["currentTeacher"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "session": {
+    "public.session": {
       "name": "session",
       "schema": "",
       "columns": {
@@ -379,17 +404,21 @@
         "session_userId_user_id_fk": {
           "name": "session_userId_user_id_fk",
           "tableFrom": "session",
+          "columnsFrom": [
+            "userId"
+          ],
           "tableTo": "user",
-          "columnsFrom": ["userId"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "students": {
+    "public.students": {
       "name": "students",
       "schema": "",
       "columns": {
@@ -428,7 +457,9 @@
       "indexes": {
         "email_idx": {
           "name": "email_idx",
-          "columns": ["studentEmail"],
+          "columns": [
+            "studentEmail"
+          ],
           "isUnique": true
         }
       },
@@ -436,23 +467,29 @@
         "students_classroomId_classrooms_id_fk": {
           "name": "students_classroomId_classrooms_id_fk",
           "tableFrom": "students",
+          "columnsFrom": [
+            "classroomId"
+          ],
           "tableTo": "classrooms",
-          "columnsFrom": ["classroomId"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "students_studentEmail_unique": {
           "name": "students_studentEmail_unique",
-          "nullsNotDistinct": false,
-          "columns": ["studentEmail"]
+          "columns": [
+            "studentEmail"
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "user": {
+    "public.user": {
       "name": "user",
       "schema": "",
       "columns": {
@@ -500,12 +537,14 @@
       "uniqueConstraints": {
         "user_email_unique": {
           "name": "user_email_unique",
-          "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "verificationToken": {
+    "public.verificationToken": {
       "name": "verificationToken",
       "schema": "",
       "columns": {
@@ -533,44 +572,52 @@
       "compositePrimaryKeys": {
         "verificationToken_identifier_token_pk": {
           "name": "verificationToken_identifier_token_pk",
-          "columns": ["identifier", "token"]
+          "columns": [
+            "identifier",
+            "token"
+          ]
         }
       },
       "uniqueConstraints": {}
     }
   },
   "enums": {
-    "RequestStatus": {
+    "public.RequestStatus": {
       "name": "RequestStatus",
-      "values": {
-        "pending": "pending",
-        "approved": "approved",
-        "denied": "denied",
-        "arrived": "arrived"
-      }
+      "schema": "public",
+      "values": [
+        "pending",
+        "approved",
+        "denied",
+        "arrived"
+      ]
     },
-    "Role": {
+    "public.Role": {
       "name": "Role",
-      "values": {
-        "secretary": "secretary",
-        "teacher": "teacher",
-        "student": "student",
-        "admin": "admin"
-      }
+      "schema": "public",
+      "values": [
+        "secretary",
+        "teacher",
+        "student",
+        "admin"
+      ]
     },
-    "Status": {
+    "public.Status": {
       "name": "Status",
-      "values": {
-        "transferredA": "transferredA",
-        "transferredN": "transferredN",
-        "default": "default"
-      }
+      "schema": "public",
+      "values": [
+        "transferredA",
+        "transferredN",
+        "default"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "5e3f4a12-c3bb-42ca-beb0-017e689536ab",
+  "prevId": "f2653329-fc92-43d8-8c13-0a46accbd586"
 }
