@@ -1,8 +1,10 @@
 import { NotFoundError } from "elysia";
+import { nanoid } from "nanoid";
 
-import type { StudentDashboardData } from "@local/utils";
-import { db, eq, schema } from "@local/db";
+import type { Availability, StudentDashboardData } from "@local/utils";
+import { and, db, eq, schema } from "@local/db";
 import {
+  availabilityArrayValidator,
   formatTeacherNames,
   logger,
   studentClassesArrayValidator,
@@ -21,6 +23,7 @@ import {
 } from "~/lib/sql";
 import {
   chatHrefConstructor,
+  convertUTCDateToLocalDate,
   fetcher,
   formatClasses,
   getHashKey,
@@ -182,22 +185,45 @@ export async function deleteComment(id: string) {
   }
 }
 
-export async function setAvailability(id: string, dates: Date[]) {
+export async function setAvailability(
+  teacherId: string,
+  classroomId: string,
+  dates: Date[],
+) {
   try {
-    await clearKV(`TeacherRoster-${id}`);
-    logger.debug(dates);
-    await db.transaction(async (tx) => {
-      for (const date of dates) {
-        await tx.insert(schema.availability).values({
-          classroomId: id,
-          date: date,
+    await clearKV(`TeacherRoster-${teacherId}`);
+    logger.debug("passed in dates", dates);
+    const existingAvailability = await db
+      .select()
+      .from(schema.availability)
+      .where(eq(schema.availability.teacherId, teacherId));
+    let existingDatesSet: Date[] = [];
+    if (existingAvailability.length > 0) {
+      existingDatesSet = existingAvailability.map((a) =>
+        convertUTCDateToLocalDate(a.date),
+      );
+    }
+
+    logger.debug("existing dates", existingDatesSet);
+    const availability: Availability[] = [];
+    for (const date of dates) {
+      if (!existingDatesSet.includes(date)) {
+        availability.push({
+          id: nanoid(),
+          teacherId: teacherId,
+          classroomId: classroomId,
+          date: new Date(date),
           available: true,
         });
       }
-    });
+    }
+    logger.debug("availability", availability);
+    const parsed = availabilityArrayValidator.parse(availability);
+    await db.insert(schema.availability).values(parsed);
+    return new Response("Availability set", { status: 200 });
   } catch (e) {
     if (e instanceof Error) {
-      console.error(e.message);
+      logger.error(e.message);
     }
     logger.error("something went wrong 👌");
     throw e;
@@ -210,9 +236,31 @@ export async function getAvailability(id: string) {
       .select()
       .from(schema.availability)
       .where(eq(schema.availability.teacherId, id));
-    logger.debug(result);
+
     return result;
   } catch (e) {
     throw new NotFoundError("No availability found");
+  }
+}
+
+export async function deleteAvailability(id: string, date: Date) {
+  try {
+    await clearKV(`TeacherRoster-${id}`);
+
+    const deleteDate = convertUTCDateToLocalDate(date);
+    await db
+      .delete(schema.availability)
+      .where(
+        and(
+          eq(schema.availability.teacherId, id),
+          eq(schema.availability.date, deleteDate),
+        ),
+      );
+    return new Response("Availability deleted", { status: 200 });
+  } catch (e) {
+    if (e instanceof Error) {
+      logger.error(e.message);
+    }
+    throw e;
   }
 }

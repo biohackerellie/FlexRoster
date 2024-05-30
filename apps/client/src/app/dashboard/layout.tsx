@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation";
 
 import { auth } from "@local/auth";
-
-
 import { Shell } from "@local/ui/shell";
 
 import { Navbar } from "@/components/navbar";

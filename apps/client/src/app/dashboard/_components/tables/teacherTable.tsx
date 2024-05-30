@@ -23,6 +23,7 @@ export default function TeacherRosterTable({ dataPromise }: TableProps) {
   const teacherId = data[0]?.teacherId!;
   const comment = data[0]?.comment ?? null;
   const status = data[0]?.available!;
+  const classroomId = data[0]?.classroomId ?? "";
   const filterFields: DataTableFilterField<TeacherTable>[] = [
     {
       label: "Name",
@@ -52,6 +53,7 @@ export default function TeacherRosterTable({ dataPromise }: TableProps) {
           comment={comment}
           table={table}
           currentStatus={status}
+          classroomId={classroomId}
         />
       </DataTableToolbar>
       <DataTable table={table} />

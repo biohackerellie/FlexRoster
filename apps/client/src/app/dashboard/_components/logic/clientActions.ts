@@ -1,7 +1,11 @@
 import { toast } from "sonner";
 
 import { getErrorMessage } from "@/lib/errorHandler";
-import { deleteComment, setAvailability } from "./actions";
+import {
+  deleteComment,
+  setAvailability,
+  setTodayAvailability,
+} from "./actions";
 
 export function deleteComments({
   teacherId,
@@ -22,19 +26,24 @@ export function deleteComments({
 
 export function updateAvailability({
   teacherId,
+  classroomId,
   status,
   onSuccess,
 }: {
   teacherId: string;
+  classroomId: string;
   status: boolean;
   onSuccess?: () => void;
 }) {
-  toast.promise(async () => await setAvailability(teacherId, status), {
-    loading: "Updating availability...",
-    success: () => {
-      onSuccess?.();
-      return "Availability updated successfully";
+  toast.promise(
+    async () => await setTodayAvailability(classroomId, teacherId, status),
+    {
+      loading: "Updating availability...",
+      success: () => {
+        onSuccess?.();
+        return "Availability updated successfully";
+      },
+      error: (err) => getErrorMessage(err),
     },
-    error: (err) => getErrorMessage(err),
-  });
+  );
 }

@@ -40,7 +40,7 @@ export const rosterByTeacherId = db
     studentId: schema.users.id,
     roomNumber: schema.classrooms.roomNumber,
     teacherName: schema.classrooms.teacherName,
-
+    classroomId: schema.classrooms.id,
     comment: schema.classrooms.comment,
   })
   .from(schema.students)

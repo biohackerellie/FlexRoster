@@ -126,7 +126,7 @@ export const classroomRelations = relations(classrooms, ({ many, one }) => ({
 }));
 
 export const availability = pgTable("availability", {
-  id: serial("id").primaryKey().notNull(),
+  id: text("id").primaryKey().notNull(),
   classroomId: text("classroomId")
     .notNull()
     .references(() => classrooms.id, { onDelete: "cascade" }),

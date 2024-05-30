@@ -1,7 +1,7 @@
 import { NotFoundError } from "elysia";
 
-import type { AllStudents, TeacherRoster } from "@local/utils";
-import { db, eq, schema } from "@local/db";
+import type { AllStudents, Availability, TeacherRoster } from "@local/utils";
+import { and, db, eq, schema } from "@local/db";
 import {
   allStudentsArrayValidator,
   logger,
@@ -19,10 +19,12 @@ import {
   allStudentsMap,
   rosterByClassroomId,
   rosterByTeacherId,
+  teacherAvailableTodayQuery,
   userQuery,
   userRosterQuery,
 } from "~/lib/sql";
 import { chatHrefConstructor, getHashKey } from "~/lib/utils";
+import { getAvailability } from "../classes/handlers";
 
 export async function getRosters() {
   try {
@@ -68,6 +70,11 @@ export async function getRostersById(id: string) {
 export async function getTeacherRoster(userId: string) {
   try {
     let data: TeacherRoster[] = [];
+
+    let today: Date | string = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let available = false;
     const cacheKey = `TeacherRoster-${userId}`;
     const cachedData = await getKV(cacheKey);
     if (cachedData) {
@@ -77,12 +84,19 @@ export async function getTeacherRoster(userId: string) {
         data = validated;
       }
     } else {
+      const availability = await teacherAvailableTodayQuery.execute({
+        teacherId: userId,
+      });
+      if (availability && availability.length > 0) {
+        available = availability[0]!.available;
+      }
       const dbData = await rosterByTeacherId.execute({ userId: userId });
-      logger.debug(dbData);
+
       if (dbData?.length) {
         const result = dbData.map((student) => {
           return {
             ...student,
+            available: available,
             teacherId: userId,
             chatId: student.studentId
               ? `/dashboard/chat/${chatHrefConstructor(userId, student.studentId)}`

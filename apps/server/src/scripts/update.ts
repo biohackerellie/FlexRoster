@@ -1,7 +1,7 @@
 import { db, eq, schema } from "@local/db";
 
 export async function setRoomStatus() {
-  return null
+  return null;
 }
 
 setRoomStatus().catch((e) => {

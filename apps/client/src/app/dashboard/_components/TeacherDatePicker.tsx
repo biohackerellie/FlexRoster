@@ -1,10 +1,10 @@
 "use client";
 
+import type { DateRange } from "react-day-picker";
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addDays, format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { DateRange } from "react-day-picker";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -28,10 +28,14 @@ import { getErrorMessage } from "@/lib/errorHandler";
 import { setAvailability } from "./logic/actions";
 
 interface DatePickerFormProps {
-  id: string;
+  classroomId: string;
+  teacherId: string;
 }
 
-export function TeacherDatePickerForm({ id }: DatePickerFormProps) {
+export function TeacherDatePickerForm({
+  classroomId,
+  teacherId,
+}: DatePickerFormProps) {
   const [open, setOpen] = React.useState(false);
   const [isRequestPending, startRequestTransition] = React.useTransition();
 
@@ -42,9 +46,9 @@ export function TeacherDatePickerForm({ id }: DatePickerFormProps) {
     to: addDays(today, 1),
   });
 
-  function onSubmit(dates: DateRange, classroomId: string) {
+  function onSubmit(dates: DateRange, classroomId: string, teacherId: string) {
     startRequestTransition(() => {
-      toast.promise(setAvailability(dates, classroomId), {
+      toast.promise(setAvailability(dates, classroomId, teacherId), {
         position: "top-center",
         loading: "Updating Availability...",
         success: () => {
@@ -120,7 +124,7 @@ export function TeacherDatePickerForm({ id }: DatePickerFormProps) {
             </DialogClose>
             <Button
               disabled={isRequestPending}
-              onClick={() => onSubmit(dates!, id)}
+              onClick={() => onSubmit(dates!, classroomId, teacherId)}
             >
               Submit
             </Button>

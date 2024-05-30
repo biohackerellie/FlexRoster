@@ -10,6 +10,7 @@ import { TeacherDatePickerForm } from "./TeacherDatePicker";
 
 interface ToolbarActionsProps {
   teacherId: string;
+  classroomId: string;
   comment: string | null;
   table: Table<TeacherTable>;
   currentStatus: boolean;
@@ -19,6 +20,7 @@ export function ToolbarActions({
   teacherId,
   comment,
   currentStatus,
+  classroomId,
 }: ToolbarActionsProps) {
   return (
     <div className="flex items-center justify-evenly gap-2 gap-x-4">
@@ -35,7 +37,14 @@ export function ToolbarActions({
       ) : (
         <CreateCommentDialog teacherId={teacherId} />
       )}
-      <TeacherDatePickerForm id={teacherId} />
+      <div>
+        <AvailabilityDialog
+          classroomId={classroomId}
+          teacherId={teacherId}
+          currentStatus={currentStatus}
+        />
+      </div>
+      <TeacherDatePickerForm classroomId={classroomId} teacherId={teacherId} />
     </div>
   );
 }

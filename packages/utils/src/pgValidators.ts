@@ -46,6 +46,16 @@ export const insertClassroomValidator = createInsertSchema(schema.classrooms);
 
 export type Classroom = z.infer<typeof selectClassroomValidator>;
 
+export const selectAvailabilityValidator = createSelectSchema(
+  schema.availability,
+);
+export const availabilityArrayValidator = z.array(selectAvailabilityValidator);
+export const insertAvailabilityValidator = createInsertSchema(
+  schema.availability,
+);
+
+export type Availability = z.infer<typeof selectAvailabilityValidator>;
+
 /**
  * Query Validation
  */
@@ -107,6 +117,7 @@ export const TeacherRosterValidator = z.object({
   studentId: z.string().nullable(),
   roomNumber: z.string(),
   teacherName: z.string(),
+  classroomId: z.string().optional(),
   available: z.boolean().optional(),
   comment: z.string().nullable(),
   chatId: z.string().nullable(),
