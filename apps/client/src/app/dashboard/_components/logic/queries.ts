@@ -4,6 +4,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
 
 import type { TableSearchParams } from "@local/utils";
+import { logger } from "@local/utils";
 
 import { client } from "@/lib/eden";
 
@@ -12,7 +13,7 @@ export async function getTableData(search: TableSearchParams) {
   const { data, error } = await client.api.rosters.all.get();
 
   if (error) {
-    console.error(error);
+    logger.error(error);
     return [];
   }
   if (!search) {
@@ -41,7 +42,7 @@ export async function getData(rosterId: string) {
     .get();
 
   if (error) {
-    console.error(error);
+    logger.error(error);
     return notFound();
   }
   if (!data) {
@@ -62,7 +63,7 @@ export async function getDefaultRoster(
     .get();
 
   if (error) {
-    console.error(error);
+    logger.error(error);
   }
   if (!data) {
     return [];
@@ -92,7 +93,7 @@ export async function getRosters(search: TableSearchParams) {
   noStore();
   const { data, error } = await client.api.classes.secretary.get();
   if (error) {
-    console.error(error);
+    logger.error(error);
   }
   if (!data) {
     return [];
@@ -118,7 +119,7 @@ export async function getStudentClassesData(
 
   const { data, error } = await client.api.classes.all({ id: userId }).get();
   if (error) {
-    console.error(error);
+    logger.error(error);
   }
   if (!data) {
     return { tableData: [], currentClass: "" };
@@ -148,7 +149,7 @@ export async function getStudentRequests(userId: string) {
     .student({ userId: userId })
     .get();
   if (error) {
-    console.error(error);
+    logger.error(error);
   }
   if (!data) {
     return [];

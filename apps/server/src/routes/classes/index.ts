@@ -3,6 +3,7 @@ import { Elysia, t } from "elysia";
 import { classroomsWithRosterCount } from "~/lib/sql";
 import {
   createComment,
+  deleteAvailability,
   deleteComment,
   getAvailability,
   getClassById,
@@ -55,10 +56,12 @@ export const classRoutes = new Elysia({ prefix: "/classes" })
   })
   .post(
     "/availability",
-    ({ body: { id, dates } }) => setAvailability(id, dates),
+    ({ body: { teacherId, classroomId, dates } }) =>
+      setAvailability(teacherId, classroomId, dates),
     {
       body: t.Object({
-        id: t.String(),
+        classroomId: t.String(),
+        teacherId: t.String(),
         dates: t.Array(t.Date()),
       }),
     },
@@ -67,4 +70,14 @@ export const classRoutes = new Elysia({ prefix: "/classes" })
     params: t.Object({
       id: t.String(),
     }),
-  });
+  })
+  .delete(
+    "/availability",
+    ({ body: { id, date } }) => deleteAvailability(id, date),
+    {
+      body: t.Object({
+        id: t.String(),
+        date: t.Date(),
+      }),
+    },
+  );

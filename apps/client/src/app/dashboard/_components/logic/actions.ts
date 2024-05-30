@@ -1,11 +1,11 @@
 "use server";
 
+import type { DateRange } from "react-day-picker";
 import {
   unstable_noStore as noStore,
   revalidatePath,
   revalidateTag,
 } from "next/cache";
-import { DateRange } from "react-day-picker";
 
 import type {
   CreateCommentSchema,
@@ -15,11 +15,12 @@ import type {
   TeacherDatePickerSchema,
 } from "@local/utils";
 import { auth } from "@local/auth";
+import { logger } from "@local/utils";
 
 import { client } from "@/lib/eden";
 import { getErrorMessage } from "@/lib/errorHandler";
 import { pusherServer } from "@/lib/pusher";
-import { toPusherKey } from "@/lib/utils";
+import { convertUTCDateToLocalDate, toPusherKey } from "@/lib/utils";
 
 export async function Attendance(studentId: string) {
   const { data: res, error } = await client.api.rosters.attendance.post({
@@ -107,27 +108,77 @@ export async function deleteComment(id: string) {
   }
 }
 
-export async function setAvailability(range: DateRange, classroomId: string) {
+export async function setAvailability(
+  range: DateRange,
+  classroomId: string,
+  teacherId: string,
+) {
   try {
     //calculate all of the dates in the date range from date.from to date.to
-    const dates = [];
+    const dates: Date[] = [];
     if (!range.to) {
-      dates.push(range.from!);
+      dates.push(convertUTCDateToLocalDate(range.from!));
     } else {
       for (
         let date = range.from!;
         date <= range.to;
         date.setDate(date.getDate() + 1)
       ) {
-        dates.push(new Date(date));
+        dates.push(convertUTCDateToLocalDate(date));
       }
     }
-    await client.api.classes.availability.post({
-      id: classroomId,
-      dates: dates,
-    });
-    revalidatePath("/");
+    if (dates.length > 0) {
+      logger.info("dates", dates);
+      await client.api.classes.availability.post({
+        classroomId: classroomId,
+        teacherId: teacherId,
+        dates: dates,
+      });
+      revalidatePath("/");
+    }
   } catch (err) {
+    return {
+      data: null,
+      error: getErrorMessage(err),
+    };
+  }
+}
+
+export async function setTodayAvailability(
+  classroomId: string,
+  teacherId: string,
+  availability: boolean,
+) {
+  try {
+    const today = convertUTCDateToLocalDate(new Date());
+    today.setHours(0, 0, 0, 0);
+    if (availability === true) {
+      const dates = [today];
+      const res = await client.api.classes.availability.post({
+        classroomId: classroomId,
+        teacherId: teacherId,
+        dates: dates,
+      });
+      revalidatePath("/");
+      logger.debug(res);
+      return {
+        data: null,
+        error: null,
+      };
+    } else {
+      await client.api.classes.availability.delete({
+        id: teacherId,
+        date: today,
+      });
+      logger.debug("deleting", today);
+      revalidatePath("/");
+      return {
+        data: null,
+        error: null,
+      };
+    }
+  } catch (err) {
+    logger.error("something went wrong", err);
     return {
       data: null,
       error: getErrorMessage(err),

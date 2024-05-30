@@ -5,7 +5,9 @@
 import type { AnyColumn } from "@local/db";
 import { and, db, eq, schema, sql } from "@local/db";
 
-const today = new Date();
+import { convertUTCDateToLocalDate } from "../utils";
+
+const today = convertUTCDateToLocalDate(new Date());
 today.setHours(0, 0, 0, 0);
 
 export const todaysAvailability = db
@@ -23,13 +25,26 @@ export const classroomsQuery = db // get all classrooms and associated teacher
     roomNumber: schema.classrooms.roomNumber,
     teacherName: schema.classrooms.teacherName,
     teacherId: schema.classrooms.teacherId,
-    available: sql<boolean>`${schema.availability.available ?? false}`,
+    available: sql<boolean>`${todaysAvailability.available ?? false}`,
     comment: schema.classrooms.comment,
   })
   .from(schema.classrooms)
   .leftJoin(todaysAvailability, eq(schema.classrooms.id, todaysAvailability.id))
   .prepare("classroomsQuery");
 
+export const teacherAvailableTodayQuery = db
+  .select({
+    available: schema.availability.available,
+  })
+  .from(schema.availability)
+  .where(
+    and(
+      eq(schema.availability.teacherId, sql.placeholder("teacherId")),
+      eq(schema.availability.date, today),
+    ),
+  )
+
+  .prepare("teacherAvailableTodayQuery");
 export const roomByIdQuery = db // get classroom by userId
   .select({
     id: schema.classrooms.id,
@@ -75,8 +90,8 @@ export const countRosterByClassroomId = db
 
 export async function classroomsWithRosterCount() {
   const classrooms = [];
-  const rawClassrooms = await allClassrooms.execute();
-  
+  const rawClassrooms = await classroomsQuery.execute();
+
   for (const room of rawClassrooms) {
     const countData = await countRosterByClassroomId.execute({
       classroomId: room.id,

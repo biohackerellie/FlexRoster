@@ -21,6 +21,7 @@ import { updateAvailability } from "./logic/clientActions";
 interface AvailabilityDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {
   teacherId: string;
+  classroomId: string;
   currentStatus: boolean;
   onSuccess?: () => void;
   showTrigger?: boolean;
@@ -92,6 +93,7 @@ export function AvailabilityDialog({
                 startUpdateTransition(() => {
                   updateAvailability({
                     teacherId: props.teacherId,
+                    classroomId: props.classroomId,
                     status: statusVars.opposite,
                     onSuccess,
                   });

@@ -1,7 +1,6 @@
-
-import { logger } from "@local/utils";
 import type { Logs } from "@local/utils";
 import { db, schema } from "@local/db";
+import { logger } from "@local/utils";
 
 import { createClient } from "~/lib/redis";
 

@@ -1,6 +1,6 @@
 {
-  "id": "be41d761-1e15-4b33-8ca1-e75c98db9d63",
-  "prevId": "5e3f4a12-c3bb-42ca-beb0-017e689536ab",
+  "id": "18621ccb-9769-46a0-b924-0d6fe4a1c461",
+  "prevId": "984decc4-fcfd-4281-8d3f-56c0a3e9a461",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -101,7 +101,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -123,6 +123,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": false
+        },
+        "teacherId": {
+          "name": "teacherId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -134,6 +140,15 @@
           "columnsFrom": ["classroomId"],
           "columnsTo": ["id"],
           "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "availability_teacherId_user_id_fk": {
+          "name": "availability_teacherId_user_id_fk",
+          "tableFrom": "availability",
+          "tableTo": "user",
+          "columnsFrom": ["teacherId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
