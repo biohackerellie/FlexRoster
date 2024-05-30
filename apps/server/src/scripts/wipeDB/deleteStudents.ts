@@ -3,11 +3,12 @@
  */
 
 import { db, eq, schema } from "@local/db";
+import { logger } from "@local/utils";
 
 async function deleteStudentUsers() {
   try {
     await db.delete(schema.users).where(eq(schema.users.role, "student"));
-    console.log("Deleted all students");
+    logger.debug("Deleted all students");
     process.exit(0);
   } catch (error) {
     throw new Error();

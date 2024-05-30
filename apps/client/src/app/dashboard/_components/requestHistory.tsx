@@ -1,6 +1,6 @@
 import { format } from "date-fns-tz";
 
-import type { Request } from "@local/validators";
+import type { Request } from "@local/utils";
 import { ScrollArea } from "@local/ui/scroll-area";
 import { Separator } from "@local/ui/separator";
 

@@ -6,6 +6,7 @@ import type { Table } from "@tanstack/react-table";
 import { AvailabilityDialog } from "./availabilityDialog";
 import { CreateCommentDialog } from "./createDialog";
 import { DeleteCommentDialog } from "./deleteDialog";
+import { TeacherDatePickerForm } from "./TeacherDatePicker";
 
 interface ToolbarActionsProps {
   teacherId: string;
@@ -34,7 +35,7 @@ export function ToolbarActions({
       ) : (
         <CreateCommentDialog teacherId={teacherId} />
       )}
-      <AvailabilityDialog teacherId={teacherId} currentStatus={currentStatus} />
+      <TeacherDatePickerForm id={teacherId} />
     </div>
   );
 }

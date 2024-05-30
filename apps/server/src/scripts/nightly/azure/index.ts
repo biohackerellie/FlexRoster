@@ -3,6 +3,7 @@
  */
 
 import { db, eq, like, schema } from "@local/db";
+import { logger } from "@local/utils";
 
 import type { AzureResponse, AzureUser } from "~/lib/types";
 import { env } from "~/env";
@@ -70,7 +71,7 @@ async function azureTeachers(): Promise<AzureUser[]> {
 
     await db.transaction(async (tx) => {
       for (const teacher of newTeachers) {
-        console.log("adding: ", teacher.userPrincipalName);
+        logger.debug("adding: ", teacher.userPrincipalName);
         let role: "teacher" | "secretary" = "teacher";
         if (
           secretaries.includes(
@@ -112,17 +113,17 @@ async function azureTeachers(): Promise<AzureUser[]> {
         helpdeskCount++;
       }
     });
-    console.log(
+    logger.debug(
       `Added ${teacherCount} teachers and ${helpdeskCount} helpdesk users to the database.`,
     );
     process.exit(0);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     throw new Error();
   }
 }
 
 azureTeachers().catch((e) => {
-  console.error(e);
+  logger.error(e);
   process.exit(1);
 });

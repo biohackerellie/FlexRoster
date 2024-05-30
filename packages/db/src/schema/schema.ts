@@ -113,7 +113,6 @@ export const classrooms = pgTable("classrooms", {
   roomNumber: text("roomNumber").notNull(),
   teacherName: text("teacherName").notNull(),
   teacherId: text("teacherId").references(() => users.id),
-  available: boolean("available").default(true).notNull(),
   comment: text("comment"),
 });
 
@@ -121,6 +120,28 @@ export const classroomRelations = relations(classrooms, ({ many, one }) => ({
   students: many(students),
   users: one(users, {
     fields: [classrooms.teacherId],
+    references: [users.id],
+  }),
+  availability: many(availability),
+}));
+
+export const availability = pgTable("availability", {
+  id: serial("id").primaryKey().notNull(),
+  classroomId: text("classroomId")
+    .notNull()
+    .references(() => classrooms.id, { onDelete: "cascade" }),
+  date: date("date", { mode: "date" }).notNull(),
+  available: boolean("available").default(false).notNull(),
+  teacherId: text("teacherId").references(() => users.id),
+});
+
+export const availabilityRelations = relations(availability, ({ one }) => ({
+  classroom: one(classrooms, {
+    fields: [availability.classroomId],
+    references: [classrooms.id],
+  }),
+  users: one(users, {
+    fields: [availability.teacherId],
     references: [users.id],
   }),
 }));
@@ -147,6 +168,7 @@ export const userRelations = relations(users, ({ one, many }) => ({
   studentRequests: many(requests, { relationName: "student" }),
   newTeacherRequests: many(requests, { relationName: "newTeacher" }),
   currentTeacherRequests: many(requests, { relationName: "currentTeacher" }),
+  availability: many(availability),
 }));
 export type SelectUser = typeof users.$inferSelect;
 export const accounts = pgTable(

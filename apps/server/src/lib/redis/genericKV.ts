@@ -1,3 +1,5 @@
+import { logger } from "@local/utils";
+
 import { getHashKey } from "~/lib/utils";
 import { createClient } from "./client";
 
@@ -43,8 +45,7 @@ export async function clearKV(key: string): Promise<void> {
     exists = true;
     await client.del(hashedKey);
   }
-  console.log(exists);
-
+  logger.success(`${key} deleted`);
   await client.quit();
   return;
 }

@@ -64,6 +64,15 @@ export const datePickerSchema = z.object({
 });
 export type DatePickerSchema = z.infer<typeof datePickerSchema>;
 
+export const teacherDatePickerSchema = z.object({
+  dates: z.array(
+    z.date({
+      required_error: "Requested date is required",
+    }),
+  ),
+});
+export type TeacherDatePickerSchema = z.infer<typeof teacherDatePickerSchema>;
+
 export * from "./nameHelpers";
 export * from "./pgValidators";
 
@@ -71,3 +80,5 @@ interface PreferredNames {
   givenName: string;
   preferredName: string;
 }
+
+export * from "./logger";

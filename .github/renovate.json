@@ -7,7 +7,7 @@
 
   "packageRules": [
     {
-      "matchPackagePatterns": ["^@local/"],
+      "matchPackagePatterns": ["^@local/", "babel-plugin-react-compiler"],
       "enabled": false
     }
   ],

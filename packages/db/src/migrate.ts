@@ -10,7 +10,7 @@ const db = drizzle(sql, { schema });
 
 migrate(db, { migrationsFolder: "src/drizzle" })
   .then(() => {
-    console.log("migrations completed");
+    console.debug("migrations completed");
     process.exit(0);
   })
   .catch((err) => {

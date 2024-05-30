@@ -4,7 +4,7 @@ import * as React from "react";
 import { unstable_noStore as noStore } from "next/cache";
 import { Loader2 } from "lucide-react";
 
-import type { TableSearchParams } from "@local/validators";
+import type { TableSearchParams } from "@local/utils";
 import {
   Card,
   CardContent,
@@ -13,7 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@local/ui/card";
-import { searchParamsValidator } from "@local/validators";
+import { searchParamsValidator } from "@local/utils";
 
 import { getTableData } from "../../_components/logic/queries";
 import AllStudentsTable from "../../_components/tables/studentTable";

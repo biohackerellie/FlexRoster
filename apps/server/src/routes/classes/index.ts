@@ -4,6 +4,7 @@ import { classroomsWithRosterCount } from "~/lib/sql";
 import {
   createComment,
   deleteComment,
+  getAvailability,
   getClassById,
   getClasses,
   resetOneClass,
@@ -54,11 +55,16 @@ export const classRoutes = new Elysia({ prefix: "/classes" })
   })
   .post(
     "/availability",
-    ({ body: { id, status } }) => setAvailability(id, status),
+    ({ body: { id, dates } }) => setAvailability(id, dates),
     {
       body: t.Object({
         id: t.String(),
-        status: t.Boolean(),
+        dates: t.Array(t.Date()),
       }),
     },
-  );
+  )
+  .get("/availability/:id", ({ params: { id } }) => getAvailability(id), {
+    params: t.Object({
+      id: t.String(),
+    }),
+  });

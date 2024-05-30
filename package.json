@@ -18,6 +18,7 @@
     "clean:outs": "turbo run clean:outs",
     "cache:reset": "pnpm -F server cache:reset",
     "nightly": "pnpm -F server nightly",
+    "db:drizup": "pnpm -F db drizup",
     "db:push": "pnpm -F db push",
     "db:studio": "pnpm -F db studio",
     "db:migrate": "pnpm -F db migrate",

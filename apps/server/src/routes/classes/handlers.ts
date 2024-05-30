@@ -1,12 +1,13 @@
 import { NotFoundError } from "elysia";
 
-import type { StudentDashboardData } from "@local/validators";
+import type { StudentDashboardData } from "@local/utils";
 import { db, eq, schema } from "@local/db";
 import {
   formatTeacherNames,
+  logger,
   studentClassesArrayValidator,
   StudentDashboardDataValidator,
-} from "@local/validators";
+} from "@local/utils";
 
 import type { RosterResponse } from "~/lib/types";
 import { env } from "~/env";
@@ -66,7 +67,7 @@ export async function getClasses(id: string) {
     }
 
     const [student] = await userRosterQuery.execute({ id: id });
-    console.log(student);
+    logger.debug(student);
     if (student) {
       const teacherName = formatTeacherNames(student.classrooms.teacherName);
       returnData.currentClass = `Your FLEX class today is room ${student.classrooms.roomNumber} with ${teacherName}`;
@@ -176,23 +177,42 @@ export async function deleteComment(id: string) {
     if (e instanceof Error) {
       console.error(e.message);
     }
-    console.log("something went wrong 👌");
+    logger.error("something went wrong 👌");
     throw e;
   }
 }
 
-export async function setAvailability(id: string, status: boolean) {
+export async function setAvailability(id: string, dates: Date[]) {
   try {
     await clearKV(`TeacherRoster-${id}`);
-    await db
-      .update(schema.classrooms)
-      .set({ available: status })
-      .where(eq(schema.classrooms.teacherId, id));
+    logger.debug(dates);
+    await db.transaction(async (tx) => {
+      for (const date of dates) {
+        await tx.insert(schema.availability).values({
+          classroomId: id,
+          date: date,
+          available: true,
+        });
+      }
+    });
   } catch (e) {
     if (e instanceof Error) {
       console.error(e.message);
     }
-    console.log("something went wrong 👌");
+    logger.error("something went wrong 👌");
     throw e;
+  }
+}
+
+export async function getAvailability(id: string) {
+  try {
+    const result = await db
+      .select()
+      .from(schema.availability)
+      .where(eq(schema.availability.teacherId, id));
+    logger.debug(result);
+    return result;
+  } catch (e) {
+    throw new NotFoundError("No availability found");
   }
 }

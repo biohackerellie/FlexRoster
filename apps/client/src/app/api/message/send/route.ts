@@ -1,8 +1,8 @@
 import { nanoid } from "nanoid";
 
-import type { Logs, Message } from "@local/validators";
+import type { Logs, Message } from "@local/utils";
 import { auth } from "@local/auth";
-import { messageValidator } from "@local/validators";
+import { messageValidator } from "@local/utils";
 
 import { client } from "@/lib/eden";
 import { pusherServer } from "@/lib/pusher";

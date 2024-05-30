@@ -1,18 +1,8 @@
 import { notFound } from "next/navigation";
 
 import { auth } from "@local/auth";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@local/ui/alert-dialog";
-import { Button } from "@local/ui/button";
+
+
 import { Shell } from "@local/ui/shell";
 
 import { Navbar } from "@/components/navbar";

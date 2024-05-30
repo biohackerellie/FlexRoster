@@ -9,7 +9,7 @@ import {
   MessageSquareOffIcon,
 } from "lucide-react";
 
-import type { StudentClasses } from "@local/validators";
+import type { StudentClasses } from "@local/utils";
 import { Badge } from "@local/ui/badge";
 import { Button } from "@local/ui/button";
 import { DataTableColumnHeader } from "@local/ui/data-table-column-header";

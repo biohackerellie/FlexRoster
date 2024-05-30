@@ -1,12 +1,13 @@
 import { NotFoundError } from "elysia";
 
-import type { Logs, Request, TeacherRequestQuery } from "@local/validators";
+import type { Logs, Request, TeacherRequestQuery } from "@local/utils";
 import { db, eq, schema } from "@local/db";
 import {
+  logger,
   requestArrayValidator,
   requestValidator,
   teacherRequestQueryValidator,
-} from "@local/validators";
+} from "@local/utils";
 
 import { clearKV, getKV, newLog, setKV } from "~/lib/redis";
 import {
@@ -30,7 +31,7 @@ export async function newRequest({
   try {
     const studentRequestKey = `requests:${studentId}`;
     const teacherRequestKey = `requests:${newTeacher}:teacher`;
-    console.log(
+    logger.debug(
       "studentId",
       studentId,
       "newTeacher",
@@ -88,7 +89,7 @@ export async function newRequest({
       id: Math.floor(Math.random() * 1000000),
     };
     const validatedRequest = requestValidator.parse(requestData);
-    console.log("made it this far");
+    logger.debug("made it this far");
     await db.insert(schema.requests).values(validatedRequest);
     const log: Logs = {
       type: "request",
@@ -111,15 +112,15 @@ export async function getTeacherRequests(userId: string) {
   try {
     const cacheRequests = await getKV(teacherRequestKey);
     if (cacheRequests) {
-      console.log("cacheHit");
-      console.log(JSON.parse(cacheRequests));
+      logger.debug("cacheHit");
+      logger.debug(JSON.parse(cacheRequests));
       return teacherRequestQueryValidator.parse(JSON.parse(cacheRequests));
     }
   } catch (e) {
     console.error("Error retrieving from cache", e);
   }
   try {
-    console.log("cacheMiss");
+    logger.debug("cacheMiss");
     const requests = await userRequestQuery.execute({ userId: userId });
     if (requests.length === 0) {
       return { incomingRequests: [], outgoingRequests: [] };

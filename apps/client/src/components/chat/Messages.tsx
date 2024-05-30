@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 
 import type { SelectUser } from "@local/db";
-import type { Message } from "@local/validators";
+import type { Message } from "@local/utils";
 import { cn } from "@local/ui";
 
 import { pusherClient } from "@/lib/pusher";

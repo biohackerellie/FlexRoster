@@ -1,8 +1,7 @@
 import { db, eq, schema } from "@local/db";
+import { logger } from "@local/utils";
 
-import type { RosterResponse } from "~/lib/types";
 import { env } from "~/env";
-import { fetcher, icAuth } from "~/lib/utils";
 
 type SyncTeachers = {
   email: string;
@@ -43,11 +42,11 @@ export async function syncTeachers(body: SyncTeachers) {
 
 export async function pong() {
   try {
-    console.log("dburl", env.DATABASE_URL);
+    logger.debug("dburl", env.DATABASE_URL);
     const res = await db.query.users.findMany({
       where: eq(schema.users.role, "student"),
     });
-    console.log("res", res);
+    logger.debug("res", res);
     return new Response("OK", { status: 200 });
   } catch (error) {
     console.error(error);

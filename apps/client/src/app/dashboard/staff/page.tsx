@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@local/ui/card";
 import { Shell } from "@local/ui/shell";
-import { searchParamsValidator } from "@local/validators";
+import { searchParamsValidator } from "@local/utils";
 
 import { getRosters } from "../_components/logic/queries";
 import AllRosterTable from "../_components/tables/AllRosterTable";

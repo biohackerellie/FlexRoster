@@ -1,8 +1,11 @@
+import type { PgSelect } from "@local/db";
+import { and, db, eq, InferSelectModel, schema, sql } from "@local/db";
+
+import { todaysAvailability } from "./classroomQueries";
+
 /**
  * Roster table queries
  */
-
-import { db, eq, InferSelectModel, schema, sql } from "@local/db";
 
 // get all rosters
 export const rosterQuery = db.select().from(schema.students).prepare("roster");
@@ -37,7 +40,7 @@ export const rosterByTeacherId = db
     studentId: schema.users.id,
     roomNumber: schema.classrooms.roomNumber,
     teacherName: schema.classrooms.teacherName,
-    available: schema.classrooms.available,
+
     comment: schema.classrooms.comment,
   })
   .from(schema.students)
@@ -57,14 +60,20 @@ export const rosterByClassroomId = db
     roomNumber: schema.classrooms.roomNumber,
     teacherName: schema.classrooms.teacherName,
     teacherId: schema.classrooms.teacherId,
-    available: schema.classrooms.available,
+    available: sql<boolean>`${schema.availability.available ?? false}`,
   })
   .from(schema.students)
   .innerJoin(
     schema.classrooms,
     eq(schema.students.classroomId, schema.classrooms.id),
   )
-  .where(eq(schema.students.classroomId, sql.placeholder("classroomId")))
+  .leftJoin(todaysAvailability, eq(schema.classrooms.id, todaysAvailability.id))
+  .where(
+    and(
+      eq(schema.students.classroomId, sql.placeholder("classroomId")),
+      eq(schema.availability.classroomId, sql.placeholder("classroomId")),
+    ),
+  )
   .prepare("rosterByClassroomId");
 
 export const allStudentDetails = db

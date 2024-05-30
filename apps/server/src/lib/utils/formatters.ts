@@ -1,5 +1,5 @@
-import type { ConfigSchema, StudentClasses } from "@local/validators";
-import { formatTeacherNames } from "@local/validators";
+import type { ConfigSchema, StudentClasses } from "@local/utils";
+import { formatTeacherNames } from "@local/utils";
 
 import { chatHrefConstructor } from "./chatHrefConstructor";
 

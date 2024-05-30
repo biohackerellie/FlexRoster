@@ -1,3 +1,5 @@
+import { logger } from "@local/utils";
+
 import { createClient } from "~/lib/redis";
 
 export async function redisInit() {
@@ -5,7 +7,7 @@ export async function redisInit() {
   await client.flushall();
   await client.xgroup("CREATE", "logs", "log-consumer-group", "$", "MKSTREAM");
   await client.quit();
-  console.log("Redis flushed");
+  logger.success("Redis flushed");
   process.exit(0);
 }
 

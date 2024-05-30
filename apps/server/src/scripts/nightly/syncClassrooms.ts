@@ -5,18 +5,20 @@
  * The teacher names are formatted and stored in the database.
  */
 import { db, eq, schema } from "@local/db";
-import { findUserIdByName, formatTeacherNames } from "@local/validators";
+import { findUserIdByName, formatTeacherNames, logger } from "@local/utils";
 
 import type { ClassResponse } from "~/lib/types";
 import { excludedTeachers, preferredNames, semesterClassName } from "~/config";
 import { env } from "~/env";
+import { classroomsQuery } from "~/lib/sql";
 import { fetcher, icAuth, icClassQueryFunction } from "../../lib/utils";
 
 async function syncClassrooms() {
   try {
     const token = await icAuth();
 
-    const existingClassrooms = await db.select().from(schema.classrooms);
+    const existingClassrooms = await classroomsQuery.execute({});
+
     const allTeachers = await db
       .select()
       .from(schema.users)
@@ -38,8 +40,6 @@ async function syncClassrooms() {
       },
     );
 
-    // Swap out STEAM value either STEAM-A for first semester or STEAM-B for second semester
-
     const filteredClasses = data.classes.filter((cls) =>
       cls.title.includes(semesterClassName),
     );
@@ -52,7 +52,7 @@ async function syncClassrooms() {
       };
     });
     if (existingClassrooms.length === 0 || !existingClassrooms) {
-      console.info(
+      logger.info(
         "No classrooms found in local db, adding all classrooms from Infinite Campus",
       );
       await db.transaction(async (tx) => {
@@ -62,11 +62,11 @@ async function syncClassrooms() {
               room.teacher.toLowerCase().includes(name.toLowerCase()),
             )
           ) {
-            console.info(`Skipping ${room.teacher}`);
+            logger.info(`Skipping ${room.teacher}`);
             continue;
           }
           let teacherName = formatTeacherNames(room.teacher);
-          // if teacherName is givenName in prefferedNames, replace teacherName with prefferedName
+          // if teacherName is givenName in preferredNames, replace teacherName with preferredName
           const preferredName = preferredNames.find(
             (name) => name.givenName === teacherName,
           );
@@ -78,7 +78,7 @@ async function syncClassrooms() {
             user = findUserIdByName(teacherName, allTeachers);
           }
           if (!user) {
-            console.error(`Could not find user for ${teacherName}`);
+            logger.error(`Could not find user for ${teacherName}`);
             continue;
           }
           await tx
@@ -100,17 +100,19 @@ async function syncClassrooms() {
           newCount++;
         }
       });
-      console.log(`Added ${newCount} classrooms`);
-      console.log("Completed");
+      logger.success(`Added ${newCount} classrooms`);
+      logger.success("Completed");
       process.exit(0);
     } else {
-      // classes that exist in local db but no longer in Infinite Campus
-      const existingClassIds = new Set(existingClassrooms.map((c) => c.id));
-      const existingClassNumbers = new Set(
-        existingClassrooms.map((c) => c.roomNumber),
+      const availableClassrooms = existingClassrooms.filter(
+        (c) => c.available === true,
       );
+      const availableSet = new Set(availableClassrooms.map((c) => c.id));
+      const existingClassIds = new Set(existingClassrooms.map((c) => c.id));
+      const fetchedClassIds = new Set(fetchedClasses.map((c) => c.id));
+      // delete classroom ids that arent in fetchedClassIds
       const classroomsToDelete = existingClassrooms.filter(
-        (classroom) => !fetchedClasses.some((c) => c.id === classroom.id),
+        (c) => !fetchedClassIds.has(c.id),
       );
 
       // Get classes that need to be updated if a teacher has changed their room number
@@ -118,13 +120,14 @@ async function syncClassrooms() {
         existingClassrooms.some(
           (existingClass) =>
             existingClass.id === fetchedClass.id &&
-            existingClass.roomNumber !== fetchedClass.roomNumber,
+            existingClass.roomNumber !== fetchedClass.roomNumber &&
+            !availableSet.has(existingClass.id),
         ),
       );
 
-      const classesToInsert = fetchedClasses.filter((c) => {
-        !existingClassrooms.some((classroom) => classroom.id === c.id);
-      });
+      const classesToInsert = fetchedClasses.filter(
+        (fetchedClass) => !existingClassIds.has(fetchedClass.id),
+      );
 
       await db.transaction(async (tx) => {
         if (classroomsToDelete.length > 0) {
@@ -151,7 +154,7 @@ async function syncClassrooms() {
                 room.teacher.toLowerCase().includes(name.toLowerCase()),
               )
             ) {
-              console.info(`Skipping ${room.teacher}`);
+              logger.info(`Skipping ${room.teacher}`);
               continue;
             }
             let teacherName = formatTeacherNames(room.teacher);
@@ -167,7 +170,7 @@ async function syncClassrooms() {
               user = findUserIdByName(teacherName, allTeachers);
             }
             if (!user) {
-              console.error(`Could not find user for ${teacherName}`);
+              logger.error(`Could not find user for ${teacherName}`);
               continue;
             }
             await tx
@@ -190,10 +193,10 @@ async function syncClassrooms() {
           }
         }
       });
-      console.log(`Deleted ${deletedCount} classrooms`);
-      console.log(`Added ${newCount} classrooms`);
-      console.log(`Updated ${updatedCount} classrooms`);
-      console.log("Completed");
+      logger.info(`Deleted ${deletedCount} classrooms`);
+      logger.info(`Added ${newCount} classrooms`);
+      logger.info(`Updated ${updatedCount} classrooms`);
+      logger.success("Completed");
       process.exit(0);
     }
   } catch (error) {
@@ -202,6 +205,6 @@ async function syncClassrooms() {
 }
 
 syncClassrooms().catch((e) => {
-  console.error(e);
+  logger.error(e);
   process.exit(1);
 });
