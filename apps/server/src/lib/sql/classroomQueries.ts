@@ -76,7 +76,7 @@ export const countRosterByClassroomId = db
 export async function classroomsWithRosterCount() {
   const classrooms = [];
   const rawClassrooms = await allClassrooms.execute();
-  console.log("rawClassrooms", rawClassrooms);
+  
   for (const room of rawClassrooms) {
     const countData = await countRosterByClassroomId.execute({
       classroomId: room.id,

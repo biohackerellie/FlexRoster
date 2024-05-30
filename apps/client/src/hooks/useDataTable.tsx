@@ -20,7 +20,7 @@ import {
 } from "@tanstack/react-table";
 import { z } from "zod";
 
-import { searchParamsValidator } from "@local/validators";
+import { searchParamsValidator } from "@local/utils";
 
 import type { DataTableFilterField } from "./types";
 import { useDebounce } from "./use-debounce";

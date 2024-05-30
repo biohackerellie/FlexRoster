@@ -3,7 +3,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { format, toZonedTime } from "date-fns-tz";
 import { Loader2 } from "lucide-react";
 
-import type { Request } from "@local/validators";
+import type { Request } from "@local/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@local/ui/card";
 import { ScrollArea } from "@local/ui/scroll-area";
 import { Separator } from "@local/ui/separator";
@@ -99,7 +99,6 @@ async function getRequests(teacherId: string) {
   if (error) {
     console.error(error);
   }
-  console.log("requests", data);
   return data;
 }
 function RequestComponent(request: Request) {

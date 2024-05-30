@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 
-import type { messageAlerts } from "@local/validators/";
+import type { messageAlerts } from "@local/utils/";
 import { Button } from "@local/ui/button";
 
 import { useChatNotifications } from "@/hooks";

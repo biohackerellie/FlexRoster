@@ -80,3 +80,5 @@ interface PreferredNames {
   givenName: string;
   preferredName: string;
 }
+
+export * from "./logger";

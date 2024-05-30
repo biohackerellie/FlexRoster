@@ -8,7 +8,7 @@ import { DateRange } from "react-day-picker";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import type { TeacherDatePickerSchema } from "@local/validators";
+import type { TeacherDatePickerSchema } from "@local/utils";
 import { cn } from "@local/ui";
 import { Button } from "@local/ui/button";
 import { Calendar } from "@local/ui/calendar";

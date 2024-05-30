@@ -5,7 +5,7 @@ import * as React from "react";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 
-import type { AllStudents } from "@local/validators";
+import type { AllStudents } from "@local/utils";
 import { Badge } from "@local/ui/badge";
 import { Button } from "@local/ui/button";
 import { DataTableColumnHeader } from "@local/ui/data-table-column-header";

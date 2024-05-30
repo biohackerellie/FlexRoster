@@ -1,6 +1,6 @@
-import { log } from "console";
 
-import type { Logs } from "@local/validators";
+import { logger } from "@local/utils";
+import type { Logs } from "@local/utils";
 import { db, schema } from "@local/db";
 
 import { createClient } from "~/lib/redis";
@@ -24,7 +24,7 @@ async function processLogs() {
       "logs",
       ">",
     )) as [string, [string, string[]][]][] | null;
-    console.log(rawLogs);
+    logger.debug(rawLogs);
     if (rawLogs && rawLogs.length > 0) {
       const streamLogs = rawLogs[0]![1];
       const transformedLogs = streamLogs.map(
@@ -65,10 +65,10 @@ async function processLogs() {
         ),
       );
     } else {
-      console.log("No logs to process");
+      logger.success("No logs to process");
     }
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     throw new Error("Failed to process logs");
   } finally {
     await client.quit();
@@ -77,6 +77,6 @@ async function processLogs() {
 }
 
 processLogs().catch((e) => {
-  console.error(e);
+  logger.error(e);
   process.exit(1);
 });

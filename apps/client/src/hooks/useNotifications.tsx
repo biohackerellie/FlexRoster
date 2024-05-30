@@ -5,7 +5,7 @@ import * as React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { Message, Request } from "@local/validators";
+import { Message, Request } from "@local/utils";
 
 import { pusherClient } from "@/lib/pusher";
 import { chatHrefConstructor, toPusherKey } from "@/lib/utils";

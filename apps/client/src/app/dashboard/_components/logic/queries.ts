@@ -3,7 +3,7 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
 
-import type { TableSearchParams } from "@local/validators";
+import type { TableSearchParams } from "@local/utils";
 
 import { client } from "@/lib/eden";
 
@@ -85,7 +85,6 @@ export async function getDefaultRoster(
     const statusArray = search.status.split(".");
     result = result.filter((student) => statusArray.includes(student.status));
   }
-  console.log(result);
   return result;
 }
 

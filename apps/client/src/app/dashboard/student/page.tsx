@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import { auth } from "@local/auth";
 import { Button } from "@local/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@local/ui/card";
-import { searchParamsValidator } from "@local/validators";
+import { searchParamsValidator } from "@local/utils";
 
 import {
   getStudentClassesData,

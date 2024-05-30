@@ -1,8 +1,10 @@
+import { logger } from "@local/utils";
+
 import app from "./app";
 import { env } from "./env";
 
 app.listen(env.SERVER_PORT, () => {
-  console.log(
+  logger.info(
     `💩 FLEXible pile of shit being served at ${app.server?.hostname}:${app.server?.port}`,
   );
 });

@@ -3,7 +3,7 @@
 import type { DataTableFilterField } from "@/hooks/types";
 import * as React from "react";
 
-import type { StudentClasses } from "@local/validators";
+import type { StudentClasses } from "@local/utils";
 import { Button } from "@local/ui/button";
 import { DataTable } from "@local/ui/data-table-students";
 import { DataTableToolbar } from "@local/ui/data-table-toolbar";

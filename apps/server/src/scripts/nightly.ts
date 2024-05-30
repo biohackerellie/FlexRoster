@@ -1,9 +1,11 @@
 import { $ } from "bun";
 
+import { logger } from "@local/utils";
+
 await $`echo "Running nightly script ..."`;
 
 $.cwd(`src/scripts`);
-console.log("Working directory: ");
+logger.debug("Working directory: ");
 await $`pwd`;
 
 // const processLogs = await $`bun ./processLogs.ts`;
@@ -48,4 +50,4 @@ await $`echo "Duplicates removed"`;
 // }
 // await $`echo "Redis flushed"`;
 
-console.log("Nightly script completed");
+logger.debug("Nightly script completed");

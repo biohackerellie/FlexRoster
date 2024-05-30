@@ -1,6 +1,6 @@
 import { NotFoundError } from "elysia";
 
-import type { Request, Student, User } from "@local/validators";
+import type { Request, Student, User } from "@local/utils";
 import { db, eq, schema, sql } from "@local/db";
 
 import {

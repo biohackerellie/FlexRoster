@@ -2,7 +2,7 @@ import type { SearchParams } from "@/hooks/types";
 import * as React from "react";
 import { Loader2 } from "lucide-react";
 
-import type { TableSearchParams } from "@local/validators";
+import type { TableSearchParams } from "@local/utils";
 import {
   Card,
   CardContent,
@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@local/ui/card";
-import { searchParamsValidator } from "@local/validators";
+import { searchParamsValidator } from "@local/utils";
 
 import { client } from "@/lib/eden";
 import { getDefaultRoster } from "../../_components/logic/queries";

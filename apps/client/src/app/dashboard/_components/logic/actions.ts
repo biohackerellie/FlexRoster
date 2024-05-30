@@ -13,7 +13,7 @@ import type {
   requestFormType,
   TableSearchParams,
   TeacherDatePickerSchema,
-} from "@local/validators";
+} from "@local/utils";
 import { auth } from "@local/auth";
 
 import { client } from "@/lib/eden";

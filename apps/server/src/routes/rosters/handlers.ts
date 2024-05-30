@@ -1,11 +1,12 @@
 import { NotFoundError } from "elysia";
 
-import type { AllStudents, TeacherRoster } from "@local/validators";
+import type { AllStudents, TeacherRoster } from "@local/utils";
 import { db, eq, schema } from "@local/db";
 import {
   allStudentsArrayValidator,
+  logger,
   teacherRosterArrayValidator,
-} from "@local/validators";
+} from "@local/utils";
 
 import {
   getKV,
@@ -77,7 +78,7 @@ export async function getTeacherRoster(userId: string) {
       }
     } else {
       const dbData = await rosterByTeacherId.execute({ userId: userId });
-      console.log(dbData);
+      logger.debug(dbData);
       if (dbData?.length) {
         const result = dbData.map((student) => {
           return {

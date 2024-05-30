@@ -3,6 +3,7 @@
  */
 
 import { db, eq, schema } from "@local/db";
+import { logger } from "@local/utils";
 
 async function removeDuplicates() {
   try {
@@ -13,10 +14,10 @@ async function removeDuplicates() {
         emails.indexOf(email) !== index && emails.lastIndexOf(email) === index,
     );
     if (duplicateEmails.length === 0) {
-      console.log("No duplicates found");
+      logger.info("No duplicates found");
       process.exit(0);
     }
-    console.log(`Found ${duplicateEmails.length} duplicate emails`);
+    logger.info(`Found ${duplicateEmails.length} duplicate emails`);
     let count = 0;
     await db.transaction(async (tx) => {
       for (const email of duplicateEmails) {
@@ -26,15 +27,15 @@ async function removeDuplicates() {
         count++;
       }
     });
-    console.log(`Completed ${count} users removed`);
+    logger.success(`Completed ${count} users removed`);
     process.exit(0);
   } catch (error) {
-    console.log("error", error);
+    logger.error("error", error);
     throw new Error();
   }
 }
 
 removeDuplicates().catch((e) => {
-  console.error(e);
+  logger.error(e);
   process.exit(1);
 });

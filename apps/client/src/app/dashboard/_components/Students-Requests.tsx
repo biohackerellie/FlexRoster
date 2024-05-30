@@ -3,7 +3,7 @@
 import * as React from "react";
 import { format } from "date-fns-tz";
 
-import type { Request } from "@local/validators";
+import type { Request } from "@local/utils";
 import { cn } from "@local/ui";
 import { Button } from "@local/ui/button";
 import {

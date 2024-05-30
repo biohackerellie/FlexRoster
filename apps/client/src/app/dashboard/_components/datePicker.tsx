@@ -7,7 +7,7 @@ import { ArrowLeftRightIcon, CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import type { DatePickerSchema } from "@local/validators";
+import type { DatePickerSchema } from "@local/utils";
 import { cn } from "@local/ui";
 import { Button } from "@local/ui/button";
 import { Calendar } from "@local/ui/calendar";
@@ -31,7 +31,7 @@ import {
   FormMessage,
 } from "@local/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@local/ui/popover";
-import { datePickerSchema } from "@local/validators";
+import { datePickerSchema } from "@local/utils";
 
 import { getErrorMessage } from "@/lib/errorHandler";
 import { RequestRoom } from "./logic/actions";

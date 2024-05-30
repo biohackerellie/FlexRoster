@@ -20,7 +20,7 @@
     "@local/db": "workspace:*",
     "@local/server": "workspace:*",
     "@local/ui": "workspace:*",
-    "@local/validators": "workspace:*",
+    "@local/utils": "workspace:*",
     "@next/bundle-analyzer": "^14.2.3",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-table": "^8.17.3",

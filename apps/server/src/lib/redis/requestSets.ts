@@ -1,5 +1,5 @@
-import type { Request } from "@local/validators";
-import { requestArrayValidator, requestValidator } from "@local/validators";
+import type { Request } from "@local/utils";
+import { requestArrayValidator, requestValidator } from "@local/utils";
 
 import { createClient } from ".";
 

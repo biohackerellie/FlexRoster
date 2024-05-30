@@ -1,7 +1,7 @@
 import { NotFoundError } from "elysia";
 
-import type { Message, messageAlerts } from "@local/validators";
-import { messageArrayValidator, messageValidator } from "@local/validators";
+import type { Message, messageAlerts } from "@local/utils";
+import { messageArrayValidator, messageValidator } from "@local/utils";
 
 import { createClient } from ".";
 import { userQuery } from "../sql";

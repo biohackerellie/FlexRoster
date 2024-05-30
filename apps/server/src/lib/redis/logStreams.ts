@@ -1,7 +1,7 @@
 import { InternalServerError, NotFoundError } from "elysia";
 
-import type { Logs } from "@local/validators";
-import { logValidator } from "@local/validators";
+import type { Logs } from "@local/utils";
+import { logValidator } from "@local/utils";
 
 import { createClient } from ".";
 
