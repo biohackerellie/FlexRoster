@@ -37,10 +37,13 @@ export function columns(): ColumnDef<SecretaryTable>[] {
       },
       cell: ({ row }) => {
         //eslint-disable-next-line
-        const id = row.getValue("teacherId") as string;
+
+        const teacherName = row.getValue("teacherName") as string;
         return (
           <Button variant={"outline"} asChild>
-            <Link href={`/dashboard/staff/${id}`}>Students</Link>
+            <Link href={`/dashboard/staff/students?teacherName=${teacherName}`}>
+              Students
+            </Link>
           </Button>
         );
       },

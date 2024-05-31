@@ -7,13 +7,7 @@ import {
   revalidateTag,
 } from "next/cache";
 
-import type {
-  CreateCommentSchema,
-  DatePickerSchema,
-  requestFormType,
-  TableSearchParams,
-  TeacherDatePickerSchema,
-} from "@local/utils";
+import type { CreateCommentSchema, DatePickerSchema } from "@local/utils";
 import { auth } from "@local/auth";
 import { logger } from "@local/utils";
 
@@ -187,25 +181,40 @@ export async function setTodayAvailability(
 }
 
 export async function RequestRoom(
-  input: DatePickerSchema & { teacherId: string },
+  input: DatePickerSchema & {
+    teacherId?: string;
+    studentId?: string;
+  },
 ) {
   noStore();
   try {
+    let student = "";
+    let teacher = "";
+    let teacherRequest = false;
     const session = await auth();
-    const studentId = session?.user?.id!;
+    const userId = session?.user?.id!;
+    if (input.studentId) {
+      student = input.studentId;
+      teacher = userId;
+      teacherRequest = true;
+    } else if (input.teacherId) {
+      student = userId;
+      teacher = input.teacherId;
+    }
 
     const { data, error } = await client.api.requests.new.post({
-      studentId: studentId,
-      newTeacher: input.teacherId,
+      studentId: student,
+      newTeacher: teacher,
       dateRequested: input.requestedDate,
+      teacherRequest: teacherRequest,
     });
     if (error) {
       throw error.value;
     }
     await pusherServer.trigger(
-      toPusherKey(`request:${input.teacherId}`),
+      toPusherKey(`request:${teacher}`),
       "new-request",
-      { studentId },
+      { student },
     );
     revalidatePath("/", "layout");
 

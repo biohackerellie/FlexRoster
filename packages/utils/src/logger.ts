@@ -2,7 +2,7 @@ import chalk from "chalk";
 
 export const logger = {
   error(...args: unknown[]) {
-    console.log(chalk.red(chalk.bold("[ERROR]"), ...args));
+    console.error(chalk.red(chalk.bold("[ERROR]"), ...args));
   },
   warn(...args: unknown[]) {
     console.log(chalk.yellow(chalk.bold("[WARN]"), ...args));

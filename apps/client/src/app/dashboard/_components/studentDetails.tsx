@@ -16,6 +16,7 @@ import { ScrollArea } from "@local/ui/scroll-area";
 import { Separator } from "@local/ui/separator";
 
 import type { getData } from "./logic/queries";
+import { DatePickerForm } from "@/app/dashboard/_components/datePicker";
 
 interface StudentDetailsProps {
   dataPromise: ReturnType<typeof getData>;
@@ -26,6 +27,7 @@ export default function StudentDetails({ dataPromise }: StudentDetailsProps) {
   const student = data.student.students;
   const requests = data.requests;
   const classroom = data.student.classrooms!;
+  const studentId = data.student.user?.id;
   const router = useRouter();
   let status = "";
 
@@ -43,7 +45,7 @@ export default function StudentDetails({ dataPromise }: StudentDetailsProps) {
 
   return (
     <CardContent>
-      <div className="relative left-full right-10 mr-4 items-end justify-end  pr-2">
+      <div className="relative left-full right-10 mr-4 items-end justify-end pr-2">
         <X
           className="absolute h-8 w-8 text-gray-500 transition-all ease-in-out hover:rotate-90 hover:scale-75"
           onClick={() => router.back()}
@@ -74,6 +76,17 @@ export default function StudentDetails({ dataPromise }: StudentDetailsProps) {
       </div>
 
       <Separator className="my-4" />
+      {studentId && (
+        <>
+          <div className="flex justify-center gap-2">
+            <div className="text-md font-semibold">
+              Transfer {student.studentName} to my classroom
+            </div>
+            <DatePickerForm studentId={studentId} />
+          </div>
+          <Separator className="my-4" />
+        </>
+      )}
       <CardFooter className="justify-center">
         <ScrollArea className="h-72 w-full rounded-md border shadow-sm">
           <div className="p-4">

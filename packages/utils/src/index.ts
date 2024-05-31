@@ -14,6 +14,7 @@ export const messageArrayValidator = z.array(messageValidator);
 export type Message = z.infer<typeof messageValidator>;
 
 const requestStatusSchema = z.enum(["pending", "approved", "denied"]);
+export type RequestStatus = z.infer<typeof requestStatusSchema>;
 
 export const requestParser = z.object({
   teacherId: z.string(),

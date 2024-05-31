@@ -27,7 +27,12 @@ export async function getTableData(search: TableSearchParams) {
       student.studentName.toLowerCase().includes(searchLower),
     );
   }
-
+  if (search.teacherName) {
+    const searchLower = search.teacherName.toLowerCase();
+    result = result.filter((teacher) =>
+      teacher.teacherName.toLowerCase().includes(searchLower),
+    );
+  }
   if (search.status) {
     const statusArray = search.status.split(".");
     result = result.filter((student) => statusArray.includes(student.status));

@@ -37,10 +37,11 @@ import { getErrorMessage } from "@/lib/errorHandler";
 import { RequestRoom } from "./logic/actions";
 
 interface DatePickerFormProps {
-  id: string;
+  teacherId?: string;
+  studentId?: string;
 }
 
-export function DatePickerForm({ id }: DatePickerFormProps) {
+export function DatePickerForm({ teacherId, studentId }: DatePickerFormProps) {
   const [open, setOpen] = React.useState(false);
   const [isRequestPending, startRequestTransition] = React.useTransition();
 
@@ -58,7 +59,8 @@ export function DatePickerForm({ id }: DatePickerFormProps) {
       toast.promise(
         RequestRoom({
           ...input,
-          teacherId: id,
+          teacherId: teacherId ?? undefined,
+          studentId: studentId ?? undefined,
         }),
         {
           position: "top-center",

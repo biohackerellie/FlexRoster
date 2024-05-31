@@ -21,7 +21,7 @@ export default async function DetailsPage({
   const data = await getData(rosterId);
   return (
     <div className="flex h-screen flex-col">
-      <div className="flex min-h-screen w-full flex-col ">
+      <div className="flex min-h-screen w-full flex-col">
         <Shell>
           <Card>
             <React.Suspense

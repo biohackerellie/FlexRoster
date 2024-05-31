@@ -15,10 +15,15 @@ import { ToolbarActions } from "../toolbarActions";
 
 interface TableProps {
   dataPromise: ReturnType<typeof getDefaultRoster>;
+  authorized: boolean;
 }
 
-export default function TeacherRosterTable({ dataPromise }: TableProps) {
+export default function TeacherRosterTable({
+  dataPromise,
+  authorized,
+}: TableProps) {
   const tableColumns = columns();
+
   const data = React.use(dataPromise);
   const teacherId = data[0]?.teacherId!;
   const comment = data[0]?.comment ?? null;
@@ -48,13 +53,15 @@ export default function TeacherRosterTable({ dataPromise }: TableProps) {
   return (
     <div className="w-full space-y-2.5 overflow-auto">
       <DataTableToolbar table={table} filterFields={filterFields}>
-        <ToolbarActions
-          teacherId={teacherId}
-          comment={comment}
-          table={table}
-          currentStatus={status}
-          classroomId={classroomId}
-        />
+        {authorized && (
+          <ToolbarActions
+            teacherId={teacherId}
+            comment={comment}
+            table={table}
+            currentStatus={status}
+            classroomId={classroomId}
+          />
+        )}
       </DataTableToolbar>
       <DataTable table={table} />
     </div>

@@ -3,6 +3,7 @@ import * as React from "react";
 import { Loader2 } from "lucide-react";
 
 import type { TableSearchParams } from "@local/utils";
+import { auth } from "@local/auth";
 import {
   Card,
   CardContent,
@@ -17,14 +18,22 @@ import { getDefaultRoster } from "../../_components/logic/queries";
 // import { getDefaultRoster } from "../../_components/logic/queries";
 import TeacherRosterTable from "../../_components/tables/teacherTable";
 
-export default function TeacherDashboardPage({
+export default async function TeacherDashboardPage({
   params,
   searchParams,
 }: {
   params: { id: string };
   searchParams: SearchParams;
 }) {
+  const session = await auth();
   const teacherId = params.id;
+  let isTeacher = false;
+  if (session) {
+    const userId = session?.user?.id;
+    if (userId === teacherId) {
+      isTeacher = true;
+    }
+  }
   const search = searchParamsValidator.parse(searchParams);
   return (
     <div>
@@ -42,6 +51,7 @@ export default function TeacherDashboardPage({
           >
             <TeacherRosterTable
               dataPromise={getDefaultRoster(teacherId, search)}
+              authorized={isTeacher}
             />
           </React.Suspense>
         </CardContent>

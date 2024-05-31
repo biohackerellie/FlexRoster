@@ -1,6 +1,11 @@
 import { NotFoundError } from "elysia";
 
-import type { Logs, Request, TeacherRequestQuery } from "@local/utils";
+import type {
+  Logs,
+  Request,
+  RequestStatus,
+  TeacherRequestQuery,
+} from "@local/utils";
 import { db, eq, schema } from "@local/db";
 import {
   logger,
@@ -22,12 +27,16 @@ import { NoRequestForUError } from "~/lib/utils/Errors";
 type selectRequest = typeof schema.requests.$inferSelect;
 type insertRequest = typeof schema.requests.$inferInsert;
 type newRequestProps = Partial<insertRequest>;
+interface RequestProps extends newRequestProps {
+  teacherRequest?: boolean;
+}
 
 export async function newRequest({
   studentId,
   newTeacher,
   dateRequested,
-}: newRequestProps) {
+  teacherRequest,
+}: RequestProps) {
   try {
     const studentRequestKey = `requests:${studentId}`;
     const teacherRequestKey = `requests:${newTeacher}:teacher`;
@@ -41,7 +50,12 @@ export async function newRequest({
     );
 
     let requests: Request[] = [];
-
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let status: RequestStatus = "pending";
+    if (teacherRequest) {
+      status = "approved";
+    }
     const kvRequests = await getKV(studentRequestKey);
     if (kvRequests) {
       requests = requestArrayValidator.parse(JSON.parse(kvRequests));
@@ -73,10 +87,11 @@ export async function newRequest({
       throw new NotFoundError("No teacher found with that ID");
     }
     const newTeacherData = newTeacherRaw[0];
-
+    let log: Logs;
     const timestamp = Date.now().toString();
+
     const requestData: insertRequest = {
-      status: "pending",
+      status: status,
       studentName: student?.user.name!,
       studentId: student?.user.id!,
       dateRequested: dateRequested!,
@@ -90,16 +105,38 @@ export async function newRequest({
     };
     const validatedRequest = requestValidator.parse(requestData);
     logger.debug("made it this far");
-    await db.insert(schema.requests).values(validatedRequest);
-    const log: Logs = {
-      type: "request",
-      action: `${student?.user?.name} requested to transfer to ${newTeacherData?.name} from ${currentTeacherName} at ${timestamp}`,
-      user: studentId!,
-    };
-    await newLog(log);
+    if (teacherRequest && validatedRequest.dateRequested === today) {
+      const newClassroomId = await getClassroomIdByTeacher.execute({
+        teacherId: newTeacher,
+      });
+      await db.transaction(async (tx) => {
+        await tx
+          .update(schema.students)
+          .set({
+            classroomId: newClassroomId[0]?.classroomId,
+            status: "transferredN",
+          })
+          .where(eq(schema.students.studentEmail, student?.user.email!));
+
+        await tx.insert(schema.requests).values(validatedRequest);
+        log = {
+          type: "request",
+          action: `${newTeacherData?.name} transfered  ${student?.user?.name} from ${currentTeacherName} at ${timestamp}`,
+          user: newTeacher!,
+        };
+      });
+    } else {
+      await db.insert(schema.requests).values(validatedRequest);
+      log = {
+        type: "request",
+        action: `${student?.user?.name} requested to transfer to ${newTeacherData?.name} from ${currentTeacherName} at ${timestamp}`,
+        user: studentId!,
+      };
+    }
+    await newLog(log!);
   } catch (e) {
     if (e instanceof Error) {
-      console.error(e);
+      logger.error(e);
       throw new Error(e.message);
     } else {
       throw new Error("Unknown error");
@@ -117,7 +154,7 @@ export async function getTeacherRequests(userId: string) {
       return teacherRequestQueryValidator.parse(JSON.parse(cacheRequests));
     }
   } catch (e) {
-    console.error("Error retrieving from cache", e);
+    logger.error("Error retrieving from cache", e);
   }
   try {
     logger.debug("cacheMiss");
@@ -145,11 +182,11 @@ export async function getTeacherRequests(userId: string) {
     try {
       await setKV(teacherRequestKey, JSON.stringify(validatedRequests));
     } catch (e) {
-      console.error("Error writing to cache", e);
+      logger.error("Error writing to cache", e);
     }
     return validatedRequests;
   } catch (e) {
-    console.error("Error processing requests", e);
+    logger.error("Error processing requests", e);
     throw new Error(
       e instanceof Error
         ? e.message
@@ -177,7 +214,7 @@ export async function getRequests(userId: string) {
       return requests;
     }
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     if (e instanceof Error) {
       throw new Error(e.message);
     } else {

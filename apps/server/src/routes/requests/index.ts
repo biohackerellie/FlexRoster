@@ -35,13 +35,14 @@ export const requestRoutes = new Elysia({ prefix: "/requests" })
   )
   .post(
     "/new",
-    ({ body: { studentId, newTeacher, dateRequested } }) =>
-      newRequest({ studentId, newTeacher, dateRequested }),
+    ({ body: { studentId, newTeacher, dateRequested, teacherRequest } }) =>
+      newRequest({ studentId, newTeacher, dateRequested, teacherRequest }),
     {
       body: t.Object({
         studentId: t.String(),
         newTeacher: t.String(),
         dateRequested: t.Date(),
+        teacherRequest: t.Optional(t.Boolean()),
       }),
     },
   )
