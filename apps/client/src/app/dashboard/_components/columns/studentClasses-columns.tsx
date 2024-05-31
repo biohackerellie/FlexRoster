@@ -79,7 +79,7 @@ export function columns(): ColumnDef<StudentClasses>[] {
             </Button>
           );
         } else {
-          return <DatePickerForm id={teacherId} />;
+          return <DatePickerForm teacherId={teacherId} />;
         }
       },
       enableSorting: false,
@@ -121,7 +121,7 @@ export function columns(): ColumnDef<StudentClasses>[] {
           return (
             <Tooltip>
               <TooltipTrigger className="cursor-pointer" asChild>
-                <span className="text-md text-ellipsis text-nowrap font-normal ">
+                <span className="text-md text-ellipsis text-nowrap font-normal">
                   {comment}
                 </span>
               </TooltipTrigger>

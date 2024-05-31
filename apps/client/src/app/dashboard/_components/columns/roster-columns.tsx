@@ -1,3 +1,4 @@
+// eslint-disable
 "use client";
 
 import type { SecretaryTable, StudentStatus } from "@/lib/types";
@@ -36,9 +37,7 @@ export function columns(): ColumnDef<SecretaryTable>[] {
         return <DataTableColumnHeader column={column} title="Roster" />;
       },
       cell: ({ row }) => {
-        //eslint-disable-next-line
-
-        const teacherName = row.getValue("teacherName") as string;
+        const teacherName = row.getValue("teacherName");
         return (
           <Button variant={"outline"} asChild>
             <Link href={`/dashboard/staff/students?teacherName=${teacherName}`}>

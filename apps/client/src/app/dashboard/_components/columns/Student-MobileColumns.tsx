@@ -71,7 +71,7 @@ export function mColumns(): ColumnDef<StudentClasses>[] {
             </Button>
           );
         } else {
-          return <DatePickerForm id={teacherId} />;
+          return <DatePickerForm teacherId={teacherId} />;
         }
       },
       enableSorting: false,
