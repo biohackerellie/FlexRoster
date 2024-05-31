@@ -10,7 +10,7 @@ cleanup() {
 trap cleanup SIGINT
 
 # Get the type of change
-TYPE=$(gum choose "fix" "feat" "docs" "style" "refactor" "test" "chore" "revert")
+TYPE=$(gum choose "fix" "feat" "docs" "style" "refactor" "bump" "chore" "revert")
 
 # Get the summary and description for the commit
 SUMMARY=$(gum input --value "$TYPE: " --placeholder "Summary of this change")
