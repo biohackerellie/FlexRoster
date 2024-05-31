@@ -10,13 +10,9 @@ createJiti(fileURLToPath(import.meta.url))("@local/auth/env");
 const nextConfig = {
   output: "standalone",
   reactStrictMode: true,
-  transpilePackages: [
-    "@local/server",
-    "@local/db",
-    "@local/auth",
-    "@local/ui",
-    "@local/utils",
-  ],
+  transpilePackages: ["@local/server", "@local/db", "@local/auth", "@local/ui"],
+  serverExternalPackages: ["@local/utils"],
+
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   experimental: {

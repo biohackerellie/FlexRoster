@@ -66,5 +66,13 @@
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
   },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false,
+    "net": false,
+    "tls": false,
+    "perf_hooks": false
+  },
   "prettier": "@local/prettier-config"
 }
