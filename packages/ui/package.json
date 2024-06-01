@@ -50,7 +50,7 @@
     "@local/tailwind-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@types/react": "^18.3.3",
-    "eslint": "^9.3.0",
+    "eslint": "^9.4.0",
     "prettier": "^3.2.5",
     "react": "19.0.0-rc-f994737d14-20240522",
     "tailwindcss": "^3.4.3",
