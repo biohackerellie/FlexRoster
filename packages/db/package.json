@@ -42,7 +42,7 @@
     "drizzle-kit": "^0.22.1",
     "eslint": "^9.4.0",
     "pg": "^8.11.5",
-    "prettier": "^3.2.5",
+    "prettier": "^3.3.0",
     "tsx": "^4.11.0",
     "typescript": "^5.4.5"
   },
