@@ -46,7 +46,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/gradient-string": "^1.1.6",
     "@types/node": "^20.13.0",
-    "bun-types": "^1.1.10",
+    "bun-types": "^1.1.12",
     "dotenv-cli": "^7.4.2",
     "eslint": "^9.4.0",
     "prettier": "^3.2.5",
