@@ -18,8 +18,8 @@ importers:
         specifier: ^1.13.3
         version: 1.13.3(@types/node@20.13.0)(typescript@5.4.5)
       prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
+        specifier: ^3.3.0
+        version: 3.3.0
       turbo:
         specifier: ^1.13.3
         version: 1.13.3
@@ -169,8 +169,8 @@ importers:
         specifier: ^8.4.38
         version: 8.4.38
       prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
+        specifier: ^3.3.0
+        version: 3.3.0
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.3(ts-node@10.9.2(@types/node@20.13.0)(typescript@5.4.5))
@@ -251,8 +251,8 @@ importers:
         specifier: ^9.4.0
         version: 9.4.0
       prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
+        specifier: ^3.3.0
+        version: 3.3.0
       type-fest:
         specifier: ^4.18.3
         version: 4.18.3
@@ -348,8 +348,8 @@ importers:
         specifier: ^8.11.5
         version: 8.11.5
       prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
+        specifier: ^3.3.0
+        version: 3.3.0
       tsx:
         specifier: ^4.11.0
         version: 4.11.0
@@ -457,8 +457,8 @@ importers:
         specifier: ^9.4.0
         version: 9.4.0
       prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
+        specifier: ^3.3.0
+        version: 3.3.0
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.3(ts-node@10.9.2(@types/node@20.13.0)(typescript@5.4.5))
@@ -500,8 +500,8 @@ importers:
         specifier: ^9.4.0
         version: 9.4.0
       prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
+        specifier: ^3.3.0
+        version: 3.3.0
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
@@ -558,8 +558,8 @@ importers:
         specifier: ^0.0.91
         version: 0.0.91(@typescript-eslint/parser@7.11.0(eslint@9.4.0)(typescript@5.4.5))(bun-types@1.1.10)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.11.0(eslint@9.4.0)(typescript@5.4.5))(eslint@9.4.0))(eslint@9.4.0)
       prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
+        specifier: ^3.3.0
+        version: 3.3.0
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
@@ -570,13 +570,13 @@ importers:
     dependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.2.1
-        version: 4.2.1(prettier@3.2.5)
+        version: 4.2.1(prettier@3.3.0)
       prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
+        specifier: ^3.3.0
+        version: 3.3.0
       prettier-plugin-tailwindcss:
         specifier: ^0.6.1
-        version: 0.6.1(@ianvs/prettier-plugin-sort-imports@4.2.1(prettier@3.2.5))(prettier@3.2.5)
+        version: 0.6.1(@ianvs/prettier-plugin-sort-imports@4.2.1(prettier@3.3.0))(prettier@3.3.0)
     devDependencies:
       '@local/tsconfig':
         specifier: workspace:*
@@ -619,8 +619,8 @@ importers:
         specifier: ^9.4.0
         version: 9.4.0
       prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
+        specifier: ^3.3.0
+        version: 3.3.0
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
@@ -4305,8 +4305,8 @@ packages:
       prettier-plugin-svelte:
         optional: true
 
-  prettier@3.2.5:
-    resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
+  prettier@3.3.0:
+    resolution: {integrity: sha512-J9odKxERhCQ10OC2yb93583f6UnYutOeiV5i0zEDS7UGTdUt0u+y8erxl3lBKvwo/JHyyoEdXjwp4dke9oyZ/g==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -5712,14 +5712,14 @@ snapshots:
 
   '@humanwhocodes/retry@0.3.0': {}
 
-  '@ianvs/prettier-plugin-sort-imports@4.2.1(prettier@3.2.5)':
+  '@ianvs/prettier-plugin-sort-imports@4.2.1(prettier@3.3.0)':
     dependencies:
       '@babel/core': 7.24.4
       '@babel/generator': 7.24.4
       '@babel/parser': 7.24.4
       '@babel/traverse': 7.24.1
       '@babel/types': 7.24.0
-      prettier: 3.2.5
+      prettier: 3.3.0
       semver: 7.6.0
     transitivePeerDependencies:
       - supports-color
@@ -8899,13 +8899,13 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-tailwindcss@0.6.1(@ianvs/prettier-plugin-sort-imports@4.2.1(prettier@3.2.5))(prettier@3.2.5):
+  prettier-plugin-tailwindcss@0.6.1(@ianvs/prettier-plugin-sort-imports@4.2.1(prettier@3.3.0))(prettier@3.3.0):
     dependencies:
-      prettier: 3.2.5
+      prettier: 3.3.0
     optionalDependencies:
-      '@ianvs/prettier-plugin-sort-imports': 4.2.1(prettier@3.2.5)
+      '@ianvs/prettier-plugin-sort-imports': 4.2.1(prettier@3.3.0)
 
-  prettier@3.2.5: {}
+  prettier@3.3.0: {}
 
   pretty-format@24.9.0:
     dependencies:
