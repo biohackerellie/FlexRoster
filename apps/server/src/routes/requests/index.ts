@@ -3,6 +3,7 @@ import { Elysia, t } from "elysia";
 
 import { NoRequestForUError } from "~/lib/utils/Errors";
 import {
+  getAllRequests,
   getRequests,
   getTeacherRequests,
   newRequest,
@@ -64,4 +65,5 @@ export const requestRoutes = new Elysia({ prefix: "/requests" })
         status: t.Union([t.Literal("approved"), t.Literal("denied")]),
       }),
     },
-  );
+  )
+  .get("/", () => getAllRequests());

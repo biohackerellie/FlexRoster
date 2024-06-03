@@ -287,3 +287,9 @@ export async function requestApproval(
     throw new NotFoundError("No requests found");
   }
 }
+
+export async function getAllRequests() {
+  const data = await db.select().from(schema.requests);
+
+  return data;
+}

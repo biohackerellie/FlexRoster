@@ -44,11 +44,9 @@ export function columns(): ColumnDef<StudentClasses>[] {
         return <DataTableColumnHeader column={column} title="Available" />;
       },
       cell: ({ row }) => {
-        const available = studentStatusOptions.find(
-          (status) => status.value === row.original.available.toString(),
-        );
+        const available = row.original.available;
 
-        if (available?.value === "false") {
+        if (!available) {
           return <Badge variant="destructive">Not Available</Badge>;
         } else {
           return <Badge variant="success">Available</Badge>;

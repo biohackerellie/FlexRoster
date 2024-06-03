@@ -26,18 +26,18 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@local/ui/drawer";
-import { Input } from "@local/ui/input";
-import { Label } from "@local/ui/label";
 import { ScrollArea, ScrollBar } from "@local/ui/scroll-area";
 
 import type { getStudentRequests } from "./logic/queries";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { convertUTCDateToLocalDate } from "@/lib/utils";
 
 export function StudentRequestsComponent({
   dataPromise,
 }: {
   dataPromise: ReturnType<typeof getStudentRequests>;
 }) {
+  "use memo";
   const data = React.use(dataPromise);
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -100,9 +100,7 @@ function List({ data, className }: { data: Request[]; className?: string }) {
           <li key={index} className="flex items-center justify-between">
             <p className="text-sm text-gray-500">{request.newTeacherName}</p>
             <p className="text-sm text-gray-500">
-              {format(request.dateRequested as string, "PPP", {
-                timeZone: "America/Denver",
-              })}
+              {format(convertUTCDateToLocalDate(request.dateRequested), "PPP")}
             </p>
             <p className="text-lg font-semibold">{request.status}</p>
           </li>

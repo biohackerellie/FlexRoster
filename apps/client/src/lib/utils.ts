@@ -23,7 +23,10 @@ export function formatTeacherNames(teacherName: string) {
 export function toPusherKey(key: string) {
   return key.replace(/:/g, "__");
 }
-export function convertUTCDateToLocalDate(date: Date): Date {
-  const newDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-  return newDate;
+export function convertUTCDateToLocalDate(date: Date | string): Date {
+  return new Date(
+    (typeof date === "string" ? new Date(date) : date).toLocaleString([], {
+      timeZone: "UTC",
+    }),
+  );
 }

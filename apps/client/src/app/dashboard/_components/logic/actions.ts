@@ -201,7 +201,7 @@ export async function RequestRoom(
       student = userId;
       teacher = input.teacherId;
     }
-
+    logger.info("requested Date", input.requestedDate);
     const { data, error } = await client.api.requests.new.post({
       studentId: student,
       newTeacher: teacher,

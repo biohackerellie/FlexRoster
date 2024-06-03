@@ -22,7 +22,6 @@ import {
   userRosterQuery,
 } from "~/lib/sql";
 import {
-  chatHrefConstructor,
   convertUTCDateToLocalDate,
   fetcher,
   formatClasses,
@@ -61,7 +60,7 @@ export async function getClasses(id: string) {
       returnData.classes = formatClasses(validatedClasses, id);
     } else {
       const dbData = await classroomsQuery.execute({});
-
+      logger.error(dbData);
       if (dbData?.length) {
         const parsedData = studentClassesArrayValidator.parse(dbData);
         await setKV(classesKey, JSON.stringify(parsedData), 1200);

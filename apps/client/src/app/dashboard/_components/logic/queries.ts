@@ -141,7 +141,7 @@ export async function getStudentClassesData(
   if (search.available) {
     const searchLower = search.available.toLowerCase();
     tableData = tableData.filter((student) =>
-      student.available.toString().toLowerCase().includes(searchLower),
+      student.available?.toString().toLowerCase().includes(searchLower),
     );
   }
 

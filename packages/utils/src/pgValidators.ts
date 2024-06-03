@@ -131,7 +131,7 @@ export const StudentClassesValidator = z.object({
   roomNumber: z.string(),
   comment: z.string().nullable(),
   teacherName: z.string(),
-  available: z.boolean(),
+  available: z.boolean().nullable(),
   teacherId: z.string(),
   chatId: z.string().optional(),
   id: z.string().optional(),

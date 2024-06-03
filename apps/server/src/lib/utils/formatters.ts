@@ -100,6 +100,9 @@ export function addStringsToArray({
   });
 }
 export function convertUTCDateToLocalDate(date: Date): Date {
-  const newDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-  return newDate;
+  return new Date(
+    (typeof date === "string" ? new Date(date) : date).toLocaleString([], {
+      timeZone: "UTC",
+    }),
+  );
 }

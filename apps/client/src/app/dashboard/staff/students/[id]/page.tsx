@@ -12,13 +12,9 @@ export const metadata: Metadata = {
   title: "FLEX | Details",
 };
 
-export default async function DetailsPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function DetailsPage({ params }: { params: { id: string } }) {
   const rosterId = params.id;
-  const data = await getData(rosterId);
+
   return (
     <div className="flex h-screen flex-col">
       <div className="flex min-h-screen w-full flex-col">

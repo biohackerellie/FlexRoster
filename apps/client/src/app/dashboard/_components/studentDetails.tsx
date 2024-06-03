@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { format } from "date-fns-tz";
+import { format, setHours } from "date-fns";
 import { X } from "lucide-react";
 
 import {
@@ -17,18 +17,21 @@ import { Separator } from "@local/ui/separator";
 
 import type { getData } from "./logic/queries";
 import { DatePickerForm } from "@/app/dashboard/_components/datePicker";
+import { convertUTCDateToLocalDate } from "@/lib/utils";
 
 interface StudentDetailsProps {
   dataPromise: ReturnType<typeof getData>;
 }
 
 export default function StudentDetails({ dataPromise }: StudentDetailsProps) {
+  "use memo";
   const data = React.use(dataPromise);
   const student = data.student.students;
   const requests = data.requests;
   const classroom = data.student.classrooms!;
   const studentId = data.student.user?.id;
   const router = useRouter();
+  console.log(requests);
   let status = "";
 
   switch (student.status) {
@@ -91,26 +94,31 @@ export default function StudentDetails({ dataPromise }: StudentDetailsProps) {
         <ScrollArea className="h-72 w-full rounded-md border shadow-sm">
           <div className="p-4">
             <h4 className="mb-4 text-lg font-medium leading-none">Requests</h4>
-            {requests.map((request, key) => (
-              <>
-                <div key={key} className="text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-md text-gray-500">
-                      {format(request.dateRequested, "PPP", {
-                        timeZone: "America/Denver",
-                      })}
-                    </span>
-                    <span className="text-md text-gray-500">
-                      {request.status}
-                    </span>
+            {requests.map((request, key) => {
+              const dateRequested = new Date(request.dateRequested);
+
+              return (
+                <>
+                  <div key={key} className="text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-md text-gray-500">
+                        {format(
+                          dateRequested.toLocaleString([], { timeZone: "UTC" }),
+                          "E, MMM d",
+                        )}
+                      </span>
+                      <span className="text-md text-gray-500">
+                        {request.status}
+                      </span>
+                    </div>
+                    <div className="text-sm font-medium">
+                      {request.currentTeacherName} to {request.newTeacherName}
+                    </div>
+                    <Separator className="my-2" />
                   </div>
-                  <div className="text-sm font-medium">
-                    {request.currentTeacherName} to {request.newTeacherName}
-                  </div>
-                  <Separator className="my-2" />
-                </div>
-              </>
-            ))}
+                </>
+              );
+            })}
           </div>
         </ScrollArea>
       </CardFooter>
