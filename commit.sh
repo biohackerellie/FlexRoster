@@ -59,14 +59,17 @@ if ! gum confirm "Tag this commit as $NEW_TAG?"; then
   TAG=false
 fi
 
-# Execute all commands after user confirmation
+if [ "$TAG" = true ]; then
+  CURRENT_VERSION=$(grep -oP 'https://github.com/biohackerellie/FlexRoster/releases/download/v\K[0-9.]+' README.md)
+  sed -i "s|v${CURRENT_VERSION}/FlexRoster_${CURRENT_VERSION}|${NEW_TAG}/FlexRoster_${NEW_TAG:1}|g" README.md
+  sed -i "s|xzf FlexRoster_${CURRENT_VERSION}|xzf FlexRoster_${NEW_TAG:1}|g" README.md
+fi
+
 git add -A
 git commit -m "$SUMMARY" -m "$DESCRIPTION"
-# if [ "$TAG" = true ]; then
-#   git tag "$NEW_TAG"
-#   git push origin HEAD --tags #
-# else
+
 git push origin HEAD
+
 
 if gum confirm "Merge dev into main and tag the commit in main?"; then
   git checkout main

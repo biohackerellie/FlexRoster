@@ -19,7 +19,7 @@ export default function AlertComponent({ messages, userId }: ComponentProps) {
   if (!messages || messages.length === 0) {
     return (
       <div className="flex h-full max-h-[calc(100vh-6rem)] w-fit flex-1 flex-col content-center items-center justify-center align-middle">
-        <div className=" p-4 text-2xl font-bold text-gray-600">No alerts</div>
+        <div className="p-4 text-2xl font-bold text-gray-600">No alerts</div>
       </div>
     );
   } else {

@@ -31,7 +31,7 @@ export default function AllStudentsPage({
   const roster = getTableData(search);
   return (
     <div className="flex h-screen flex-col">
-      <div className="flex min-h-screen w-full flex-col ">
+      <div className="flex min-h-screen w-full flex-col">
         <Card>
           <CardHeader>
             <CardTitle>All Students</CardTitle>

@@ -55,7 +55,7 @@ export function StudentRequestsComponent({
             <DialogTitle>My Requests</DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col ">
+          <div className="flex flex-col">
             <List data={data} />
           </div>
           <DialogFooter>

@@ -28,8 +28,8 @@ export default async function StudentDashboard({
   const search = searchParamsValidator.parse(searchParams);
   return (
     <div className="flex justify-center align-middle">
-      <Card className=" fixed top-1/4 border-none bg-transparent sm:relative sm:top-0 sm:w-full sm:border sm:bg-inherit">
-        <CardContent className=" xl:gap-y-4">
+      <Card className="fixed top-1/4 border-none bg-transparent sm:relative sm:top-0 sm:w-full sm:border sm:bg-inherit">
+        <CardContent className="xl:gap-y-4">
           <div className="">
             <React.Suspense
               fallback={<Loader2 className="h-4 w-4 animate-spin" />}

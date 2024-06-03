@@ -27,7 +27,7 @@ export default async function RequestsPage({
       </CardHeader>
       <CardContent>
         <React.Suspense fallback={<Loader2 className="h-8 w-8 animate-spin" />}>
-          <div className="inset-0  h-auto w-full  items-center justify-between">
+          <div className="inset-0 h-auto w-full items-center justify-between">
             <Tabs defaultValue="requests">
               <TabsList>
                 <TabsTrigger value="requests">Requests</TabsTrigger>
@@ -40,7 +40,7 @@ export default async function RequestsPage({
                     requests?.incomingRequests.map((request, index) => {
                       return (
                         <div className="flex items-center justify-center border">
-                          <div className="grid h-auto w-full grid-cols-3 grid-rows-3  gap-x-5 ">
+                          <div className="grid h-auto w-full grid-cols-3 grid-rows-3 gap-x-5">
                             <div className="" key={index}>
                               <RequestComponent {...request} />
                               <Separator />
@@ -65,7 +65,7 @@ export default async function RequestsPage({
                     requests.outgoingRequests.map((request, index) => {
                       return (
                         <div className="flex items-center justify-center border">
-                          <div className="grid h-auto w-full grid-cols-3 grid-rows-3  gap-x-5 ">
+                          <div className="grid h-auto w-full grid-cols-3 grid-rows-3 gap-x-5">
                             <div key={index}>
                               <RequestComponent {...request} />
                               <Separator />
@@ -106,14 +106,14 @@ function RequestComponent(request: Request) {
   const zonedDate = toZonedTime(request.dateRequested, timeZone);
 
   return (
-    <div className=" justify-between p-2">
+    <div className="justify-between p-2">
       <div>
         <div className="text-sm font-semibold">
           {request.studentName} from {request.currentTeacherName}'s room
         </div>
         <div className="flex justify-between">
           Requested {format(zonedDate, "PPP")}
-          <div className="cursor-pointer ">
+          <div className="cursor-pointer">
             <ApprovalMenu
               requestId={request.id}
               studentId={request.studentId}

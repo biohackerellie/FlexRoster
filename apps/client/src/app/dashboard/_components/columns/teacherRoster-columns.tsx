@@ -40,7 +40,7 @@ export function columns(): ColumnDef<TeacherTable>[] {
           return (
             <div className="text-md max-w-[80px] overflow-ellipsis leading-none">
               <Tooltip>
-                <TooltipTrigger className="cursor-pointer " asChild>
+                <TooltipTrigger className="cursor-pointer" asChild>
                   <Badge
                     variant="destructive"
                     className="animate-pulse"

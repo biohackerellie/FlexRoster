@@ -28,7 +28,7 @@ export default function NotFound() {
           <Button
             variant={"link"}
             onClick={() => router.back()}
-            className="cursor-pointer text-center text-4xl font-bold tracking-tight text-red-500  drop-shadow-md hover:text-blue-600 hover:underline md:text-7xl"
+            className="cursor-pointer text-center text-4xl font-bold tracking-tight text-red-500 drop-shadow-md hover:text-blue-600 hover:underline md:text-7xl"
           >
             HERE
           </Button>{" "}
