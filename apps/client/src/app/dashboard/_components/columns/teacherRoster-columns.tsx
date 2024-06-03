@@ -14,6 +14,7 @@ import { statusOptions } from "@/lib/constants";
 import { Attendance } from "../logic/actions";
 
 export function columns(): ColumnDef<TeacherTable>[] {
+  "use memo";
   return [
     {
       accessorKey: "studentName",

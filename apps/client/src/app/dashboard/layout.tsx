@@ -11,6 +11,7 @@ export default async function staffDashboard({
 }: {
   children: React.ReactNode;
 }) {
+  "use memo";
   const session = await auth();
   if (!session) {
     return notFound();

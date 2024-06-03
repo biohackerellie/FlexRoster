@@ -25,6 +25,7 @@ export default async function TeacherDashboardPage({
   params: { id: string };
   searchParams: SearchParams;
 }) {
+  "use memo";
   const session = await auth();
   const teacherId = params.id;
   let isTeacher = false;

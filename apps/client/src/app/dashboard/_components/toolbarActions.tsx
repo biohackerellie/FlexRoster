@@ -22,6 +22,7 @@ export function ToolbarActions({
   currentStatus,
   classroomId,
 }: ToolbarActionsProps) {
+  "use memo";
   return (
     <div className="flex items-center justify-evenly gap-2 gap-x-4">
       {comment ? (

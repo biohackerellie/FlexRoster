@@ -17,7 +17,9 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   experimental: {
     ppr: true,
-    reactCompiler: false,
+    reactCompiler: {
+      compilationMode: "annotation",
+    },
     after: true,
   },
 };

@@ -47,6 +47,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     { className, variant, size, asChild = false, loading = false, ...props },
     ref,
   ) => {
+    "use memo";
     const Comp = asChild ? Slot : "button";
     if (loading) {
       return (

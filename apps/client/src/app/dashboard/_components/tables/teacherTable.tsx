@@ -22,7 +22,7 @@ export default function TeacherRosterTable({
   dataPromise,
   authorized,
 }: TableProps) {
-  const tableColumns = columns();
+  const tableColumns = React.useMemo(() => columns(), []);
 
   const data = React.use(dataPromise);
   const teacherId = data[0]?.teacherId!;
