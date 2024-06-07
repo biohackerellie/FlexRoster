@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@elysiajs/eden": "^1.0.14",
-    "@hookform/resolvers": "^3.4.2",
+    "@hookform/resolvers": "^3.6.0",
     "@local/auth": "workspace:*",
     "@local/db": "workspace:*",
     "@local/server": "workspace:*",
