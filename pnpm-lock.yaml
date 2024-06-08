@@ -311,8 +311,8 @@ importers:
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.4.5)(zod@3.23.8)
       drizzle-orm:
-        specifier: ^0.31.1
-        version: 0.31.1(@types/pg@8.11.6)(@types/react@18.3.3)(bun-types@1.1.12)(pg@8.12.0)(postgres@3.4.4)(react@18.3.1)
+        specifier: ^0.31.2
+        version: 0.31.2(@types/pg@8.11.6)(@types/react@18.3.3)(bun-types@1.1.12)(pg@8.12.0)(postgres@3.4.4)(react@18.3.1)
       postgres:
         specifier: ^3.4.4
         version: 3.4.4
@@ -473,7 +473,7 @@ importers:
     dependencies:
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.31.1(@types/pg@8.11.6)(@types/react@18.3.3)(bun-types@1.1.12)(pg@8.12.0)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8)
+        version: 0.5.1(drizzle-orm@0.31.2(@types/pg@8.11.6)(@types/react@18.3.3)(bun-types@1.1.12)(pg@8.12.0)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -2758,8 +2758,8 @@ packages:
     resolution: {integrity: sha512-hhCJRyZkr6cWnnUuslxE3VbptPVLpFPZkfS3iyuuHUHGQV8jTUotRvpDFhhytxhwazy4Uj5s7wcsQp3iXHn1vQ==}
     hasBin: true
 
-  drizzle-orm@0.31.1:
-    resolution: {integrity: sha512-hTbYne2XX3y6sV7WSxcPH6/vNSiQSUG9VZsFI27jBMCN0OT3Ok7ao3pIT5OMAqWkzJCRFgGjAaUeTAZWPgOKag==}
+  drizzle-orm@0.31.2:
+    resolution: {integrity: sha512-QnenevbnnAzmbNzQwbhklvIYrDE8YER8K7kSrAWQSV1YvFCdSQPzj+jzqRdTSsV2cDqSpQ0NXGyL1G9I43LDLg==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
@@ -2769,6 +2769,7 @@ packages:
       '@op-engineering/op-sqlite': '>=2'
       '@opentelemetry/api': ^1.4.1
       '@planetscale/database': '>=1'
+      '@tidbcloud/serverless': '*'
       '@types/better-sqlite3': '*'
       '@types/pg': '*'
       '@types/react': '>=18'
@@ -2802,6 +2803,8 @@ packages:
       '@opentelemetry/api':
         optional: true
       '@planetscale/database':
+        optional: true
+      '@tidbcloud/serverless':
         optional: true
       '@types/better-sqlite3':
         optional: true
@@ -7210,7 +7213,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.31.1(@types/pg@8.11.6)(@types/react@18.3.3)(bun-types@1.1.12)(pg@8.12.0)(postgres@3.4.4)(react@18.3.1):
+  drizzle-orm@0.31.2(@types/pg@8.11.6)(@types/react@18.3.3)(bun-types@1.1.12)(pg@8.12.0)(postgres@3.4.4)(react@18.3.1):
     optionalDependencies:
       '@types/pg': 8.11.6
       '@types/react': 18.3.3
@@ -7219,9 +7222,9 @@ snapshots:
       postgres: 3.4.4
       react: 18.3.1
 
-  drizzle-zod@0.5.1(drizzle-orm@0.31.1(@types/pg@8.11.6)(@types/react@18.3.3)(bun-types@1.1.12)(pg@8.12.0)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8):
+  drizzle-zod@0.5.1(drizzle-orm@0.31.2(@types/pg@8.11.6)(@types/react@18.3.3)(bun-types@1.1.12)(pg@8.12.0)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8):
     dependencies:
-      drizzle-orm: 0.31.1(@types/pg@8.11.6)(@types/react@18.3.3)(bun-types@1.1.12)(pg@8.12.0)(postgres@3.4.4)(react@18.3.1)
+      drizzle-orm: 0.31.2(@types/pg@8.11.6)(@types/react@18.3.3)(bun-types@1.1.12)(pg@8.12.0)(postgres@3.4.4)(react@18.3.1)
       zod: 3.23.8
 
   duplexer@0.1.2: {}
