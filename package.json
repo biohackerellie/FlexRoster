@@ -38,7 +38,7 @@
     "@local/prettier-config": "workspace:*",
     "@total-typescript/ts-reset": "^0.5.1",
     "@turbo/gen": "^1.13.4",
-    "prettier": "^3.3.1",
+    "prettier": "^3.3.2",
     "turbo": "^1.13.4",
     "typescript": "^5.4.5"
   },
