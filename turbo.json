@@ -1,13 +1,30 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env"],
-  "experimentalUI": true,
-  "pipeline": {
+  "globalDependencies": [
+    "**/.env"
+  ],
+  "globalEnv": [
+    "DIRECT_URL",
+    "DATABASE_URL",
+    "NEXT_PUBLIC_HOST",
+    "NEXT_PUBLIC_PORT",
+    "NEXT_PUBLIC_API_URL",
+    "NEXT_PUBLIC_API_PORT",
+    "NEXTAUTH_SECRET",
+    "AZURE_AD_CLIENT_ID",
+    "AZURE_AD_CLIENT_SECRET",
+    "AZURE_AD_TENANT_ID"
+  ],
+  "tasks": {
     "topo": {
-      "dependsOn": ["^topo"]
+      "dependsOn": [
+        "^topo"
+      ]
     },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "outputs": [
         ".next/**",
         "!.next/cache/**",
@@ -18,8 +35,12 @@
       ]
     },
     "nightly": {
-      "dependsOn": ["^topo"],
-      "outputs": [".turbo/.cache/.nightlycache"]
+      "dependsOn": [
+        "^topo"
+      ],
+      "outputs": [
+        ".turbo/.cache/.nightlycache"
+      ]
     },
     "dev": {
       "cache": false,
@@ -39,28 +60,26 @@
       "cache": false
     },
     "format": {
-      "outputs": [".turbo/.cache/.prettiercache"],
-      "outputMode": "new-only"
+      "outputs": [
+        ".turbo/.cache/.prettiercache"
+      ],
+      "outputLogs": "new-only"
     },
     "lint": {
-      "dependsOn": ["^topo"],
-      "outputs": [".turbo/.cache/.eslintcache"]
+      "dependsOn": [
+        "^topo"
+      ],
+      "outputs": [
+        ".turbo/.cache/.eslintcache"
+      ]
     },
     "typecheck": {
-      "dependsOn": ["^topo"],
-      "outputs": [".turbo/.cache/tsbuildinfo.json"]
+      "dependsOn": [
+        "^topo"
+      ],
+      "outputs": [
+        ".turbo/.cache/tsbuildinfo.json"
+      ]
     }
-  },
-  "globalEnv": [
-    "DIRECT_URL",
-    "DATABASE_URL",
-    "NEXT_PUBLIC_HOST",
-    "NEXT_PUBLIC_PORT",
-    "NEXT_PUBLIC_API_URL",
-    "NEXT_PUBLIC_API_PORT",
-    "NEXTAUTH_SECRET",
-    "AZURE_AD_CLIENT_ID",
-    "AZURE_AD_CLIENT_SECRET",
-    "AZURE_AD_TENANT_ID"
-  ]
+  }
 }
