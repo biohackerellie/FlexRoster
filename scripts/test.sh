@@ -3,9 +3,6 @@
 set -e
 
 
-
-
-
 # Function to check if gum is installed
 check_gum_installed() {
   if command -v gum &>/dev/null; then
@@ -86,3 +83,4 @@ sleep 2
 # gum style --foreground 212 "Pushing Docker image..."
 # docker stack deploy -c docker-compose.yml FlexRoster -d
 gum spin --show-output --spinner monkey --title "Wrapping up..." --title.foreground 99 -- sh -c 'sleep 1; echo "K bye, loser 😒"'
+process.exit(0)
