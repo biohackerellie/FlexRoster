@@ -2,6 +2,10 @@
 
 set -e
 
+
+
+
+
 # Function to check if gum is installed
 check_gum_installed() {
   if command -v gum &>/dev/null; then
@@ -67,25 +71,18 @@ $$/       $$/  $$$$$$$/ $$/   $$/ $$/   $$/  $$$$$$/  $$$$$$$/     $$$$/   $$$$$
 `')"
 
 gum spin --title "Checking for updates..." -- sleep 1
-echo "Checking for updates..."
-if ! git diff --quiet HEAD @{u}; then
-  echo "Changes detected, updating and deploying"
-  git pull
-  # bash ./scripts/deploy.sh
-else
-  echo "No changes detected"
-fi
 
-sleep 2
-
+git pull origin main
 gum style --foreground 212 "Building Docker image..."
+sleep 2
+bash ./scripts/deploy.sh
 
-docker-compose -f docker-build.yml build
+
 clear
 gum spin --show-output --spinner monkey --title "Building..." --title.foreground 99 -- sh -c 'sleep 1; echo "Done! 🎉"'
 
 sleep 2
 
-gum style --foreground 212 "Pushing Docker image..."
-docker stack deploy -c docker-compose.yml FlexRoster -d
+# gum style --foreground 212 "Pushing Docker image..."
+# docker stack deploy -c docker-compose.yml FlexRoster -d
 gum spin --show-output --spinner monkey --title "Wrapping up..." --title.foreground 99 -- sh -c 'sleep 1; echo "K bye, loser 😒"'
