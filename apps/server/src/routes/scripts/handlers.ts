@@ -1,7 +1,9 @@
 import { db, eq, schema } from "@local/db";
 import { logger } from "@local/utils";
 
+import type { ClassResponse } from "~/lib/types";
 import { env } from "~/env";
+import { fetcher, icAuth, icClassQueryFunction } from "~/lib/utils";
 
 type SyncTeachers = {
   email: string;
@@ -42,12 +44,19 @@ export async function syncTeachers(body: SyncTeachers) {
 
 export async function pong() {
   try {
-    logger.debug("dburl", env.DATABASE_URL);
-    const res = await db.query.users.findMany({
-      where: eq(schema.users.role, "student"),
-    });
-    logger.debug("res", res);
-    return new Response("OK", { status: 200 });
+    const token = await icAuth();
+    const res = await fetcher<ClassResponse>(
+      icClassQueryFunction(env.LHS_SOURCE_ID, env.ONEROSTER_APPNAME),
+      {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          "X-XSRF-TOKEN": env.XSRF_TOKEN,
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return res;
   } catch (error) {
     console.error(error);
     return new Response("Error", { status: 500 });

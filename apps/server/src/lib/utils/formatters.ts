@@ -30,7 +30,7 @@ export function icClassQueryFunction(
   IC_SchoolSourceId: string,
   appName: string,
 ) {
-  return `${icQuery(appName)}/classes?filter=school.sourceId%3D%27${IC_SchoolSourceId}%27&limit=1200`;
+  return `${icQuery(appName)}/schools/${IC_SchoolSourceId}/classes?limit=1200`;
 }
 
 interface PreferredNames {
