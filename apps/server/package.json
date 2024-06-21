@@ -51,7 +51,7 @@
     "eslint": "^9.5.0",
     "prettier": "^3.3.2",
     "type-fest": "^4.20.1",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.2"
   },
   "prettier": "@local/prettier-config"
 }

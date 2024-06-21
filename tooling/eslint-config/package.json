@@ -32,7 +32,7 @@
     "eslint": "^9.5.0",
     "eslint-import-resolver-typescript-bun": "^0.0.94",
     "prettier": "^3.3.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.2"
   },
   "prettier": "@local/prettier-config"
 }
