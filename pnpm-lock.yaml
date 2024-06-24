@@ -555,8 +555,8 @@ importers:
         specifier: ^9.5.0
         version: 9.5.0
       eslint-import-resolver-typescript-bun:
-        specifier: ^0.0.94
-        version: 0.0.94(@typescript-eslint/parser@7.13.1(eslint@9.5.0)(typescript@5.5.2))(bun-types@1.1.16)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.13.1(eslint@9.5.0)(typescript@5.5.2))(eslint@9.5.0))(eslint@9.5.0)
+        specifier: ^0.0.95
+        version: 0.0.95(@typescript-eslint/parser@7.13.1(eslint@9.5.0)(typescript@5.5.2))(bun-types@1.1.16)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.13.1(eslint@9.5.0)(typescript@5.5.2))(eslint@9.5.0))(eslint@9.5.0)
       prettier:
         specifier: ^3.3.2
         version: 3.3.2
@@ -3223,8 +3223,8 @@ packages:
   eslint-import-resolver-node@0.3.9:
     resolution: {integrity: sha512-WFj2isz22JahUv+B788TlO3N6zL3nNJGU8CcZbPZvVEkBPaJdCV4vy5wyghty5ROFbCRnm132v8BScu5/1BQ8g==}
 
-  eslint-import-resolver-typescript-bun@0.0.94:
-    resolution: {integrity: sha512-pQ4uX7Wvj9tGbbkx1nP8nuZ8QPp4Z1Rk+w52wDYvtN7ut0uUWlJryLTppdZQ5nLVgAEcKfz3ayx2QyI6C1mIig==}
+  eslint-import-resolver-typescript-bun@0.0.95:
+    resolution: {integrity: sha512-XxxfhGNh6z4Y/ynGyYfUbcWj/L7aKwwdAYTWOmGcjfIV4Ue4hen6uyj/A0jcUpn3kVq/L0LHyOVHrzNbDcNdSg==}
     peerDependencies:
       bun-types: ^0.8.1
 
@@ -7968,7 +7968,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript-bun@0.0.94(@typescript-eslint/parser@7.13.1(eslint@9.5.0)(typescript@5.5.2))(bun-types@1.1.16)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.13.1(eslint@9.5.0)(typescript@5.5.2))(eslint@9.5.0))(eslint@9.5.0):
+  eslint-import-resolver-typescript-bun@0.0.95(@typescript-eslint/parser@7.13.1(eslint@9.5.0)(typescript@5.5.2))(bun-types@1.1.16)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.13.1(eslint@9.5.0)(typescript@5.5.2))(eslint@9.5.0))(eslint@9.5.0):
     dependencies:
       bun-types: 1.1.16
       debug: 4.3.5
