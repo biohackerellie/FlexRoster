@@ -59,7 +59,7 @@
     "@types/react": "^18.3.3",
     "autoprefixer": "^10.4.19",
     "dotenv-cli": "^7.4.2",
-    "eslint": "^9.5.0",
+    "eslint": "^9.6.0",
     "jiti": "^1.21.6",
     "postcss": "^8.4.39",
     "prettier": "^3.3.2",
