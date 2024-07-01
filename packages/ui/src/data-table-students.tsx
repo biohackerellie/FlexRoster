@@ -5,7 +5,6 @@ import * as React from "react";
 import { flexRender } from "@tanstack/react-table";
 
 import { Button } from "./button";
-import { Input } from "./input";
 import {
   Table,
   TableBody,
@@ -20,6 +19,7 @@ interface DataTableProps<TData> {
 }
 
 export function DataTable<TData>({ table }: DataTableProps<TData>) {
+  "use-no-memo";
   return (
     <div>
       <div className="rounded-md border-2 bg-slate-800 bg-opacity-15 font-medium backdrop-blur-sm">

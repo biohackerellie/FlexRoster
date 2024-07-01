@@ -34,6 +34,7 @@ export function DataTableFacetedFilter<TData, TValue>({
   title,
   options,
 }: DataTableFacetedFilterProps<TData, TValue>) {
+  "use-no-memo";
   const selectedValues = new Set(column?.getFilterValue() as string[]);
   const [open, setOpen] = React.useState(false);
   return (
