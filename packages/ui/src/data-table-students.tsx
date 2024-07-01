@@ -19,7 +19,7 @@ interface DataTableProps<TData> {
 }
 
 export function DataTable<TData>({ table }: DataTableProps<TData>) {
-  "use-no-memo";
+  "use no memo";
   return (
     <div>
       <div className="rounded-md border-2 bg-slate-800 bg-opacity-15 font-medium backdrop-blur-sm">

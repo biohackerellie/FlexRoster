@@ -23,7 +23,7 @@ export function DataTableColumnHeader<TData, TValue>({
   title,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-  "use-no-memo";
+  "use no memo";
   if (!column.getCanSort()) {
     return (
       <div
