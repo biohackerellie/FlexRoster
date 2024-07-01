@@ -1,8 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    "**/.env"
-  ],
+  "globalDependencies": ["**/.env"],
+
   "globalEnv": [
     "DIRECT_URL",
     "DATABASE_URL",
@@ -17,14 +16,10 @@
   ],
   "tasks": {
     "topo": {
-      "dependsOn": [
-        "^topo"
-      ]
+      "dependsOn": ["^topo"]
     },
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "outputs": [
         ".next/**",
         "!.next/cache/**",
@@ -35,17 +30,12 @@
       ]
     },
     "nightly": {
-      "dependsOn": [
-        "^topo"
-      ],
-      "outputs": [
-        ".turbo/.cache/.nightlycache"
-      ]
+      "dependsOn": ["^topo"],
+      "outputs": [".turbo/.cache/.nightlycache"]
     },
     "dev": {
       "cache": false,
-      "persistent": true,
-      "interactive": true
+      "persistent": true
     },
     "clean": {
       "cache": false
@@ -60,26 +50,16 @@
       "cache": false
     },
     "format": {
-      "outputs": [
-        ".turbo/.cache/.prettiercache"
-      ],
+      "outputs": [".turbo/.cache/.prettiercache"],
       "outputLogs": "new-only"
     },
     "lint": {
-      "dependsOn": [
-        "^topo"
-      ],
-      "outputs": [
-        ".turbo/.cache/.eslintcache"
-      ]
+      "dependsOn": ["^topo"],
+      "outputs": [".turbo/.cache/.eslintcache"]
     },
     "typecheck": {
-      "dependsOn": [
-        "^topo"
-      ],
-      "outputs": [
-        ".turbo/.cache/tsbuildinfo.json"
-      ]
+      "dependsOn": ["^topo"],
+      "outputs": [".turbo/.cache/tsbuildinfo.json"]
     }
   }
 }

@@ -22,12 +22,13 @@ export default function TeacherRosterTable({
   dataPromise,
   authorized,
 }: TableProps) {
+  "use no memo";
   const tableColumns = React.useMemo(() => columns(), []);
 
   const data = React.use(dataPromise);
-  const teacherId = data[0]?.teacherId!;
+  const teacherId = data[0]?.teacherId ?? "";
   const comment = data[0]?.comment ?? null;
-  const status = data[0]?.available!;
+  const status = data[0]?.available;
   const classroomId = data[0]?.classroomId ?? "";
   const filterFields: DataTableFilterField<TeacherTable>[] = [
     {
