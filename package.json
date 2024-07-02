@@ -40,7 +40,7 @@
     "@turbo/gen": "^2.0.6",
     "prettier": "^3.3.2",
     "turbo": "^2.0.6",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.3"
   },
   "prettier": "@local/prettier-config",
   "packageManager": "pnpm@9.4.0"
