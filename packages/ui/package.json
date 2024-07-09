@@ -38,7 +38,7 @@
     "next-themes": "^0.3.0",
     "react": "19.0.0-rc-fb9a90fa48-20240614",
     "react-day-picker": "^8.10.1",
-    "react-hook-form": "^7.52.0",
+    "react-hook-form": "^7.52.1",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
