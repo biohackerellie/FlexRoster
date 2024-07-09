@@ -24,7 +24,7 @@
     "@next/bundle-analyzer": "^14.2.4",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-table": "^8.19.2",
-    "auth": "^1.0.2",
+    "auth": "^1.1.1",
     "axios": "^1.7.2",
     "babel-plugin-react-compiler": "0.0.0-experimental-487cb0e-20240529",
     "date-fns": "^3.6.0",
