@@ -19,14 +19,17 @@ export const todaysAvailability = db
   .where(eq(schema.availability.date, today))
   .as("todaysAvailability");
 
-const availabilityQuery = db
-  .select()
-  .from(schema.availability)
-  .as("availabilityQuery")
 export const classroomsQuery = db // get all classrooms and associated teacher
-  .select()
+  .select({
+    id: schema.classrooms.id,
+    roomNumber: schema.classrooms.roomNumber,
+    teacherName: schema.classrooms.teacherName,
+    teacherId: schema.classrooms.teacherId,
+    available: sql<boolean>`${todaysAvailability.available ?? false}`,
+    comment: schema.classrooms.comment,
+    availableDates: schema.availability.date
+  })
   .from(schema.classrooms)
-
   .leftJoin(todaysAvailability, eq(schema.classrooms.id, todaysAvailability.id))
   .leftJoin(schema.availability, eq(schema.classrooms.id, schema.availability.classroomId))
   .prepare("classroomsQuery")

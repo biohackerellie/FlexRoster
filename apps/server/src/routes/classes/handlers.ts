@@ -33,7 +33,11 @@ import {
 type insertClassRoster = typeof schema.students.$inferInsert;
 
 export async function getClasses(id: string) {
+  const today = convertUTCDateToLocalDate(new Date());
+  today.setHours(0, 0, 0, 0);
   try {
+
+
     const returnData: StudentDashboardData = {
       classes: [],
       currentClass: "",
@@ -59,14 +63,15 @@ export async function getClasses(id: string) {
 
       returnData.classes = formatClasses(validatedClasses, id);
     } else {
-      const dbData = await classroomsQuery.execute({});
+      const dbData = await db.query.classrooms.findMany({
+        with: {
+          availability: true,
+        }
+      })
       logger.error(dbData);
+
+      // let availableDates: Date[] = [];
       if (dbData?.length) {
-      //   for(const c of dbData) {
-      //     if(!c.teacherId) continue
-      //     const dates = await getAvailability(c.teacherId);
-        //   c.availableDates = dates 
-        // }
         const parsedData = studentClassesArrayValidator.parse(dbData);
         await setKV(classesKey, JSON.stringify(parsedData), 1200);
         returnData.classes = formatClasses(parsedData, id);
