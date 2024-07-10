@@ -187,8 +187,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0
       '@elysiajs/cors':
-        specifier: ^1.0.2
-        version: 1.0.2(elysia@1.0.27(@sinclair/typebox@0.32.34)(openapi-types@12.1.3)(typescript@5.5.3))
+        specifier: ^1.0.4
+        version: 1.0.4(elysia@1.0.27(@sinclair/typebox@0.32.34)(openapi-types@12.1.3)(typescript@5.5.3))
       '@elysiajs/swagger':
         specifier: ^1.0.5
         version: 1.0.5(elysia@1.0.27(@sinclair/typebox@0.32.34)(openapi-types@12.1.3)(typescript@5.5.3))
@@ -854,8 +854,8 @@ packages:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
     engines: {node: '>=10.0.0'}
 
-  '@elysiajs/cors@1.0.2':
-    resolution: {integrity: sha512-2X+wes5M2SdSaI4lGp0YBbTK35y9TtjjjFMjmQNjMonUXxtOrAR7cA0lsSIvHQ8UTd9z+mMBn7NyBhWaKxq0jA==}
+  '@elysiajs/cors@1.0.4':
+    resolution: {integrity: sha512-rrjJFM/z2jxGcVPwj26U91DogZTz3gBpOhHPFHYWH2bMir0AbnrOc2F6SNQr2opQAbmGoxDPPEgZFyqenXHRbw==}
     peerDependencies:
       elysia: '>= 1.0.2'
 
@@ -5822,7 +5822,7 @@ snapshots:
 
   '@discoveryjs/json-ext@0.5.7': {}
 
-  '@elysiajs/cors@1.0.2(elysia@1.0.27(@sinclair/typebox@0.32.34)(openapi-types@12.1.3)(typescript@5.5.3))':
+  '@elysiajs/cors@1.0.4(elysia@1.0.27(@sinclair/typebox@0.32.34)(openapi-types@12.1.3)(typescript@5.5.3))':
     dependencies:
       elysia: 1.0.27(@sinclair/typebox@0.32.34)(openapi-types@12.1.3)(typescript@5.5.3)
 
