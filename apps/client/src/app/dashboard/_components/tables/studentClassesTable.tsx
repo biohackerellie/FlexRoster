@@ -10,9 +10,7 @@ import { DataTableToolbar } from "@local/ui/data-table-toolbar";
 import {
   Drawer,
   DrawerContent,
-  DrawerDescription,
   DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from "@local/ui/drawer";
 import { ScrollArea, ScrollBar } from "@local/ui/scroll-area";

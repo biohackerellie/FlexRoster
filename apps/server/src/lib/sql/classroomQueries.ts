@@ -3,7 +3,7 @@
  */
 
 import type { AnyColumn } from "@local/db";
-import { and, db, eq, schema, sql } from "@local/db";
+import { and, db, eq, schema, gte, sql } from "@local/db";
 
 import { convertUTCDateToLocalDate } from "../utils";
 
@@ -19,18 +19,17 @@ export const todaysAvailability = db
   .where(eq(schema.availability.date, today))
   .as("todaysAvailability");
 
+const availabilityQuery = db
+  .select()
+  .from(schema.availability)
+  .as("availabilityQuery")
 export const classroomsQuery = db // get all classrooms and associated teacher
-  .select({
-    id: schema.classrooms.id,
-    roomNumber: schema.classrooms.roomNumber,
-    teacherName: schema.classrooms.teacherName,
-    teacherId: schema.classrooms.teacherId,
-    available: sql<boolean>`${todaysAvailability.available ?? false}`,
-    comment: schema.classrooms.comment,
-  })
+  .select()
   .from(schema.classrooms)
+
   .leftJoin(todaysAvailability, eq(schema.classrooms.id, todaysAvailability.id))
-  .prepare("classroomsQuery");
+  .leftJoin(schema.availability, eq(schema.classrooms.id, schema.availability.classroomId))
+  .prepare("classroomsQuery")
 
 export const teacherAvailableTodayQuery = db
   .select({

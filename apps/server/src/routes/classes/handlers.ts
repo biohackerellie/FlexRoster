@@ -62,6 +62,11 @@ export async function getClasses(id: string) {
       const dbData = await classroomsQuery.execute({});
       logger.error(dbData);
       if (dbData?.length) {
+      //   for(const c of dbData) {
+      //     if(!c.teacherId) continue
+      //     const dates = await getAvailability(c.teacherId);
+        //   c.availableDates = dates 
+        // }
         const parsedData = studentClassesArrayValidator.parse(dbData);
         await setKV(classesKey, JSON.stringify(parsedData), 1200);
         returnData.classes = formatClasses(parsedData, id);

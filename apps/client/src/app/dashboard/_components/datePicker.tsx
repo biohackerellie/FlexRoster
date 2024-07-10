@@ -3,7 +3,7 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { ArrowLeftRightIcon, CalendarIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -44,9 +44,10 @@ type DatePickerSchema = z.infer<typeof datePickerSchema>;
 interface DatePickerFormProps {
   teacherId?: string;
   studentId?: string;
+  availableDates?: Date[];
 }
 
-export function DatePickerForm({ teacherId, studentId }: DatePickerFormProps) {
+export function DatePickerForm({ teacherId, studentId, availableDates }: DatePickerFormProps) {
   const [open, setOpen] = React.useState(false);
   const [isRequestPending, startRequestTransition] = React.useTransition();
 
@@ -56,8 +57,6 @@ export function DatePickerForm({ teacherId, studentId }: DatePickerFormProps) {
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const futureLimit = new Date();
-  futureLimit.setDate(today.getDate() + 7);
 
   function onSubmit(input: DatePickerSchema) {
     startRequestTransition(() => {
@@ -131,11 +130,9 @@ export function DatePickerForm({ teacherId, studentId }: DatePickerFormProps) {
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>
-                          date > futureLimit ||
-                          date < today ||
-                          date.getDay() === 6 ||
-                          date.getDay() === 0
-                        } // disable past dates // weekends // and 7 days in advance
+                        !availableDates?.includes(date) 
+
+                        } // disable all dates not in availableDates
                         initialFocus
                       />
                     </PopoverContent>
