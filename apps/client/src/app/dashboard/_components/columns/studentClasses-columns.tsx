@@ -38,25 +38,25 @@ export function columns(): ColumnDef<StudentClasses>[] {
       },
       size: 1,
     },
-    {
-      accessorKey: "available",
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Available" />;
-      },
-      cell: ({ row }) => {
-        const available = row.original.available;
+    // {
+    //   accessorKey: "available",
+    //   header: ({ column }) => {
+    //     return <DataTableColumnHeader column={column} title="Available" />;
+    //   },
+    //   cell: ({ row }) => {
+    //     const available = row.original.available;
 
-        if (!available) {
-          return <Badge variant="destructive">Not Available</Badge>;
-        } else {
-          return <Badge variant="success">Available</Badge>;
-        }
-      },
-      filterFn: (row, id, value) => {
-        return Array.isArray(value) && value.includes(row.getValue(id));
-      },
-      size: 1,
-    },
+    //     if (!available) {
+    //       return <Badge variant="destructive">Not Available</Badge>;
+    //     } else {
+    //       return <Badge variant="success">Available</Badge>;
+    //     }
+    //   },
+    //   filterFn: (row, id, value) => {
+    //     return Array.isArray(value) && value.includes(row.getValue(id));
+    //   },
+    //   size: 1,
+    // },
     {
       accessorKey: "teacherId",
       header: ({ column }) => {

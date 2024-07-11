@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-
+import {z} from 'zod'
 import type { Logs, Message } from "@local/utils";
 import { auth } from "@local/auth";
 import { messageValidator } from "@local/utils";
@@ -11,7 +11,7 @@ import { toPusherKey } from "@/lib/utils";
 export async function POST(req: Request) {
   try {
     const { chatId, text }: { chatId: string; text: string } = await req.json();
-
+    await profanityFilter(text)
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
 
@@ -64,4 +64,22 @@ export async function POST(req: Request) {
 
     return new Response("Internal Server Error", { status: 500 });
   }
+}
+
+const profanityFilterSchema = z.object({
+isProfane: z.boolean(),
+score: z.number(),
+flaggedFor: z.string(),
+)};
+
+async function profanityFilter(message: string){
+  const res = await fetch("https://vector.profanity.dev", {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({message}),
+  })
+  
+  
 }
