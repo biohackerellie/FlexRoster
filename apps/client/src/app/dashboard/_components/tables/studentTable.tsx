@@ -17,7 +17,6 @@ interface TableProps {
 }
 
 export default function AllStudentsTable({ dataPromise }: TableProps) {
-  "use no memo";
   const tableColumns = React.useMemo(() => columns(), []);
   const data = React.use(dataPromise);
 
