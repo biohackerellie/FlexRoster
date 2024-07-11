@@ -65,8 +65,13 @@ export function columns(): ColumnDef<StudentClasses>[] {
       cell: ({ row }) => {
         const teacherId = row.original.teacherId;
         const availableDates = row.original.availableDates ?? [];
-          return <DatePickerForm teacherId={teacherId} availableDates={availableDates} />;
-        
+
+        return (
+          <DatePickerForm
+            teacherId={teacherId}
+            availableDates={availableDates}
+          />
+        );
       },
       enableSorting: false,
       size: 1,

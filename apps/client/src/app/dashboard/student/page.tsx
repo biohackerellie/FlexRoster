@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
 import { auth } from "@local/auth";
-import { Card, CardContent  } from "@local/ui/card";
+import { Card, CardContent } from "@local/ui/card";
 import { searchParamsValidator } from "@local/utils";
 
 import {

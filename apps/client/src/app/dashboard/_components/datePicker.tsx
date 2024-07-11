@@ -47,7 +47,11 @@ interface DatePickerFormProps {
   availableDates?: Date[];
 }
 
-export function DatePickerForm({ teacherId, studentId, availableDates }: DatePickerFormProps) {
+export function DatePickerForm({
+  teacherId,
+  studentId,
+  availableDates,
+}: DatePickerFormProps) {
   const [open, setOpen] = React.useState(false);
   const [isRequestPending, startRequestTransition] = React.useTransition();
 
@@ -55,8 +59,18 @@ export function DatePickerForm({ teacherId, studentId, availableDates }: DatePic
     resolver: zodResolver(datePickerSchema),
   });
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const isAvailable = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (!availableDates) return date >= today;
+    const dateStr = date.toISOString().split("T")[0];
+    return (
+      date >= today &&
+      availableDates.some(
+        (d) => new Date(d).toISOString().split("T")[0] === dateStr,
+      )
+    );
+  };
 
   function onSubmit(input: DatePickerSchema) {
     startRequestTransition(() => {
@@ -129,10 +143,7 @@ export function DatePickerForm({ teacherId, studentId, availableDates }: DatePic
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) =>
-                        !availableDates?.includes(date) 
-
-                        } // disable all dates not in availableDates
+                        disabled={(date) => !isAvailable(date)} // disable all dates not in availableDates
                         initialFocus
                       />
                     </PopoverContent>

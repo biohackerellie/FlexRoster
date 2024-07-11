@@ -17,3 +17,5 @@ export const logger = {
     console.log(chalk.green(chalk.bold("[SUCCESS]"), ...args));
   },
 };
+
+export type Logger = typeof logger;

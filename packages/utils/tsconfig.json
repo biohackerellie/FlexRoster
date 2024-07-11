@@ -4,6 +4,6 @@
     "outDir": "dist",
     "tsBuildInfoFile": ".turbo/.cache/tsbuildinfo.json"
   },
-  "include": ["*.ts", "src"],
+  "include": ["*.ts", "src", "logger.ts", "nameHelpers.ts"],
   "exclude": ["node_modules"]
 }

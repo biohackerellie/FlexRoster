@@ -15,7 +15,7 @@ import type { RosterResponse } from "~/lib/types";
 import { env } from "~/env";
 import { clearKV, getKV, setKV } from "~/lib/redis";
 import {
-  classroomsQuery,
+  aggregateClassroomData,
   getClassroomIdByTeacher,
   roomByIdQuery,
   rosterByIDQuery,
@@ -36,8 +36,6 @@ export async function getClasses(id: string) {
   const today = convertUTCDateToLocalDate(new Date());
   today.setHours(0, 0, 0, 0);
   try {
-
-
     const returnData: StudentDashboardData = {
       classes: [],
       currentClass: "",
@@ -63,14 +61,9 @@ export async function getClasses(id: string) {
 
       returnData.classes = formatClasses(validatedClasses, id);
     } else {
-      const dbData = await db.query.classrooms.findMany({
-        with: {
-          availability: true,
-        }
-      })
+      const dbData = await aggregateClassroomData();
       logger.error(dbData);
 
-      // let availableDates: Date[] = [];
       if (dbData?.length) {
         const parsedData = studentClassesArrayValidator.parse(dbData);
         await setKV(classesKey, JSON.stringify(parsedData), 1200);
