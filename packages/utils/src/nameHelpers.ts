@@ -31,6 +31,8 @@ export function normalizeName(name: string): string[] {
     .map((word) => nicknameMap[word] ?? word);
 }
 
+export type NormalizeName = typeof normalizeName;
+
 export function findUserIdByName(
   searchName: string,
   userObjects: User[],

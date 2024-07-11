@@ -10,9 +10,7 @@ import { DataTableToolbar } from "@local/ui/data-table-toolbar";
 import {
   Drawer,
   DrawerContent,
-  DrawerDescription,
   DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from "@local/ui/drawer";
 import { ScrollArea, ScrollBar } from "@local/ui/scroll-area";
@@ -29,7 +27,6 @@ interface TableProps {
 }
 
 export default function StudentClassesTable({ dataPromise }: TableProps) {
-  "use no memo";
   let tableColumns;
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const desktopColumns = React.useMemo(() => columns(), []);

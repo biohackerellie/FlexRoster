@@ -3,7 +3,7 @@
  */
 
 import type { AnyColumn } from "@local/db";
-import { and, db, eq, schema, sql } from "@local/db";
+import { and, db, eq, gte, schema, sql } from "@local/db";
 
 import { convertUTCDateToLocalDate } from "../utils";
 
@@ -19,6 +19,11 @@ export const todaysAvailability = db
   .where(eq(schema.availability.date, today))
   .as("todaysAvailability");
 
+export const availabilityQuery = db
+  .select()
+  .from(schema.availability)
+  .prepare("availabilityQuery");
+
 export const classroomsQuery = db // get all classrooms and associated teacher
   .select({
     id: schema.classrooms.id,
@@ -31,6 +36,19 @@ export const classroomsQuery = db // get all classrooms and associated teacher
   .from(schema.classrooms)
   .leftJoin(todaysAvailability, eq(schema.classrooms.id, todaysAvailability.id))
   .prepare("classroomsQuery");
+
+// aggragate the classroom data to include array of dates to each classroom
+export async function aggregateClassroomData() {
+  const classrooms = await classroomsQuery.execute();
+  const dates = await availabilityQuery.execute();
+  const result = classrooms.map((classroom) => {
+    const availableDates = dates
+      .filter((date) => date.classroomId === classroom.id)
+      .map((date) => date.date);
+    return { ...classroom, availableDates };
+  });
+  return result;
+}
 
 export const teacherAvailableTodayQuery = db
   .select({

@@ -135,6 +135,7 @@ export const StudentClassesValidator = z.object({
   teacherId: z.string(),
   chatId: z.string().optional(),
   id: z.string().optional(),
+  availableDates: z.array(z.coerce.date()).optional(),
 });
 
 export const studentClassesArrayValidator = z.array(StudentClassesValidator);

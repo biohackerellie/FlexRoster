@@ -1,11 +1,7 @@
 import { toast } from "sonner";
 
 import { getErrorMessage } from "@/lib/errorHandler";
-import {
-  deleteComment,
-  setAvailability,
-  setTodayAvailability,
-} from "./actions";
+import { deleteComment, setTodayAvailability } from "./actions";
 
 export function deleteComments({
   teacherId,

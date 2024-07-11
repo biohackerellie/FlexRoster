@@ -180,6 +180,24 @@ export async function setTodayAvailability(
   }
 }
 
+export async function getAvailability(id: string) {
+  const today = convertUTCDateToLocalDate(new Date());
+  today.setHours(0, 0, 0, 0);
+  try {
+    const { data, error } = await client.api.classes
+      .availability({ id: id })
+      .get();
+    if (error) {
+      throw error.value;
+    }
+    const filteredDates = data.filter((date) => date.date >= today);
+    return filteredDates;
+  } catch (err) {
+    logger.error("something went wrong", err);
+    return [];
+  }
+}
+
 export async function RequestRoom(
   input: DatePickerSchema & {
     teacherId?: string;

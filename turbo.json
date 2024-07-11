@@ -2,6 +2,7 @@
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env"],
 
+  "ui":"tui",
   "globalEnv": [
     "DIRECT_URL",
     "DATABASE_URL",

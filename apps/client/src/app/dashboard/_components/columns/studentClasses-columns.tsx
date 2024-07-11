@@ -64,21 +64,14 @@ export function columns(): ColumnDef<StudentClasses>[] {
       },
       cell: ({ row }) => {
         const teacherId = row.original.teacherId;
+        const availableDates = row.original.availableDates ?? [];
 
-        const available = row.original.available;
-        if (!available) {
-          return (
-            <Button
-              variant="destructive"
-              disabled
-              className="cursor-not-allowed"
-            >
-              <CalendarIcon />
-            </Button>
-          );
-        } else {
-          return <DatePickerForm teacherId={teacherId} />;
-        }
+        return (
+          <DatePickerForm
+            teacherId={teacherId}
+            availableDates={availableDates}
+          />
+        );
       },
       enableSorting: false,
       size: 1,

@@ -15,7 +15,7 @@ import type { RosterResponse } from "~/lib/types";
 import { env } from "~/env";
 import { clearKV, getKV, setKV } from "~/lib/redis";
 import {
-  classroomsQuery,
+  aggregateClassroomData,
   getClassroomIdByTeacher,
   roomByIdQuery,
   rosterByIDQuery,
@@ -33,6 +33,8 @@ import {
 type insertClassRoster = typeof schema.students.$inferInsert;
 
 export async function getClasses(id: string) {
+  const today = convertUTCDateToLocalDate(new Date());
+  today.setHours(0, 0, 0, 0);
   try {
     const returnData: StudentDashboardData = {
       classes: [],
@@ -59,8 +61,9 @@ export async function getClasses(id: string) {
 
       returnData.classes = formatClasses(validatedClasses, id);
     } else {
-      const dbData = await classroomsQuery.execute({});
+      const dbData = await aggregateClassroomData();
       logger.error(dbData);
+
       if (dbData?.length) {
         const parsedData = studentClassesArrayValidator.parse(dbData);
         await setKV(classesKey, JSON.stringify(parsedData), 1200);
