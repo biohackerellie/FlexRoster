@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
-import {z} from 'zod'
+import { z } from "zod";
+
 import type { Logs, Message } from "@local/utils";
 import { auth } from "@local/auth";
 import { messageValidator } from "@local/utils";
@@ -11,7 +12,13 @@ import { toPusherKey } from "@/lib/utils";
 export async function POST(req: Request) {
   try {
     const { chatId, text }: { chatId: string; text: string } = await req.json();
-    await profanityFilter(text)
+    const filter = await profanityFilter(text);
+    if (filter.isProfanity) {
+      return new Response(
+        `Gasp, you sad a no-no word! Dont say ${filter.flaggedFor}!`,
+        { status: 202 },
+      );
+    }
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
 
@@ -67,19 +74,21 @@ export async function POST(req: Request) {
 }
 
 const profanityFilterSchema = z.object({
-isProfane: z.boolean(),
-score: z.number(),
-flaggedFor: z.string(),
-)};
+  isProfanity: z.boolean(),
+  score: z.number(),
+  flaggedFor: z.string(),
+});
 
-async function profanityFilter(message: string){
+async function profanityFilter(message: string) {
   const res = await fetch("https://vector.profanity.dev", {
-    method: 'POST',
+    method: "POST",
     headers: {
-    'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({message}),
-  })
-  
-  
+    body: JSON.stringify({ message }),
+  }).then((res) => res.json());
+
+  const result = profanityFilterSchema.parse(res);
+
+  return result;
 }
