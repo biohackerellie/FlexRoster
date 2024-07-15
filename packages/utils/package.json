@@ -24,15 +24,15 @@
     "@local/eslint-config": "workspace:*",
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
-    "eslint": "^9.7.0",
+    "eslint": "catalog:",
     "chalk": "5.3.0",
     "chalk-animation": "^2.0.3",
-    "prettier": "^3.3.3",
-    "typescript": "^5.5.3"
+    "prettier": "catalog:",
+    "typescript": "catalog:"
   },
   "prettier": "@local/prettier-config",
   "dependencies": {
     "drizzle-zod": "^0.5.1",
-    "zod": "^3.23.8"
+    "zod": "catalog:"
   }
 }

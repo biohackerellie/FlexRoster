@@ -36,7 +36,7 @@
     "date-fns": "^3.6.0",
     "lucide-react": "^0.408.0",
     "next-themes": "^0.3.0",
-    "react": "19.0.0-rc-fb9a90fa48-20240614",
+    "react": "catalog:react19",
     "react-day-picker": "^8.10.1",
     "react-hook-form": "^7.52.1",
     "sonner": "^1.5.0",
@@ -49,17 +49,19 @@
     "@local/prettier-config": "workspace:*",
     "@local/tailwind-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
-    "@types/react": "^18.3.3",
-    "eslint": "^9.7.0",
-    "prettier": "^3.3.3",
-    "react": "19.0.0-rc-fb9a90fa48-20240614",
+    "@types/react": "catalog:react19",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
     "tailwindcss": "^3.4.4",
-    "typescript": "^5.5.3",
-    "zod": "^3.23.8"
+    "typescript": "catalog:",
+    "zod": "catalog:"
+  },
+  "overrides": {
+    "@types/react": "catalog:react19"
   },
   "peerDependencies": {
-    "react": "18.3.1",
-    "zod": "^3.23.8"
+    "react": "catalog:react19",
+    "zod": "catalog:"
   },
   "prettier": "@local/prettier-config"
 }
