@@ -67,10 +67,10 @@
     "tailwindcss": "^3.4.4",
     "typescript": "catalog:"
   },
-  "overrides":{
-  "@types/react": "catalog:react19",
-  "@types/react-dom": "catalog:react19"
-},
+  "overrides": {
+    "@types/react": "catalog:react19",
+    "@types/react-dom": "catalog:react19"
+  },
   "browser": {
     "fs": false,
     "path": false,
