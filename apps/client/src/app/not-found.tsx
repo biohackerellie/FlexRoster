@@ -21,7 +21,7 @@ export default function NotFound() {
             duration: 0.8,
             ease: "easeInOut",
           }}
-          //@ts-ignore - TODO: fix this
+          //@ts-expect-error - TODO: fix this
           className="mt-8 bg-gradient-to-br from-rose-300 to-slate-500 bg-clip-text py-4 text-center text-4xl font-bold tracking-tight text-transparent drop-shadow-md md:text-7xl"
         >
           OOPS! <br />

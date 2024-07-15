@@ -31,7 +31,7 @@ export const LampContainer = ({
           style={{
             backgroundImage: `conic-gradient(var(--conic-position), var(--tw-gradient-stops))`,
           }}
-          //@ts-ignore - TODO: fix this
+          //@ts-expect-error - TODO: fix this
           className="bg-gradient-conic absolute inset-auto right-1/2 h-56 w-[30rem] overflow-visible from-red-500 via-transparent to-transparent text-white [--conic-position:from_70deg_at_center_top]"
         >
           <div className="absolute bottom-0 left-0 z-20 h-40 w-[100%] bg-slate-950 [mask-image:linear-gradient(to_top,white,transparent)]" />
@@ -48,7 +48,7 @@ export const LampContainer = ({
           style={{
             backgroundImage: `conic-gradient(var(--conic-position), var(--tw-gradient-stops))`,
           }}
-          //@ts-ignore - TODO: fix this
+          //@ts-expect-error - TODO: fix this
           className="bg-gradient-conic absolute inset-auto left-1/2 h-56 w-[30rem] from-transparent via-transparent to-red-500 text-white [--conic-position:from_290deg_at_center_top]"
         >
           <div className="absolute bottom-0 right-0 z-20 h-[100%] w-40 bg-slate-950 [mask-image:linear-gradient(to_left,white,transparent)]" />
@@ -65,7 +65,7 @@ export const LampContainer = ({
             duration: 0.8,
             ease: "easeInOut",
           }}
-          //@ts-ignore - TODO: fix this
+          //@ts-expect-error - TODO: fix this
           className="absolute inset-auto z-30 h-36 w-64 -translate-y-[6rem] rounded-full bg-red-400 blur-2xl"
         ></motion.div>
         <motion.div
@@ -76,7 +76,7 @@ export const LampContainer = ({
             duration: 0.8,
             ease: "easeInOut",
           }}
-          //@ts-ignore - TODO: fix thisj
+          //@ts-expect-error - TODO: fix thisj
           className="absolute inset-auto z-50 h-0.5 w-[30rem] -translate-y-[7rem] bg-red-400"
         ></motion.div>
 
