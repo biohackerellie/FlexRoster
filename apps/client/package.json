@@ -23,7 +23,7 @@
     "@local/utils": "workspace:*",
     "@next/bundle-analyzer": "^14.2.5",
     "@t3-oss/env-nextjs": "^0.10.1",
-    "@tanstack/react-table": "^8.19.2",
+    "@tanstack/react-table": "^8.19.3",
     "auth": "^1.1.1",
     "axios": "^1.7.2",
     "babel-plugin-react-compiler": "0.0.0-experimental-487cb0e-20240529",
