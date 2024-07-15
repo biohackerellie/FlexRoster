@@ -4,6 +4,7 @@
 
 import type { SelectClassRoster } from "@local/db";
 import { db, eq, gt, or, schema } from "@local/db";
+import { logger } from "@local/utils";
 
 import type { RosterResponse } from "~/lib/types";
 import { env } from "~/env";
@@ -24,6 +25,7 @@ export async function RosterSync() {
     const token = await icAuth(); // Helper function to get InfinteCampus auth token
     const classes = await db.query.classrooms.findMany({}); // Gets all classes from the database, synced from syncRoster.ts script
     const allStudents = await rosterQuery.execute({}); // Gets all existing students in local DB
+
     const existingStudentEmails = new Set(
       allStudents.map((s) => s.studentEmail),
     );
@@ -41,6 +43,7 @@ export async function RosterSync() {
 
     for (const c of classes) {
       const id = c.id;
+      logger.debug(`Fetching roster for class ${c.id}`);
       const data = await fetcher<RosterResponse>(
         icStudentQuery(id, env.ONEROSTER_APPNAME),
         {
@@ -54,15 +57,15 @@ export async function RosterSync() {
       );
       data.users.forEach((user) => {
         rosterData.push({
-          studentEmail: user.email,
+          studentEmail: user.email ?? "",
           studentName: `${user.givenName} ${user.familyName}`,
           classroomId: c.id,
         });
       });
     }
-
+    logger.info("RosterData: ", JSON.stringify(rosterData));
     const rosterEmails = new Set(rosterData.map((r) => r.studentEmail));
-    const ignoredEmails = new Set(ignoredStudentUsers);
+    // const ignoredEmails = new Set(ignoredStudentUsers);
 
     /**
      * Compares todays date with date on each request, if they match, the student is added to the studentsWithRequestToday array
@@ -88,8 +91,7 @@ export async function RosterSync() {
 
     // variable for students that exist in the db but not in the roster
     const studentsToDelete = allStudents.filter(
-      (s) =>
-        !rosterEmails.has(s.studentEmail) && !ignoredEmails.has(s.studentEmail),
+      (s) => !rosterEmails.has(s.studentEmail),
     );
 
     // ignore rosterData for students with requests today, and set other students back to default
@@ -113,17 +115,21 @@ export async function RosterSync() {
     await db.transaction(async (tx) => {
       try {
         // Update students with requests for today with their requested classroom
-        for (const s of studentsWithRequestToday) {
-          await tx
-            .update(schema.students)
-            .set({
-              classroomId: s.classroomId,
-              status: s.status,
-            })
-            .where(eq(schema.students.studentEmail, s.studentEmail));
-          studentsUpdated++;
+        if (studentsWithRequestToday.length > 0) {
+          logger.debug("Updating students with requests for today");
+          for (const s of studentsWithRequestToday) {
+            await tx
+              .update(schema.students)
+              .set({
+                classroomId: s.classroomId,
+                status: s.status,
+              })
+              .where(eq(schema.students.studentEmail, s.studentEmail));
+            studentsUpdated++;
+          }
         }
         if (studentsToUpdate.length > 0) {
+          logger.debug("Updating students");
           for (const s of studentsToUpdate) {
             await tx
               .update(schema.students)
@@ -136,7 +142,9 @@ export async function RosterSync() {
           }
         }
         if (studentsToDelete.length > 0) {
+          logger.debug("Deleting students");
           for (const s of studentsToDelete) {
+            logger.debug(`Deleting student ${s.studentEmail}`);
             await tx
               .delete(schema.students)
               .where(eq(schema.students.studentEmail, s.studentEmail));
@@ -144,7 +152,10 @@ export async function RosterSync() {
           }
         }
         if (studentsToInsert.length > 0) {
-          await tx.insert(schema.students).values(studentsToInsert);
+          await tx
+            .insert(schema.students)
+            .values(studentsToInsert)
+            .onConflictDoNothing();
           studentsAdded = studentsToInsert.length;
         }
       } catch (error) {
@@ -166,4 +177,4 @@ RosterSync().catch((e) => {
   process.exit(1);
 });
 
-const ignoredStudentUsers = ["elliana_kerns@laurel.k12.mt.us"];
+// const ignoredStudentUsers = ["elliana_kerns@laurel.k12.mt.us"];

@@ -24,9 +24,9 @@
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@types/node": "^20.14.10",
-    "eslint": "^9.7.0",
-    "prettier": "^3.3.3",
-    "typescript": "^5.5.3"
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
   },
   "prettier": "@local/prettier-config"
 }

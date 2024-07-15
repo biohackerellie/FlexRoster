@@ -29,10 +29,10 @@
     "@local/tsconfig": "workspace:*",
     "@types/eslint": "^8.56.10",
     "bun-types": "^1.1.20",
-    "eslint": "^9.7.0",
+    "eslint": "catalog:",
     "eslint-import-resolver-typescript-bun": "^0.0.98",
-    "prettier": "^3.3.3",
-    "typescript": "^5.5.3"
+    "prettier": "catalog:",
+    "typescript": "catalog:"
   },
   "prettier": "@local/prettier-config"
 }

@@ -41,14 +41,14 @@
     "next-themes": "^0.3.0",
     "pusher": "^5.2.0",
     "pusher-js": "^8.3.0",
-    "react": "19.0.0-rc-fb9a90fa48-20240614",
+    "react": "catalog:react19",
     "react-day-picker": "^8.10.1",
-    "react-dom": "19.0.0-rc-fb9a90fa48-20240614",
+    "react-dom": "catalog:react19",
     "react-hook-form": "^7.52.1",
     "sonner": "^1.5.0",
     "superjson": "2.2.1",
     "ui": "^0.2.4",
-    "zod": "^3.23.8"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@local/eslint-config": "workspace:*",
@@ -56,15 +56,20 @@
     "@local/tailwind-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@types/node": "^20.14.10",
-    "@types/react": "^18.3.3",
+    "@types/react": "catalog:react19",
+    "@types/react-dom": "catalog:react19",
     "autoprefixer": "^10.4.19",
     "dotenv-cli": "^7.4.2",
-    "eslint": "^9.7.0",
+    "eslint": "catalog:",
     "jiti": "^1.21.6",
     "postcss": "^8.4.39",
-    "prettier": "^3.3.3",
+    "prettier": "catalog:",
     "tailwindcss": "^3.4.4",
-    "typescript": "^5.5.3"
+    "typescript": "catalog:"
+  },
+  "overrides": {
+    "@types/react": "catalog:react19",
+    "@types/react-dom": "catalog:react19"
   },
   "browser": {
     "fs": false,

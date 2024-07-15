@@ -24,21 +24,17 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatPartner, chatId }) => {
     setIsLoading(true);
 
     try {
-       const res = await axios.post("/api/message/send", {
+      const res = await axios.post("/api/message/send", {
         text: input,
         chatId,
       });
-      if(res.status === 202){
-        toast.error(res.data)
-        
-      };
+      if (res.status === 202) {
+        toast.error(res.data);
+      }
       setInput("");
       textareaRef.current?.focus();
     } catch (error) {
-      
-     if(error instanceof Error) 
-      toast.error( error.message);
-      
+      if (error instanceof Error) toast.error(error.message);
     } finally {
       setIsLoading(false);
     }

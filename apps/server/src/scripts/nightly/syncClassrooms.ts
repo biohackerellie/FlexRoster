@@ -39,11 +39,12 @@ async function syncClassrooms() {
         },
       },
     );
+    logger.warn("semesterClassName", semesterClassName);
 
     const filteredClasses = data.classes.filter((cls) =>
       cls.title.includes(semesterClassName),
     );
-
+    logger.info(filteredClasses);
     const fetchedClasses = filteredClasses.map((cls) => {
       return {
         id: cls.sourcedId,
