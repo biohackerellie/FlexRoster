@@ -4,8 +4,8 @@
 import type { SecretaryTable, StudentStatus } from "@/lib/types";
 import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
-import Link from "next/link";
 import { ArrowUpDown, CheckCircle, MessageSquare, XCircle } from "lucide-react";
+import { Link } from "next-view-transitions";
 
 import { Button } from "@local/ui/button";
 import { DataTableColumnHeader } from "@local/ui/data-table-column-header";

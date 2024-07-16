@@ -2,8 +2,8 @@
 
 import type { TeacherTable } from "@/lib/types";
 import type { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 import { MessageSquare } from "lucide-react";
+import { Link } from "next-view-transitions";
 
 import { Badge } from "@local/ui/badge";
 import { Button } from "@local/ui/button";

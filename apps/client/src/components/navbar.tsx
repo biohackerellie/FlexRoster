@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import {
   Home,
   LineChart,
@@ -12,6 +11,7 @@ import {
   Users2,
 } from "lucide-react";
 import { useTheme } from "next-themes";
+import { Link } from "next-view-transitions";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
