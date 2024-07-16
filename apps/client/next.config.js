@@ -1,6 +1,7 @@
 import dns from "dns";
 import { fileURLToPath } from "url";
 import createJiti from "jiti";
+import nextra from "nextra";
 
 dns.setDefaultResultOrder("ipv4first");
 createJiti(fileURLToPath(import.meta.url))("./src/env");
@@ -24,4 +25,8 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+const withNextra = nextra({
+  theme: "nextra-theme-docs",
+  themeConfig: "./theme.config.jsx",
+});
+export default withNextra(nextConfig);
