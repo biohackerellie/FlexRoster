@@ -38,6 +38,7 @@ FlexRoster is a comprehensive full-stack application designed to manage flex sch
 sudo ./deploy.sh
 ```
 
+
 4. Download the Cli tar from github releases and extract it to your local machine. _Make sure to replace the version number with the latest release._
 
 ```bash
