@@ -2,12 +2,12 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
-import Link from "next/link";
 import {
   CalendarIcon,
   MessageSquareIcon,
   MessageSquareOffIcon,
 } from "lucide-react";
+import { Link } from "next-view-transitions";
 
 import type { StudentClasses } from "@local/utils";
 import { Badge } from "@local/ui/badge";

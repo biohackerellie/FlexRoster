@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 
 import type { messageAlerts } from "@local/utils/";
 import { Button } from "@local/ui/button";

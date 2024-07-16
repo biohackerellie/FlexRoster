@@ -5,7 +5,7 @@ export default {
   project: {
   link: 'https://github.com/biohackerellie/FlexRoster',
   },
-  docsRepositoryBase: 'https://github.com/biohackerellie/FlexRoster/tree/main/apps/client',
+  docsRepositoryBase: 'https://github.com/biohackerellie/FlexRoster/tree/main/apps/client/pages/help',
   color: {
   hue: 201,
   },

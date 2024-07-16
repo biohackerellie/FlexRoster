@@ -2,7 +2,7 @@
 
 import type { StudentTable } from "@/lib/types";
 import * as React from "react";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 
 import { Button } from "@local/ui/button";
 import { DataTable } from "@local/ui/data-table";
