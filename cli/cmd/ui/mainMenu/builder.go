@@ -7,16 +7,13 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-var (
-	helpStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("241")).Render
-)
+var helpStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("241")).Render
 
 type BuilderModel struct {
 	err error
 }
 
 func Builder() BuilderModel {
-
 	return BuilderModel{}
 }
 

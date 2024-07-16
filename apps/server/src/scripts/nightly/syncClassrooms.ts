@@ -1,7 +1,5 @@
 /**
  * Synchronizes the roster by fetching class data from the server and inserting it into the database.
- * Only classes with titles containing "STEAM-B" are considered.
- * Teacher names containing "Brandi Fox" are skipped.
  * The teacher names are formatted and stored in the database.
  */
 import { db, eq, schema } from "@local/db";
@@ -39,12 +37,10 @@ async function syncClassrooms() {
         },
       },
     );
-    logger.warn("semesterClassName", semesterClassName);
 
     const filteredClasses = data.classes.filter((cls) =>
       cls.title.includes(semesterClassName),
     );
-    logger.info(filteredClasses);
     const fetchedClasses = filteredClasses.map((cls) => {
       return {
         id: cls.sourcedId,
