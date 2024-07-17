@@ -30,4 +30,5 @@ COPY turbo.json turbo.json
 COPY .env .env
 RUN pnpm install 
 
+CMD ["pnpm", "db:studio"]
 
