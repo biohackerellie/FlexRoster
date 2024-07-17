@@ -25,5 +25,12 @@ services:
     env_file:
       - .env
 
+  dbstudio:
+    image: docker.laurel.k12.mt.us/dbstudio
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.hostname == bunswarm]
+
 networks:
   webnet:
