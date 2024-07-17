@@ -23,10 +23,11 @@ RUN apk update
 RUN corepack enable && corepack prepare pnpm@9.0.5 --activate
 RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store pnpm fetch
 
-RUN pnpm install 
+WORKDIR /app
 
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 COPY .env .env
+RUN pnpm install 
 
 
