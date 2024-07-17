@@ -1,4 +1,5 @@
 import type { LucideIcon, LucideProps } from "lucide-react";
+import { Link } from "lucide-react";
 
 export type { LucideIcon as Icon };
 
@@ -11,4 +12,5 @@ export const Icons = {
       />
     </svg>
   ),
+  link: Link,
 };

@@ -2,6 +2,7 @@ import dns from "dns";
 import { fileURLToPath } from "url";
 import withMdx from "@next/mdx";
 import createJiti from "jiti";
+import remarkToc from "remark-toc";
 
 dns.setDefaultResultOrder("ipv4first");
 createJiti(fileURLToPath(import.meta.url))("./src/env");
@@ -33,4 +34,16 @@ const nextConfig = {
   },
 };
 
-export default withMdx({})(nextConfig);
+export default withMdx({
+  options: {
+    remarkPlugins: [
+      [
+        remarkToc,
+        /** @type {import("remark-toc").Options} */
+        ({
+          tight: true,
+        }),
+      ],
+    ],
+  },
+})(nextConfig);

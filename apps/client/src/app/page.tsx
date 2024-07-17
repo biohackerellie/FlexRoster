@@ -1,20 +1,26 @@
 import { Link } from "next-view-transitions";
 
-import { Button } from "@local/ui/button";
+import { cn } from "@local/ui";
+import { buttonVariants } from "@local/ui/button";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
-      <h1 className="z-20 bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text py-8 text-4xl font-bold text-transparent sm:text-8xl">
+      <h1 className="z-20 bg-gradient-to-b from-foreground to-primary bg-clip-text py-8 text-4xl font-bold text-transparent sm:text-8xl">
         Welcome to FLEX
       </h1>
 
       <div>
-        <Button asChild>
-          <Link prefetch={false} href="/dashboard">
-            Open Dashboard
-          </Link>
-        </Button>
+        <Link
+          prefetch={false}
+          href="/dashboard"
+          className={cn(
+            "text-2xl font-medium",
+            buttonVariants({ size: "lg", variant: "outline" }),
+          )}
+        >
+          Login
+        </Link>
         <BottomGradient />
       </div>
     </main>

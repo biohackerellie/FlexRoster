@@ -1,14 +1,29 @@
 import type { Metadata, Viewport } from "next";
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
+import { Inter, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { ViewTransitions } from "next-view-transitions";
 
-import "./globals.css";
+import { cn } from "@local/ui";
+
+import "./styles/globals.css";
 
 import { Toaster } from "@local/ui/sonner";
 
 import { ThemeProvider } from "@/lib/providers";
 
+const fontCal = localFont({
+  src: "./styles/calsans.ttf",
+  variable: "--font-cal",
+  display: "swap",
+});
+const fontSans = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+const fontMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+});
 export const metadata: Metadata = {
   title: "FLEX | Home",
   description: "Be gay, do crime",
@@ -28,8 +43,14 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <html lang="en" suppressHydrationWarning>
+        <head />
         <body
-          className={`${GeistSans.variable} ${GeistMono.variable} h-full max-h-screen w-auto items-center justify-center bg-white bg-grid-small-black/[0.2] dark:bg-black dark:bg-grid-small-white/[0.2]`}
+          className={cn(
+            "min-h-screen font-sans antialiased",
+            fontSans.variable,
+            fontCal.variable,
+            fontMono.variable,
+          )}
         >
           <ThemeProvider
             attribute="class"
@@ -37,7 +58,9 @@ export default function RootLayout({
             enableSystem={false}
             disableTransitionOnChange
           >
-            {children}
+            <div className="relative flex min-h-screen flex-col">
+              {children}
+            </div>
           </ThemeProvider>
           <Toaster />
         </body>

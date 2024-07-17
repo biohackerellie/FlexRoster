@@ -51,6 +51,7 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "catalog:react19",
     "react-hook-form": "^7.52.1",
+    "remark-toc": "^9.0.0",
     "sonner": "^1.5.0",
     "superjson": "2.2.1",
     "ui": "^0.2.4",

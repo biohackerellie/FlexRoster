@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import {
+  HelpCircleIcon,
   Home,
   LineChart,
   MessageCircle,
@@ -10,12 +11,12 @@ import {
   SunIcon as Sun,
   Users2,
 } from "lucide-react";
-import { useTheme } from "next-themes";
 import { Link } from "next-view-transitions";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
 import { useChatNotifications } from "@/hooks";
+import ThemeToggle from "./toggleTheme";
 
 interface NavProps extends React.HTMLAttributes<HTMLDivElement> {
   userId?: string;
@@ -98,7 +99,6 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
   if (userId) {
     useChatNotifications(userId!);
   }
-  const { theme, setTheme } = useTheme();
 
   return (
     <>
@@ -120,16 +120,18 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
       </nav>
       <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
         <Tooltip>
-          <TooltipTrigger
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          >
-            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            <span className="sr-only">Toggle theme</span>
+          <TooltipTrigger asChild>
+            <Link
+              href="/help"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+            >
+              <HelpCircleIcon className="h-5 w-5" />
+              <span className="sr-only">Help</span>
+            </Link>
           </TooltipTrigger>
-          <TooltipContent side="right">Toggle theme</TooltipContent>
+          <TooltipContent side="right">Help</TooltipContent>
         </Tooltip>
+        <ThemeToggle />
       </nav>
     </>
   );

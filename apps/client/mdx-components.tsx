@@ -3,6 +3,8 @@
 import type { MDXComponents } from "mdx/types";
 import { Link } from "next-view-transitions";
 
+import { Icons } from "@/components/icons";
+
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children, ...props }) => (
@@ -60,6 +62,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </Component>
       );
     },
+    img: (props) => <img {...props} className="rounded-lg" />,
+    Steps: ({ ...props }) => (
+      <div
+        className="[&>h3]:step mb-12 ml-4 border-l pl-6 [counter-reset:step]"
+        {...props}
+      />
+    ),
     ...components,
   };
 }

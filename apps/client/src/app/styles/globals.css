@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 243.8 100% 95%;
+    --foreground: 243.8 5% 10%;
+    --card: 243.8 50% 90%;
+    --card-foreground: 243.8 5% 15%;
+    --popover: 243.8 100% 95%;
+    --popover-foreground: 243.8 100% 10%;
+    --primary: 243.8 47.1% 20%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 243.8 30% 70%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 205.8 30% 85%;
+    --muted-foreground: 243.8 5% 35%;
+    --accent: 205.8 30% 80%;
+    --accent-foreground: 243.8 5% 15%;
+    --destructive: 0 100% 30%;
+    --destructive-foreground: 243.8 5% 90%;
+    --border: 243.8 30% 50%;
+    --input: 243.8 30% 26%;
+    --ring: 243.8 47.1% 20%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 243.8 50% 10%;
+    --foreground: 243.8 5% 90%;
+    --card: 243.8 50% 10%;
+    --card-foreground: 243.8 5% 90%;
+    --popover: 243.8 50% 5%;
+    --popover-foreground: 243.8 5% 90%;
+    --primary: 243.8 47.1% 20%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 243.8 30% 20%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 205.8 30% 25%;
+    --muted-foreground: 243.8 5% 60%;
+    --accent: 205.8 30% 25%;
+    --accent-foreground: 243.8 5% 90%;
+    --destructive: 0 100% 30%;
+    --destructive-foreground: 243.8 5% 90%;
+    --border: 243.8 30% 26%;
+    --input: 243.8 30% 26%;
+    --ring: 243.8 47.1% 20%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    font-size: 100%;
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .step {
+    counter-increment: step;
+  }
+  .step:before {
+    @apply font-cal absolute inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent text-center -indent-px text-base font-medium;
+    @apply ml-[-41px];
+    content: counter(step);
+  }
+}

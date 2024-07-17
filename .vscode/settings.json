@@ -6,7 +6,7 @@
   "editor.smoothScrolling": true,
   "workbench.list.smoothScrolling": true,
   "terminal.integrated.smoothScrolling": true,
-
+  "mdx.experimentalLanguageServer": true,
   "editor.tabSize": 2,
   "editor.wordWrap": "on",
   "editor.codeActionsOnSave": {
@@ -78,7 +78,8 @@
     "apps/**/src/**/page.tsx": "${dirname}/📄",
     "apps/**/src/**/layout.tsx": "${dirname}/${filename}",
     "apps/**/src/routes/**/index.ts": "${dirname}/${filename}",
-    "apps/server/src/routes/**/handlers.ts": "${dirname}/${filename}"
+    "apps/server/src/routes/**/handlers.ts": "${dirname}/${filename}",
+    "apps/client/src/help/**/page.mdx": "${dirname}/${filename}"
   },
   "[ignore]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
