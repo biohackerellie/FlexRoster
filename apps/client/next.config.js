@@ -1,8 +1,12 @@
+//@ts-nocheck - ignore typescript errors
+
 import dns from "dns";
 import { fileURLToPath } from "url";
 import withMdx from "@next/mdx";
 import createJiti from "jiti";
+import rehypePrettyCode from "rehype-pretty-code";
 import remarkToc from "remark-toc";
+import { getHighlighter } from "shiki";
 
 dns.setDefaultResultOrder("ipv4first");
 createJiti(fileURLToPath(import.meta.url))("./src/env");
@@ -42,6 +46,30 @@ export default withMdx({
         /** @type {import("remark-toc").Options} */
         ({
           tight: true,
+        }),
+      ],
+    ],
+    rehypePlugins: [
+      [
+        rehypePrettyCode,
+        /** @type {import("rehype-pretty-code").Options} */
+        ({
+          theme: { dark: "one-dark-pro", light: "min-light" },
+          getHighlighter,
+          onVisitLine(node) {
+            // Prevent lines from collapsing in `display: grid` mode, and allow empty
+            // lines to be copy/pasted
+            if (node.children.length === 0) {
+              node.children = [{ type: "text", value: " " }];
+            }
+          },
+          onVisitHighlightedLine(node) {
+            node.properties.className?.push("line--highlighted");
+          },
+          onVisitHighlightedWord(node, id) {
+            node.properties.className = ["word"];
+            node.properties["data-word-id"] = id;
+          },
         }),
       ],
     ],

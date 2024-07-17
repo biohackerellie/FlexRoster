@@ -5,6 +5,8 @@ import { ViewTransitions } from "next-view-transitions";
 
 import { cn } from "@local/ui";
 
+import { DocHeader } from "./help/_components/doc-header";
+
 import "./styles/globals.css";
 
 import { Toaster } from "@local/ui/sonner";
@@ -55,11 +57,11 @@ export default function RootLayout({
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
-            enableSystem={false}
-            disableTransitionOnChange
+            enableSystem={true}
           >
             <div className="relative flex min-h-screen flex-col">
-              {children}
+              <DocHeader />
+              <div className="flex-1">{children}</div>
             </div>
           </ThemeProvider>
           <Toaster />

@@ -3,6 +3,7 @@
 import type { MDXComponents } from "mdx/types";
 import { Link } from "next-view-transitions";
 
+import { Callout } from "@/app/help/_components/callout";
 import { Icons } from "@/components/icons";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -62,7 +63,15 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </Component>
       );
     },
+    ul: (props) => <ul className="mt-4 list-disc pl-8" {...props} />,
+    code: (props) => (
+      <code
+        className="relative rounded bg-muted py-[0.3rem] font-mono text-sm font-semibold text-muted-foreground"
+        {...props}
+      />
+    ),
     img: (props) => <img {...props} className="rounded-lg" />,
+    Callout,
     Steps: ({ ...props }) => (
       <div
         className="[&>h3]:step mb-12 ml-4 border-l pl-6 [counter-reset:step]"

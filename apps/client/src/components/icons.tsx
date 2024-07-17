@@ -1,5 +1,15 @@
 import type { LucideIcon, LucideProps } from "lucide-react";
-import { Link } from "lucide-react";
+import {
+  HelpCircleIcon,
+  Home,
+  LineChart,
+  Link,
+  MessageCircle,
+  MoonIcon as Moon,
+  Search,
+  SunIcon as Sun,
+  Users2,
+} from "lucide-react";
 
 export type { LucideIcon as Icon };
 
@@ -13,4 +23,12 @@ export const Icons = {
     </svg>
   ),
   link: Link,
+  home: Home,
+  users: Users2,
+  search: Search,
+  lineChart: LineChart,
+  messageCircle: MessageCircle,
+  helpCircle: HelpCircleIcon,
+  sun: Sun,
+  moon: Moon,
 };

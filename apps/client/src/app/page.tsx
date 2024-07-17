@@ -7,10 +7,10 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
       <h1 className="z-20 bg-gradient-to-b from-foreground to-primary bg-clip-text py-8 text-4xl font-bold text-transparent sm:text-8xl">
-        Welcome to FLEX
+        Welcome to FlexRoster
       </h1>
 
-      <div>
+      <div className="flex justify-between px-2">
         <Link
           prefetch={false}
           href="/dashboard"
@@ -20,6 +20,18 @@ export default function Home() {
           )}
         >
           Login
+        </Link>
+      </div>
+      <div className="pt-2">
+        <Link
+          prefetch={false}
+          href="/help"
+          className={cn(
+            "text-2xl font-medium",
+            buttonVariants({ size: "lg", variant: "outline" }),
+          )}
+        >
+          Help
         </Link>
         <BottomGradient />
       </div>

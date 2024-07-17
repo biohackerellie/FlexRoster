@@ -13,7 +13,7 @@ export default middleware((req) => {
   const path = req.nextUrl.pathname;
 
   if (!token) {
-    if (path.startsWith("/dashboard") || path.startsWith("/help")) {
+    if (path.startsWith("/dashboard")) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
 

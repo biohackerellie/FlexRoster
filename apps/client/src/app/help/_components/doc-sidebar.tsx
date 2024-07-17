@@ -13,7 +13,7 @@ export interface NestedNavItem extends NavItem {
 
 export function DocsSidebarNav(props: { items: NestedNavItem[] }) {
   const pathname = usePathname();
-
+  console.log(pathname);
   return props.items.length ? (
     <div className="w-full px-2">
       {props.items.map((item) => (
@@ -42,7 +42,7 @@ export function DocsSidebarNavItems(props: {
             key={item.title}
             href={item.href}
             className={cn(
-              "group flex h-9 w-full items-center rounded-md border border-transparent px-3 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              "focus-visible:ring-ringfocus-visible:outline-none group flex h-9 w-full items-center rounded-md border border-transparent px-3 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               item.disabled && "cursor-not-allowed opacity-60",
               {
                 "border-border bg-accent font-medium text-accent-foreground":

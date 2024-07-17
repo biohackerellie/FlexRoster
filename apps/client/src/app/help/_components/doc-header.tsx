@@ -4,6 +4,8 @@ import { buttonVariants } from "@local/ui/button";
 
 import { Icons } from "@/components/icons";
 import ThemeToggle from "@/components/toggleTheme";
+import { siteConfig } from "@/siteConfig";
+import { DocsNav } from "./doc-nav";
 
 export function DocHeader() {
   return (
@@ -18,6 +20,7 @@ export function DocHeader() {
               FlexRoster
             </span>
           </Link>
+          <DocsNav items={siteConfig.teacherNav} />
         </div>
         <div className="flex items-center space-x-2 md:space-x-4">
           <Link
@@ -32,6 +35,7 @@ export function DocHeader() {
             <Icons.gitHub className="h-6 w-6" />
             <span className="sr-only">GitHub</span>
           </Link>
+          <ThemeToggle />
         </div>
       </div>
     </header>
