@@ -5,7 +5,7 @@ import { buttonVariants } from "@local/ui/button";
 import { Icons } from "@/components/icons";
 import ThemeToggle from "@/components/toggleTheme";
 import { siteConfig } from "@/siteConfig";
-import { DocsNav } from "./doc-nav";
+import { MobileDropdown } from "./mobileNav";
 
 export function DocHeader() {
   return (
@@ -20,7 +20,6 @@ export function DocHeader() {
               FlexRoster
             </span>
           </Link>
-          <DocsNav items={siteConfig.teacherNav} />
         </div>
         <div className="flex items-center space-x-2 md:space-x-4">
           <Link
@@ -36,6 +35,11 @@ export function DocHeader() {
             <span className="sr-only">GitHub</span>
           </Link>
           <ThemeToggle />
+          <MobileDropdown
+            items={{
+              docs: siteConfig.docNav,
+            }}
+          />
         </div>
       </div>
     </header>

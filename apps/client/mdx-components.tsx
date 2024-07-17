@@ -4,6 +4,7 @@ import type { MDXComponents } from "mdx/types";
 import { Link } from "next-view-transitions";
 
 import { Callout } from "@/app/help/_components/callout";
+import { Codeblock } from "@/app/help/_components/code-block";
 import { Icons } from "@/components/icons";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -33,6 +34,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       >
         <a className="group" href={`#${slugify(children)}`}>
           <span>{children}</span>
+          <Icons.link className="invisible ml-1 inline-flex h-4 w-4 group-hover:visible" />
         </a>
       </h3>
     ),
@@ -66,11 +68,15 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ul: (props) => <ul className="mt-4 list-disc pl-8" {...props} />,
     code: (props) => (
       <code
-        className="relative rounded bg-muted py-[0.3rem] font-mono text-sm font-semibold text-muted-foreground"
+        className="relative rounded bg-secondary px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-muted-foreground"
         {...props}
       />
     ),
+    pre: Codeblock,
+
     img: (props) => <img {...props} className="rounded-lg" />,
+
+    // Add custom components.
     Callout,
     Steps: ({ ...props }) => (
       <div
@@ -78,6 +84,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {...props}
       />
     ),
+
+    // Pass through all other components.
     ...components,
   };
 }

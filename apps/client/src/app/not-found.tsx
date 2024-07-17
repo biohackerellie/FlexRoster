@@ -15,7 +15,6 @@ export default function NotFound() {
         <motion.h1
           initial={{ opacity: 0.5, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
-          
           transition={{
             delay: 0.3,
             duration: 0.8,
@@ -30,7 +29,6 @@ export default function NotFound() {
           <Button
             variant={"link"}
             onClick={() => router.back()}
-            
             className="cursor-pointer text-center text-4xl font-bold tracking-tight text-red-500 drop-shadow-md hover:text-blue-600 hover:underline md:text-7xl"
           >
             HERE

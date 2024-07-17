@@ -23,6 +23,7 @@
     --border: 243.8 30% 50%;
     --input: 243.8 30% 26%;
     --ring: 243.8 47.1% 20%;
+
     --radius: 0.5rem;
   }
   .dark {
@@ -50,12 +51,11 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
   body {
-    font-size: 100%;
     @apply bg-background text-foreground;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
 }
 
@@ -121,7 +121,7 @@
     width: 1rem;
     margin-right: 1rem;
     text-align: right;
-    color: var(--muted-foreground);
+    color: var(--card-foreground);
   }
 
   [data-rehype-pretty-code-fragment] {
@@ -134,7 +134,7 @@
 
   [data-rehype-pretty-code-title] {
     padding: 0.75rem 0 0.75rem 2.5rem;
-    @apply font-cal mt-4 rounded-t-lg border border-b-0 bg-accent text-foreground;
+    @apply font-cal mt-4 rounded-t-lg border border-b-0 bg-card text-foreground;
   }
 
   [data-rehype-pretty-code-title]:has(+ [data-language-icon]) {
@@ -163,8 +163,8 @@
 }
 
 [data-rehype-pretty-code-fragment] .line--highlighted {
-  @apply rounded bg-muted-foreground/40 p-1;
+  @apply rounded bg-card/40 p-1;
 }
 [data-rehype-pretty-code-fragment] .word {
-  @apply rounded bg-muted-foreground/40 p-1;
+  @apply rounded bg-card/40 p-1;
 }
