@@ -1,0 +1,9 @@
+services:
+  dbStudio:
+    container_name: drizzle-studio
+    image: localhost:5000/dbstudio
+    build:
+      context: .
+      dockerfile: ./docker/drizzleStudio/studio.Dockerfile
+    restart: unless-stopped 
+    network_mode: host
