@@ -1,13 +1,16 @@
 import { Link } from "next-view-transitions";
 
+import { auth } from "@local/auth";
 import { buttonVariants } from "@local/ui/button";
 
 import { Icons } from "@/components/icons";
-import ThemeToggle from "@/components/toggleTheme";
 import { siteConfig } from "@/siteConfig";
-import { MobileDropdown } from "./mobileNav";
+import { MobileDropdown } from "../app/help/_components/mobileNav";
+import { Navbar } from "./navbar";
 
-export function DocHeader() {
+export async function Header() {
+  const session = await auth();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur">
       <div className="container flex h-16 items-center justify-between">
@@ -20,9 +23,20 @@ export function DocHeader() {
               FlexRoster
             </span>
           </Link>
+          {session && (
+            <div className="hidden md:flex">
+              <Navbar userId={session.user.id} role={session.user.roles} />
+            </div>
+          )}
         </div>
         <div className="flex items-center space-x-2 md:space-x-4">
-          <Link
+          <MobileDropdown
+            items={{
+              docs: siteConfig.docNav,
+            }}
+          />
+          <div className="hidden sm:flex">
+            <Link
             href="https://github.com/biohackerellie/FlexRoster"
             target="_blank"
             rel="noreferrer"
@@ -31,15 +45,11 @@ export function DocHeader() {
               variant: "ghost",
             })}
           >
-            <Icons.gitHub className="h-6 w-6" />
-            <span className="sr-only">GitHub</span>
-          </Link>
-          <ThemeToggle />
-          <MobileDropdown
-            items={{
-              docs: siteConfig.docNav,
-            }}
-          />
+              <Icons.gitHub className="h-6 w-6" />
+              <span className="sr-only">GitHub</span>
+            </Link>
+          </div>
+
         </div>
       </div>
     </header>

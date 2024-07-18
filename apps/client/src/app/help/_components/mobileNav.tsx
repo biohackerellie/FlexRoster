@@ -43,10 +43,10 @@ export function MobileDropdown(props: { items: { docs: NestedNavItem[] } }) {
         <ScrollArea className="pb-8">
           <div className="flex flex-col space-y-3 pt-6">
             <Link
-              href="/"
+              href="/dashboard"
               className={cn(
                 "flex py-1 text-base font-medium text-muted-foreground transition-colors hover:text-primary",
-                pathname === "/" && "text-foreground",
+                pathname === "/dashboard" && "text-foreground",
               )}
             >
               <h4 className="font-bold">Home </h4>

@@ -10,7 +10,7 @@ import {
 import { useTheme } from "next-themes";
 
 import { cn } from "@local/ui";
-import { Button } from "@local/ui/button";
+import { Button, buttonVariants } from "@local/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@local/ui/drawer";
 import { Label } from "@local/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@local/ui/popover";
@@ -43,19 +43,30 @@ function ThemeToggle() {
         </DrawerContent>
       </Drawer>
       <div className="hidden items-center md:flex">
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button size="icon" variant={"ghost"}>
-              <Paint className="h-6 w-6" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent
-            align="start"
-            className="z-60 w-[340px] rounded-[12px] bg-white p-6 dark:bg-zinc-950"
-          >
-            <Customizer />
-          </PopoverContent>
-        </Popover>
+        <Tooltip>
+          <Popover>
+            <TooltipTrigger asChild>
+              <PopoverTrigger
+                className={cn(
+                  "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
+                  buttonVariants({
+                    size: "icon",
+                    variant: "ghost",
+                  }),
+                )}
+              >
+                <Paint className="h-5 w-5" />
+              </PopoverTrigger>
+            </TooltipTrigger>
+            <PopoverContent
+              align="start"
+              className="z-60 w-[340px] rounded-[12px] bg-white p-6 dark:bg-zinc-950"
+            >
+              <Customizer />
+            </PopoverContent>
+          </Popover>
+          <TooltipContent side="right">Customize</TooltipContent>
+        </Tooltip>
         <div className="ml-2 hidden items-center gap-0.5">
           {mounted ? (
             <>
@@ -141,10 +152,7 @@ function Customizer() {
   }, []);
 
   return (
-    <ThemeWrapper
-      defaultTheme="Mulberry"
-      className="flex flex-col space-y-4 md:space-y-6"
-    >
+    <ThemeWrapper className="flex flex-col space-y-4 md:space-y-6">
       <div className="flex items-start pt-4 md:pt-0">
         <div className="space-y-1 pr-2">
           <div className="font-semibold leading-none tracking-tight">

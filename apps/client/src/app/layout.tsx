@@ -6,12 +6,11 @@ import { ViewTransitions } from "next-view-transitions";
 import { cn } from "@local/ui";
 
 import { ThemeWrapper } from "@/components/theme-wrapper";
-import { DocHeader } from "./help/_components/doc-header";
+import { Header } from "../components/header";
 
 import "./styles/globals.css";
 
 import { Toaster } from "@local/ui/sonner";
-import { TooltipProvider } from "@local/ui/tooltip";
 
 import { ThemeSwitcher } from "@/components/themeSwitcher";
 import { ThemeProvider } from "@/lib/providers";
@@ -59,7 +58,7 @@ export default function RootLayout({
         >
           <ThemeProvider attribute="class" enableSystem={false}>
             <ThemeWrapper className="relative flex min-h-screen flex-col">
-              <DocHeader />
+              <Header />
               <div className="flex-1">{children}</div>
             </ThemeWrapper>
             <ThemeSwitcher />
