@@ -8,7 +8,7 @@ type Config = {
 };
 
 const configAtom = atomWithStorage<Config>("config", {
-  theme: "Mulberry",
+  theme: "grape",
 });
 
 export function useConfig() {

@@ -18,7 +18,7 @@ import { Skeleton } from "@local/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
 import { useConfig } from "@/hooks/use-config";
-import { Theme, themeConfig, themes } from "@/lib/themes";
+import { themes } from "@/lib/themes";
 import { ThemeWrapper } from "./theme-wrapper";
 
 function ThemeToggle() {
@@ -59,60 +59,62 @@ function ThemeToggle() {
         <div className="ml-2 hidden items-center gap-0.5">
           {mounted ? (
             <>
-              {["zinc", "Mulberry"].map((color) => {
-                const theme = themes.find((theme) => theme.name === color);
-                const isActive = config.theme === color;
+              {["zinc", "grape", "sky", "ogre", "doll", "spicy"].map(
+                (color) => {
+                  const theme = themes.find((theme) => theme.name === color);
+                  const isActive = config.theme === color;
 
-                if (!theme) {
-                  return null;
-                }
+                  if (!theme) {
+                    return null;
+                  }
 
-                return (
-                  <Tooltip key={theme.name}>
-                    <TooltipTrigger asChild>
-                      <button
-                        onClick={() =>
-                          setConfig({
-                            ...config,
-                            theme: theme.name,
-                          })
-                        }
-                        className={cn(
-                          "flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs",
-                          isActive
-                            ? "border-[--theme-primary]"
-                            : "border-transparent",
-                        )}
-                        style={
-                          {
-                            "--theme-primary": `hsl(${
-                              theme?.activeColor[
-                                mode === "dark" ? "dark" : "light"
-                              ]
-                            })`,
-                          } as React.CSSProperties
-                        }
-                      >
-                        <span
+                  return (
+                    <Tooltip key={theme.name}>
+                      <TooltipTrigger asChild>
+                        <button
+                          onClick={() =>
+                            setConfig({
+                              ...config,
+                              theme: theme.name,
+                            })
+                          }
                           className={cn(
-                            "flex h-5 w-5 items-center justify-center rounded-full bg-[--theme-primary]",
+                            "flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs",
+                            isActive
+                              ? "border-[--theme-primary]"
+                              : "border-transparent",
                           )}
+                          style={
+                            {
+                              "--theme-primary": `hsl(${
+                                theme?.activeColor[
+                                  mode === "dark" ? "dark" : "light"
+                                ]
+                              })`,
+                            } as React.CSSProperties
+                          }
                         >
-                          {isActive && (
-                            <CheckIcon className="h-4 w-4 text-white" />
-                          )}
-                        </span>
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent
-                      align="center"
-                      className="rounded-[0.5rem] bg-zinc-900 text-zinc-50"
-                    >
-                      {theme.label}
-                    </TooltipContent>
-                  </Tooltip>
-                );
-              })}
+                          <span
+                            className={cn(
+                              "flex h-5 w-5 items-center justify-center rounded-full bg-[--theme-primary]",
+                            )}
+                          >
+                            {isActive && (
+                              <CheckIcon className="h-4 w-4 text-white" />
+                            )}
+                          </span>
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent
+                        align="center"
+                        className="rounded-[0.5rem] bg-zinc-900 text-zinc-50"
+                      >
+                        {theme.label}
+                      </TooltipContent>
+                    </Tooltip>
+                  );
+                },
+              )}
             </>
           ) : (
             <div className="mr-1 flex items-center gap-4">
@@ -163,7 +165,7 @@ function Customizer() {
                   size="sm"
                   key={theme.name}
                   onClick={() => {
-                    setConfig({
+                    void setConfig({
                       ...config,
                       theme: theme.name,
                     });
