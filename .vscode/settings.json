@@ -12,6 +12,9 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
+  "workbench.editor.limit.enabled": true,
+  "workbench.editor.limit.value": 8,
+  "workbench.editor.pinnedTabSizing": "shrink",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "eslint.rules.customizations": [{ "rule": "*", "severity": "warn" }],
