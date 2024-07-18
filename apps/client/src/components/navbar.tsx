@@ -6,9 +6,7 @@ import {
   Home,
   LineChart,
   MessageCircle,
-  MoonIcon as Moon,
   Search,
-  SunIcon as Sun,
   Users2,
 } from "lucide-react";
 import { Link } from "next-view-transitions";
@@ -102,7 +100,7 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
 
   return (
     <>
-      <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
+      <nav className="flex items-center gap-4 px-2 sm:py-5">
         {links.map((link) => (
           <Tooltip key={link.name}>
             <TooltipTrigger asChild>
@@ -117,8 +115,6 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
             <TooltipContent side="right">{link.name}</TooltipContent>
           </Tooltip>
         ))}
-      </nav>
-      <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
@@ -131,7 +127,9 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
           </TooltipTrigger>
           <TooltipContent side="right">Help</TooltipContent>
         </Tooltip>
-        <ThemeToggle />
+
+            <ThemeToggle />
+  
       </nav>
     </>
   );
