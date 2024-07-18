@@ -1,5 +1,6 @@
 import type { LucideIcon, LucideProps } from "lucide-react";
 import {
+  Circle,
   HelpCircleIcon,
   Home,
   LineChart,
@@ -15,6 +16,17 @@ import {
 export type { LucideIcon as Icon };
 
 export const Icons = {
+  color: (props: LucideProps) => (
+    <svg
+      fill="currentColor"
+      viewBox="0 0 16 16"
+      height="1em"
+      width="1em"
+      {...props}
+    >
+      <path d="M16 8 A8 8 0 0 1 8 16 A8 8 0 0 1 0 8 A8 8 0 0 1 16 8 z" />
+    </svg>
+  ),
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path
@@ -92,4 +104,5 @@ export const Icons = {
   helpCircle: HelpCircleIcon,
   sun: Sun,
   moon: Moon,
+  circle: Circle,
 };

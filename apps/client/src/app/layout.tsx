@@ -5,12 +5,15 @@ import { ViewTransitions } from "next-view-transitions";
 
 import { cn } from "@local/ui";
 
+import { ThemeWrapper } from "@/components/theme-wrapper";
 import { DocHeader } from "./help/_components/doc-header";
 
 import "./styles/globals.css";
 
 import { Toaster } from "@local/ui/sonner";
+import { TooltipProvider } from "@local/ui/tooltip";
 
+import { ThemeSwitcher } from "@/components/themeSwitcher";
 import { ThemeProvider } from "@/lib/providers";
 
 const fontCal = localFont({
@@ -54,17 +57,14 @@ export default function RootLayout({
             fontMono.variable,
           )}
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem={true}
-          >
-            <div className="relative flex min-h-screen flex-col">
+          <ThemeProvider attribute="class" enableSystem={true}>
+            <ThemeWrapper className="relative flex min-h-screen flex-col">
               <DocHeader />
               <div className="flex-1">{children}</div>
-            </div>
+            </ThemeWrapper>
+            <ThemeSwitcher />
+            <Toaster />
           </ThemeProvider>
-          <Toaster />
         </body>
       </html>
     </ViewTransitions>

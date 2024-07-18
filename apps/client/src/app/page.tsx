@@ -10,7 +10,7 @@ export default function Home() {
         Welcome to FlexRoster
       </h1>
 
-      <div className="flex justify-between px-2">
+      <div className="flex justify-evenly px-2">
         <Link
           prefetch={false}
           href="/dashboard"
@@ -21,18 +21,18 @@ export default function Home() {
         >
           Login
         </Link>
-      </div>
-      <div className="pt-2">
-        <Link
-          prefetch={false}
-          href="/help"
-          className={cn(
-            "text-2xl font-medium",
-            buttonVariants({ size: "lg", variant: "outline" }),
-          )}
-        >
-          Help
-        </Link>
+        <div className="flex px-4">
+          <Link
+            prefetch={false}
+            href="/help"
+            className={cn(
+              "text-2xl font-medium",
+              buttonVariants({ size: "lg", variant: "outline" }),
+            )}
+          >
+            Help
+          </Link>
+        </div>
         <BottomGradient />
       </div>
     </main>
