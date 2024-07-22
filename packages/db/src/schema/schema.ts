@@ -114,6 +114,7 @@ export const classrooms = pgTable("classrooms", {
   teacherName: text("teacherName").notNull(),
   teacherId: text("teacherId").references(() => users.id),
   comment: text("comment"),
+  isFlex: boolean("isFlex").default(false),
 });
 
 export const classroomRelations = relations(classrooms, ({ many, one }) => ({

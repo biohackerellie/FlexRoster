@@ -23,7 +23,9 @@ export async function RosterSync() {
      * variables
      */
     const token = await icAuth(); // Helper function to get InfinteCampus auth token
-    const classes = await db.query.classrooms.findMany({}); // Gets all classes from the database, synced from syncRoster.ts script
+    const classes = await db.query.classrooms.findMany({
+      where: eq(schema.classrooms.isFlex, true),
+    }); // Gets all classes from the database, synced from syncRoster.ts script
     const allStudents = await rosterQuery.execute({}); // Gets all existing students in local DB
 
     const existingStudentEmails = new Set(

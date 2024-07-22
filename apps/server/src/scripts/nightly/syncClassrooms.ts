@@ -42,17 +42,30 @@ async function syncClassrooms() {
       cls.title.includes(semesterClassName),
     );
     // #TODO
-    // const otherClasses = data.classes.filter(
-    //   (cls) => !cls.title.includes(semesterClassName),
-    // );
+    const otherClasses = data.classes.filter(
+      (cls) => !cls.title.includes(semesterClassName),
+    );
+    // combine the 2 arrays into one mapped array, filtered classes have isFlex = true and otherClasses have isFlex = false
 
-    const fetchedClasses = filteredClasses.map((cls) => {
-      return {
-        id: cls.sourcedId,
-        teacher: cls.classCode,
-        roomNumber: cls.location ?? "unknown",
-      };
-    });
+    const fetchedClasses = filteredClasses
+      .map((cls) => {
+        return {
+          id: cls.sourcedId,
+          teacher: cls.classCode,
+          roomNumber: cls.location ?? "unknown",
+          isFlex: true,
+        };
+      })
+      .concat(
+        otherClasses.map((cls) => {
+          return {
+            id: cls.sourcedId,
+            teacher: cls.classCode,
+            roomNumber: cls.location ?? "unknown",
+            isFlex: false,
+          };
+        }),
+      );
     if (existingClassrooms.length === 0 || !existingClassrooms) {
       logger.info(
         "No classrooms found in local db, adding all classrooms from Infinite Campus",
@@ -90,6 +103,7 @@ async function syncClassrooms() {
               roomNumber: room.roomNumber,
               teacherName: teacherName,
               teacherId: user,
+              isFlex: room.isFlex,
             })
             .onConflictDoUpdate({
               target: schema.classrooms.id,
@@ -97,6 +111,7 @@ async function syncClassrooms() {
                 roomNumber: room.roomNumber,
                 teacherName: teacherName,
                 teacherId: user,
+                isFlex: room.isFlex,
               },
             });
           newCount++;
@@ -182,6 +197,7 @@ async function syncClassrooms() {
                 roomNumber: room.roomNumber,
                 teacherName: teacherName,
                 teacherId: user,
+                isFlex: room.isFlex,
               })
               .onConflictDoUpdate({
                 target: schema.classrooms.id,
@@ -189,6 +205,7 @@ async function syncClassrooms() {
                   roomNumber: room.roomNumber,
                   teacherName: teacherName,
                   teacherId: user,
+                  isFlex: room.isFlex,
                 },
               });
             newCount++;
