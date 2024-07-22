@@ -3,7 +3,7 @@
  */
 
 import type { SelectClassRoster } from "@local/db";
-import { db, eq, gt, or, schema } from "@local/db";
+import { db, eq, schema } from "@local/db";
 import { logger } from "@local/utils";
 
 import type { RosterResponse } from "~/lib/types";

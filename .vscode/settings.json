@@ -12,6 +12,20 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
+  "background.fullscreen": {
+    "images": [
+      "https://cdn.wallpapersafari.com/71/14/Hr7ZQj.jpg",
+      "https://wallpapercave.com/wp/wp6952566.jpg",
+      "https://w.wallhaven.cc/full/7p/wallhaven-7p3z53.png",
+      "https://wallpapercave.com/wp/wp6051017.jpg",
+      "https://github.com/Gingeh/wallpapers/blob/main/landscapes/evening-sky.png?raw=true"
+    ], // urls of your images
+    "opacity": 0.92, // 0.85 ~ 0.95 recommended
+    "size": "cover", // also css, `cover` to self-adaption (recommended)，or `contain`、`200px 200px`
+    "useFront": false,
+    "position": "center", // alias to `background-position`, default `center`
+    "interval": 600 // seconds of interval for carousel, default `0` to disabled.
+  },
   "workbench.editor.limit.enabled": true,
   "workbench.editor.limit.value": 8,
   "workbench.editor.pinnedTabSizing": "shrink",
@@ -89,6 +103,7 @@
   },
   "editor.insertSpaces": true,
   "vim.useSystemClipboard": true,
+
   "vim.useCtrlKeys": false,
   "window.titleBarStyle": "native",
   "apc.electron": {
@@ -146,7 +161,6 @@
 
   "window.title": "‎",
 
-  "workbench.editor.enablePreview": false,
   "workbench.editor.revealIfOpen": true,
   "workbench.iconTheme": "symbols",
   "workbench.list.horizontalScrolling": true,

@@ -41,11 +41,16 @@ async function syncClassrooms() {
     const filteredClasses = data.classes.filter((cls) =>
       cls.title.includes(semesterClassName),
     );
+    // #TODO
+    // const otherClasses = data.classes.filter(
+    //   (cls) => !cls.title.includes(semesterClassName),
+    // );
+
     const fetchedClasses = filteredClasses.map((cls) => {
       return {
         id: cls.sourcedId,
         teacher: cls.classCode,
-        roomNumber: cls.location || "unknown",
+        roomNumber: cls.location ?? "unknown",
       };
     });
     if (existingClassrooms.length === 0 || !existingClassrooms) {

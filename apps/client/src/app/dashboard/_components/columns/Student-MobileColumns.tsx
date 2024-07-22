@@ -2,11 +2,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
-import {
-  CalendarIcon,
-  MessageSquareIcon,
-  MessageSquareOffIcon,
-} from "lucide-react";
+import { MessageSquareIcon, MessageSquareOffIcon } from "lucide-react";
 import { Link } from "next-view-transitions";
 
 import type { StudentClasses } from "@local/utils";
@@ -57,22 +53,7 @@ export function mColumns(): ColumnDef<StudentClasses>[] {
       },
       cell: ({ row }) => {
         const teacherId = row.original.teacherId;
-
-        const available = row.original.available;
-        if (!available) {
-          return (
-            <Button
-              variant="destructive"
-              disabled
-              className="cursor-not-allowed"
-              size="sm"
-            >
-              <CalendarIcon />
-            </Button>
-          );
-        } else {
-          return <DatePickerForm teacherId={teacherId} />;
-        }
+        return <DatePickerForm teacherId={teacherId} />;
       },
       enableSorting: false,
       size: 1,
