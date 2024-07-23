@@ -6,7 +6,7 @@ RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store pnpm fetch
 
 FROM base AS builder
 
-RUN apt update && apt upgrade -y
+RUN apt-get update && apt upgrade -y
 
 
 WORKDIR /app
@@ -15,8 +15,8 @@ COPY . .
 RUN turbo prune @local/server --docker
 
 FROM base AS installer
-RUN apt update
-RUN apt install curl unzip -y
+RUN apt-get update
+RUN apt-get -qq install curl unzip -y
 
 RUN curl https://bun.sh/install | bash
 WORKDIR /app

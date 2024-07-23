@@ -21,6 +21,9 @@ const nicknameMap: Record<string, string> = {
   jim: "james",
   jenny: "jennifer",
   jen: "jennifer",
+  dave: "david",
+  doug: "douglas",
+  kate: "katherine",
 };
 
 export function normalizeName(name: string): string[] {
