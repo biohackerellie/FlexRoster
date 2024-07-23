@@ -128,8 +128,7 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
           <TooltipContent side="right">Help</TooltipContent>
         </Tooltip>
 
-            <ThemeToggle />
-  
+        <ThemeToggle />
       </nav>
     </>
   );

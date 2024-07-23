@@ -47,7 +47,7 @@ async function syncClassrooms() {
     );
     // combine the 2 arrays into one mapped array, filtered classes have isFlex = true and otherClasses have isFlex = false
 
-    const fetchedClasses = filteredClasses
+    const concatedClasses = filteredClasses
       .map((cls) => {
         return {
           id: cls.sourcedId,
@@ -66,6 +66,30 @@ async function syncClassrooms() {
           };
         }),
       );
+
+    const teacherMap = new Map<
+      string,
+      { id: string; teacher: string; roomNumber: string; isFlex: boolean }
+    >();
+    concatedClasses.forEach((cls) => {
+      if (!teacherMap.has(cls.teacher)) {
+        teacherMap.set(cls.teacher, {
+          id: cls.id,
+          teacher: cls.teacher,
+          roomNumber: cls.roomNumber,
+          isFlex: cls.isFlex,
+        });
+      } else if (cls.isFlex) {
+        teacherMap.set(cls.teacher, {
+          id: cls.id,
+          teacher: cls.teacher,
+          roomNumber: cls.roomNumber,
+          isFlex: cls.isFlex,
+        });
+      }
+    });
+
+    const fetchedClasses = Array.from(teacherMap.values());
     if (existingClassrooms.length === 0 || !existingClassrooms) {
       logger.info(
         "No classrooms found in local db, adding all classrooms from Infinite Campus",

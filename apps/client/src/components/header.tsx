@@ -37,19 +37,18 @@ export async function Header() {
           />
           <div className="hidden sm:flex">
             <Link
-            href="https://github.com/biohackerellie/FlexRoster"
-            target="_blank"
-            rel="noreferrer"
-            className={buttonVariants({
-              size: "icon",
-              variant: "ghost",
-            })}
-          >
+              href="https://github.com/biohackerellie/FlexRoster"
+              target="_blank"
+              rel="noreferrer"
+              className={buttonVariants({
+                size: "icon",
+                variant: "ghost",
+              })}
+            >
               <Icons.gitHub className="h-6 w-6" />
               <span className="sr-only">GitHub</span>
             </Link>
           </div>
-
         </div>
       </div>
     </header>
