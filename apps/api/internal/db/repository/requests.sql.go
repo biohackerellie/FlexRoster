@@ -11,6 +11,44 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const allStudentRequests = `-- name: AllStudentRequests :many
+SELECT id, "studentId", "studentName", "newTeacher", "newTeacherName", "currentTeacher", "currentTeacherName", "dateRequested", status, arrived, timestamp FROM "requests"
+WHERE "studentId" = $1
+ORDER BY "dateRequested" DESC
+`
+
+func (q *Queries) AllStudentRequests(ctx context.Context, studentid string) ([]Request, error) {
+	rows, err := q.db.Query(ctx, allStudentRequests, studentid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Request
+	for rows.Next() {
+		var i Request
+		if err := rows.Scan(
+			&i.ID,
+			&i.StudentId,
+			&i.StudentName,
+			&i.NewTeacher,
+			&i.NewTeacherName,
+			&i.CurrentTeacher,
+			&i.CurrentTeacherName,
+			&i.DateRequested,
+			&i.Status,
+			&i.Arrived,
+			&i.Timestamp,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const studentRequestsQuery = `-- name: StudentRequestsQuery :many
 SELECT requests.id, "studentId", "studentName", "newTeacher", "newTeacherName", "currentTeacher", "currentTeacherName", "dateRequested", requests.status, arrived, timestamp, "user".id, name, email, "emailVerified", image, role, "studentEmail", "studentName", "classroomId", students.status, students.id, classrooms.id, "roomNumber", "teacherName", "teacherId", comment, "isFlex" FROM "requests"
 JOIN "user" ON "requests"."studentId" = "user"."id"

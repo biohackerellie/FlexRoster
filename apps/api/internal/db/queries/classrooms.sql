@@ -5,16 +5,16 @@ WHERE "date" >= CURRENT_DATE;
 
 
 -- name: AvailabilityQuery :many
-SELECT * FROM "availability"
+SELECT * FROM "availability";
 
 
 
 -- name: ClassroomQuery :many
 SELECT 
-    "id", 
+    "classrooms"."id", 
     "roomNumber", 
     "teacherName", 
-    "teacherId", 
+    "classrooms"."teacherId", 
     "availability"."available", 
     "comment"
 FROM 
@@ -22,6 +22,19 @@ FROM
 LEFT JOIN 
     "availability" 
 ON 
-    "id" = "availability"."classroomId" 
+    "classrooms"."id" = "availability"."classroomId" 
     AND "availability"."date" >= CURRENT_DATE;
+
+
+
+-- name: TeacherAvailableToday :one
+SELECT "availability"."available"
+FROM "availability"
+WHERE "teacherId" = $1 AND "date" = CURRENT_DATE;
+
+
+-- name: CountRosterByClassroomId :one
+SELECT COUNT(*)
+FROM "students"
+WHERE "classroomId" = $1;
 
