@@ -94,7 +94,7 @@ type UserRosterQueryRow struct {
 	StudentEmail  string
 	StudentName   string
 	ClassroomId   string
-	Status        interface{}
+	Status        Status
 	ID_2          int32
 	ID_3          string
 	RoomNumber    string

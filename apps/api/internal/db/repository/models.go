@@ -5,8 +5,168 @@
 package db
 
 import (
+	"database/sql/driver"
+	"fmt"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
+
+type RequestStatus string
+
+const (
+	RequestStatusPending  RequestStatus = "pending"
+	RequestStatusApproved RequestStatus = "approved"
+	RequestStatusDenied   RequestStatus = "denied"
+	RequestStatusArrived  RequestStatus = "arrived"
+)
+
+func (e *RequestStatus) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = RequestStatus(s)
+	case string:
+		*e = RequestStatus(s)
+	default:
+		return fmt.Errorf("unsupported scan type for RequestStatus: %T", src)
+	}
+	return nil
+}
+
+type NullRequestStatus struct {
+	RequestStatus RequestStatus
+	Valid         bool // Valid is true if RequestStatus is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullRequestStatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.RequestStatus, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.RequestStatus.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullRequestStatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.RequestStatus), nil
+}
+
+func AllRequestStatusValues() []RequestStatus {
+	return []RequestStatus{
+		RequestStatusPending,
+		RequestStatusApproved,
+		RequestStatusDenied,
+		RequestStatusArrived,
+	}
+}
+
+type Role string
+
+const (
+	RoleSecretary Role = "secretary"
+	RoleTeacher   Role = "teacher"
+	RoleStudent   Role = "student"
+	RoleAdmin     Role = "admin"
+)
+
+func (e *Role) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Role(s)
+	case string:
+		*e = Role(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Role: %T", src)
+	}
+	return nil
+}
+
+type NullRole struct {
+	Role  Role
+	Valid bool // Valid is true if Role is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullRole) Scan(value interface{}) error {
+	if value == nil {
+		ns.Role, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Role.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullRole) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Role), nil
+}
+
+func AllRoleValues() []Role {
+	return []Role{
+		RoleSecretary,
+		RoleTeacher,
+		RoleStudent,
+		RoleAdmin,
+	}
+}
+
+type Status string
+
+const (
+	StatusTransferredA Status = "transferredA"
+	StatusTransferredN Status = "transferredN"
+	StatusDefault      Status = "default"
+)
+
+func (e *Status) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Status(s)
+	case string:
+		*e = Status(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Status: %T", src)
+	}
+	return nil
+}
+
+type NullStatus struct {
+	Status Status
+	Valid  bool // Valid is true if Status is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullStatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.Status, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Status.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullStatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Status), nil
+}
+
+func AllStatusValues() []Status {
+	return []Status{
+		StatusTransferredA,
+		StatusTransferredN,
+		StatusDefault,
+	}
+}
 
 type Account struct {
 	UserId            string
@@ -64,7 +224,7 @@ type Request struct {
 	CurrentTeacher     string
 	CurrentTeacherName string
 	DateRequested      pgtype.Date
-	Status             interface{}
+	Status             RequestStatus
 	Arrived            pgtype.Bool
 	Timestamp          string
 }
@@ -79,7 +239,7 @@ type Student struct {
 	StudentEmail string
 	StudentName  string
 	ClassroomId  string
-	Status       interface{}
+	Status       Status
 	ID           int32
 }
 

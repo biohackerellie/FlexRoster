@@ -2,9 +2,11 @@ version: "2"
 sql:
   - engine: "postgresql"
     queries: "internal/db/queries"
-    schema: "internal/db/migrations"
+    schema: "internal/db/repository/schema.sql"
     gen:
       go:
         package: "db"
         sql_package: "pgx/v5"
         out: "internal/db/repository"
+        emit_prepared_queries: true
+        emit_all_enum_values: true
