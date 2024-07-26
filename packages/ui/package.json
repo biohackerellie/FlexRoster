@@ -52,7 +52,7 @@
     "@types/react": "catalog:react19",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "tailwindcss": "^3.4.6",
+    "tailwindcss": "^3.4.7",
     "typescript": "catalog:",
     "zod": "catalog:"
   },
