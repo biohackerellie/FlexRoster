@@ -14,15 +14,15 @@
   },
   "dependencies": {
     "@next/eslint-plugin-next": "^14.2.5",
-    "@typescript-eslint/eslint-plugin": "^7.16.1",
-    "@typescript-eslint/parser": "^7.16.1",
+    "@typescript-eslint/eslint-plugin": "^7.17.0",
+    "@typescript-eslint/parser": "^7.17.0",
     "eslint-config-turbo": "^2.0.9",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-react-compiler": "^0.0.0-experimental-c8b3f72-20240517",
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "typescript-eslint": "^7.16.1"
+    "typescript-eslint": "^7.17.0"
   },
   "devDependencies": {
     "@local/prettier-config": "workspace:*",
