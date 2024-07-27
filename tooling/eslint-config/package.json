@@ -27,7 +27,7 @@
   "devDependencies": {
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
-    "@types/eslint": "^8.56.11",
+    "@types/eslint": "^9.6.0",
     "bun-types": "^1.1.20",
     "eslint": "catalog:",
     "eslint-import-resolver-typescript-bun": "^0.0.99",
