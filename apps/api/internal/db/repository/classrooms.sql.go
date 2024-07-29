@@ -43,19 +43,15 @@ func (q *Queries) AvailabilityQuery(ctx context.Context) ([]Availability, error)
 
 const classroomQuery = `-- name: ClassroomQuery :many
 SELECT 
-    "classrooms"."id", 
-    "roomNumber", 
-    "teacherName", 
-    "classrooms"."teacherId", 
-    "availability"."available", 
-    "comment"
-FROM 
-    "classrooms"
-LEFT JOIN 
-    "availability" 
-ON 
-    "classrooms"."id" = "availability"."classroomId" 
-    AND "availability"."date" >= CURRENT_DATE
+  c."id", 
+  c."roomNumber", 
+  c."teacherName", 
+  c."teacherId", 
+  c."comment",
+  COALESCE(a."available", FALSE) AS "available" 
+FROM "classrooms" c
+LEFT JOIN
+  "availability" a ON c."id" = a."classroomId" AND a."date" = CURRENT_DATE
 `
 
 type ClassroomQueryRow struct {
@@ -63,8 +59,8 @@ type ClassroomQueryRow struct {
 	RoomNumber  string
 	TeacherName string
 	TeacherId   pgtype.Text
-	Available   pgtype.Bool
 	Comment     pgtype.Text
+	Available   bool
 }
 
 func (q *Queries) ClassroomQuery(ctx context.Context) ([]ClassroomQueryRow, error) {
@@ -81,8 +77,55 @@ func (q *Queries) ClassroomQuery(ctx context.Context) ([]ClassroomQueryRow, erro
 			&i.RoomNumber,
 			&i.TeacherName,
 			&i.TeacherId,
-			&i.Available,
 			&i.Comment,
+			&i.Available,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const classroomsWithRosterCount = `-- name: ClassroomsWithRosterCount :many
+SELECT c.id, c."roomNumber", c."teacherName", c."teacherId", c.comment, c."isFlex", (
+  SELECT COUNT(*)
+  FROM "students" s
+  WHERE s."classroomId" = c."classroomId"
+) AS "count"
+FROM "classrooms" c
+`
+
+type ClassroomsWithRosterCountRow struct {
+	ID          string
+	RoomNumber  string
+	TeacherName string
+	TeacherId   pgtype.Text
+	Comment     pgtype.Text
+	IsFlex      pgtype.Bool
+	Count       int64
+}
+
+func (q *Queries) ClassroomsWithRosterCount(ctx context.Context) ([]ClassroomsWithRosterCountRow, error) {
+	rows, err := q.db.Query(ctx, classroomsWithRosterCount)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ClassroomsWithRosterCountRow
+	for rows.Next() {
+		var i ClassroomsWithRosterCountRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.RoomNumber,
+			&i.TeacherName,
+			&i.TeacherId,
+			&i.Comment,
+			&i.IsFlex,
+			&i.Count,
 		); err != nil {
 			return nil, err
 		}
@@ -108,9 +151,11 @@ func (q *Queries) CountRosterByClassroomId(ctx context.Context, classroomid stri
 }
 
 const teacherAvailableToday = `-- name: TeacherAvailableToday :one
-SELECT "availability"."available"
-FROM "availability"
-WHERE "teacherId" = $1 AND "date" = CURRENT_DATE
+SELECT EXISTS (
+    SELECT 1
+    FROM "availability"
+    WHERE "teacherId" = $1 AND "date" = CURRENT_DATE
+) AS "available"
 `
 
 func (q *Queries) TeacherAvailableToday(ctx context.Context, teacherid pgtype.Text) (bool, error) {
@@ -123,7 +168,7 @@ func (q *Queries) TeacherAvailableToday(ctx context.Context, teacherid pgtype.Te
 const todaysAvailability = `-- name: TodaysAvailability :many
 SELECT "available", "id" 
 FROM "availability"
-WHERE "date" >= CURRENT_DATE
+WHERE "date" = CURRENT_DATE
 `
 
 type TodaysAvailabilityRow struct {

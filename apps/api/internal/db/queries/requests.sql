@@ -8,7 +8,7 @@ SELECT * FROM "requests"
 JOIN "user" ON "requests"."studentId" = "user"."id"
 JOIN "students" ON "user"."email" = "students"."studentEmail"
 JOIN "classrooms" ON "requests.newTeacher" = "classrooms"."teacherId"
-WHERE "requests"."dateRequested" >= GETDATE();
+WHERE "requests"."dateRequested" >= CURRENT_DATE;
 
 
 

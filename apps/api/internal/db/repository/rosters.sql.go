@@ -116,6 +116,59 @@ func (q *Queries) AllStudentsMap(ctx context.Context) ([]AllStudentsMapRow, erro
 	return items, nil
 }
 
+const rosterByClassroomId = `-- name: RosterByClassroomId :many
+SELECT
+  s."id" AS "rosterId",
+  s."studentEmail" AS "studentEmail",
+  c."id" AS "classroomId",
+  c."roomNumber" AS "roomNumber",
+  c."teacherName" AS "teacherName",
+  c."teacherId" AS "teacherId",
+  COALESCE(a."available", FALSE) AS "available" 
+FROM "students" s
+JOIN "classrooms" c ON s."classroomId" = c."id"
+LEFT JOIN "availability" a ON c."id" = a."classroomId" AND a."date" = CURRENT_DATE
+WHERE s."classroomId" = $1
+`
+
+type RosterByClassroomIdRow struct {
+	RosterId     int32
+	StudentEmail string
+	ClassroomId  string
+	RoomNumber   string
+	TeacherName  string
+	TeacherId    pgtype.Text
+	Available    bool
+}
+
+func (q *Queries) RosterByClassroomId(ctx context.Context, classroomid string) ([]RosterByClassroomIdRow, error) {
+	rows, err := q.db.Query(ctx, rosterByClassroomId, classroomid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []RosterByClassroomIdRow
+	for rows.Next() {
+		var i RosterByClassroomIdRow
+		if err := rows.Scan(
+			&i.RosterId,
+			&i.StudentEmail,
+			&i.ClassroomId,
+			&i.RoomNumber,
+			&i.TeacherName,
+			&i.TeacherId,
+			&i.Available,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const rosterById = `-- name: RosterById :many
 SELECT "studentEmail", "studentName", "classroomId", status, id FROM "students" WHERE "id" = $1
 `
