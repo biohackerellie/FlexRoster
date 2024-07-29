@@ -28,7 +28,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "^20.14.12",
+    "@types/node": "^20.14.13",
     "typescript": "catalog:"
   }
 }
