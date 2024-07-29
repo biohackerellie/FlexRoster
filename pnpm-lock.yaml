@@ -145,8 +145,8 @@ importers:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       next-view-transitions:
-        specifier: ^0.2.0
-        version: 0.2.0(next@15.0.0-rc.0(babel-plugin-react-compiler@0.0.0-experimental-487cb0e-20240529)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
+        specifier: ^0.3.0
+        version: 0.3.0(next@15.0.0-rc.0(babel-plugin-react-compiler@0.0.0-experimental-487cb0e-20240529)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       nextra:
         specifier: 3.0.0-alpha.29
         version: 3.0.0-alpha.29(next@15.0.0-rc.0(babel-plugin-react-compiler@0.0.0-experimental-487cb0e-20240529)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1)(typescript@5.5.3)
@@ -5262,8 +5262,8 @@ packages:
       react: ^16.8 || ^17 || ^18
       react-dom: ^16.8 || ^17 || ^18
 
-  next-view-transitions@0.2.0:
-    resolution: {integrity: sha512-dFxevMIJy8irIstytJivLEtgYT4IJ7Gy7fnDCKHJtNZAsuQgmewYcdA/o/mRkMd1zwxTfyGALiOlZYxvtsn5jg==}
+  next-view-transitions@0.3.0:
+    resolution: {integrity: sha512-EfMG4sQR48Q40apCl0rWqTvpDNk4TcdlFjcsGd2ZOBJMNlwfuB8lnwhOL5A0kKWnZwXlMgDPFXY7qwoOY+NhtQ==}
     peerDependencies:
       next: ^14.0.0
       react: ^18.2.0
@@ -12129,7 +12129,7 @@ snapshots:
       react: 19.0.0-rc-fb9a90fa48-20240614
       react-dom: 19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614)
 
-  next-view-transitions@0.2.0(next@15.0.0-rc.0(babel-plugin-react-compiler@0.0.0-experimental-487cb0e-20240529)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614):
+  next-view-transitions@0.3.0(next@15.0.0-rc.0(babel-plugin-react-compiler@0.0.0-experimental-487cb0e-20240529)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614):
     dependencies:
       next: 15.0.0-rc.0(babel-plugin-react-compiler@0.0.0-experimental-487cb0e-20240529)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       react: 19.0.0-rc-fb9a90fa48-20240614
