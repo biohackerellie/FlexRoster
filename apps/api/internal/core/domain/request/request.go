@@ -1,7 +1,6 @@
 package request
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -12,6 +11,14 @@ const (
 	RequestStatusApproved RequestStatus = "approved"
 	RequestStatusDenied   RequestStatus = "denied"
 	RequestStatusArrived  RequestStatus = "arrived"
+)
+
+type Status string
+
+const (
+	StatusTransferredA Status = "transferredA"
+	StatusTransferredN Status = "transferredN"
+	StatusDefault      Status = "default"
 )
 
 type Request struct {
@@ -26,4 +33,27 @@ type Request struct {
 	Status             RequestStatus
 	Arrived            bool
 	Timestamp          string
+}
+
+type StudentRequests struct {
+	Request
+	Student
+	Classroom
+}
+
+type Student struct {
+	StudentEmail string
+	StudentName  string
+	ClassroomId  string
+	Status       Status
+	ID           int32
+}
+
+type Classroom struct {
+	ID          string
+	RoomNumber  string
+	TeacherName string
+	TeacherId   string
+	Comment     string
+	IsFlex      bool
 }

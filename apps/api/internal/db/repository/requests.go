@@ -38,8 +38,8 @@ func (s *RequestDBService) WithLogs(logger *zap.SugaredLogger) *RequestDBService
 	return s
 }
 
-func (s *RequestDBService) AllStudentRequests(ctx context.Context, studentid string) ([]*request.Request, error) {
-	res, err := s.q.AllStudentRequests(ctx, studentid)
+func (s *RequestDBService) GetRequests(ctx context.Context, userId string) ([]*request.Request, error) {
+	res, err := s.q.UserRequestQuery(ctx, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -65,4 +65,27 @@ func (s *RequestDBService) AllStudentRequests(ctx context.Context, studentid str
 	return response, nil
 }
 
-func (s *RequestDBService) GetAllStudentsRequests(ctx context.Context)
+func (s *RequestDBService) GetAllRequests(ctx context.Context) ([]*request.Request, error) {
+	res, err := s.q.ALlRequests(ctx)
+	if err != nil {
+		return nil, err
+	}
+	response := make([]*request.Request, len(res))
+	for i, r := range res {
+		mappedRes := &request.Request{
+			ID:                 r.ID,
+			StudentID:          r.StudentId,
+			StudentName:        r.StudentName,
+			NewTeacher:         r.NewTeacher,
+			NewTeacherName:     r.NewTeacherName,
+			CurrentTeacher:     r.CurrentTeacher,
+			CurrentTeacherName: r.CurrentTeacherName,
+			DateRequested:      r.DateRequested.Time,
+			Status:             request.RequestStatus(r.Status),
+			Arrived:            r.Arrived.Bool,
+			Timestamp:          r.Timestamp,
+		}
+		response[i] = mappedRes
+	}
+	return response, nil
+}

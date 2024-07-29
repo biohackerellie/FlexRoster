@@ -16,6 +16,7 @@ SELECT
   c."teacherName", 
   c."teacherId", 
   c."comment",
+  c."isFlex",
   COALESCE(a."available", FALSE) AS "available" 
 FROM "classrooms" c
 LEFT JOIN
@@ -45,3 +46,15 @@ SELECT c.*, (
   WHERE s."classroomId" = c."classroomId"
 ) AS "count"
 FROM "classrooms" c;
+
+-- name: RoomByIdQuery :one
+SELECT
+  c."id",
+  c."roomNumber",
+  u."name" as "teacherName",
+  u."id" as "teacherId",
+  COALESCE(a."available", FALSE) AS "available"
+FROM "classrooms" c
+JOIN "user" u ON c."teacherId" = u."id"
+LEFT JOIN "availability" a ON c."id" = a."classroomId" AND a."date" = CURRENT_DATE
+WHERE c."id" = $1;

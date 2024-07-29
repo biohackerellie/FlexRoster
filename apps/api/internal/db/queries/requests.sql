@@ -17,3 +17,5 @@ SELECT * FROM "requests"
 WHERE "studentId" = $1
 ORDER BY "dateRequested" DESC;
 
+-- name: ALlRequests :many
+SELECT * FROM "requests";

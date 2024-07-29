@@ -11,6 +11,42 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const aLlRequests = `-- name: ALlRequests :many
+SELECT id, "studentId", "studentName", "newTeacher", "newTeacherName", "currentTeacher", "currentTeacherName", "dateRequested", status, arrived, timestamp FROM "requests"
+`
+
+func (q *Queries) ALlRequests(ctx context.Context) ([]Request, error) {
+	rows, err := q.db.Query(ctx, aLlRequests)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Request
+	for rows.Next() {
+		var i Request
+		if err := rows.Scan(
+			&i.ID,
+			&i.StudentId,
+			&i.StudentName,
+			&i.NewTeacher,
+			&i.NewTeacherName,
+			&i.CurrentTeacher,
+			&i.CurrentTeacherName,
+			&i.DateRequested,
+			&i.Status,
+			&i.Arrived,
+			&i.Timestamp,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const allStudentRequests = `-- name: AllStudentRequests :many
 SELECT id, "studentId", "studentName", "newTeacher", "newTeacherName", "currentTeacher", "currentTeacherName", "dateRequested", status, arrived, timestamp FROM "requests"
 WHERE "studentId" = $1
