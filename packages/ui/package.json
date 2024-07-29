@@ -34,7 +34,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
-    "lucide-react": "^0.416.0",
+    "lucide-react": "^0.417.0",
     "next-themes": "^0.3.0",
     "react": "catalog:react19",
     "react-day-picker": "^8.10.1",
