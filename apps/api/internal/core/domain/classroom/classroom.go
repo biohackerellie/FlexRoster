@@ -33,3 +33,8 @@ type ClassroomWithAvailable struct {
 	Classroom
 	Available bool
 }
+
+type ClassroomWithCount struct {
+	Classroom
+	Count int64
+}

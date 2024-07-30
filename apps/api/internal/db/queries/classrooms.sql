@@ -58,3 +58,27 @@ FROM "classrooms" c
 JOIN "user" u ON c."teacherId" = u."id"
 LEFT JOIN "availability" a ON c."id" = a."classroomId" AND a."date" = CURRENT_DATE
 WHERE c."id" = $1;
+
+-- name: ClassroomScheduleQuery :many
+SELECT sqlc.embed(availability) FROM "availability" WHERE availability."classroomId" = $1 OR availability."teacherId" = $1;
+
+
+-- name: CreateComment :exec 
+UPDATE "classrooms" SET "comment" = $2
+WHERE "teacherId" = $1;
+
+
+-- name: DeleteComment :exec
+UPDATE "classrooms" SET "comment" = NULL
+WHERE "teacherId" = $1;
+
+
+-- name: CreateAvailability :copyfrom
+INSERT INTO "availability" ("id", "teacherId", "classroomId", "date", "available")
+VALUES($1, $2, $3, $4, $5);
+
+-- name: DeleteAvailability :exec
+DELETE FROM "availability"
+WHERE "teacherId" = $1 AND "date" = $2;
+
+

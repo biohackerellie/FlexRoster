@@ -85,8 +85,64 @@ func (q *Queries) AllStudentRequests(ctx context.Context, studentid string) ([]R
 	return items, nil
 }
 
+const newRequest = `-- name: NewRequest :exec
+INSERT INTO "requests" (
+  "status",
+  "studentName",
+  "studentId",
+  "dateRequested",
+  "currentTeacher",
+  "currentTeacherName",
+  "newTeacher",
+  "newTeacherName",
+  "arrived",
+  "timestamp",
+  "id"
+)
+VALUES (
+  $1,
+  $2,
+  $3,
+  $4,
+  $5,
+  $6,
+  $7,
+  $8,
+  $9,
+  current_timestamp,
+  floor(rand()*(80+1))
+)
+`
+
+type NewRequestParams struct {
+	Status             RequestStatus
+	StudentName        string
+	StudentId          string
+	DateRequested      pgtype.Date
+	CurrentTeacher     string
+	CurrentTeacherName string
+	NewTeacher         string
+	NewTeacherName     string
+	Arrived            pgtype.Bool
+}
+
+func (q *Queries) NewRequest(ctx context.Context, arg NewRequestParams) error {
+	_, err := q.db.Exec(ctx, newRequest,
+		arg.Status,
+		arg.StudentName,
+		arg.StudentId,
+		arg.DateRequested,
+		arg.CurrentTeacher,
+		arg.CurrentTeacherName,
+		arg.NewTeacher,
+		arg.NewTeacherName,
+		arg.Arrived,
+	)
+	return err
+}
+
 const studentRequestsQuery = `-- name: StudentRequestsQuery :many
-SELECT requests.id, "studentId", "studentName", "newTeacher", "newTeacherName", "currentTeacher", "currentTeacherName", "dateRequested", requests.status, arrived, timestamp, "user".id, name, email, "emailVerified", image, role, "studentEmail", "studentName", "classroomId", students.status, students.id, classrooms.id, "roomNumber", "teacherName", "teacherId", comment, "isFlex" FROM "requests"
+SELECT requests.id, requests."studentId", requests."studentName", requests."newTeacher", requests."newTeacherName", requests."currentTeacher", requests."currentTeacherName", requests."dateRequested", requests.status, requests.arrived, requests.timestamp FROM "requests"
 JOIN "user" ON "requests"."studentId" = "user"."id"
 JOIN "students" ON "user"."email" = "students"."studentEmail"
 JOIN "classrooms" ON "requests.newTeacher" = "classrooms"."teacherId"
@@ -94,34 +150,7 @@ WHERE "requests"."dateRequested" >= CURRENT_DATE
 `
 
 type StudentRequestsQueryRow struct {
-	ID                 int32
-	StudentId          string
-	StudentName        string
-	NewTeacher         string
-	NewTeacherName     string
-	CurrentTeacher     string
-	CurrentTeacherName string
-	DateRequested      pgtype.Date
-	Status             RequestStatus
-	Arrived            pgtype.Bool
-	Timestamp          string
-	ID_2               string
-	Name               pgtype.Text
-	Email              string
-	EmailVerified      pgtype.Timestamp
-	Image              pgtype.Text
-	Role               string
-	StudentEmail       string
-	StudentName_2      string
-	ClassroomId        string
-	Status_2           Status
-	ID_3               int32
-	ID_4               string
-	RoomNumber         string
-	TeacherName        string
-	TeacherId          pgtype.Text
-	Comment            pgtype.Text
-	IsFlex             pgtype.Bool
+	Request Request
 }
 
 func (q *Queries) StudentRequestsQuery(ctx context.Context) ([]StudentRequestsQueryRow, error) {
@@ -134,34 +163,17 @@ func (q *Queries) StudentRequestsQuery(ctx context.Context) ([]StudentRequestsQu
 	for rows.Next() {
 		var i StudentRequestsQueryRow
 		if err := rows.Scan(
-			&i.ID,
-			&i.StudentId,
-			&i.StudentName,
-			&i.NewTeacher,
-			&i.NewTeacherName,
-			&i.CurrentTeacher,
-			&i.CurrentTeacherName,
-			&i.DateRequested,
-			&i.Status,
-			&i.Arrived,
-			&i.Timestamp,
-			&i.ID_2,
-			&i.Name,
-			&i.Email,
-			&i.EmailVerified,
-			&i.Image,
-			&i.Role,
-			&i.StudentEmail,
-			&i.StudentName_2,
-			&i.ClassroomId,
-			&i.Status_2,
-			&i.ID_3,
-			&i.ID_4,
-			&i.RoomNumber,
-			&i.TeacherName,
-			&i.TeacherId,
-			&i.Comment,
-			&i.IsFlex,
+			&i.Request.ID,
+			&i.Request.StudentId,
+			&i.Request.StudentName,
+			&i.Request.NewTeacher,
+			&i.Request.NewTeacherName,
+			&i.Request.CurrentTeacher,
+			&i.Request.CurrentTeacherName,
+			&i.Request.DateRequested,
+			&i.Request.Status,
+			&i.Request.Arrived,
+			&i.Request.Timestamp,
 		); err != nil {
 			return nil, err
 		}
@@ -173,32 +185,52 @@ func (q *Queries) StudentRequestsQuery(ctx context.Context) ([]StudentRequestsQu
 	return items, nil
 }
 
+const updateRequest = `-- name: UpdateRequest :exec
+UPDATE "requests"
+SET "status" = $2
+WHERE "id" = $1
+`
+
+type UpdateRequestParams struct {
+	ID     int32
+	Status RequestStatus
+}
+
+func (q *Queries) UpdateRequest(ctx context.Context, arg UpdateRequestParams) error {
+	_, err := q.db.Exec(ctx, updateRequest, arg.ID, arg.Status)
+	return err
+}
+
 const userRequestQuery = `-- name: UserRequestQuery :many
-SELECT id, "studentId", "studentName", "newTeacher", "newTeacherName", "currentTeacher", "currentTeacherName", "dateRequested", status, arrived, timestamp FROM "requests"
+SELECT requests.id, requests."studentId", requests."studentName", requests."newTeacher", requests."newTeacherName", requests."currentTeacher", requests."currentTeacherName", requests."dateRequested", requests.status, requests.arrived, requests.timestamp FROM "requests"
 WHERE "studentId" = $1 OR "teacherId" = $1 OR "currentTeacher" = $1
 `
 
-func (q *Queries) UserRequestQuery(ctx context.Context, studentid string) ([]Request, error) {
+type UserRequestQueryRow struct {
+	Request Request
+}
+
+func (q *Queries) UserRequestQuery(ctx context.Context, studentid string) ([]UserRequestQueryRow, error) {
 	rows, err := q.db.Query(ctx, userRequestQuery, studentid)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Request
+	var items []UserRequestQueryRow
 	for rows.Next() {
-		var i Request
+		var i UserRequestQueryRow
 		if err := rows.Scan(
-			&i.ID,
-			&i.StudentId,
-			&i.StudentName,
-			&i.NewTeacher,
-			&i.NewTeacherName,
-			&i.CurrentTeacher,
-			&i.CurrentTeacherName,
-			&i.DateRequested,
-			&i.Status,
-			&i.Arrived,
-			&i.Timestamp,
+			&i.Request.ID,
+			&i.Request.StudentId,
+			&i.Request.StudentName,
+			&i.Request.NewTeacher,
+			&i.Request.NewTeacherName,
+			&i.Request.CurrentTeacher,
+			&i.Request.CurrentTeacherName,
+			&i.Request.DateRequested,
+			&i.Request.Status,
+			&i.Request.Arrived,
+			&i.Request.Timestamp,
 		); err != nil {
 			return nil, err
 		}

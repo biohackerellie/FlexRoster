@@ -6,8 +6,8 @@ import (
 
 	config "api/internal/config"
 	"api/internal/core/domain/classroom"
+	"api/internal/lib/helpers"
 	"github.com/jackc/pgx/v5/pgtype"
-
 	"go.uber.org/zap"
 )
 
@@ -107,7 +107,7 @@ func (s *ClassroomDBService) TeacherAvailableToday(ctx context.Context, teacherI
 	return available, nil
 }
 
-func (s *ClassroomDBService) GetRoomById(ctx context.Context, id string) (*classroom.ClassroomWithAvailable, error) {
+func (s *ClassroomDBService) GetRoomByTeacherId(ctx context.Context, id string) (*classroom.ClassroomWithAvailable, error) {
 	res, err := s.q.RoomByIdQuery(ctx, id)
 	if err != nil {
 		return nil, err
@@ -121,4 +121,75 @@ func (s *ClassroomDBService) GetRoomById(ctx context.Context, id string) (*class
 		},
 		Available: res.Available,
 	}, nil
+}
+
+func (s *ClassroomDBService) RoomsWithRosterCount(ctx context.Context) ([]*classroom.ClassroomWithCount, error) {
+	res, err := s.q.ClassroomsWithRosterCount(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*classroom.ClassroomWithCount, len(res))
+	for i, r := range res {
+		mappedResponse := &classroom.ClassroomWithCount{
+			Classroom: classroom.Classroom{
+				ID:          r.ID,
+				RoomNumber:  r.RoomNumber,
+				TeacherName: r.TeacherName,
+				TeacherId:   r.TeacherId.String,
+				Comment:     r.Comment.String,
+				IsFlex:      r.IsFlex.Bool,
+			},
+			Count: r.Count,
+		}
+		result[i] = mappedResponse
+	}
+	return result, nil
+}
+
+func (s *ClassroomDBService) ClassroomSchedule(ctx context.Context, classroomid string) ([]*classroom.Availability, error) {
+	res, err := s.q.ClassroomScheduleQuery(ctx, classroomid)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*classroom.Availability, len(res))
+	for i, r := range res {
+		mappedResponse := &classroom.Availability{
+			ID:          r.Availability.ID,
+			ClassroomId: r.Availability.ClassroomId,
+			Date:        r.Availability.Date.Time,
+			Available:   r.Availability.Available,
+			TeacherId:   r.Availability.TeacherId.String,
+		}
+		result[i] = mappedResponse
+	}
+	return result, nil
+}
+
+func (s *ClassroomDBService) CreateComment(ctx context.Context, teacherId string, comment string) error {
+	ID := helpers.StringToPGText(teacherId)
+	Comment := helpers.StringToPGText(comment)
+	args := CreateCommentParams{
+		TeacherId: ID,
+		Comment:   Comment,
+	}
+	err := s.q.CreateComment(ctx, args)
+	return err
+}
+
+func (s *ClassroomDBService) DeleteComment(ctx context.Context, teacherId string) error {
+	ID := helpers.StringToPGText(teacherId)
+	err := s.q.DeleteComment(ctx, ID)
+	return err
+}
+
+func (s *ClassroomDBService) DeleteAvailability(ctx context.Context, teacherId string, date time.Time) error {
+	ID := helpers.StringToPGText(teacherId)
+	DATE := pgtype.Date{}
+	DATE.Time = date
+	args := DeleteAvailabilityParams{
+		TeacherId: ID,
+		Date:      DATE,
+	}
+	err := s.q.DeleteAvailability(ctx, args)
+	return err
 }

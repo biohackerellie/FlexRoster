@@ -77,10 +77,10 @@ func (q *Queries) GetUser(ctx context.Context, id string) (GetUserRow, error) {
 	return i, err
 }
 
-const userRosterQuery = `-- name: UserRosterQuery :many
-SELECT "user".id, name, email, "emailVerified", image, role, "studentEmail", "studentName", "classroomId", status, students.id, classrooms.id, "roomNumber", "teacherName", "teacherId", comment, "isFlex" FROM "user"
-JOIN "students" ON "students"."studentEmail" = "user"."email"
-JOIN "classrooms" ON "classrooms"."id" = "students"."classroomId"
+const userRosterQuery = `-- name: UserRosterQuery :one
+SELECT "user".id, name, email, "emailVerified", image, role, "studentEmail", "studentName", "classroomId", status, s.id, c.id, "roomNumber", "teacherName", "teacherId", comment, "isFlex" FROM "user"
+JOIN "students" s ON s."studentEmail" = "user"."email"
+JOIN "classrooms" c ON c."id" = s."classroomId"
 WHERE "user"."id" = $1
 `
 
@@ -104,40 +104,27 @@ type UserRosterQueryRow struct {
 	IsFlex        pgtype.Bool
 }
 
-func (q *Queries) UserRosterQuery(ctx context.Context, id string) ([]UserRosterQueryRow, error) {
-	rows, err := q.db.Query(ctx, userRosterQuery, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []UserRosterQueryRow
-	for rows.Next() {
-		var i UserRosterQueryRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Name,
-			&i.Email,
-			&i.EmailVerified,
-			&i.Image,
-			&i.Role,
-			&i.StudentEmail,
-			&i.StudentName,
-			&i.ClassroomId,
-			&i.Status,
-			&i.ID_2,
-			&i.ID_3,
-			&i.RoomNumber,
-			&i.TeacherName,
-			&i.TeacherId,
-			&i.Comment,
-			&i.IsFlex,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
+func (q *Queries) UserRosterQuery(ctx context.Context, id string) (UserRosterQueryRow, error) {
+	row := q.db.QueryRow(ctx, userRosterQuery, id)
+	var i UserRosterQueryRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.EmailVerified,
+		&i.Image,
+		&i.Role,
+		&i.StudentEmail,
+		&i.StudentName,
+		&i.ClassroomId,
+		&i.Status,
+		&i.ID_2,
+		&i.ID_3,
+		&i.RoomNumber,
+		&i.TeacherName,
+		&i.TeacherId,
+		&i.Comment,
+		&i.IsFlex,
+	)
+	return i, err
 }

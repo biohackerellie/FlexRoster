@@ -116,14 +116,31 @@ func (q *Queries) AllStudentsMap(ctx context.Context) ([]AllStudentsMapRow, erro
 	return items, nil
 }
 
+const deleteStudent = `-- name: DeleteStudent :exec
+DELETE FROM "students" WHERE "studentEmail" = $1
+`
+
+func (q *Queries) DeleteStudent(ctx context.Context, studentemail string) error {
+	_, err := q.db.Exec(ctx, deleteStudent, studentemail)
+	return err
+}
+
+type NewStudentParams struct {
+	StudentEmail string
+	StudentName  string
+	Status       Status
+	ClassroomId  string
+}
+
 const rosterByClassroomId = `-- name: RosterByClassroomId :many
 SELECT
-  s."id" AS "rosterId",
+  s."id" AS "studentId",
   s."studentEmail" AS "studentEmail",
   c."id" AS "classroomId",
   c."roomNumber" AS "roomNumber",
   c."teacherName" AS "teacherName",
   c."teacherId" AS "teacherId",
+  c."comment" AS "comment",
   COALESCE(a."available", FALSE) AS "available" 
 FROM "students" s
 JOIN "classrooms" c ON s."classroomId" = c."id"
@@ -132,12 +149,13 @@ WHERE s."classroomId" = $1
 `
 
 type RosterByClassroomIdRow struct {
-	RosterId     int32
+	StudentId    int32
 	StudentEmail string
 	ClassroomId  string
 	RoomNumber   string
 	TeacherName  string
 	TeacherId    pgtype.Text
+	Comment      pgtype.Text
 	Available    bool
 }
 
@@ -151,12 +169,13 @@ func (q *Queries) RosterByClassroomId(ctx context.Context, classroomid string) (
 	for rows.Next() {
 		var i RosterByClassroomIdRow
 		if err := rows.Scan(
-			&i.RosterId,
+			&i.StudentId,
 			&i.StudentEmail,
 			&i.ClassroomId,
 			&i.RoomNumber,
 			&i.TeacherName,
 			&i.TeacherId,
+			&i.Comment,
 			&i.Available,
 		); err != nil {
 			return nil, err
@@ -275,4 +294,21 @@ func (q *Queries) RosterQuery(ctx context.Context) ([]Student, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateRoster = `-- name: UpdateRoster :exec
+UPDATE "students"
+SET "classroomId" = $1, "status" = $2
+WHERE "studentEmail" = $3
+`
+
+type UpdateRosterParams struct {
+	ClassroomId  string
+	Status       Status
+	StudentEmail string
+}
+
+func (q *Queries) UpdateRoster(ctx context.Context, arg UpdateRosterParams) error {
+	_, err := q.db.Exec(ctx, updateRoster, arg.ClassroomId, arg.Status, arg.StudentEmail)
+	return err
 }

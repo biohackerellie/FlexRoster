@@ -93,6 +93,40 @@ func (q *Queries) ClassroomQuery(ctx context.Context) ([]ClassroomQueryRow, erro
 	return items, nil
 }
 
+const classroomScheduleQuery = `-- name: ClassroomScheduleQuery :many
+SELECT availability.id, availability."classroomId", availability.date, availability.available, availability."teacherId" FROM "availability" WHERE availability."classroomId" = $1 OR availability."teacherId" = $1
+`
+
+type ClassroomScheduleQueryRow struct {
+	Availability Availability
+}
+
+func (q *Queries) ClassroomScheduleQuery(ctx context.Context, classroomid string) ([]ClassroomScheduleQueryRow, error) {
+	rows, err := q.db.Query(ctx, classroomScheduleQuery, classroomid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ClassroomScheduleQueryRow
+	for rows.Next() {
+		var i ClassroomScheduleQueryRow
+		if err := rows.Scan(
+			&i.Availability.ID,
+			&i.Availability.ClassroomId,
+			&i.Availability.Date,
+			&i.Availability.Available,
+			&i.Availability.TeacherId,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const classroomsWithRosterCount = `-- name: ClassroomsWithRosterCount :many
 SELECT c.id, c."roomNumber", c."teacherName", c."teacherId", c.comment, c."isFlex", (
   SELECT COUNT(*)
@@ -151,6 +185,54 @@ func (q *Queries) CountRosterByClassroomId(ctx context.Context, classroomid stri
 	var count int64
 	err := row.Scan(&count)
 	return count, err
+}
+
+type CreateAvailabilityParams struct {
+	ID          string
+	TeacherId   pgtype.Text
+	ClassroomId string
+	Date        pgtype.Date
+	Available   bool
+}
+
+const createComment = `-- name: CreateComment :exec
+UPDATE "classrooms" SET "comment" = $2
+WHERE "teacherId" = $1
+`
+
+type CreateCommentParams struct {
+	TeacherId pgtype.Text
+	Comment   pgtype.Text
+}
+
+func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) error {
+	_, err := q.db.Exec(ctx, createComment, arg.TeacherId, arg.Comment)
+	return err
+}
+
+const deleteAvailability = `-- name: DeleteAvailability :exec
+DELETE FROM "availability"
+WHERE "teacherId" = $1 AND "date" = $2
+`
+
+type DeleteAvailabilityParams struct {
+	TeacherId pgtype.Text
+	Date      pgtype.Date
+}
+
+func (q *Queries) DeleteAvailability(ctx context.Context, arg DeleteAvailabilityParams) error {
+	_, err := q.db.Exec(ctx, deleteAvailability, arg.TeacherId, arg.Date)
+	return err
+}
+
+const deleteComment = `-- name: DeleteComment :exec
+UPDATE "classrooms" SET "comment" = NULL
+WHERE "teacherId" = $1
+`
+
+func (q *Queries) DeleteComment(ctx context.Context, teacherid pgtype.Text) error {
+	_, err := q.db.Exec(ctx, deleteComment, teacherid)
+	return err
 }
 
 const roomByIdQuery = `-- name: RoomByIdQuery :one
