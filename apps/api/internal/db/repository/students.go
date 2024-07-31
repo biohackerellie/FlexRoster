@@ -149,3 +149,12 @@ func (s *StudentDBService) UpdateStudentStatus(ctx context.Context, status Statu
 	})
 	return err
 }
+
+func (s *StudentDBService) UpdateStudentRoster(ctx context.Context, classroomId string, status Status, studentEmail string) error {
+	err := s.q.UpdateRoster(ctx, UpdateRosterParams{
+		ClassroomId:  classroomId,
+		Status:       status,
+		StudentEmail: studentEmail,
+	})
+	return err
+}

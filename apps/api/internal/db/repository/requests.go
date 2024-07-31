@@ -6,8 +6,6 @@ import (
 
 	config "api/internal/config"
 	"api/internal/core/domain/request"
-	"api/internal/core/domain/student"
-	"api/internal/lib/errors"
 
 	"go.uber.org/zap"
 
@@ -94,32 +92,11 @@ func (s *RequestDBService) GetAllRequests(ctx context.Context) ([]*request.Reque
 	return response, nil
 }
 
-func (s *RequestDBService) NewRequest(ctx context.Context, student *student.Student, status Status, requestStatus RequestStatus, dateRequested time.Time, newTeacher string, newTeacherName string, currentTeacher string, currentTeacherName string) error {
-	tx, err := s.db.Begin(ctx)
-	if err != nil {
-		return err
-	}
-	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
-	qtx := s.q.WithTx(tx)
-
-	parsedRequestedDate := dateRequested.Day()
-
-	if parsedRequestedDate == time.Now().Day() {
-		requestStatus = "transferredN"
-
-		err = qtx.UpdateRoster(ctx, UpdateRosterParams{
-			ClassroomId:  student.ClassroomId,
-			Status:       status,
-			StudentEmail: student.StudentEmail,
-		})
-		if err != nil {
-			return err
-		}
-	}
-	err = qtx.NewRequest(ctx, NewRequestParams{
+func (s *RequestDBService) NewRequest(ctx context.Context, studentName string, studentID string, requestStatus RequestStatus, dateRequested time.Time, newTeacher string, newTeacherName string, currentTeacher string, currentTeacherName string) error {
+	err := s.q.NewRequest(ctx, NewRequestParams{
 		Status:             requestStatus,
-		StudentName:        student.StudentName,
-		StudentId:          student.StudentEmail,
+		StudentName:        studentName,
+		StudentId:          studentID,
 		DateRequested:      pgtype.Date{Time: dateRequested},
 		CurrentTeacher:     currentTeacher,
 		CurrentTeacherName: currentTeacherName,
@@ -127,11 +104,7 @@ func (s *RequestDBService) NewRequest(ctx context.Context, student *student.Stud
 		NewTeacherName:     newTeacherName,
 		Arrived:            pgtype.Bool{Bool: false},
 	})
-	if err != nil {
-		return err
-	}
-
-	return tx.Commit(ctx)
+	return err
 }
 
 func (s *RequestDBService) UpdateRequest(ctx context.Context, id int32, status RequestStatus) error {
