@@ -312,3 +312,19 @@ func (q *Queries) UpdateRoster(ctx context.Context, arg UpdateRosterParams) erro
 	_, err := q.db.Exec(ctx, updateRoster, arg.ClassroomId, arg.Status, arg.StudentEmail)
 	return err
 }
+
+const updateStudentStatus = `-- name: UpdateStudentStatus :exec
+UPDATE "students"
+SET "status" = $1
+WHERE "studentEmail" = $2
+`
+
+type UpdateStudentStatusParams struct {
+	Status       Status
+	StudentEmail string
+}
+
+func (q *Queries) UpdateStudentStatus(ctx context.Context, arg UpdateStudentStatusParams) error {
+	_, err := q.db.Exec(ctx, updateStudentStatus, arg.Status, arg.StudentEmail)
+	return err
+}

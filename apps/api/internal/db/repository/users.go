@@ -5,7 +5,6 @@ import (
 
 	config "api/internal/config"
 	"api/internal/core/domain/user"
-	"github.com/jackc/pgx/v5/pgtype"
 
 	"go.uber.org/zap"
 )

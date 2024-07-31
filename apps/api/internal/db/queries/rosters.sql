@@ -48,3 +48,8 @@ DELETE FROM "students" WHERE "studentEmail" = $1;
 -- name: NewStudent :copyfrom
 INSERT INTO "students" ("studentEmail", "studentName", "status", "classroomId")
 VALUES ($1, $2, $3, $4);
+
+-- name: UpdateStudentStatus :exec
+UPDATE "students"
+SET "status" = $1
+WHERE "studentEmail" = $2;

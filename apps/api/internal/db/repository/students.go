@@ -5,6 +5,7 @@ import (
 
 	config "api/internal/config"
 	"api/internal/core/domain/student"
+
 	"github.com/jackc/pgx/v5/pgtype"
 
 	"go.uber.org/zap"
@@ -63,7 +64,7 @@ func (s *StudentDBService) RosterByClassroomId(ctx context.Context, classroomId 
 		mappedRes := &student.StudentWithClassroom{
 			Student: student.Student{
 				StudentEmail: r.StudentEmail,
-				ID:           r.RosterId,
+				ID:           r.StudentId,
 			},
 			Classroom: student.Classroom{
 				ClassroomId: r.ClassroomId,
@@ -139,4 +140,12 @@ func (s *StudentDBService) GetAllStudents(ctx context.Context) ([]*student.Stude
 		response[i] = mappedResponse
 	}
 	return response, nil
+}
+
+func (s *StudentDBService) UpdateStudentStatus(ctx context.Context, status Status, studentEmail string) error {
+	err := s.q.UpdateStudentStatus(ctx, UpdateStudentStatusParams{
+		Status:       status,
+		StudentEmail: studentEmail,
+	})
+	return err
 }

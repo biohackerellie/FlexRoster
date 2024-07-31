@@ -193,3 +193,26 @@ func (s *ClassroomDBService) DeleteAvailability(ctx context.Context, teacherId s
 	err := s.q.DeleteAvailability(ctx, args)
 	return err
 }
+
+type CreateAvailabilityArgs struct {
+	ID          string
+	TeacherID   string
+	ClassroomId string
+	Date        time.Time
+	Available   bool
+}
+
+func (s *ClassroomDBService) CreateAvailability(ctx context.Context, args []CreateAvailabilityArgs) error {
+	var availability []CreateAvailabilityParams
+	for _, arg := range args {
+		availability = append(availability, CreateAvailabilityParams{
+			ID:          arg.ID,
+			TeacherId:   helpers.StringToPGText(arg.TeacherID),
+			ClassroomId: arg.ClassroomId,
+			Date:        pgtype.Date{Time: arg.Date},
+			Available:   arg.Available,
+		})
+	}
+	_, err := s.q.CreateAvailability(ctx, availability)
+	return err
+}
