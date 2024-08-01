@@ -83,10 +83,10 @@ func (a *Adapter) SetAvailability(teacherId string, classroomId string, dates []
 			ExistingDates = append(ExistingDates, date.Date)
 		}
 	}
-
+	availability := make([]*classroom.Availability, 0)
 	for _, date := range dates {
 		if !arrays.EZContains(ExistingDates, date) {
-			go a.classroomRepo.CreateAvailability(context.Background(), &classroom.Availability{
+			availability = append(availability, &classroom.Availability{
 				TeacherId:   teacherId,
 				ClassroomId: classroomId,
 				Date:        date,
@@ -94,6 +94,13 @@ func (a *Adapter) SetAvailability(teacherId string, classroomId string, dates []
 				Available:   true,
 			})
 		}
+	}
+	if len(availability) > 0 {
+		err = a.classroomRepo.CreateAvailability(context.Background(), availability)
+		if err != nil {
+			return fmt.Errorf("error creating availability: %w", err)
+		}
+
 	}
 	return nil
 }

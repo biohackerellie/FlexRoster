@@ -9,9 +9,9 @@ import (
 )
 
 type Env struct {
-	User                    string `env:"EMAIL_USER"`
-	Pass                    string `env:"EMAIL_PASSWORD"`
-	APIKey                  string `env:"API_KEY"`
+	SERVER_HOST string `env:"SERVER_HOST"`
+	SERVER_PORT string `env:"SERVER_PORT"`
+
 	DSN                     string `env:"DSN"`
 	REDIS_HOST1             string `env:"REDIS_HOST1"`
 	REDIS_HOST2             string `env:"REDIS_HOST2"`
@@ -24,12 +24,9 @@ type Env struct {
 }
 
 func loadEnv() {
-	env := os.Getenv("GO_ENV")
-	if env == "development" {
-		err := godotenv.Load("../../.env")
-		if err != nil {
-			fmt.Println("Error loading .env file")
-		}
+	err := godotenv.Load(".env")
+	if err != nil {
+		fmt.Println("Error loading .env file")
 	}
 }
 

@@ -49,20 +49,22 @@ SELECT
   c."teacherId", 
   c."comment",
   c."isFlex",
-  COALESCE(a."available", FALSE) AS "available" 
+  a."availableDates"  
 FROM "classrooms" c
-LEFT JOIN
-  "availability" a ON c."id" = a."classroomId" AND a."date" = CURRENT_DATE
+LEFT JOIN(
+select av."classroomId", array_agg((av)) as "availableDates" from "availability" av
+group by av."classroomId"
+) a ON c."id" = a."classroomId"
 `
 
 type ClassroomQueryRow struct {
-	ID          string
-	RoomNumber  string
-	TeacherName string
-	TeacherId   pgtype.Text
-	Comment     pgtype.Text
-	IsFlex      pgtype.Bool
-	Available   bool
+	ID             string
+	RoomNumber     string
+	TeacherName    string
+	TeacherId      pgtype.Text
+	Comment        pgtype.Text
+	IsFlex         pgtype.Bool
+	AvailableDates interface{}
 }
 
 func (q *Queries) ClassroomQuery(ctx context.Context) ([]ClassroomQueryRow, error) {
@@ -81,7 +83,7 @@ func (q *Queries) ClassroomQuery(ctx context.Context) ([]ClassroomQueryRow, erro
 			&i.TeacherId,
 			&i.Comment,
 			&i.IsFlex,
-			&i.Available,
+			&i.AvailableDates,
 		); err != nil {
 			return nil, err
 		}

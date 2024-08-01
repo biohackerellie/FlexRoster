@@ -17,12 +17,12 @@ SELECT
   c."teacherId", 
   c."comment",
   c."isFlex",
-  COALESCE(a."available", FALSE) AS "available" 
+  a."availableDates"  
 FROM "classrooms" c
-LEFT JOIN
-  "availability" a ON c."id" = a."classroomId" AND a."date" = CURRENT_DATE;
-  
-
+LEFT JOIN(
+select av."classroomId", array_agg((av)) as "availableDates" from "availability" av
+group by av."classroomId"
+) a ON c."id" = a."classroomId";
 
 
 -- name: TeacherAvailableToday :one

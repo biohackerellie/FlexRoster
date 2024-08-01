@@ -13,7 +13,7 @@ import (
 
 type ClassroomDBService interface {
 	GetClassrooms(ctx context.Context) ([]*classroom.Classroom, error)
-	GetAvailability(ctx context.Context) []*classroom.Availability
+	GetAvailability(ctx context.Context) ([]*classroom.Availability, error)
 
 	// Creates an array of all the classrooms with each rooms available dates
 	AggregateClassroomData(ctx context.Context) ([]*classroom.ClassroomWithAvailability, error)

@@ -3,13 +3,13 @@ package classroom
 import "time"
 
 type Classroom struct {
-	ID          string `json:"id"`
-	RoomNumber  string `json:"roomNumber"`
-	TeacherName string `json:"teacherName"`
-	TeacherId   string `json:"teacherId"`
-	Comment     string `json:"comment"`
-
-	IsFlex bool `json:"isFlex"`
+	ID             string      `json:"id"`
+	RoomNumber     string      `json:"roomNumber"`
+	TeacherName    string      `json:"teacherName"`
+	TeacherId      string      `json:"teacherId"`
+	Comment        string      `json:"comment"`
+	AvailableDates interface{} `json:"availableDates"`
+	IsFlex         bool        `json:"isFlex"`
 }
 
 type Availability struct {
@@ -39,4 +39,9 @@ type ClassroomWithAvailable struct {
 type ClassroomWithCount struct {
 	Classroom
 	Count int64 `json:"count"`
+}
+
+type GetClassesResponse struct {
+	err     error
+	classes []*ClassroomWithAvailability
 }

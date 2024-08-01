@@ -2,11 +2,12 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"time"
 
-	config "api/internal/config"
 	"api/internal/core/domain/classroom"
 	"api/internal/lib/helpers"
+
 	"github.com/jackc/pgx/v5/pgtype"
 	"go.uber.org/zap"
 )
@@ -15,7 +16,6 @@ type ClassroomDBService struct {
 	q      *Queries
 	db     DBTXWrapper
 	logger *zap.SugaredLogger
-	config *config.Env
 }
 
 func NewClassroomDBService(db DBTXWrapper) *ClassroomDBService {
@@ -37,15 +37,17 @@ func (s *ClassroomDBService) GetClassrooms(ctx context.Context) ([]*classroom.Cl
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println(res)
 	response := make([]*classroom.Classroom, len(res))
 	for i, r := range res {
 		mappedResponse := &classroom.Classroom{
-			ID:          r.ID,
-			RoomNumber:  r.RoomNumber,
-			TeacherName: r.TeacherName,
-			TeacherId:   r.TeacherId.String,
-			Comment:     r.Comment.String,
-			IsFlex:      r.IsFlex.Bool,
+			ID:             r.ID,
+			RoomNumber:     r.RoomNumber,
+			TeacherName:    r.TeacherName,
+			TeacherId:      r.TeacherId.String,
+			Comment:        r.Comment.String,
+			IsFlex:         r.IsFlex.Bool,
+			AvailableDates: r.AvailableDates,
 		}
 		response[i] = mappedResponse
 	}
@@ -56,6 +58,13 @@ func (s *ClassroomDBService) GetAvailability(ctx context.Context) ([]*classroom.
 	res, err := s.q.AvailabilityQuery(ctx)
 	if err != nil {
 		return nil, err
+	}
+	if len(res) == 0 {
+		return []*classroom.Availability{
+			{
+				Date: time.Now(),
+			},
+		}, nil
 	}
 	response := make([]*classroom.Availability, len(res))
 	for i, r := range res {
@@ -80,6 +89,7 @@ func (s *ClassroomDBService) AggregateClassroomData(ctx context.Context) ([]*cla
 	if err != nil {
 		return nil, err
 	}
+
 	result := make([]*classroom.ClassroomWithAvailability, len(classrooms))
 
 	for i, r := range classrooms {

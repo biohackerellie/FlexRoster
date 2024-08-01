@@ -13,7 +13,7 @@ type Adapter struct {
 	cache         *redis.RClient
 }
 
-func NewAdapter(classroomRepo ports.ClassroomDBService, log *zap.SugaredLogger) *Adapter {
+func NewAdapter(classroomRepo ports.ClassroomDBService) *Adapter {
 	return &Adapter{
 		classroomRepo: classroomRepo,
 		log:           zap.NewNop().Sugar(),
