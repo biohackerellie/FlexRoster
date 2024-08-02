@@ -69,7 +69,7 @@
     "@types/node": "^20.14.13",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
-    "autoprefixer": "^10.4.19",
+    "autoprefixer": "^10.4.20",
     "dotenv-cli": "^7.4.2",
     "eslint": "catalog:",
     "jiti": "^1.21.6",
