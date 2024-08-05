@@ -85,19 +85,11 @@ func (s *ClassroomDBService) AggregateClassroomData(ctx context.Context) ([]*cla
 	if err != nil {
 		return nil, err
 	}
-	dates, err := s.GetAvailability(ctx)
-	if err != nil {
-		return nil, err
-	}
 
 	result := make([]*classroom.ClassroomWithAvailability, len(classrooms))
 
 	for i, r := range classrooms {
-		var availableDates []time.Time
-		for _, d := range dates {
-			if d.ClassroomId == r.ID {
-				availableDates = append(availableDates, d.Date)
-			}
+		for _, d := range r.AvailableDates {
 		}
 		result[i] = &classroom.ClassroomWithAvailability{
 			Classroom:      *r,

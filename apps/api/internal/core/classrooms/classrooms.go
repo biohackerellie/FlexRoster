@@ -24,7 +24,7 @@ func (a *Adapter) GetClasses(id string) ([]*classroom.ClassroomWithAvailability,
 			return nil, fmt.Errorf("error unmarshalling cached data: %w", err)
 		}
 	} else {
-		classes, err := a.classroomRepo.AggregateClassroomData(context.Background())
+		classes, err := a.classroomRepo.GetClassrooms(context.Background())
 		if err != nil {
 			return nil, fmt.Errorf("error getting classrooms: %w", err)
 		}
