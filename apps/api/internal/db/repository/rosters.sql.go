@@ -19,23 +19,23 @@ WHERE "students"."id" = $1
 `
 
 type AllStudentDetailsRow struct {
-	StudentEmail  string
-	StudentName   string
-	ClassroomId   string
-	Status        Status
-	ID            int32
-	ID_2          pgtype.Text
-	Name          pgtype.Text
-	Email         pgtype.Text
-	EmailVerified pgtype.Timestamp
-	Image         pgtype.Text
-	Role          pgtype.Text
-	ID_3          pgtype.Text
-	RoomNumber    pgtype.Text
-	TeacherName   pgtype.Text
-	TeacherId     pgtype.Text
-	Comment       pgtype.Text
-	IsFlex        pgtype.Bool
+	StudentEmail  string           `db:"studentEmail" json:"studentEmail"`
+	StudentName   string           `db:"studentName" json:"studentName"`
+	ClassroomId   string           `db:"classroomId" json:"classroomId"`
+	Status        Status           `db:"status" json:"status"`
+	ID            int32            `db:"id" json:"id"`
+	ID_2          pgtype.Text      `db:"id_2" json:"id_2"`
+	Name          pgtype.Text      `db:"name" json:"name"`
+	Email         pgtype.Text      `db:"email" json:"email"`
+	EmailVerified pgtype.Timestamp `db:"emailVerified" json:"emailVerified"`
+	Image         pgtype.Text      `db:"image" json:"image"`
+	Role          pgtype.Text      `db:"role" json:"role"`
+	ID_3          pgtype.Text      `db:"id_3" json:"id_3"`
+	RoomNumber    pgtype.Text      `db:"roomNumber" json:"roomNumber"`
+	TeacherName   pgtype.Text      `db:"teacherName" json:"teacherName"`
+	TeacherId     pgtype.Text      `db:"teacherId" json:"teacherId"`
+	Comment       pgtype.Text      `db:"comment" json:"comment"`
+	IsFlex        pgtype.Bool      `db:"isFlex" json:"isFlex"`
 }
 
 func (q *Queries) AllStudentDetails(ctx context.Context, id int32) ([]AllStudentDetailsRow, error) {
@@ -83,11 +83,11 @@ JOIN "classrooms" ON "students"."classroomId" = "classrooms"."id"
 `
 
 type AllStudentsMapRow struct {
-	ID           int32
-	StudentEmail string
-	StudentName  string
-	Status       Status
-	TeacherName  string
+	ID           int32  `db:"id" json:"id"`
+	StudentEmail string `db:"studentEmail" json:"studentEmail"`
+	StudentName  string `db:"studentName" json:"studentName"`
+	Status       Status `db:"status" json:"status"`
+	TeacherName  string `db:"teacherName" json:"teacherName"`
 }
 
 func (q *Queries) AllStudentsMap(ctx context.Context) ([]AllStudentsMapRow, error) {
@@ -126,10 +126,10 @@ func (q *Queries) DeleteStudent(ctx context.Context, studentemail string) error 
 }
 
 type NewStudentParams struct {
-	StudentEmail string
-	StudentName  string
-	Status       Status
-	ClassroomId  string
+	StudentEmail string `db:"studentEmail" json:"studentEmail"`
+	StudentName  string `db:"studentName" json:"studentName"`
+	Status       Status `db:"status" json:"status"`
+	ClassroomId  string `db:"classroomId" json:"classroomId"`
 }
 
 const rosterByClassroomId = `-- name: RosterByClassroomId :many
@@ -149,14 +149,14 @@ WHERE s."classroomId" = $1
 `
 
 type RosterByClassroomIdRow struct {
-	StudentId    int32
-	StudentEmail string
-	ClassroomId  string
-	RoomNumber   string
-	TeacherName  string
-	TeacherId    pgtype.Text
-	Comment      pgtype.Text
-	Available    bool
+	StudentId    int32       `db:"studentId" json:"studentId"`
+	StudentEmail string      `db:"studentEmail" json:"studentEmail"`
+	ClassroomId  string      `db:"classroomId" json:"classroomId"`
+	RoomNumber   string      `db:"roomNumber" json:"roomNumber"`
+	TeacherName  string      `db:"teacherName" json:"teacherName"`
+	TeacherId    pgtype.Text `db:"teacherId" json:"teacherId"`
+	Comment      pgtype.Text `db:"comment" json:"comment"`
+	Available    bool        `db:"available" json:"available"`
 }
 
 func (q *Queries) RosterByClassroomId(ctx context.Context, classroomid string) ([]RosterByClassroomIdRow, error) {
@@ -227,14 +227,14 @@ WHERE "classrooms"."teacherId" = $1
 `
 
 type RosterByTeacherIdRow struct {
-	StudentEmail string
-	StudentName  string
-	Status       Status
-	StudentId    pgtype.Text
-	RoomNumber   string
-	TeacherName  string
-	ClassroomId  string
-	Comment      pgtype.Text
+	StudentEmail string      `db:"studentEmail" json:"studentEmail"`
+	StudentName  string      `db:"studentName" json:"studentName"`
+	Status       Status      `db:"status" json:"status"`
+	StudentId    pgtype.Text `db:"studentId" json:"studentId"`
+	RoomNumber   string      `db:"roomNumber" json:"roomNumber"`
+	TeacherName  string      `db:"teacherName" json:"teacherName"`
+	ClassroomId  string      `db:"classroomId" json:"classroomId"`
+	Comment      pgtype.Text `db:"comment" json:"comment"`
 }
 
 func (q *Queries) RosterByTeacherId(ctx context.Context, teacherid pgtype.Text) ([]RosterByTeacherIdRow, error) {
@@ -303,9 +303,9 @@ WHERE "studentEmail" = $3
 `
 
 type UpdateRosterParams struct {
-	ClassroomId  string
-	Status       Status
-	StudentEmail string
+	ClassroomId  string `db:"classroomId" json:"classroomId"`
+	Status       Status `db:"status" json:"status"`
+	StudentEmail string `db:"studentEmail" json:"studentEmail"`
 }
 
 func (q *Queries) UpdateRoster(ctx context.Context, arg UpdateRosterParams) error {
@@ -320,8 +320,8 @@ WHERE "studentEmail" = $2
 `
 
 type UpdateStudentStatusParams struct {
-	Status       Status
-	StudentEmail string
+	Status       Status `db:"status" json:"status"`
+	StudentEmail string `db:"studentEmail" json:"studentEmail"`
 }
 
 func (q *Queries) UpdateStudentStatus(ctx context.Context, arg UpdateStudentStatusParams) error {

@@ -18,18 +18,18 @@ WHERE "user"."id" = $1 LIMIT 1
 `
 
 type GetTeacherRow struct {
-	ID            string
-	Name          pgtype.Text
-	Email         string
-	EmailVerified pgtype.Timestamp
-	Image         pgtype.Text
-	Role          string
-	ID_2          pgtype.Text
-	RoomNumber    pgtype.Text
-	TeacherName   pgtype.Text
-	TeacherId     pgtype.Text
-	Comment       pgtype.Text
-	IsFlex        pgtype.Bool
+	ID            string           `db:"id" json:"id"`
+	Name          pgtype.Text      `db:"name" json:"name"`
+	Email         string           `db:"email" json:"email"`
+	EmailVerified pgtype.Timestamp `db:"emailVerified" json:"emailVerified"`
+	Image         pgtype.Text      `db:"image" json:"image"`
+	Role          string           `db:"role" json:"role"`
+	ID_2          pgtype.Text      `db:"id_2" json:"id_2"`
+	RoomNumber    pgtype.Text      `db:"roomNumber" json:"roomNumber"`
+	TeacherName   pgtype.Text      `db:"teacherName" json:"teacherName"`
+	TeacherId     pgtype.Text      `db:"teacherId" json:"teacherId"`
+	Comment       pgtype.Text      `db:"comment" json:"comment"`
+	IsFlex        pgtype.Bool      `db:"isFlex" json:"isFlex"`
 }
 
 func (q *Queries) GetTeacher(ctx context.Context, id string) (GetTeacherRow, error) {
@@ -59,10 +59,10 @@ WHERE "id" = $1 LIMIT 1
 `
 
 type GetUserRow struct {
-	ID    string
-	Name  pgtype.Text
-	Email string
-	Role  string
+	ID    string      `db:"id" json:"id"`
+	Name  pgtype.Text `db:"name" json:"name"`
+	Email string      `db:"email" json:"email"`
+	Role  string      `db:"role" json:"role"`
 }
 
 func (q *Queries) GetUser(ctx context.Context, id string) (GetUserRow, error) {
@@ -85,23 +85,23 @@ WHERE "user"."id" = $1
 `
 
 type UserRosterQueryRow struct {
-	ID            string
-	Name          pgtype.Text
-	Email         string
-	EmailVerified pgtype.Timestamp
-	Image         pgtype.Text
-	Role          string
-	StudentEmail  string
-	StudentName   string
-	ClassroomId   string
-	Status        Status
-	ID_2          int32
-	ID_3          string
-	RoomNumber    string
-	TeacherName   string
-	TeacherId     pgtype.Text
-	Comment       pgtype.Text
-	IsFlex        pgtype.Bool
+	ID            string           `db:"id" json:"id"`
+	Name          pgtype.Text      `db:"name" json:"name"`
+	Email         string           `db:"email" json:"email"`
+	EmailVerified pgtype.Timestamp `db:"emailVerified" json:"emailVerified"`
+	Image         pgtype.Text      `db:"image" json:"image"`
+	Role          string           `db:"role" json:"role"`
+	StudentEmail  string           `db:"studentEmail" json:"studentEmail"`
+	StudentName   string           `db:"studentName" json:"studentName"`
+	ClassroomId   string           `db:"classroomId" json:"classroomId"`
+	Status        Status           `db:"status" json:"status"`
+	ID_2          int32            `db:"id_2" json:"id_2"`
+	ID_3          string           `db:"id_3" json:"id_3"`
+	RoomNumber    string           `db:"roomNumber" json:"roomNumber"`
+	TeacherName   string           `db:"teacherName" json:"teacherName"`
+	TeacherId     pgtype.Text      `db:"teacherId" json:"teacherId"`
+	Comment       pgtype.Text      `db:"comment" json:"comment"`
+	IsFlex        pgtype.Bool      `db:"isFlex" json:"isFlex"`
 }
 
 func (q *Queries) UserRosterQuery(ctx context.Context, id string) (UserRosterQueryRow, error) {

@@ -3,13 +3,13 @@ package classroom
 import "time"
 
 type Classroom struct {
-	ID             string      `json:"id"`
-	RoomNumber     string      `json:"roomNumber"`
-	TeacherName    string      `json:"teacherName"`
-	TeacherId      string      `json:"teacherId"`
-	Comment        string      `json:"comment"`
-	AvailableDates interface{} `json:"availableDates"`
-	IsFlex         bool        `json:"isFlex"`
+	ID          string `json:"id"`
+	RoomNumber  string `json:"roomNumber"`
+	TeacherName string `json:"teacherName"`
+	TeacherId   string `json:"teacherId"`
+	Comment     string `json:"comment"`
+	Available   bool   `json:"available"`
+	IsFlex      bool   `json:"isFlex"`
 }
 
 type Availability struct {
@@ -20,7 +20,7 @@ type Availability struct {
 	Available   bool      `json:"available"`
 }
 
-type ClassroomWithAvailability struct {
+type ClassroomWithChatID struct {
 	ChatId string `json:"chatId"`
 	Classroom
 	AvailableDates []time.Time `json:"availableDates"`
@@ -33,7 +33,7 @@ type TodaysAvailability struct {
 
 type ClassroomWithAvailable struct {
 	Classroom
-	Available bool `json:"available"`
+	AvailableDates []time.Time `json:"availableDates"`
 }
 
 type ClassroomWithCount struct {
@@ -43,5 +43,5 @@ type ClassroomWithCount struct {
 
 type GetClassesResponse struct {
 	err     error
-	classes []*ClassroomWithAvailability
+	classes []*ClassroomWithChatID
 }

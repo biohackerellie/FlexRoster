@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	"fmt"
+	"sync"
 	"time"
 
 	"api/internal/core/domain/classroom"
@@ -32,25 +32,29 @@ func (s *ClassroomDBService) WithLogs(logger *zap.SugaredLogger) *ClassroomDBSer
 	return s
 }
 
-func (s *ClassroomDBService) GetClassrooms(ctx context.Context) ([]*classroom.Classroom, error) {
+func (s *ClassroomDBService) GetClassrooms(ctx context.Context) ([]*classroom.ClassroomWithAvailable, error) {
 	res, err := s.q.ClassroomQuery(ctx)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(res)
-	response := make([]*classroom.Classroom, len(res))
+	var wg sync.WaitGroup
+
+	response := make([]*classroom.ClassroomWithAvailable, len(res))
+	ch := make(chan *classroom.ClassroomWithAvailable, len(res))
 	for i, r := range res {
-		mappedResponse := &classroom.Classroom{
-			ID:             r.ID,
-			RoomNumber:     r.RoomNumber,
-			TeacherName:    r.TeacherName,
-			TeacherId:      r.TeacherId.String,
-			Comment:        r.Comment.String,
-			IsFlex:         r.IsFlex.Bool,
-			AvailableDates: r.AvailableDates,
-		}
-		response[i] = mappedResponse
+		wg.Add(1)
+		go func(r ClassroomQueryRow, i int) {
+			defer wg.Done()
+			s.mapClassroom(r, ch)
+		}(r, i)
 	}
+	for i := 0; i < len(res); i++ {
+		response[i] = <-ch
+	}
+	go func() {
+		wg.Wait()
+		close(ch)
+	}()
 	return response, nil
 }
 
@@ -58,13 +62,6 @@ func (s *ClassroomDBService) GetAvailability(ctx context.Context) ([]*classroom.
 	res, err := s.q.AvailabilityQuery(ctx)
 	if err != nil {
 		return nil, err
-	}
-	if len(res) == 0 {
-		return []*classroom.Availability{
-			{
-				Date: time.Now(),
-			},
-		}, nil
 	}
 	response := make([]*classroom.Availability, len(res))
 	for i, r := range res {
@@ -80,25 +77,6 @@ func (s *ClassroomDBService) GetAvailability(ctx context.Context) ([]*classroom.
 	return response, nil
 }
 
-func (s *ClassroomDBService) AggregateClassroomData(ctx context.Context) ([]*classroom.ClassroomWithAvailability, error) {
-	classrooms, err := s.GetClassrooms(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	result := make([]*classroom.ClassroomWithAvailability, len(classrooms))
-
-	for i, r := range classrooms {
-		for _, d := range r.AvailableDates {
-		}
-		result[i] = &classroom.ClassroomWithAvailability{
-			Classroom:      *r,
-			AvailableDates: availableDates,
-		}
-	}
-	return result, nil
-}
-
 func (s *ClassroomDBService) TeacherAvailableToday(ctx context.Context, teacherId string) (bool, error) {
 	id := pgtype.Text{}
 	id.String = teacherId
@@ -109,19 +87,17 @@ func (s *ClassroomDBService) TeacherAvailableToday(ctx context.Context, teacherI
 	return available, nil
 }
 
-func (s *ClassroomDBService) GetRoomByTeacherId(ctx context.Context, id string) (*classroom.ClassroomWithAvailable, error) {
+func (s *ClassroomDBService) GetRoomByTeacherId(ctx context.Context, id string) (*classroom.Classroom, error) {
 	res, err := s.q.RoomByIdQuery(ctx, id)
 	if err != nil {
 		return nil, err
 	}
-	return &classroom.ClassroomWithAvailable{
-		Classroom: classroom.Classroom{
-			ID:          res.ID,
-			RoomNumber:  res.RoomNumber,
-			TeacherName: res.TeacherName.String,
-			TeacherId:   res.TeacherId,
-		},
-		Available: res.Available,
+	return &classroom.Classroom{
+		ID:          res.ID,
+		RoomNumber:  res.RoomNumber,
+		TeacherName: res.TeacherName.String,
+		TeacherId:   res.TeacherId,
+		Available:   res.Available,
 	}, nil
 }
 
@@ -209,4 +185,31 @@ func (s *ClassroomDBService) CreateAvailability(ctx context.Context, args []*cla
 	}
 	_, err := s.q.CreateAvailability(ctx, availability)
 	return err
+}
+
+func (s *ClassroomDBService) mapClassroom(r ClassroomQueryRow, ch chan<- *classroom.ClassroomWithAvailable) {
+	ctx := context.Background()
+	dates := make([]time.Time, 0)
+	res, err := s.q.ClassroomScheduleQuery(ctx, r.ID)
+	if err != nil {
+		s.logger.Warnf("Error getting classroom schedule: %v", err)
+	}
+
+	for _, date := range res {
+		dates = append(dates, date.Availability.Date.Time)
+	}
+
+	mappedResponse := &classroom.ClassroomWithAvailable{
+		Classroom: classroom.Classroom{
+			ID:          r.ID,
+			RoomNumber:  r.RoomNumber,
+			TeacherName: r.TeacherName,
+			TeacherId:   r.TeacherId.String,
+			Comment:     r.Comment.String,
+			IsFlex:      r.IsFlex.Bool,
+			Available:   r.Available,
+		},
+		AvailableDates: dates,
+	}
+	ch <- mappedResponse
 }

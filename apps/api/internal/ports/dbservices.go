@@ -12,14 +12,10 @@ import (
 )
 
 type ClassroomDBService interface {
-	GetClassrooms(ctx context.Context) ([]*classroom.Classroom, error)
+	GetClassrooms(ctx context.Context) ([]*classroom.ClassroomWithAvailable, error)
 	GetAvailability(ctx context.Context) ([]*classroom.Availability, error)
-
-	// Creates an array of all the classrooms with each rooms available dates
-	AggregateClassroomData(ctx context.Context) ([]*classroom.ClassroomWithAvailability, error)
-
 	TeacherAvailableToday(ctx context.Context, teacherId string) (bool, error)
-	GetRoomByTeacherId(ctx context.Context, id string) (*classroom.ClassroomWithAvailable, error)
+	GetRoomByTeacherId(ctx context.Context, id string) (*classroom.Classroom, error)
 	RoomsWithRosterCount(ctx context.Context) ([]*classroom.ClassroomWithCount, error)
 	ClassroomSchedule(ctx context.Context, classroomid string) ([]*classroom.Availability, error)
 	CreateComment(ctx context.Context, teacherId string, comment string) error

@@ -115,15 +115,15 @@ VALUES (
 `
 
 type NewRequestParams struct {
-	Status             RequestStatus
-	StudentName        string
-	StudentId          string
-	DateRequested      pgtype.Date
-	CurrentTeacher     string
-	CurrentTeacherName string
-	NewTeacher         string
-	NewTeacherName     string
-	Arrived            pgtype.Bool
+	Status             RequestStatus `db:"status" json:"status"`
+	StudentName        string        `db:"studentName" json:"studentName"`
+	StudentId          string        `db:"studentId" json:"studentId"`
+	DateRequested      pgtype.Date   `db:"dateRequested" json:"dateRequested"`
+	CurrentTeacher     string        `db:"currentTeacher" json:"currentTeacher"`
+	CurrentTeacherName string        `db:"currentTeacherName" json:"currentTeacherName"`
+	NewTeacher         string        `db:"newTeacher" json:"newTeacher"`
+	NewTeacherName     string        `db:"newTeacherName" json:"newTeacherName"`
+	Arrived            pgtype.Bool   `db:"arrived" json:"arrived"`
 }
 
 func (q *Queries) NewRequest(ctx context.Context, arg NewRequestParams) error {
@@ -150,7 +150,7 @@ WHERE "requests"."dateRequested" >= CURRENT_DATE
 `
 
 type StudentRequestsQueryRow struct {
-	Request Request
+	Request Request `db:"request" json:"request"`
 }
 
 func (q *Queries) StudentRequestsQuery(ctx context.Context) ([]StudentRequestsQueryRow, error) {
@@ -192,8 +192,8 @@ WHERE "id" = $1
 `
 
 type UpdateRequestParams struct {
-	ID     int32
-	Status RequestStatus
+	ID     int32         `db:"id" json:"id"`
+	Status RequestStatus `db:"status" json:"status"`
 }
 
 func (q *Queries) UpdateRequest(ctx context.Context, arg UpdateRequestParams) error {
@@ -207,7 +207,7 @@ WHERE "studentId" = $1 OR "teacherId" = $1 OR "currentTeacher" = $1
 `
 
 type UserRequestQueryRow struct {
-	Request Request
+	Request Request `db:"request" json:"request"`
 }
 
 func (q *Queries) UserRequestQuery(ctx context.Context, studentid string) ([]UserRequestQueryRow, error) {

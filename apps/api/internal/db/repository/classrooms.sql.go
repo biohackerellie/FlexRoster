@@ -49,32 +49,19 @@ SELECT
   c."teacherId", 
   c."comment",
   c."isFlex",
-  COALESCE(a."availableDates", '{}') as "availableDates"
+  COALESCE(a."available", FALSE) as "available"
 FROM "classrooms" c
-LEFT JOIN(
-  SELECT
-    av."classroomId",
-    array_agg(
-      jsonb_build_object(
-        'id', av."id",
-        'date', av."date",
-        'available', av."available",
-        'teacherId', av."teacherId"
-      )
-    ) as "availableDates"
-  FROM "availability" av
-  GROUP BY av."classroomId"
-) a ON c."id" = a."classroomId"
+LEFT JOIN "availability" a ON c."id" = a."classroomId" AND a."date" = CURRENT_DATE
 `
 
 type ClassroomQueryRow struct {
-	ID             string
-	RoomNumber     string
-	TeacherName    string
-	TeacherId      pgtype.Text
-	Comment        pgtype.Text
-	IsFlex         pgtype.Bool
-	AvailableDates interface{}
+	ID          string      `db:"id" json:"id"`
+	RoomNumber  string      `db:"roomNumber" json:"roomNumber"`
+	TeacherName string      `db:"teacherName" json:"teacherName"`
+	TeacherId   pgtype.Text `db:"teacherId" json:"teacherId"`
+	Comment     pgtype.Text `db:"comment" json:"comment"`
+	IsFlex      pgtype.Bool `db:"isFlex" json:"isFlex"`
+	Available   bool        `db:"available" json:"available"`
 }
 
 func (q *Queries) ClassroomQuery(ctx context.Context) ([]ClassroomQueryRow, error) {
@@ -93,7 +80,7 @@ func (q *Queries) ClassroomQuery(ctx context.Context) ([]ClassroomQueryRow, erro
 			&i.TeacherId,
 			&i.Comment,
 			&i.IsFlex,
-			&i.AvailableDates,
+			&i.Available,
 		); err != nil {
 			return nil, err
 		}
@@ -110,7 +97,7 @@ SELECT availability.id, availability."classroomId", availability.date, availabil
 `
 
 type ClassroomScheduleQueryRow struct {
-	Availability Availability
+	Availability Availability `db:"availability" json:"availability"`
 }
 
 func (q *Queries) ClassroomScheduleQuery(ctx context.Context, classroomid string) ([]ClassroomScheduleQueryRow, error) {
@@ -149,13 +136,13 @@ FROM "classrooms" c
 `
 
 type ClassroomsWithRosterCountRow struct {
-	ID          string
-	RoomNumber  string
-	TeacherName string
-	TeacherId   pgtype.Text
-	Comment     pgtype.Text
-	IsFlex      pgtype.Bool
-	Count       int64
+	ID          string      `db:"id" json:"id"`
+	RoomNumber  string      `db:"roomNumber" json:"roomNumber"`
+	TeacherName string      `db:"teacherName" json:"teacherName"`
+	TeacherId   pgtype.Text `db:"teacherId" json:"teacherId"`
+	Comment     pgtype.Text `db:"comment" json:"comment"`
+	IsFlex      pgtype.Bool `db:"isFlex" json:"isFlex"`
+	Count       int64       `db:"count" json:"count"`
 }
 
 func (q *Queries) ClassroomsWithRosterCount(ctx context.Context) ([]ClassroomsWithRosterCountRow, error) {
@@ -200,11 +187,11 @@ func (q *Queries) CountRosterByClassroomId(ctx context.Context, classroomid stri
 }
 
 type CreateAvailabilityParams struct {
-	ID          string
-	TeacherId   pgtype.Text
-	ClassroomId string
-	Date        pgtype.Date
-	Available   bool
+	ID          string      `db:"id" json:"id"`
+	TeacherId   pgtype.Text `db:"teacherId" json:"teacherId"`
+	ClassroomId string      `db:"classroomId" json:"classroomId"`
+	Date        pgtype.Date `db:"date" json:"date"`
+	Available   bool        `db:"available" json:"available"`
 }
 
 const createComment = `-- name: CreateComment :exec
@@ -213,8 +200,8 @@ WHERE "teacherId" = $1
 `
 
 type CreateCommentParams struct {
-	TeacherId pgtype.Text
-	Comment   pgtype.Text
+	TeacherId pgtype.Text `db:"teacherId" json:"teacherId"`
+	Comment   pgtype.Text `db:"comment" json:"comment"`
 }
 
 func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) error {
@@ -228,8 +215,8 @@ WHERE "teacherId" = $1 AND "date" = $2
 `
 
 type DeleteAvailabilityParams struct {
-	TeacherId pgtype.Text
-	Date      pgtype.Date
+	TeacherId pgtype.Text `db:"teacherId" json:"teacherId"`
+	Date      pgtype.Date `db:"date" json:"date"`
 }
 
 func (q *Queries) DeleteAvailability(ctx context.Context, arg DeleteAvailabilityParams) error {
@@ -261,11 +248,11 @@ WHERE c."id" = $1
 `
 
 type RoomByIdQueryRow struct {
-	ID          string
-	RoomNumber  string
-	TeacherName pgtype.Text
-	TeacherId   string
-	Available   bool
+	ID          string      `db:"id" json:"id"`
+	RoomNumber  string      `db:"roomNumber" json:"roomNumber"`
+	TeacherName pgtype.Text `db:"teacherName" json:"teacherName"`
+	TeacherId   string      `db:"teacherId" json:"teacherId"`
+	Available   bool        `db:"available" json:"available"`
 }
 
 func (q *Queries) RoomByIdQuery(ctx context.Context, id string) (RoomByIdQueryRow, error) {
@@ -303,8 +290,8 @@ WHERE "date" = CURRENT_DATE
 `
 
 type TodaysAvailabilityRow struct {
-	Available bool
-	ID        string
+	Available bool   `db:"available" json:"available"`
+	ID        string `db:"id" json:"id"`
 }
 
 func (q *Queries) TodaysAvailability(ctx context.Context) ([]TodaysAvailabilityRow, error) {

@@ -109,6 +109,18 @@ CREATE TABLE IF NOT EXISTS "verificationToken" (
 	"expires" timestamp NOT NULL,
 	CONSTRAINT "verificationToken_identifier_token_pk" PRIMARY KEY("identifier","token")
 );
+CREATE VIEW availability_view AS
+SELECT
+  c."id",
+  c."roomNumber",
+  c."teacherName",
+  c."teacherId",
+  c."comment",
+  c."isFlex",
+  COALESCE(JSON_AGG(a.*), []) AS "availability"
+FROM "classrooms" c
+JOIN "availability" a ON c."id" = a."classroomId"
+GROUP BY c."id", a."id";
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "account" ADD CONSTRAINT "account_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;

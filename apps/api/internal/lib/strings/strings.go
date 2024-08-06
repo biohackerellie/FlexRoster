@@ -51,16 +51,22 @@ func ChatHrefConstructor(id1 string, id2 string) string {
 	return fmt.Sprintf("%s--%s", sorted[0], sorted[1])
 }
 
-func FormatClasses(classes []*classroom.ClassroomWithAvailability, studentId string) []*classroom.ClassroomWithAvailability {
-	formatted := make([]*classroom.ClassroomWithAvailability, len(classes))
-
-	for _, class := range classes {
-		class.TeacherName = FormatTeacherNames(class.TeacherName)
-		class.ChatId = ChatHrefConstructor(class.TeacherId, studentId)
-
-		formatted = append(formatted, class)
+func FormatClasses(class *classroom.ClassroomWithAvailable, studentId string) *classroom.ClassroomWithChatID {
+	ChatId := ChatHrefConstructor(class.TeacherId, studentId)
+	formattedTeacherName := FormatTeacherNames(class.TeacherName)
+	return &classroom.ClassroomWithChatID{
+		ChatId: ChatId,
+		Classroom: classroom.Classroom{
+			ID:          class.ID,
+			RoomNumber:  class.RoomNumber,
+			TeacherName: formattedTeacherName,
+			TeacherId:   class.TeacherId,
+			Comment:     class.Comment,
+			Available:   class.Available,
+			IsFlex:      class.IsFlex,
+		},
+		AvailableDates: class.AvailableDates,
 	}
-	return formatted
 }
 
 func GetHashKey(_filter string) string {

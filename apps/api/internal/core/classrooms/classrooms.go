@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"sync"
 	"time"
 
 	"api/internal/core/domain/classroom"
@@ -14,35 +15,57 @@ import (
 
 var today = time.Now().Format("2006-01-02")
 
-func (a *Adapter) GetClasses(id string) ([]*classroom.ClassroomWithAvailability, error) {
+func (a *Adapter) GetClasses(id string) ([]*classroom.ClassroomWithChatID, error) {
 	cacheKey := stringHelpers.CacheKey("StudentCache", id)
-	var returnData []*classroom.ClassroomWithAvailability
+	var returnData []*classroom.ClassroomWithChatID
 	cachedData, err := a.cache.Get(cacheKey)
 	if err == nil {
 		err := json.Unmarshal([]byte(cachedData), &returnData)
 		if err != nil {
 			return nil, fmt.Errorf("error unmarshalling cached data: %w", err)
 		}
-	} else {
-		classes, err := a.classroomRepo.GetClassrooms(context.Background())
-		if err != nil {
-			return nil, fmt.Errorf("error getting classrooms: %w", err)
-		}
-		classesString, err := json.Marshal(classes)
-		if err != nil {
-			return nil, fmt.Errorf("error marshalling classes: %w", err)
-		}
-		err = a.cache.Set(cacheKey, classesString, 24*time.Hour)
-		if err != nil {
-			return nil, fmt.Errorf("error setting cache: %w", err)
-		}
-
-		returnData = stringHelpers.FormatClasses(classes, id)
+		return returnData, nil
 	}
+	classes, err := a.classroomRepo.GetClassrooms(context.Background())
+	if err != nil {
+		return nil, fmt.Errorf("error getting classrooms: %w", err)
+	}
+	fmt.Println("Classes: ", classes)
+	var wg sync.WaitGroup
+	ch := make(chan *classroom.ClassroomWithChatID, len(classes))
+
+	for _, c := range classes {
+		wg.Add(1)
+		go func(c *classroom.ClassroomWithAvailable) {
+			defer wg.Done()
+			formattedClass := stringHelpers.FormatClasses(c, id)
+			ch <- formattedClass
+		}(c)
+	}
+	go func() {
+		wg.Wait()
+		close(ch)
+	}()
+
+	for formattedClass := range ch {
+		// if formattedClass != nil {
+		returnData = append(returnData, formattedClass)
+		// }
+	}
+
+	classesString, err := json.Marshal(returnData)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling classes: %w", err)
+	}
+	err = a.cache.Set(cacheKey, classesString, 10*time.Minute)
+	if err != nil {
+		return nil, fmt.Errorf("error setting cache: %w", err)
+	}
+
 	return returnData, nil
 }
 
-func (a *Adapter) GetSpecificClassroom(id string) (*classroom.ClassroomWithAvailable, error) {
+func (a *Adapter) GetSpecificClassroom(id string) (*classroom.Classroom, error) {
 	d, err := a.classroomRepo.GetRoomByTeacherId(context.Background(), id)
 	if err != nil {
 		return nil, fmt.Errorf("error getting classroom: %w", err)

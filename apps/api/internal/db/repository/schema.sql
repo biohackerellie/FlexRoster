@@ -33,6 +33,21 @@ CREATE TABLE IF NOT EXISTS "classrooms" (
 	"isFlex" boolean DEFAULT false
 );
 
+
+
+CREATE VIEW availability_view AS
+SELECT
+  c."id",
+  c."roomNumber",
+  c."teacherName",
+  c."teacherId",
+  c."comment",
+  c."isFlex",
+  JSON_AGG(a.*) AS "availability"
+FROM "classrooms" c
+JOIN "availability" a ON c."id" = a."classroomId"
+GROUP BY c."id", a."id";
+
 CREATE TABLE IF NOT EXISTS "config" (
 	"secretaries" text[],
 	"preferredNames" json,

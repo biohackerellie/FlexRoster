@@ -1,4 +1,4 @@
-import { is, relations } from "drizzle-orm";
+import { eq, is, relations, sql } from "drizzle-orm";
 import {
   boolean,
   date,
@@ -8,6 +8,7 @@ import {
   jsonb,
   pgEnum,
   pgTable,
+  pgView,
   primaryKey,
   serial,
   text,
@@ -136,6 +137,8 @@ export const availability = pgTable("availability", {
   teacherId: text("teacherId").references(() => users.id),
 });
 
+type SelectAvailability = typeof availability.$inferSelect;
+
 export const availabilityRelations = relations(availability, ({ one }) => ({
   classroom: one(classrooms, {
     fields: [availability.classroomId],
@@ -198,6 +201,26 @@ export const accounts = pgTable(
   }),
 );
 
+export const availability_view = pgView("availability_view", {
+  id: text("id").primaryKey().notNull(),
+  roomNumber: text("roomNumber").notNull(),
+  teacherName: text("teacherName").notNull(),
+  teacherId: text("teacherId").references(() => users.id),
+  comment: text("comment"),
+  isFlex: boolean("isFlex").default(false),
+  availability: json("availability").$type<SelectAvailability[]>(),
+}).as(sql`SELECT
+  c."id",
+  c."roomNumber",
+  c."teacherName",
+  c."teacherId",
+  c."comment",
+  c."isFlex",
+  JSON_AGG(a.*) AS "availability"
+FROM "classrooms" c
+JOIN "availability" a ON c."id" = a."classroomId"
+GROUP BY c."id", a."id";
+`)
 export const sessions = pgTable("session", {
   sessionToken: text("sessionToken").notNull().primaryKey(),
   userId: text("userId")

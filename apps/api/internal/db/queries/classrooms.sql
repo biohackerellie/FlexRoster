@@ -17,22 +17,9 @@ SELECT
   c."teacherId", 
   c."comment",
   c."isFlex",
-  COALESCE(a."availableDates", '{}') as "availableDates"
+  COALESCE(a."available", FALSE) as "available"
 FROM "classrooms" c
-LEFT JOIN(
-  SELECT
-    av."classroomId",
-    array_agg(
-      jsonb_build_object(
-        'id', av."id",
-        'date', av."date",
-        'available', av."available",
-        'teacherId', av."teacherId"
-      )
-    ) as "availableDates"
-  FROM "availability" av
-  GROUP BY av."classroomId"
-) a ON c."id" = a."classroomId";
+LEFT JOIN "availability" a ON c."id" = a."classroomId" AND a."date" = CURRENT_DATE;
 
 -- name: TeacherAvailableToday :one
 SELECT EXISTS (
