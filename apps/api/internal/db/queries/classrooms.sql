@@ -7,7 +7,8 @@ WHERE "date" = CURRENT_DATE;
 -- name: AvailabilityQuery :many
 SELECT * FROM "availability";
 
-
+-- name: TeacherAvailabilityQuery :many
+SELECT * FROM "availability" WHERE "teacherId" = $1;
 
 -- name: ClassroomQuery :many
 SELECT 

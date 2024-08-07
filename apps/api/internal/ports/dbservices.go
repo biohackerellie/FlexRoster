@@ -15,6 +15,7 @@ type ClassroomDBService interface {
 	GetClassrooms(ctx context.Context) ([]*classroom.ClassroomWithAvailable, error)
 	GetAvailability(ctx context.Context) ([]*classroom.Availability, error)
 	TeacherAvailableToday(ctx context.Context, teacherId string) (bool, error)
+	GetTeacherAvailability(ctx context.Context, teacherId string) ([]*classroom.Availability, error)
 	GetRoomByTeacherId(ctx context.Context, id string) (*classroom.Classroom, error)
 	RoomsWithRosterCount(ctx context.Context) ([]*classroom.ClassroomWithCount, error)
 	ClassroomSchedule(ctx context.Context, classroomid string) ([]*classroom.Availability, error)

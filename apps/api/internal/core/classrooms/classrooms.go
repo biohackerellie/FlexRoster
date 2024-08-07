@@ -91,6 +91,30 @@ func (a *Adapter) DeleteComment(id string) error {
 	return a.classroomRepo.DeleteComment(context.Background(), id)
 }
 
+func (a *Adapter) GetAvailability(id string) ([]*classroom.Availability, error) {
+	result, err := a.cache.Get(stringHelpers.CacheKey("TeacherAvailability", id))
+	if err == nil {
+		var returnData []*classroom.Availability
+		err := json.Unmarshal([]byte(result), &returnData)
+		if err != nil {
+			return nil, err
+		}
+		return returnData, nil
+	}
+	dbData, err := a.classroomRepo.GetTeacherAvailability(context.Background(), id)
+	if err != nil {
+		return nil, err
+	}
+	if len(dbData) == 0 {
+		return []*classroom.Availability{}, nil
+	}
+	err = a.cache.Set(stringHelpers.CacheKey("TeacherAvailability", id), dbData, 10*time.Minute)
+	if err != nil {
+		a.log.Warn("Error setting cache: ", err)
+	}
+	return dbData, nil
+}
+
 func (a *Adapter) SetAvailability(teacherId string, classroomId string, dates []time.Time) error {
 	err := a.cache.Clear(stringHelpers.CacheKey("TeacherRoster", teacherId))
 	if err != nil {

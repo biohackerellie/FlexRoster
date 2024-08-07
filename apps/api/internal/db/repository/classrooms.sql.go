@@ -268,6 +268,36 @@ func (q *Queries) RoomByIdQuery(ctx context.Context, id string) (RoomByIdQueryRo
 	return i, err
 }
 
+const teacherAvailabilityQuery = `-- name: TeacherAvailabilityQuery :many
+SELECT id, "classroomId", date, available, "teacherId" FROM "availability" WHERE "teacherId" = $1
+`
+
+func (q *Queries) TeacherAvailabilityQuery(ctx context.Context, teacherid pgtype.Text) ([]Availability, error) {
+	rows, err := q.db.Query(ctx, teacherAvailabilityQuery, teacherid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Availability
+	for rows.Next() {
+		var i Availability
+		if err := rows.Scan(
+			&i.ID,
+			&i.ClassroomId,
+			&i.Date,
+			&i.Available,
+			&i.TeacherId,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const teacherAvailableToday = `-- name: TeacherAvailableToday :one
 SELECT EXISTS (
     SELECT 1

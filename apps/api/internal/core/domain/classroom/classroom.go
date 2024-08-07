@@ -2,6 +2,10 @@ package classroom
 
 import "time"
 
+type ClassroomResponses interface {
+	isClassroomResponses()
+}
+
 type Classroom struct {
 	ID          string `json:"id"`
 	RoomNumber  string `json:"roomNumber"`
@@ -11,6 +15,8 @@ type Classroom struct {
 	Available   bool   `json:"available"`
 	IsFlex      bool   `json:"isFlex"`
 }
+
+func (Classroom) isClassroomResponses() {}
 
 type Availability struct {
 	Date        time.Time `json:"date"`
@@ -26,6 +32,8 @@ type ClassroomWithChatID struct {
 	AvailableDates []time.Time `json:"availableDates"`
 }
 
+func (ClassroomWithChatID) isClassroomResponses() {}
+
 type TodaysAvailability struct {
 	ID        string `json:"id"`
 	Available bool   `json:"available"`
@@ -36,12 +44,23 @@ type ClassroomWithAvailable struct {
 	AvailableDates []time.Time `json:"availableDates"`
 }
 
+func (ClassroomWithAvailable) isClassroomResponses() {}
+
 type ClassroomWithCount struct {
 	Classroom
 	Count int64 `json:"count"`
 }
 
+func (ClassroomWithCount) isClassroomResponses() {}
+
 type GetClassesResponse struct {
 	err     error
 	classes []*ClassroomWithChatID
 }
+type (
+	Comment        string
+	CommentRequest struct {
+		Comment *Comment `json:"comment,omitempty"`
+		Id      string   `json:"id"`
+	}
+)

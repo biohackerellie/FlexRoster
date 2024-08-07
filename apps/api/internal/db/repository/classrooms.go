@@ -75,6 +75,27 @@ func (s *ClassroomDBService) GetAvailability(ctx context.Context) ([]*classroom.
 	return response, nil
 }
 
+func (s *ClassroomDBService) GetTeacherAvailability(ctx context.Context, teacherId string) ([]*classroom.Availability, error) {
+	ID := helpers.StringToPGText(teacherId)
+	res, err := s.q.TeacherAvailabilityQuery(ctx, ID)
+	if err != nil {
+		return nil, err
+	}
+	response := make([]*classroom.Availability, len(res))
+
+	for i, r := range res {
+		mappedResponse := &classroom.Availability{
+			ID:          r.ID,
+			ClassroomId: r.ClassroomId,
+			Date:        r.Date.Time,
+			Available:   r.Available,
+			TeacherId:   r.TeacherId.String,
+		}
+		response[i] = mappedResponse
+	}
+	return response, nil
+}
+
 func (s *ClassroomDBService) TeacherAvailableToday(ctx context.Context, teacherId string) (bool, error) {
 	id := pgtype.Text{}
 	id.String = teacherId
