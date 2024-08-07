@@ -12,4 +12,5 @@ type ClassroomService interface {
 	NewComment(id string, comment string) error
 	DeleteComment(id string) error
 	SetAvailability(teacherId string, classroomId string, dates []time.Time) error
+	RoomsWithCount() ([]*classroom.ClassroomWithCount, error)
 }

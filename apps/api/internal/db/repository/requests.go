@@ -7,7 +7,7 @@ import (
 	config "api/internal/config"
 	"api/internal/core/domain/request"
 
-	"go.uber.org/zap"
+	"api/internal/lib/logger"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -22,7 +22,7 @@ type DBTXWrapper interface {
 type RequestDBService struct {
 	q      *Queries
 	db     DBTXWrapper
-	logger *zap.SugaredLogger
+	logger *logger.Logger
 	config *config.Env
 }
 
@@ -33,10 +33,9 @@ func NewRequestDBService(db DBTXWrapper) *RequestDBService {
 	}
 }
 
-func (s *RequestDBService) WithLogs(logger *zap.SugaredLogger) *RequestDBService {
-	s.logger = logger.With(
-		"name", "db",
-	)
+func (s *RequestDBService) WithLogs(logger *logger.Logger) *RequestDBService {
+	logger.With("name", "db")
+	s.logger = logger
 	return s
 }
 

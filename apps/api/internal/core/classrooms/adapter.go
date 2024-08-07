@@ -1,27 +1,26 @@
 package classrooms
 
 import (
+	"api/internal/lib/logger"
 	"api/internal/ports"
 	"api/internal/redis"
-
-	"go.uber.org/zap"
 )
 
 type Adapter struct {
 	classroomRepo ports.ClassroomDBService
-	log           *zap.SugaredLogger
+	log           *logger.Logger
 	cache         *redis.RClient
 }
 
 func NewAdapter(classroomRepo ports.ClassroomDBService) *Adapter {
 	return &Adapter{
 		classroomRepo: classroomRepo,
-		log:           zap.NewNop().Sugar(),
 		cache:         redis.NewRedis(),
 	}
 }
 
-func (a *Adapter) WithLogger(log *zap.SugaredLogger) *Adapter {
-	a.log = log.With("layer", "core", "name", "classroomService")
+func (a *Adapter) WithLogger(log *logger.Logger) *Adapter {
+	log.With("layer", "core", "name", "classroomService")
+	a.log = log
 	return a
 }

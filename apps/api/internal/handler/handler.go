@@ -2,7 +2,6 @@ package handler
 
 import (
 	"api/internal/ports"
-
 	"github.com/go-chi/chi/v5"
 )
 

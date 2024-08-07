@@ -7,15 +7,14 @@ import (
 
 	"api/internal/core/domain/classroom"
 	"api/internal/lib/helpers"
-
+	"api/internal/lib/logger"
 	"github.com/jackc/pgx/v5/pgtype"
-	"go.uber.org/zap"
 )
 
 type ClassroomDBService struct {
 	q      *Queries
 	db     DBTXWrapper
-	logger *zap.SugaredLogger
+	logger *logger.Logger
 }
 
 func NewClassroomDBService(db DBTXWrapper) *ClassroomDBService {
@@ -25,10 +24,9 @@ func NewClassroomDBService(db DBTXWrapper) *ClassroomDBService {
 	}
 }
 
-func (s *ClassroomDBService) WithLogs(logger *zap.SugaredLogger) *ClassroomDBService {
-	s.logger = logger.With(
-		"name", "db",
-	)
+func (s *ClassroomDBService) WithLogs(logger *logger.Logger) *ClassroomDBService {
+	logger.With("name", "db")
+	s.logger = logger
 	return s
 }
 
@@ -192,7 +190,7 @@ func (s *ClassroomDBService) mapClassroom(r ClassroomQueryRow, ch chan<- *classr
 	dates := make([]time.Time, 0)
 	res, err := s.q.ClassroomScheduleQuery(ctx, r.ID)
 	if err != nil {
-		s.logger.Warnf("Error getting classroom schedule: %v", err)
+		s.logger.Warn("Error getting classroom schedule: ", "err", err)
 	}
 
 	for _, date := range res {

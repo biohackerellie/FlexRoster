@@ -3,7 +3,7 @@ package errors
 import (
 	"context"
 
-	"go.uber.org/zap"
+	"api/internal/lib/logger"
 )
 
 type LogEntry interface {
@@ -17,7 +17,8 @@ func LogError(log LogEntry, err error) {
 }
 
 func IgnoreError(err error) {
-	zap.S().Debugf("IgnoreError: %s", err)
+	log := logger.New()
+	log.Debug("IgnoreError: %s", "err", err)
 }
 
 func ExecuteAndIgnoreErrorF(f func(context.Context) error, ctx context.Context) {

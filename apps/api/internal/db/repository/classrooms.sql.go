@@ -130,7 +130,7 @@ const classroomsWithRosterCount = `-- name: ClassroomsWithRosterCount :many
 SELECT c.id, c."roomNumber", c."teacherName", c."teacherId", c.comment, c."isFlex", (
   SELECT COUNT(*)
   FROM "students" s
-  WHERE s."classroomId" = c."classroomId"
+  WHERE s."classroomId" = c."id"
 ) AS "count"
 FROM "classrooms" c
 `

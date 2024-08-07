@@ -5,14 +5,13 @@ import (
 
 	config "api/internal/config"
 	"api/internal/core/domain/user"
-
-	"go.uber.org/zap"
+	"api/internal/lib/logger"
 )
 
 type UsersDBService struct {
 	q      *Queries
 	db     DBTXWrapper
-	logger *zap.SugaredLogger
+	logger *logger.Logger
 	config *config.Env
 }
 
@@ -23,10 +22,9 @@ func NewUsersDBService(db DBTXWrapper) *UsersDBService {
 	}
 }
 
-func (s *UsersDBService) WithLogs(logger *zap.SugaredLogger) *UsersDBService {
-	s.logger = logger.With(
-		"name", "db",
-	)
+func (s *UsersDBService) WithLogs(logger *logger.Logger) *UsersDBService {
+	logger.With("name", "db")
+	s.logger = logger
 	return s
 }
 

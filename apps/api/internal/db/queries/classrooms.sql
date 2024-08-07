@@ -39,7 +39,7 @@ WHERE "classroomId" = $1;
 SELECT c.*, (
   SELECT COUNT(*)
   FROM "students" s
-  WHERE s."classroomId" = c."classroomId"
+  WHERE s."classroomId" = c."id"
 ) AS "count"
 FROM "classrooms" c;
 

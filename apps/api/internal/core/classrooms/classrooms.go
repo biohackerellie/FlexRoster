@@ -22,6 +22,7 @@ func (a *Adapter) GetClasses(id string) ([]*classroom.ClassroomWithChatID, error
 	if err == nil {
 		err := json.Unmarshal([]byte(cachedData), &returnData)
 		if err != nil {
+			a.log.Error("error unmarshalling cached data: ", "err", err)
 			return nil, fmt.Errorf("error unmarshalling cached data: %w", err)
 		}
 		return returnData, nil
@@ -55,7 +56,8 @@ func (a *Adapter) GetClasses(id string) ([]*classroom.ClassroomWithChatID, error
 
 	classesString, err := json.Marshal(returnData)
 	if err != nil {
-		return nil, fmt.Errorf("error marshalling classes: %w", err)
+		a.log.Error("error marshalling classes: ", "err", err)
+		return nil, err
 	}
 	err = a.cache.Set(cacheKey, classesString, 10*time.Minute)
 	if err != nil {
@@ -76,7 +78,7 @@ func (a *Adapter) GetSpecificClassroom(id string) (*classroom.Classroom, error) 
 func (a *Adapter) NewComment(id string, comment string) error {
 	err := a.cache.Clear(stringHelpers.CacheKey("TeacherRoster", id))
 	if err != nil {
-		a.log.Warnln("Error clearing cache: ", err)
+		a.log.Warn("Error clearing cache: ", err)
 	}
 	return a.classroomRepo.CreateComment(context.Background(), id, comment)
 }
@@ -84,7 +86,7 @@ func (a *Adapter) NewComment(id string, comment string) error {
 func (a *Adapter) DeleteComment(id string) error {
 	err := a.cache.Clear(stringHelpers.CacheKey("TeacherRoster", id))
 	if err != nil {
-		a.log.Warnln("Error clearing cache: ", err)
+		a.log.Warn("Error clearing cache: ", err)
 	}
 	return a.classroomRepo.DeleteComment(context.Background(), id)
 }
@@ -92,15 +94,15 @@ func (a *Adapter) DeleteComment(id string) error {
 func (a *Adapter) SetAvailability(teacherId string, classroomId string, dates []time.Time) error {
 	err := a.cache.Clear(stringHelpers.CacheKey("TeacherRoster", teacherId))
 	if err != nil {
-		a.log.Warnln("Error clearing cache: ", err)
+		a.log.Warn("Error clearing cache: ", err)
 	}
-	a.log.Debugln("Passed in dates: ", dates)
+	a.log.Debug("Passed in dates: ", dates)
 	ExistingDates := make([]time.Time, 0)
 
 	existing, err := a.classroomRepo.ClassroomSchedule(context.Background(), classroomId)
 
 	if err != nil {
-		a.log.Warnln("Error getting classroom schedule: ", err)
+		a.log.Warn("Error getting classroom schedule: ", err)
 	} else {
 		for _, date := range existing {
 			ExistingDates = append(ExistingDates, date.Date)
@@ -121,9 +123,34 @@ func (a *Adapter) SetAvailability(teacherId string, classroomId string, dates []
 	if len(availability) > 0 {
 		err = a.classroomRepo.CreateAvailability(context.Background(), availability)
 		if err != nil {
-			return fmt.Errorf("error creating availability: %w", err)
+			a.log.Error("Error creating availability: ", "err", err)
 		}
 
 	}
 	return nil
+}
+
+func (a *Adapter) RoomsWithCount() ([]*classroom.ClassroomWithCount, error) {
+	rooms, err := a.cache.Get(stringHelpers.CacheKey("Rooms", "All"))
+	if err == nil {
+		var returnData []*classroom.ClassroomWithCount
+		err := json.Unmarshal([]byte(rooms), &returnData)
+		if err != nil {
+			return nil, fmt.Errorf("error unmarshalling cached data: %w", err)
+		}
+		return returnData, nil
+	}
+	res, err := a.classroomRepo.RoomsWithRosterCount(context.Background())
+	if err != nil {
+		return nil, fmt.Errorf("error getting classrooms with roster count: %w", err)
+	}
+	roomsString, err := json.Marshal(res)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling classes: %w", err)
+	}
+	err = a.cache.Set(stringHelpers.CacheKey("Rooms", "All"), roomsString, 10*time.Minute)
+	if err != nil {
+		return nil, fmt.Errorf("error setting cache: %w", err)
+	}
+	return res, nil
 }

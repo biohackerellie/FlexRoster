@@ -6,15 +6,14 @@ import (
 	config "api/internal/config"
 	"api/internal/core/domain/student"
 
+	"api/internal/lib/logger"
 	"github.com/jackc/pgx/v5/pgtype"
-
-	"go.uber.org/zap"
 )
 
 type StudentDBService struct {
 	q      *Queries
 	db     DBTXWrapper
-	logger *zap.SugaredLogger
+	logger *logger.Logger
 	config *config.Env
 }
 
@@ -25,10 +24,9 @@ func NewStudentDBService(db DBTXWrapper) *StudentDBService {
 	}
 }
 
-func (s *StudentDBService) WithLogs(logger *zap.SugaredLogger) *StudentDBService {
-	s.logger = logger.With(
-		"name", "db",
-	)
+func (s *StudentDBService) WithLogs(logger *logger.Logger) *StudentDBService {
+	logger.With("name", "db")
+	s.logger = logger
 	return s
 }
 
