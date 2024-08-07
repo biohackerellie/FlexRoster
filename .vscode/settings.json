@@ -190,5 +190,11 @@
   "workbench.sideBar.location": "left",
   "supermaven.enable": {
     "*": true
-  }
+  },
+
+  // extension settings
+  "vscode-neovim.useWSL": true,
+  "vscode-neovim.neovimPath": "/usr/local/bin/nvim",
+  "vim.enableNeovim": true,
+  "vim.neovimPath": "/usr/local/bin/nvim"
 }

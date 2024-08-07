@@ -1,0 +1,14 @@
+
+{
+  "name": "@local/api",
+  "bin": {
+    "cli": "./"
+  },
+  "engines": {
+    "go": ">=1.22.3"
+  },
+  "scripts": {
+    "dev": "air -c .air.toml",
+    "start": "./bin/main"
+  }
+}

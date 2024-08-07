@@ -4,51 +4,9 @@
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1714675303462,
-      "tag": "0000_minor_liz_osborn",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1715351807037,
-      "tag": "0001_quiet_dreaming_celestial",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1715359333646,
-      "tag": "0002_fat_captain_cross",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1717006380313,
-      "tag": "0003_curved_morbius",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1717009751446,
-      "tag": "0004_concerned_marten_broadcloak",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1717084319421,
-      "tag": "0005_aspiring_human_torch",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
       "version": "7",
-      "when": 1721669896219,
-      "tag": "0006_loose_boomerang",
+      "when": 1722961890930,
+      "tag": "0000_crazy_stranger",
       "breakpoints": true
     }
   ]
