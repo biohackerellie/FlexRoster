@@ -80,7 +80,7 @@ async function getChatMessages(chatId: string) {
         case 400:
           throw error.value;
         default:
-          error.value;
+          throw error.value;
       }
     }
     if (!data) {

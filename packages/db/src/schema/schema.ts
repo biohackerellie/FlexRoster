@@ -220,7 +220,7 @@ export const availability_view = pgView("availability_view", {
 FROM "classrooms" c
 JOIN "availability" a ON c."id" = a."classroomId"
 GROUP BY c."id", a."id";
-`)
+`);
 export const sessions = pgTable("session", {
   sessionToken: text("sessionToken").notNull().primaryKey(),
   userId: text("userId")
