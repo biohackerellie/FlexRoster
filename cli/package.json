@@ -4,9 +4,10 @@
     "cli": "./"
   },
   "engines": {
-    "go": ">=1.22.3"
+    "go": ">=1.22.6"
   },
   "scripts": {
+    "install": "go mod tidy",
     "start": "./bin/cli"
   }
 }

@@ -8,7 +8,9 @@
     "go": ">=1.22.3"
   },
   "scripts": {
+    "install": "go mod tidy",
     "dev": "air -c .air.toml",
-    "start": "./bin/main"
+    "start": "./bin/main",
+    "test": "go test ./... -v"
   }
 }

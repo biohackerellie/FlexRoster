@@ -13,6 +13,8 @@ permissions:
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  GO_VERSION: stable
+  GOLANGCI_LINT_VERSION: v1.59
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -32,19 +34,35 @@ jobs:
         run: cp .env.example .env
       - name: Lint
         run: pnpm lint && pnpm lint:ws
-  golangci:
-    name: lint
+
+  detect-go-modules:
     runs-on: ubuntu-latest
+    outputs:
+      modules: ${{steps.set-modules.outputs.modules}}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.22"
-      - name: golangci-lint
+          go-version: ${{env.GO_VERSION}}
+      - id: set-modules
+        run: bash ./modules.sh >> $GITHUB_OUTPUT
+
+  golangci:
+    needs: detect-go-modules
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        modules: ${{ fromJSON(needs.detect-go-modules.outputs.modules) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: golangci-lint ${{ matrix.modules }}
         uses: golangci/golangci-lint-action@v6
         with:
-          working-directory: ./cli
-          version: v1.58
+          working-directory: ${{matrix.modules}}
+          version: ${{ env.GOLANGCI_LING_VERSION}}
   format:
     runs-on: ubuntu-latest
     steps:
