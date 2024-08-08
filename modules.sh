@@ -18,4 +18,4 @@ for mod_file in $go_mod_files; do
 done
 
 # Print the modules as a JSON array
-echo ${modules[@]} 
+echo "modules=${modules[@]}"
