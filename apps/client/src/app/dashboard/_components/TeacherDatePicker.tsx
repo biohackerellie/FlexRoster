@@ -111,7 +111,7 @@ export function TeacherDatePickerForm({
                 disabled={(date) =>
                   date < today || date.getDay() === 6 || date.getDay() === 0
                 } // disable past dates // weekends
-                initialFocus
+                // initialFocus
               />
             </PopoverContent>
           </Popover>

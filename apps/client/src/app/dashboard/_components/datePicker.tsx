@@ -24,11 +24,9 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@local/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@local/ui/popover";
 
@@ -144,7 +142,7 @@ export function DatePickerForm({
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) => !isAvailable(date)} // disable all dates not in availableDates
-                        initialFocus
+                        // initialFocus
                       />
                     </PopoverContent>
                   </Popover>
