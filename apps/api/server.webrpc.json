@@ -1,0 +1,130 @@
+{
+  "webrpc": "v1",
+  "name": "api",
+  "version": "0.0.1",
+  "types": [
+    {
+      "name": "Classroom",
+      "kind": "struct",
+      "fields": [
+        {
+          "name": "ID",
+          "type": "string",
+          "meta": [
+            {
+              "json": "id"
+            }
+          ]
+        },
+        {
+          "name": "RoomNumber",
+          "type": "string",
+          "meta": [
+            {
+              "json": "roomNumber"
+            }
+          ]
+        },
+        {
+          "name": "TeacherName",
+          "type": "string",
+          "meta": [
+            {
+              "json": "teacherName"
+            }
+          ]
+        },
+        {
+          "name": "TeacherId",
+          "type": "string",
+          "meta": [
+            {
+              "json": "teacherId"
+            }
+          ]
+        },
+        {
+          "name": "Comment",
+          "type": "string",
+          "meta": [
+            {
+              "json": "comment"
+            }
+          ]
+        },
+        {
+          "name": "Available",
+          "type": "bool",
+          "meta": [
+            {
+              "json": "available"
+            }
+          ]
+        },
+        {
+          "name": "IsFlex",
+          "type": "bool",
+          "meta": [
+            {
+              "json": "isFlex"
+            }
+          ]
+        }
+              
+      ]
+    },
+    {
+    "name": "Availability",
+      "kind":"struct",
+      "fields": [
+        {
+          "name": "Date",
+          "type": "time.Time",
+          "meta": [
+        {
+          "json": "date"
+        }
+          ]
+        },
+        {
+          "name": "ID",
+          "type": "string",
+          "meta": [
+        {
+          "json": "id"
+        }
+          ]
+        },
+        {
+          "name": "ClassroomId",
+          "type": "string",
+          "meta": [
+        {
+          "json": "classroomId"
+        }
+          ]
+        },
+        {
+          "name": "TeacherId",
+          "type": "string",
+          "meta": [
+        {
+          "json": "teacherId"
+        }
+          ]
+        },
+        {
+          "name": "Available",
+          "type": "bool",
+          "meta": [
+        {
+          "json": "available"
+        }
+          ]
+        }
+      ]
+    }
+
+  ]
+}
+

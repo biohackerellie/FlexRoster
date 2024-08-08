@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"flag"
-	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -11,20 +9,17 @@ import (
 	"time"
 
 	"api/internal/lib/logger"
+	"api/internal/service"
 
 	"api/internal/config"
 	"api/internal/core/classrooms"
 	repository "api/internal/db/repository"
-	"api/internal/handler"
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/docgen"
 	"github.com/go-chi/render"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
-
-var routes = flag.Bool("routes", false, "Generate router documentation")
 
 func main() {
 	log := logger.New()
@@ -57,18 +52,11 @@ func main() {
 	classroomRepo := repository.NewClassroomDBService(db).WithLogs(log)
 	classroomService := classrooms.NewAdapter(classroomRepo).WithLogger(log)
 
-	handler.NewClassroomHandler(router, classroomService, log)
+	// handler.NewClassroomHandler(router, classroomService, log)
+	rpcClassroomHandler := service.NewClassroomServiceServer(classroomService)
+	router.Handle("/*", rpcClassroomHandler)
 	address := "localhost" + ":" + config.SERVER_PORT
 	server := newServer(address, router, log)
-
-	if *routes {
-		// fmt.Println(docgen.JSONRoutesDoc(r))
-		fmt.Println(docgen.MarkdownRoutesDoc(router, docgen.MarkdownOpts{
-			ProjectPath: "github.com/biohackerellie/FlexRoster/apps/api",
-			Intro:       "Welcomdfjdal;fkja;lkdsfjs.",
-		}))
-		return
-	}
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {

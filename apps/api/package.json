@@ -4,6 +4,10 @@
   "bin": {
     "main": "./bin/main"
   },
+  "type": "module",
+  "exports": {
+    ".": "./web/client.ts"
+  },
   "engines": {
     "go": ">=1.22.3"
   },

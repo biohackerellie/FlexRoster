@@ -4,8 +4,8 @@ import (
 	"context"
 
 	config "api/internal/config"
-	"api/internal/core/domain/user"
 	"api/internal/lib/logger"
+	user "api/internal/service"
 )
 
 type UsersDBService struct {
@@ -34,14 +34,14 @@ func (s *UsersDBService) GetTeacher(ctx context.Context, id string) (*user.Teach
 		return nil, err
 	}
 	return &user.Teacher{
-		User: user.User{
-			ID:    res.ID,
+		User: &user.User{
+			Id:    res.ID,
 			Name:  res.Name.String,
 			Email: res.Email,
 			Role:  res.Role,
 		},
-		Classroom: user.Classroom{
-			ID:          res.ID_2.String,
+		Classroom: &user.Classroom{
+			Id:          res.ID_2.String,
 			RoomNumber:  res.RoomNumber.String,
 			TeacherName: res.TeacherName.String,
 			TeacherId:   res.TeacherId.String,
@@ -57,7 +57,7 @@ func (s *UsersDBService) GetUser(ctx context.Context, id string) (*user.User, er
 		return nil, err
 	}
 	return &user.User{
-		ID:    res.ID,
+		Id:    res.ID,
 		Name:  res.Name.String,
 		Email: res.Email,
 		Role:  res.Role,
@@ -70,21 +70,21 @@ func (s *UsersDBService) GetTeacherWithRoster(ctx context.Context, id string) (*
 		return nil, err
 	}
 	return &user.TeacherWithRoster{
-		User: user.User{
-			ID:    res.ID,
+		User: &user.User{
+			Id:    res.ID,
 			Name:  res.Name.String,
 			Email: res.Email,
 			Role:  res.Role,
 		},
-		Student: user.Student{
+		Student: &user.Student{
 			StudentEmail: res.StudentEmail,
 			StudentName:  res.StudentName,
 			ClassroomId:  res.ClassroomId,
 			Status:       user.Status(res.Status),
-			ID:           res.ID_2,
+			Id:           res.ID_2,
 		},
-		Classroom: user.Classroom{
-			ID:          res.ID_3,
+		Classroom: &user.Classroom{
+			Id:          res.ID_3,
 			RoomNumber:  res.RoomNumber,
 			TeacherName: res.TeacherName,
 			TeacherId:   res.TeacherId.String,

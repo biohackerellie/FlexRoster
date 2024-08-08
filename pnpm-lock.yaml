@@ -65,6 +65,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.52.2(react@19.0.0-rc-fb9a90fa48-20240614))
+      '@local/api':
+        specifier: workspace:*
+        version: link:../api
       '@local/auth':
         specifier: workspace:*
         version: link:../../packages/auth

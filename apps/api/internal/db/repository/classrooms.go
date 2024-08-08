@@ -5,9 +5,10 @@ import (
 	"sync"
 	"time"
 
-	"api/internal/core/domain/classroom"
 	"api/internal/lib/helpers"
 	"api/internal/lib/logger"
+	classroom "api/internal/service"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -64,7 +65,7 @@ func (s *ClassroomDBService) GetAvailability(ctx context.Context) ([]*classroom.
 	response := make([]*classroom.Availability, len(res))
 	for i, r := range res {
 		mappedResponse := &classroom.Availability{
-			ID:          r.ID,
+			Id:          r.ID,
 			ClassroomId: r.ClassroomId,
 			Date:        r.Date.Time,
 			Available:   r.Available,
@@ -85,7 +86,7 @@ func (s *ClassroomDBService) GetTeacherAvailability(ctx context.Context, teacher
 
 	for i, r := range res {
 		mappedResponse := &classroom.Availability{
-			ID:          r.ID,
+			Id:          r.ID,
 			ClassroomId: r.ClassroomId,
 			Date:        r.Date.Time,
 			Available:   r.Available,
@@ -112,7 +113,7 @@ func (s *ClassroomDBService) GetRoomByTeacherId(ctx context.Context, id string) 
 		return nil, err
 	}
 	return &classroom.Classroom{
-		ID:          res.ID,
+		Id:          res.ID,
 		RoomNumber:  res.RoomNumber,
 		TeacherName: res.TeacherName.String,
 		TeacherId:   res.TeacherId,
@@ -128,8 +129,8 @@ func (s *ClassroomDBService) RoomsWithRosterCount(ctx context.Context) ([]*class
 	result := make([]*classroom.ClassroomWithCount, len(res))
 	for i, r := range res {
 		mappedResponse := &classroom.ClassroomWithCount{
-			Classroom: classroom.Classroom{
-				ID:          r.ID,
+			Classroom: &classroom.Classroom{
+				Id:          r.ID,
 				RoomNumber:  r.RoomNumber,
 				TeacherName: r.TeacherName,
 				TeacherId:   r.TeacherId.String,
@@ -151,7 +152,7 @@ func (s *ClassroomDBService) ClassroomSchedule(ctx context.Context, classroomid 
 	result := make([]*classroom.Availability, len(res))
 	for i, r := range res {
 		mappedResponse := &classroom.Availability{
-			ID:          r.Availability.ID,
+			Id:          r.Availability.ID,
 			ClassroomId: r.Availability.ClassroomId,
 			Date:        r.Availability.Date.Time,
 			Available:   r.Availability.Available,
@@ -195,7 +196,7 @@ func (s *ClassroomDBService) CreateAvailability(ctx context.Context, args []*cla
 	var availability []CreateAvailabilityParams
 	for _, arg := range args {
 		availability = append(availability, CreateAvailabilityParams{
-			ID:          arg.ID,
+			ID:          arg.Id,
 			TeacherId:   helpers.StringToPGText(arg.TeacherId),
 			ClassroomId: arg.ClassroomId,
 			Date:        pgtype.Date{Time: arg.Date},
@@ -219,8 +220,8 @@ func (s *ClassroomDBService) mapClassroom(r ClassroomQueryRow, ch chan<- *classr
 	}
 
 	mappedResponse := &classroom.ClassroomWithAvailable{
-		Classroom: classroom.Classroom{
-			ID:          r.ID,
+		Classroom: &classroom.Classroom{
+			Id:          r.ID,
 			RoomNumber:  r.RoomNumber,
 			TeacherName: r.TeacherName,
 			TeacherId:   r.TeacherId.String,

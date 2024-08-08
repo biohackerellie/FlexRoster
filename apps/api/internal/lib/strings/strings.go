@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"api/internal/core/domain/classroom"
+	classroom "api/internal/service"
 )
 
 const TimeFormat = "00:00"
@@ -52,18 +52,18 @@ func ChatHrefConstructor(id1 string, id2 string) string {
 }
 
 func FormatClasses(class *classroom.ClassroomWithAvailable, studentId string) *classroom.ClassroomWithChatID {
-	ChatId := ChatHrefConstructor(class.TeacherId, studentId)
-	formattedTeacherName := FormatTeacherNames(class.TeacherName)
+	ChatId := ChatHrefConstructor(class.Classroom.TeacherId, studentId)
+	formattedTeacherName := FormatTeacherNames(class.Classroom.TeacherName)
 	return &classroom.ClassroomWithChatID{
 		ChatId: ChatId,
-		Classroom: classroom.Classroom{
-			ID:          class.ID,
-			RoomNumber:  class.RoomNumber,
+		Classroom: &classroom.Classroom{
+			Id:          class.Classroom.Id,
+			RoomNumber:  class.Classroom.RoomNumber,
 			TeacherName: formattedTeacherName,
-			TeacherId:   class.TeacherId,
-			Comment:     class.Comment,
-			Available:   class.Available,
-			IsFlex:      class.IsFlex,
+			TeacherId:   class.Classroom.TeacherId,
+			Comment:     class.Classroom.Comment,
+			Available:   class.Classroom.Available,
+			IsFlex:      class.Classroom.IsFlex,
 		},
 		AvailableDates: class.AvailableDates,
 	}
