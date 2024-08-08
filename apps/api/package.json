@@ -2,7 +2,7 @@
 {
   "name": "@local/api",
   "bin": {
-    "cli": "./"
+    "main": "./bin/main"
   },
   "engines": {
     "go": ">=1.22.3"
@@ -10,7 +10,10 @@
   "scripts": {
     "install": "go mod tidy",
     "dev": "air -c .air.toml",
+
+    "format": "gofmt -s -l .",
     "start": "./bin/main",
     "test": "go test ./... -v"
+
   }
 }
