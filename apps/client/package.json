@@ -75,7 +75,7 @@
     "jiti": "^1.21.6",
     "postcss": "^8.4.41",
     "prettier": "catalog:",
-    "tailwindcss": "^3.4.7",
+    "tailwindcss": "^3.4.9",
     "typescript": "catalog:"
   },
   "overrides": {
