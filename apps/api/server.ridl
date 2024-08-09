@@ -203,7 +203,7 @@ service ClassroomService
 service RequestService
   - GetRequests(userId: string) => (requests: []Request)
   - GetAllRequests() => (requests: []Request)
-  - NewRequest(studentName: string, studentID: string, requestStatus: RequestStatus, dateRequested: timestamp, newTeacher: string, newTeacherName: string, currentTeacher: string, currentTeacherName: string)
+  - NewRequest(studentName: string, teacherRequest: bool, studentID: string, requestStatus: RequestStatus, dateRequested: timestamp, newTeacher: string, newTeacherName: string, currentTeacher: string, currentTeacherName: string)
   - UpdateRequest(id: int32, status: RequestStatus)
 
 
