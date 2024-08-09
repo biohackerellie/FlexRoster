@@ -24,7 +24,7 @@ type ClassroomDBService interface {
 type RequestDBService interface {
 	GetRequests(ctx context.Context, userId string) ([]*service.Request, error)
 	GetAllRequests(ctx context.Context) ([]*service.Request, error)
-	NewRequest(ctx context.Context, studentName string, studentID string, requestStatus *service.RequestStatus, dateRequested time.Time, newTeacher string, newTeacherName string, currentTeacher string, currentTeacherName string) error
+	NewRequest(ctx context.Context, request *service.Request) error
 	UpdateRequest(ctx context.Context, id int32, status *service.RequestStatus) error
 }
 
@@ -35,10 +35,13 @@ type StudentDBService interface {
 	RosterByTeacherId(ctx context.Context, teacherId string) ([]*service.StudentWithUser, error)
 	GetAllStudents(ctx context.Context) ([]*service.Student, error)
 	UpdateStudentStatus(ctx context.Context, status *service.Status, studentEmail string) error
+	UpdateStudentRoster(ctx context.Context, classroomId string, status service.Status, studentEmail string) error
 }
 
 type UserDBService interface {
 	GetTeacher(ctx context.Context, id string) (*service.Teacher, error)
 	GetUser(ctx context.Context, id string) (*service.User, error)
 	GetTeacherWithRoster(ctx context.Context, id string) (*service.TeacherWithRoster, error)
+
+	GetStudent(ctx context.Context, id string) (*service.StudentWithUser, error)
 }

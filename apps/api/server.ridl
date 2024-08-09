@@ -181,6 +181,8 @@ struct StudentWithUser
     + json = ClassroomId
   - comment: string
     + json = Comment
+  - teacherId: string
+    + json = TeacherId
 
 struct StudentRequests
   - student: Student
@@ -221,4 +223,6 @@ service UserService
   - GetTeacher(id: string) => (teacher: Teacher)
   - GetUser(id: string) => (user: User)
   - GetTeacherWithRoster(id: string) => (teacherWithRoster: TeacherWithRoster)
+  - GetStudent(id: string) => (student:StudentWithUser)
 
+error 1000 NoRequestForUError "You already Made a request for that day 🤡" HTTP 420
