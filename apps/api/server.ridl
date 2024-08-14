@@ -189,6 +189,13 @@ struct StudentRequests
   - requests: []Request
   - classroom: Classroom
 
+struct TeacherRequests
+  - IncomingRequests: []Request
+  - OutgoingRequests: []Request
+
+struct StudentDetails
+  - Student: StudentWithUser
+  - Requests: []Request
 
 service ClassroomService
   - GetClasses(id: string) => (classrooms: []ClassroomWithChatID)
@@ -207,7 +214,7 @@ service RequestService
   - GetAllRequests() => (requests: []Request)
   - NewRequest(studentName: string, teacherRequest: bool, studentID: string, requestStatus: RequestStatus, dateRequested: timestamp, newTeacher: string, newTeacherName: string, currentTeacher: string, currentTeacherName: string)
   - UpdateRequest(id: int32, status: RequestStatus)
-
+  - GetTeacherRequests(teacherId: string) => (requests: TeacherRequests)
 
 
 service StudentService
@@ -224,5 +231,6 @@ service UserService
   - GetUser(id: string) => (user: User)
   - GetTeacherWithRoster(id: string) => (teacherWithRoster: TeacherWithRoster)
   - GetStudent(id: string) => (student:StudentWithUser)
+  - GetStudentDetails(id: string) => (details: StudentDetails)
 
 error 1000 NoRequestForUError "You already Made a request for that day 🤡" HTTP 420

@@ -24,7 +24,7 @@ func NewAdapter(requests ports.RequestDBService, users ports.UserDBService, stud
 }
 
 func (a *Adapter) WithLogger(log *logger.Logger) *Adapter {
-	log.With("layer", "core", "name", "classroomService")
+	log.With("layer", "core", "name", "requestsService")
 	a.log = log
 	return a
 }

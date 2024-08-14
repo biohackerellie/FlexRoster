@@ -148,3 +148,54 @@ func (a *Adapter) NewRequest(ctx context.Context, teacherRequest bool, studentID
 	}
 	return nil
 }
+
+func (a *Adapter) GetTeacherRequests(ctx context.Context, teacherId string) (*service.TeacherRequests, error) {
+	requests := make([]*service.Request, 0)
+	cacheKey := stringHelpers.CacheKey("requests", teacherId+":teacher")
+	cacheRequests, err := a.cache.Get(cacheKey)
+
+	incomingRequests := make([]*service.Request, 0)
+	outgoingRequests := make([]*service.Request, 0)
+	if err == nil {
+		a.log.Info("Cache hit for teacher requests")
+		err = json.Unmarshal([]byte(cacheRequests), &requests)
+		if err != nil {
+			a.log.Error("Error unmarshalling requests from cache")
+		}
+	} else {
+		requests, err = a.GetRequests(ctx, teacherId)
+		if err != nil {
+			a.log.Error("Error getting requests from db", "err", err)
+		}
+
+		if len(requests) < 0 {
+			return &service.TeacherRequests{
+				IncomingRequests: incomingRequests,
+				OutgoingRequests: outgoingRequests,
+			}, nil
+		}
+
+		for _, r := range requests {
+			if r.Status.Is(service.RequestStatus_pending) {
+				if r.CurrentTeacher == teacherId {
+					outgoingRequests = append(outgoingRequests, r)
+				} else if r.NewTeacher == teacherId {
+					incomingRequests = append(incomingRequests, r)
+				}
+			}
+		}
+		result := &service.TeacherRequests{
+			IncomingRequests: incomingRequests,
+			OutgoingRequests: outgoingRequests,
+		}
+		stringResult, _ := json.Marshal(result)
+
+		err = a.cache.Set(cacheKey, stringResult, 10*time.Minute)
+		if err != nil {
+			a.log.Error("Error setting requests in cache", "err", err)
+		}
+
+		return result, nil
+	}
+	return nil, nil
+}

@@ -23,7 +23,7 @@ func StrToInt64(i string) (int64, error) {
 }
 
 func CacheKey(t string, i string) string {
-	return fmt.Sprintf("%s:%s", t, i)
+	return GetHashKey(t + ":" + i)
 }
 
 /**
