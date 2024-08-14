@@ -1,6 +1,6 @@
 module api
 
-go 1.22.6
+go 1.23.0
 
 require (
 	github.com/charmbracelet/lipgloss v0.10.0
