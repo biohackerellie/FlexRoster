@@ -1,11 +1,11 @@
 module api
 
-go 1.22.6
+go 1.23.0
 
 require (
 	github.com/charmbracelet/lipgloss v0.10.0
 	github.com/charmbracelet/log v0.4.0
-	github.com/go-chi/chi/v5 v5.1.0
+	github.com/go-chi/chi v1.5.5
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/go-chi/docgen v1.3.0
 	github.com/go-chi/render v1.0.3
