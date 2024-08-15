@@ -1,0 +1,236 @@
+webrpc = v1             # version of webrpc schema format (ridl or json)
+
+name = api       # name of your backend app
+version = v0.0.1  
+
+# Classroom struct
+struct Classroom 
+  - id: string
+    + json = id
+  - roomNumber: string
+    + json = roomNumber
+  - teacherName: string
+    + json = teacherName
+  - teacherId: string
+    + json = teacherId
+  - comment: string
+    + json = comment
+  - available: bool
+    + json = available
+  - isFlex: bool
+    + json = isFlex
+
+
+
+struct Availability 
+  - date: timestamp
+    + json = date
+  - id: string
+    + json = id
+  - classroomId: string
+    + json = classroomId
+  - teacherId: string
+    + json = teacherId
+  - available: bool
+    + json = available
+
+
+struct ClassroomWithChatID 
+  - chatId: string
+    + json = chatId
+  - Classroom: Classroom
+  - availableDates: []timestamp
+    + json = availableDates
+
+struct TodaysAvailability   
+  - id: string
+    + json = id
+  - available: bool
+    + json = available
+
+struct ClassroomWithAvailable 
+  - Classroom: Classroom
+  - availableDates: []timestamp
+    + json = availableDates
+
+
+struct ClassroomWithCount 
+  - Classroom: Classroom
+  - count: int64
+    + json = count
+
+enum RequestStatus: string
+  - pending
+  - approved
+  - denied
+  - arrived
+
+enum Status: string
+  - transferredA
+  - transferredN
+  - default
+
+
+
+
+struct Request
+  - id: int32
+    + json = ID
+  - studentID: string
+    + json = StudentID
+  - studentName: string
+    + json = StudentName
+  - newTeacher: string
+    + json = NewTeacher
+  - newTeacherName: string
+    + json = NewTeacherName
+  - currentTeacher: string
+    + json = CurrentTeacher
+  - currentTeacherName: string
+    + json = CurrentTeacherName
+  - dateRequested: timestamp
+    + json = DateRequested
+  - status: RequestStatus
+    + json = Status
+  - arrived: bool
+    + json = Arrived
+  - timestamp: string
+    + json = Timestamp
+
+
+
+
+struct Student
+  - studentEmail: string
+    + json = StudentEmail
+  - studentName: string
+    + json = StudentName
+  - classroomId: string
+    + json = ClassroomId
+  - status: Status
+    + json = Status
+  - id: int32
+    + json = ID
+
+
+
+struct AllStudentMap
+  - studentEmail: string
+    + json = StudentEmail
+  - studentName: string
+    + json = StudentName
+  - status: Status
+    + json = Status
+  - teacherName: string
+    + json = TeacherName
+  - rosterId: int32
+    + json = RosterId
+
+struct StudentWithClassroom
+  - student: Student
+  - classroom: Classroom
+  - available: bool
+    + json = Available
+
+
+
+struct User
+  - id: string
+    + json = ID
+  - name: string
+    + json = Name
+  - email: string
+    + json = Email
+  - emailVerified: timestamp
+    + json = EmailVerified
+  - image: string
+    + json = Image
+  - role: string
+    + json = Role
+
+
+
+struct Teacher
+  - user: User
+  - classroom: Classroom
+
+
+
+
+
+struct TeacherWithRoster
+  - user: User
+  - student: Student
+  - classroom: Classroom
+
+
+struct StudentWithUser
+  - studentEmail: string
+    + json = StudentEmail
+  - studentName: string
+    + json = StudentName
+  - status: Status
+    + json = Status
+  - studentId: string
+    + json = StudentId
+  - roomNumber: string
+    + json = RoomNumber
+  - teacherName: string
+    + json = TeacherName
+  - classroomId: string
+    + json = ClassroomId
+  - comment: string
+    + json = Comment
+  - teacherId: string
+    + json = TeacherId
+
+struct StudentRequests
+  - student: Student
+  - requests: []Request
+  - classroom: Classroom
+
+struct TeacherRequests
+  - IncomingRequests: []Request
+  - OutgoingRequests: []Request
+
+struct StudentDetails
+  - Student: StudentWithUser
+  - Requests: []Request
+
+service ClassroomService
+  - GetClasses(id: string) => (classrooms: []ClassroomWithChatID)
+  - GetSpecificClassroom(id: string) => (classroom: Classroom)
+  - NewComment(id: string, comment: string)
+  - DeleteComment(id: string)
+  - SetAvailability(teacherId: string, classroomId: string, dates: []timestamp)
+  - RoomsWithCount() => (classrooms: []ClassroomWithCount)
+  - GetAvailability(id: string) => (availability: []Availability)
+  - DeleteAvailability(id: string, date: timestamp)
+
+
+
+service RequestService
+  - GetRequests(userId: string) => (requests: []Request)
+  - GetAllRequests() => (requests: []Request)
+  - NewRequest(studentName: string, teacherRequest: bool, studentID: string, requestStatus: RequestStatus, dateRequested: timestamp, newTeacher: string, newTeacherName: string, currentTeacher: string, currentTeacherName: string)
+  - UpdateRequest(id: int32, status: RequestStatus)
+  - GetTeacherRequests(teacherId: string) => (requests: TeacherRequests)
+
+
+service StudentService
+  - AllStudentsMap() => (students: []AllStudentMap)
+  - RosterByClassroomId(classroomId: string) => (students: []StudentWithClassroom)
+  - RosterById(id: int32) => (students: []Student)
+  - RosterByTeacherId(teacherId: string) => (students: []StudentWithUser)
+  - GetAllStudents() => (students: []Student)
+  - UpdateStudentStatus(status: Status, studentEmail: string)
+
+
+service UserService
+  - GetTeacher(id: string) => (teacher: Teacher)
+  - GetUser(id: string) => (user: User)
+  - GetTeacherWithRoster(id: string) => (teacherWithRoster: TeacherWithRoster)
+  - GetStudent(id: string) => (student:StudentWithUser)
+  - GetStudentDetails(id: string) => (details: StudentDetails)
+
+error 1000 NoRequestForUError "You already Made a request for that day 🤡" HTTP 420

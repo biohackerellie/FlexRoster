@@ -4,9 +4,8 @@ import (
 	"context"
 
 	config "api/internal/config"
-	"api/internal/core/domain/student"
-
 	"api/internal/lib/logger"
+	student "api/internal/service"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -60,12 +59,12 @@ func (s *StudentDBService) RosterByClassroomId(ctx context.Context, classroomId 
 
 	for i, r := range res {
 		mappedRes := &student.StudentWithClassroom{
-			Student: student.Student{
+			Student: &student.Student{
 				StudentEmail: r.StudentEmail,
-				ID:           r.StudentId,
+				Id:           r.StudentId,
 			},
-			Classroom: student.Classroom{
-				ClassroomId: r.ClassroomId,
+			Classroom: &student.Classroom{
+				Id:          r.ClassroomId,
 				RoomNumber:  r.RoomNumber,
 				TeacherName: r.TeacherName,
 			},
@@ -88,7 +87,7 @@ func (s *StudentDBService) RosterById(ctx context.Context, id int32) ([]*student
 			StudentName:  r.StudentName,
 			ClassroomId:  r.ClassroomId,
 			Status:       student.Status(r.Status),
-			ID:           r.ID,
+			Id:           r.ID,
 		}
 		response[i] = mappedRes
 	}
@@ -133,7 +132,7 @@ func (s *StudentDBService) GetAllStudents(ctx context.Context) ([]*student.Stude
 			StudentName:  r.StudentName,
 			ClassroomId:  r.ClassroomId,
 			Status:       student.Status(r.Status),
-			ID:           r.ID,
+			Id:           r.ID,
 		}
 		response[i] = mappedResponse
 	}

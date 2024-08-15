@@ -5,9 +5,8 @@ import (
 	"time"
 
 	config "api/internal/config"
-	"api/internal/core/domain/request"
-
 	"api/internal/lib/logger"
+	request "api/internal/service"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -48,7 +47,7 @@ func (s *RequestDBService) GetRequests(ctx context.Context, userId string) ([]*r
 	for i, r := range res {
 
 		mappedRes := &request.Request{
-			ID:                 r.Request.ID,
+			Id:                 r.Request.ID,
 			StudentID:          r.Request.StudentId,
 			StudentName:        r.Request.StudentName,
 			NewTeacher:         r.Request.NewTeacher,
@@ -74,7 +73,7 @@ func (s *RequestDBService) GetAllRequests(ctx context.Context) ([]*request.Reque
 	response := make([]*request.Request, len(res))
 	for i, r := range res {
 		mappedRes := &request.Request{
-			ID:                 r.ID,
+			Id:                 r.ID,
 			StudentID:          r.StudentId,
 			StudentName:        r.StudentName,
 			NewTeacher:         r.NewTeacher,

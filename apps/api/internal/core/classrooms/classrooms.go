@@ -7,17 +7,17 @@ import (
 	"sync"
 	"time"
 
-	"api/internal/core/domain/classroom"
 	arrays "api/internal/lib/arrays"
 	"api/internal/lib/helpers"
 	stringHelpers "api/internal/lib/strings"
+	"api/internal/service"
 )
 
 var today = time.Now().Format("2006-01-02")
 
-func (a *Adapter) GetClasses(id string) ([]*classroom.ClassroomWithChatID, error) {
+func (a *Adapter) GetClasses(ctx context.Context, id string) ([]*service.ClassroomWithChatID, error) {
 	cacheKey := stringHelpers.CacheKey("StudentCache", id)
-	var returnData []*classroom.ClassroomWithChatID
+	var returnData []*service.ClassroomWithChatID
 	cachedData, err := a.cache.Get(cacheKey)
 	if err == nil {
 		err := json.Unmarshal([]byte(cachedData), &returnData)
@@ -29,15 +29,15 @@ func (a *Adapter) GetClasses(id string) ([]*classroom.ClassroomWithChatID, error
 	}
 	classes, err := a.classroomRepo.GetClassrooms(context.Background())
 	if err != nil {
-		return nil, fmt.Errorf("error getting classrooms: %w", err)
+		return nil, fmt.Errorf("error getting service.: %w", err)
 	}
 	fmt.Println("Classes: ", classes)
 	var wg sync.WaitGroup
-	ch := make(chan *classroom.ClassroomWithChatID, len(classes))
+	ch := make(chan *service.ClassroomWithChatID, len(classes))
 
 	for _, c := range classes {
 		wg.Add(1)
-		go func(c *classroom.ClassroomWithAvailable) {
+		go func(c *service.ClassroomWithAvailable) {
 			defer wg.Done()
 			formattedClass := stringHelpers.FormatClasses(c, id)
 			ch <- formattedClass
@@ -67,15 +67,15 @@ func (a *Adapter) GetClasses(id string) ([]*classroom.ClassroomWithChatID, error
 	return returnData, nil
 }
 
-func (a *Adapter) GetSpecificClassroom(id string) (*classroom.Classroom, error) {
+func (a *Adapter) GetSpecificClassroom(ctx context.Context, id string) (*service.Classroom, error) {
 	d, err := a.classroomRepo.GetRoomByTeacherId(context.Background(), id)
 	if err != nil {
-		return nil, fmt.Errorf("error getting classroom: %w", err)
+		return nil, fmt.Errorf("error getting service. %w", err)
 	}
 	return d, nil
 }
 
-func (a *Adapter) NewComment(id string, comment string) error {
+func (a *Adapter) NewComment(ctx context.Context, id string, comment string) error {
 	err := a.cache.Clear(stringHelpers.CacheKey("TeacherRoster", id))
 	if err != nil {
 		a.log.Warn("Error clearing cache: ", err)
@@ -83,7 +83,7 @@ func (a *Adapter) NewComment(id string, comment string) error {
 	return a.classroomRepo.CreateComment(context.Background(), id, comment)
 }
 
-func (a *Adapter) DeleteComment(id string) error {
+func (a *Adapter) DeleteComment(ctx context.Context, id string) error {
 	err := a.cache.Clear(stringHelpers.CacheKey("TeacherRoster", id))
 	if err != nil {
 		a.log.Warn("Error clearing cache: ", err)
@@ -91,10 +91,10 @@ func (a *Adapter) DeleteComment(id string) error {
 	return a.classroomRepo.DeleteComment(context.Background(), id)
 }
 
-func (a *Adapter) GetAvailability(id string) ([]*classroom.Availability, error) {
+func (a *Adapter) GetAvailability(ctx context.Context, id string) ([]*service.Availability, error) {
 	result, err := a.cache.Get(stringHelpers.CacheKey("TeacherAvailability", id))
 	if err == nil {
-		var returnData []*classroom.Availability
+		var returnData []*service.Availability
 		err := json.Unmarshal([]byte(result), &returnData)
 		if err != nil {
 			return nil, err
@@ -106,7 +106,7 @@ func (a *Adapter) GetAvailability(id string) ([]*classroom.Availability, error) 
 		return nil, err
 	}
 	if len(dbData) == 0 {
-		return []*classroom.Availability{}, nil
+		return []*service.Availability{}, nil
 	}
 	err = a.cache.Set(stringHelpers.CacheKey("TeacherAvailability", id), dbData, 10*time.Minute)
 	if err != nil {
@@ -115,7 +115,7 @@ func (a *Adapter) GetAvailability(id string) ([]*classroom.Availability, error) 
 	return dbData, nil
 }
 
-func (a *Adapter) SetAvailability(teacherId string, classroomId string, dates []time.Time) error {
+func (a *Adapter) SetAvailability(ctx context.Context, teacherId string, classroomId string, dates []time.Time) error {
 	err := a.cache.Clear(stringHelpers.CacheKey("TeacherRoster", teacherId))
 	if err != nil {
 		a.log.Warn("Error clearing cache: ", err)
@@ -126,20 +126,20 @@ func (a *Adapter) SetAvailability(teacherId string, classroomId string, dates []
 	existing, err := a.classroomRepo.ClassroomSchedule(context.Background(), classroomId)
 
 	if err != nil {
-		a.log.Warn("Error getting classroom schedule: ", err)
+		a.log.Warn("Error getting service.schedule: ", err)
 	} else {
 		for _, date := range existing {
 			ExistingDates = append(ExistingDates, date.Date)
 		}
 	}
-	availability := make([]*classroom.Availability, 0)
+	availability := make([]*service.Availability, 0)
 	for _, date := range dates {
 		if !arrays.EZContains(ExistingDates, date) {
-			availability = append(availability, &classroom.Availability{
+			availability = append(availability, &service.Availability{
 				TeacherId:   teacherId,
 				ClassroomId: classroomId,
 				Date:        date,
-				ID:          helpers.GenRandomKeyString(10),
+				Id:          helpers.GenRandomKeyString(10),
 				Available:   true,
 			})
 		}
@@ -154,10 +154,18 @@ func (a *Adapter) SetAvailability(teacherId string, classroomId string, dates []
 	return nil
 }
 
-func (a *Adapter) RoomsWithCount() ([]*classroom.ClassroomWithCount, error) {
+func (a *Adapter) DeleteAvailability(ctx context.Context, id string, date time.Time) error {
+	err := a.cache.Clear(stringHelpers.CacheKey("TeacherRoster", id))
+	if err != nil {
+		a.log.Warn("Error clearing cache: ", err)
+	}
+	return a.classroomRepo.DeleteAvailability(context.Background(), id, date)
+}
+
+func (a *Adapter) RoomsWithCount(ctx context.Context) ([]*service.ClassroomWithCount, error) {
 	rooms, err := a.cache.Get(stringHelpers.CacheKey("Rooms", "All"))
 	if err == nil {
-		var returnData []*classroom.ClassroomWithCount
+		var returnData []*service.ClassroomWithCount
 		err := json.Unmarshal([]byte(rooms), &returnData)
 		if err != nil {
 			return nil, fmt.Errorf("error unmarshalling cached data: %w", err)
@@ -166,7 +174,7 @@ func (a *Adapter) RoomsWithCount() ([]*classroom.ClassroomWithCount, error) {
 	}
 	res, err := a.classroomRepo.RoomsWithRosterCount(context.Background())
 	if err != nil {
-		return nil, fmt.Errorf("error getting classrooms with roster count: %w", err)
+		return nil, fmt.Errorf("error getting service. with roster count: %w", err)
 	}
 	roomsString, err := json.Marshal(res)
 	if err != nil {

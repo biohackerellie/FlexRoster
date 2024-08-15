@@ -4,8 +4,8 @@ import (
 	"context"
 
 	config "api/internal/config"
-	"api/internal/core/domain/user"
 	"api/internal/lib/logger"
+	user "api/internal/service"
 )
 
 type UsersDBService struct {
@@ -34,14 +34,14 @@ func (s *UsersDBService) GetTeacher(ctx context.Context, id string) (*user.Teach
 		return nil, err
 	}
 	return &user.Teacher{
-		User: user.User{
-			ID:    res.ID,
+		User: &user.User{
+			Id:    res.ID,
 			Name:  res.Name.String,
 			Email: res.Email,
 			Role:  res.Role,
 		},
-		Classroom: user.Classroom{
-			ID:          res.ID_2.String,
+		Classroom: &user.Classroom{
+			Id:          res.ID_2.String,
 			RoomNumber:  res.RoomNumber.String,
 			TeacherName: res.TeacherName.String,
 			TeacherId:   res.TeacherId.String,
@@ -57,7 +57,7 @@ func (s *UsersDBService) GetUser(ctx context.Context, id string) (*user.User, er
 		return nil, err
 	}
 	return &user.User{
-		ID:    res.ID,
+		Id:    res.ID,
 		Name:  res.Name.String,
 		Email: res.Email,
 		Role:  res.Role,
@@ -70,26 +70,44 @@ func (s *UsersDBService) GetTeacherWithRoster(ctx context.Context, id string) (*
 		return nil, err
 	}
 	return &user.TeacherWithRoster{
-		User: user.User{
-			ID:    res.ID,
-			Name:  res.Name.String,
-			Email: res.Email,
-			Role:  res.Role,
+		User: &user.User{
+			Id:    res.User.ID,
+			Name:  res.User.Name.String,
+			Email: res.User.Email,
+			Role:  res.User.Role,
 		},
-		Student: user.Student{
-			StudentEmail: res.StudentEmail,
-			StudentName:  res.StudentName,
-			ClassroomId:  res.ClassroomId,
-			Status:       user.Status(res.Status),
-			ID:           res.ID_2,
+		Student: &user.Student{
+			StudentEmail: res.Student.StudentEmail,
+			StudentName:  res.Student.StudentName,
+			ClassroomId:  res.Student.ClassroomId,
+			Status:       user.Status(res.Student.Status),
+			Id:           res.Student.ID,
 		},
-		Classroom: user.Classroom{
-			ID:          res.ID_3,
-			RoomNumber:  res.RoomNumber,
-			TeacherName: res.TeacherName,
-			TeacherId:   res.TeacherId.String,
-			Comment:     res.Comment.String,
-			IsFlex:      res.IsFlex.Bool,
+		Classroom: &user.Classroom{
+			Id:          res.Classroom.ID,
+			RoomNumber:  res.Classroom.RoomNumber,
+			TeacherName: res.Classroom.TeacherName,
+			TeacherId:   res.Classroom.TeacherId.String,
+			Comment:     res.Classroom.Comment.String,
+			IsFlex:      res.Classroom.IsFlex.Bool,
 		},
+	}, nil
+}
+
+func (s *UsersDBService) GetStudent(ctx context.Context, id string) (*user.StudentWithUser, error) {
+	res, err := s.q.UserRosterQuery(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return &user.StudentWithUser{
+		StudentEmail: res.Student.StudentEmail,
+		StudentName:  res.Student.StudentName,
+		ClassroomId:  res.Classroom.ID,
+		Status:       user.Status(res.Student.Status),
+		StudentId:    res.User.ID,
+		RoomNumber:   res.Classroom.RoomNumber,
+		TeacherName:  res.Classroom.TeacherName,
+		Comment:      res.Classroom.Comment.String,
+		TeacherId:    res.Classroom.TeacherId.String,
 	}, nil
 }

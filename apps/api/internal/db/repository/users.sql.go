@@ -78,53 +78,40 @@ func (q *Queries) GetUser(ctx context.Context, id string) (GetUserRow, error) {
 }
 
 const userRosterQuery = `-- name: UserRosterQuery :one
-SELECT "user".id, name, email, "emailVerified", image, role, "studentEmail", "studentName", "classroomId", status, s.id, c.id, "roomNumber", "teacherName", "teacherId", comment, "isFlex" FROM "user"
-JOIN "students" s ON s."studentEmail" = "user"."email"
+SELECT u.id, u.name, u.email, u."emailVerified", u.image, u.role, s."studentEmail", s."studentName", s."classroomId", s.status, s.id, c.id, c."roomNumber", c."teacherName", c."teacherId", c.comment, c."isFlex" 
+FROM "user" u
+JOIN "students" s ON s."studentEmail" = u."email"
 JOIN "classrooms" c ON c."id" = s."classroomId"
 WHERE "user"."id" = $1
 `
 
 type UserRosterQueryRow struct {
-	ID            string           `db:"id" json:"id"`
-	Name          pgtype.Text      `db:"name" json:"name"`
-	Email         string           `db:"email" json:"email"`
-	EmailVerified pgtype.Timestamp `db:"emailVerified" json:"emailVerified"`
-	Image         pgtype.Text      `db:"image" json:"image"`
-	Role          string           `db:"role" json:"role"`
-	StudentEmail  string           `db:"studentEmail" json:"studentEmail"`
-	StudentName   string           `db:"studentName" json:"studentName"`
-	ClassroomId   string           `db:"classroomId" json:"classroomId"`
-	Status        Status           `db:"status" json:"status"`
-	ID_2          int32            `db:"id_2" json:"id_2"`
-	ID_3          string           `db:"id_3" json:"id_3"`
-	RoomNumber    string           `db:"roomNumber" json:"roomNumber"`
-	TeacherName   string           `db:"teacherName" json:"teacherName"`
-	TeacherId     pgtype.Text      `db:"teacherId" json:"teacherId"`
-	Comment       pgtype.Text      `db:"comment" json:"comment"`
-	IsFlex        pgtype.Bool      `db:"isFlex" json:"isFlex"`
+	User      User      `db:"user" json:"user"`
+	Student   Student   `db:"student" json:"student"`
+	Classroom Classroom `db:"classroom" json:"classroom"`
 }
 
 func (q *Queries) UserRosterQuery(ctx context.Context, id string) (UserRosterQueryRow, error) {
 	row := q.db.QueryRow(ctx, userRosterQuery, id)
 	var i UserRosterQueryRow
 	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.Email,
-		&i.EmailVerified,
-		&i.Image,
-		&i.Role,
-		&i.StudentEmail,
-		&i.StudentName,
-		&i.ClassroomId,
-		&i.Status,
-		&i.ID_2,
-		&i.ID_3,
-		&i.RoomNumber,
-		&i.TeacherName,
-		&i.TeacherId,
-		&i.Comment,
-		&i.IsFlex,
+		&i.User.ID,
+		&i.User.Name,
+		&i.User.Email,
+		&i.User.EmailVerified,
+		&i.User.Image,
+		&i.User.Role,
+		&i.Student.StudentEmail,
+		&i.Student.StudentName,
+		&i.Student.ClassroomId,
+		&i.Student.Status,
+		&i.Student.ID,
+		&i.Classroom.ID,
+		&i.Classroom.RoomNumber,
+		&i.Classroom.TeacherName,
+		&i.Classroom.TeacherId,
+		&i.Classroom.Comment,
+		&i.Classroom.IsFlex,
 	)
 	return i, err
 }

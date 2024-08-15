@@ -1,6 +1,6 @@
 import React from "react";
 import { unstable_noStore as noStore } from "next/cache";
-import { format, toZonedTime } from "date-fns-tz";
+import { format } from "date-fns";
 import { Loader2 } from "lucide-react";
 
 import type { Request } from "@local/utils";
@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@local/ui/card";
 import { ScrollArea } from "@local/ui/scroll-area";
 import { Separator } from "@local/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@local/ui/tabs";
+import { logger } from "@local/utils";
 
 import { client } from "@/lib/eden";
 import ApprovalMenu from "../../../_components/Requests";
@@ -97,13 +98,14 @@ async function getRequests(teacherId: string) {
     .teacher({ userId: teacherId })
     .get();
   if (error) {
-    console.error(error);
+    logger.error(error);
   }
   return data;
 }
 function RequestComponent(request: Request) {
-  const timeZone = "America/Denver";
-  const zonedDate = toZonedTime(request.dateRequested, timeZone);
+  const daate = new Date(request.dateRequested);
+  daate.setUTCHours(23);
+  const zonedDate = daate.toLocaleDateString();
 
   return (
     <div className="justify-between p-2">
@@ -112,7 +114,7 @@ function RequestComponent(request: Request) {
           {request.studentName} from {request.currentTeacherName}'s room
         </div>
         <div className="flex justify-between">
-          Requested {format(zonedDate, "PPP")}
+          Requested {zonedDate}
           <div className="cursor-pointer">
             <ApprovalMenu
               requestId={request.id}

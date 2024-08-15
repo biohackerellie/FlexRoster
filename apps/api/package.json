@@ -4,12 +4,15 @@
   "bin": {
     "main": "./bin/main"
   },
+  "type": "module",
+  "exports": {
+    ".": "./web/client.ts"
+  },
   "engines": {
     "go": ">=1.22.3"
   },
   "scripts": {
     "install": "go mod tidy",
-    "dev": "air -c .air.toml",
 
     "format": "gofmt -s -l .",
     "start": "./bin/main",

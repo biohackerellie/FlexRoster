@@ -2,7 +2,6 @@ import type { SearchParams } from "@/hooks/types";
 import * as React from "react";
 import { Loader2 } from "lucide-react";
 
-import type { TableSearchParams } from "@local/utils";
 import { auth } from "@local/auth";
 import {
   Card,
@@ -15,7 +14,6 @@ import {
 import { searchParamsValidator } from "@local/utils";
 
 import { getDefaultRoster } from "../../_components/logic/queries";
-// import { getDefaultRoster } from "../../_components/logic/queries";
 import TeacherRosterTable from "../../_components/tables/teacherTable";
 
 export default async function TeacherDashboardPage({

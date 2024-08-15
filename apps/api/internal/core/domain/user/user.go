@@ -35,6 +35,7 @@ type Student struct {
 	Status       Status
 	ID           int32
 }
+
 type Teacher struct {
 	User
 	Classroom

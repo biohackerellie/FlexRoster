@@ -1,6 +1,8 @@
 package classroom
 
-import "time"
+import (
+	"time"
+)
 
 type ClassroomResponses interface {
 	isClassroomResponses()
@@ -52,15 +54,3 @@ type ClassroomWithCount struct {
 }
 
 func (ClassroomWithCount) isClassroomResponses() {}
-
-type GetClassesResponse struct {
-	err     error
-	classes []*ClassroomWithChatID
-}
-type (
-	Comment        string
-	CommentRequest struct {
-		Comment *Comment `json:"comment,omitempty"`
-		Id      string   `json:"id"`
-	}
-)

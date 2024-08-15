@@ -1,10 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { PlusIcon, TrashIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { toast } from "sonner";
 
-import { schema } from "@local/db";
 import { Button } from "@local/ui/button";
 import {
   Dialog,
@@ -19,8 +18,7 @@ import {
 import { Textarea } from "@local/ui/textarea";
 
 import { getErrorMessage } from "@/lib/errorHandler";
-import { createComment, deleteComment } from "./logic/actions";
-import { deleteComments } from "./logic/clientActions";
+import { createComment } from "./logic/actions";
 
 interface CommentProps {
   comment?: string;

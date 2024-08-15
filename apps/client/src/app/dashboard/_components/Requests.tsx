@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import {
   DropdownMenu,
@@ -9,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@local/ui/dropdown-menu";
 
+import { getErrorMessage } from "@/lib/errorHandler";
 import { RequestApproval } from "./logic/actions";
 
 function ApprovalMenu({
@@ -22,35 +25,42 @@ function ApprovalMenu({
   teacherId: string;
   newTeacherId: string;
 }) {
+  const router = useRouter();
+  const [isPending, startCreateTransition] = React.useTransition();
+  const [open, setOpen] = React.useState(false);
+  function onSubmit(status: "approved" | "denied") {
+    startCreateTransition(() => {
+      toast.promise(
+        RequestApproval(requestId, status, studentId, teacherId, newTeacherId),
+        {
+          loading: "Creating comment...",
+          success: () => {
+            setOpen(false);
+            router.refresh();
+            return "Comment created successfully";
+          },
+          error: (error) => {
+            setOpen(false);
+            return getErrorMessage(error);
+          },
+          position: "top-center",
+        },
+      );
+    });
+  }
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger className="animate-pulse hover:cursor-pointer">
         Pending
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem
-          onClick={() => {
-            void Approval(
-              requestId,
-              studentId,
-              teacherId,
-              newTeacherId,
-              "approved",
-            );
-          }}
-        >
+        <DropdownMenuItem onClick={() => onSubmit("approved")}>
           Approve
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => {
-            void Approval(
-              requestId,
-              studentId,
-              teacherId,
-              newTeacherId,
-              "denied",
-            );
-          }}
+          disabled={isPending}
+          onClick={() => onSubmit("denied")}
         >
           Deny
         </DropdownMenuItem>
@@ -58,25 +68,5 @@ function ApprovalMenu({
     </DropdownMenu>
   );
 }
-
-const Approval = async (
-  requestId: string | number,
-  studentId: string,
-  teacherId: string,
-  newTeacherId: string,
-  status: "approved" | "denied",
-) => {
-  try {
-    await RequestApproval(
-      requestId,
-      status,
-      studentId,
-      teacherId,
-      newTeacherId,
-    );
-  } catch (e) {
-    console.error(e);
-  }
-};
 
 export default ApprovalMenu;
