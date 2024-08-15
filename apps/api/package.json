@@ -12,9 +12,7 @@
     "go": ">=1.22.3"
   },
   "scripts": {
-    "install": "go mod tidy",
 
-    "format": "gofmt -s -l .",
     "start": "./bin/main",
     "test": "go test ./... -v"
 
