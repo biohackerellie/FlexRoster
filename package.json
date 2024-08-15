@@ -39,7 +39,7 @@
     "@total-typescript/ts-reset": "^0.5.1",
     "@turbo/gen": "^2.0.13",
     "prettier": "catalog:",
-    "turbo": "^2.0.13",
+    "turbo": "^2.0.14",
     "typescript": "catalog:"
   },
   "prettier": "@local/prettier-config",
