@@ -18,7 +18,7 @@
     "@typescript-eslint/parser": "^8.1.0",
     "eslint-config-turbo": "^2.0.13",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-react-compiler": "^0.0.0-experimental-c8b3f72-20240517",
+    "eslint-plugin-react-compiler": "^0.0.0-experimental-d0e920e-20240815",
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
