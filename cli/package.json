@@ -7,8 +7,6 @@
     "go": ">=1.22.6"
   },
   "scripts": {
-    "install": "go mod tidy",
-    "format": "gofmt -s -l .",
     "start": "./bin/cli"
   }
 }
