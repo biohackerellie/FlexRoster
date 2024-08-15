@@ -4,7 +4,7 @@ import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 
-import "react-day-picker/style.css";
+// import "react-day-picker/style.css";
 
 import { cn } from ".";
 import { buttonVariants } from "./button";
@@ -45,7 +45,7 @@ function Calendar({
           buttonVariants({ variant: "outline" }),
           "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
         ),
-        nav: "flex flex-row-reverse gap-x-1 absolute left-0.5 top-1 fill-foreground",
+        nav: "flex flex-row-reverse gap-x-1 mb-2 absolute right-0.5 top-1 fill-foreground",
       }}
       components={{
         Chevron: ({ orientation }) => {

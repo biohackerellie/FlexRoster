@@ -13,7 +13,6 @@
   },
   "scripts": {
     "install": "go mod tidy",
-    "dev": "air -c .air.toml",
 
     "format": "gofmt -s -l .",
     "start": "./bin/main",
