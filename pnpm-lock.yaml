@@ -262,7 +262,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/db
       '@sinclair/typebox':
-        specifier: ^0.33.6
+        specifier: ^0.33.7
         version: 0.33.7
       '@t3-oss/env-core':
         specifier: ^0.11.0
