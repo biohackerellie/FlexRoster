@@ -584,7 +584,7 @@ importers:
         specifier: ^8.1.0
         version: 8.1.0(eslint@9.7.0)(typescript@5.5.3)
       eslint-config-turbo:
-        specifier: ^2.0.13
+        specifier: ^2.0.14
         version: 2.0.14(eslint@9.7.0)
       eslint-plugin-import:
         specifier: ^2.29.1
