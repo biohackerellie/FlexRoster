@@ -3,6 +3,23 @@ webrpc = v1             # version of webrpc schema format (ridl or json)
 name = api       # name of your backend app
 version = v0.0.1  
 
+
+enum LogType: string
+  - error
+  - request
+  - attendance
+  - message
+
+struct Logs
+  - id: string
+    + json = id
+  - user: string
+    + json = user
+  - type: LogType
+    + json = type
+  - action: string
+    + json = action
+
 # Classroom struct
 struct Classroom 
   - id: string

@@ -21,6 +21,10 @@ type ClassroomDBService interface {
 	CreateAvailability(ctx context.Context, args []*service.Availability) error
 }
 
+type LogsDBService interface {
+	GetAllLogs(ctx context.Context) ([]*service.Logs, error)
+}
+
 type RequestDBService interface {
 	GetRequests(ctx context.Context, userId string) ([]*service.Request, error)
 	GetAllRequests(ctx context.Context) ([]*service.Request, error)

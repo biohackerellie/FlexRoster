@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 
 	"api/internal/config"
 	"api/internal/core/classrooms"
-	"api/internal/core/requests"
+	// "api/internal/core/requests"
 	repository "api/internal/db/repository"
 
 	"github.com/go-chi/chi/middleware"
