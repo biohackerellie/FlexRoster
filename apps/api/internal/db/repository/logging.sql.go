@@ -7,8 +7,6 @@ package db
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const allLogsQuery = `-- name: AllLogsQuery :many
@@ -49,10 +47,10 @@ INSERT INTO "logs" ("id", "user", "type", "action")VALUES ($1, $2, $3, $4)
 `
 
 type CreateLogParams struct {
-	ID     string      `db:"id" json:"id"`
-	User   pgtype.Text `db:"user" json:"user"`
-	Type   string      `db:"type" json:"type"`
-	Action string      `db:"action" json:"action"`
+	ID     string  `db:"id" json:"id"`
+	User   *string `db:"user" json:"user"`
+	Type   string  `db:"type" json:"type"`
+	Action string  `db:"action" json:"action"`
 }
 
 func (q *Queries) CreateLog(ctx context.Context, arg CreateLogParams) error {

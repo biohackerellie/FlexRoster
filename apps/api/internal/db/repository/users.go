@@ -4,6 +4,7 @@ import (
 	"context"
 
 	config "api/internal/config"
+	errors "api/internal/lib/errors"
 	"api/internal/lib/logger"
 	user "api/internal/service"
 )
@@ -36,17 +37,17 @@ func (s *UsersDBService) GetTeacher(ctx context.Context, id string) (*user.Teach
 	return &user.Teacher{
 		User: &user.User{
 			Id:    res.ID,
-			Name:  res.Name.String,
+			Name:  *res.Name,
 			Email: res.Email,
 			Role:  res.Role,
 		},
 		Classroom: &user.Classroom{
-			Id:          res.ID_2.String,
-			RoomNumber:  res.RoomNumber.String,
-			TeacherName: res.TeacherName.String,
-			TeacherId:   res.TeacherId.String,
-			Comment:     res.Comment.String,
-			IsFlex:      res.IsFlex.Bool,
+			Id:          *res.ID_2,
+			RoomNumber:  *res.RoomNumber,
+			TeacherName: *res.TeacherName,
+			TeacherId:   *res.TeacherId,
+			Comment:     *res.Comment,
+			IsFlex:      *res.IsFlex,
 		},
 	}, nil
 }
@@ -58,7 +59,7 @@ func (s *UsersDBService) GetUser(ctx context.Context, id string) (*user.User, er
 	}
 	return &user.User{
 		Id:    res.ID,
-		Name:  res.Name.String,
+		Name:  *res.Name,
 		Email: res.Email,
 		Role:  res.Role,
 	}, nil
@@ -72,7 +73,7 @@ func (s *UsersDBService) GetTeacherWithRoster(ctx context.Context, id string) (*
 	return &user.TeacherWithRoster{
 		User: &user.User{
 			Id:    res.User.ID,
-			Name:  res.User.Name.String,
+			Name:  *res.User.Name,
 			Email: res.User.Email,
 			Role:  res.User.Role,
 		},
@@ -87,9 +88,9 @@ func (s *UsersDBService) GetTeacherWithRoster(ctx context.Context, id string) (*
 			Id:          res.Classroom.ID,
 			RoomNumber:  res.Classroom.RoomNumber,
 			TeacherName: res.Classroom.TeacherName,
-			TeacherId:   res.Classroom.TeacherId.String,
-			Comment:     res.Classroom.Comment.String,
-			IsFlex:      res.Classroom.IsFlex.Bool,
+			TeacherId:   *res.Classroom.TeacherId,
+			Comment:     *res.Classroom.Comment,
+			IsFlex:      *res.Classroom.IsFlex,
 		},
 	}, nil
 }
@@ -107,7 +108,28 @@ func (s *UsersDBService) GetStudent(ctx context.Context, id string) (*user.Stude
 		StudentId:    res.User.ID,
 		RoomNumber:   res.Classroom.RoomNumber,
 		TeacherName:  res.Classroom.TeacherName,
-		Comment:      res.Classroom.Comment.String,
-		TeacherId:    res.Classroom.TeacherId.String,
+		Comment:      *res.Classroom.Comment,
+		TeacherId:    *res.Classroom.TeacherId,
 	}, nil
+}
+
+func (s *UsersDBService) CreateUserTx(ctx context.Context, users []*user.User) error {
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
+	qtx := s.q.WithTx(tx)
+	for _, u := range users {
+		err := qtx.CreateUser(ctx, CreateUserParams{
+			ID:    u.Id,
+			Name:  &u.Name,
+			Email: u.Email,
+			Role:  u.Role,
+		})
+		if err != nil {
+			return err
+		}
+	}
+	return tx.Commit(ctx)
 }

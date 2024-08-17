@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 
-	"api/internal/lib/helpers"
+	errors "api/internal/lib/errors"
 	"api/internal/lib/logger"
 	"api/internal/service"
 )
@@ -37,7 +37,7 @@ func (s *LoggingDBService) GetAllLogs(ctx context.Context) ([]*service.Logs, err
 	for i, r := range res {
 		data[i] = &service.Logs{
 			Id:     r.Log.ID,
-			User:   r.Log.User.String,
+			User:   *r.Log.User,
 			Type:   service.LogType(r.Log.Type),
 			Action: r.Log.Action,
 		}
@@ -45,10 +45,10 @@ func (s *LoggingDBService) GetAllLogs(ctx context.Context) ([]*service.Logs, err
 	return data, nil
 }
 
-func (s *LoggingDBService) AddLog(ctx context.Context, id string, user string, logType string, action string) error {
+func (s *LoggingDBService) AddLog(ctx context.Context, id string, user *string, logType string, action string) error {
 	err := s.q.CreateLog(ctx, CreateLogParams{
 		ID:     id,
-		User:   helpers.StringToPGText(user),
+		User:   user,
 		Type:   logType,
 		Action: action,
 	})
@@ -63,11 +63,12 @@ func (s *LoggingDBService) AddLogs(ctx context.Context, logs []*service.Logs) er
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback(ctx)
+	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
+	qtx := s.q.WithTx(tx)
 	for _, log := range logs {
-		err := s.q.CreateLog(ctx, CreateLogParams{
+		err := qtx.CreateLog(ctx, CreateLogParams{
 			ID:     log.Id,
-			User:   helpers.StringToPGText(log.User),
+			User:   &log.User,
 			Type:   enumToString(log.Type),
 			Action: log.Action,
 		})

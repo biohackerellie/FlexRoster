@@ -169,17 +169,17 @@ func AllStatusValues() []Status {
 }
 
 type Account struct {
-	UserId            string      `db:"userId" json:"userId"`
-	Type              string      `db:"type" json:"type"`
-	Provider          string      `db:"provider" json:"provider"`
-	ProviderAccountId string      `db:"providerAccountId" json:"providerAccountId"`
-	RefreshToken      pgtype.Text `db:"refresh_token" json:"refresh_token"`
-	AccessToken       pgtype.Text `db:"access_token" json:"access_token"`
-	ExpiresAt         pgtype.Int4 `db:"expires_at" json:"expires_at"`
-	TokenType         pgtype.Text `db:"token_type" json:"token_type"`
-	Scope             pgtype.Text `db:"scope" json:"scope"`
-	IDToken           pgtype.Text `db:"id_token" json:"id_token"`
-	SessionState      pgtype.Text `db:"session_state" json:"session_state"`
+	UserId            string  `db:"userId" json:"userId"`
+	Type              string  `db:"type" json:"type"`
+	Provider          string  `db:"provider" json:"provider"`
+	ProviderAccountId string  `db:"providerAccountId" json:"providerAccountId"`
+	RefreshToken      *string `db:"refresh_token" json:"refresh_token"`
+	AccessToken       *string `db:"access_token" json:"access_token"`
+	ExpiresAt         *int32  `db:"expires_at" json:"expires_at"`
+	TokenType         *string `db:"token_type" json:"token_type"`
+	Scope             *string `db:"scope" json:"scope"`
+	IDToken           *string `db:"id_token" json:"id_token"`
+	SessionState      *string `db:"session_state" json:"session_state"`
 }
 
 type Availability struct {
@@ -187,42 +187,42 @@ type Availability struct {
 	ClassroomId string      `db:"classroomId" json:"classroomId"`
 	Date        pgtype.Date `db:"date" json:"date"`
 	Available   bool        `db:"available" json:"available"`
-	TeacherId   pgtype.Text `db:"teacherId" json:"teacherId"`
+	TeacherId   *string     `db:"teacherId" json:"teacherId"`
 }
 
 type AvailabilityView struct {
 	ID           string         `db:"id" json:"id"`
 	RoomNumber   string         `db:"roomNumber" json:"roomNumber"`
 	TeacherName  string         `db:"teacherName" json:"teacherName"`
-	TeacherId    pgtype.Text    `db:"teacherId" json:"teacherId"`
-	Comment      pgtype.Text    `db:"comment" json:"comment"`
-	IsFlex       pgtype.Bool    `db:"isFlex" json:"isFlex"`
+	TeacherId    *string        `db:"teacherId" json:"teacherId"`
+	Comment      *string        `db:"comment" json:"comment"`
+	IsFlex       *bool          `db:"isFlex" json:"isFlex"`
 	Availability []Availability `db:"availability" json:"availability"`
 }
 
 type Classroom struct {
-	ID          string      `db:"id" json:"id"`
-	RoomNumber  string      `db:"roomNumber" json:"roomNumber"`
-	TeacherName string      `db:"teacherName" json:"teacherName"`
-	TeacherId   pgtype.Text `db:"teacherId" json:"teacherId"`
-	Comment     pgtype.Text `db:"comment" json:"comment"`
-	IsFlex      pgtype.Bool `db:"isFlex" json:"isFlex"`
+	ID          string  `db:"id" json:"id"`
+	RoomNumber  string  `db:"roomNumber" json:"roomNumber"`
+	TeacherName string  `db:"teacherName" json:"teacherName"`
+	TeacherId   *string `db:"teacherId" json:"teacherId"`
+	Comment     *string `db:"comment" json:"comment"`
+	IsFlex      *bool   `db:"isFlex" json:"isFlex"`
 }
 
 type Config struct {
 	Secretaries       []string         `db:"secretaries" json:"secretaries"`
 	PreferredNames    []byte           `db:"preferredNames" json:"preferredNames"`
 	ExcludedTeachers  []string         `db:"excludedTeachers" json:"excludedTeachers"`
-	SemesterClassName pgtype.Text      `db:"semesterClassName" json:"semesterClassName"`
-	IsRedisCluster    pgtype.Bool      `db:"isRedisCluster" json:"isRedisCluster"`
+	SemesterClassName *string          `db:"semesterClassName" json:"semesterClassName"`
+	IsRedisCluster    *bool            `db:"isRedisCluster" json:"isRedisCluster"`
 	CreatedAt         pgtype.Timestamp `db:"createdAt" json:"createdAt"`
 }
 
 type Log struct {
-	ID     string      `db:"id" json:"id"`
-	User   pgtype.Text `db:"user" json:"user"`
-	Type   string      `db:"type" json:"type"`
-	Action string      `db:"action" json:"action"`
+	ID     string  `db:"id" json:"id"`
+	User   *string `db:"user" json:"user"`
+	Type   string  `db:"type" json:"type"`
+	Action string  `db:"action" json:"action"`
 }
 
 type Request struct {
@@ -235,7 +235,7 @@ type Request struct {
 	CurrentTeacherName string        `db:"currentTeacherName" json:"currentTeacherName"`
 	DateRequested      pgtype.Date   `db:"dateRequested" json:"dateRequested"`
 	Status             RequestStatus `db:"status" json:"status"`
-	Arrived            pgtype.Bool   `db:"arrived" json:"arrived"`
+	Arrived            *bool         `db:"arrived" json:"arrived"`
 	Timestamp          string        `db:"timestamp" json:"timestamp"`
 }
 
@@ -255,10 +255,10 @@ type Student struct {
 
 type User struct {
 	ID            string           `db:"id" json:"id"`
-	Name          pgtype.Text      `db:"name" json:"name"`
+	Name          *string          `db:"name" json:"name"`
 	Email         string           `db:"email" json:"email"`
 	EmailVerified pgtype.Timestamp `db:"emailVerified" json:"emailVerified"`
-	Image         pgtype.Text      `db:"image" json:"image"`
+	Image         *string          `db:"image" json:"image"`
 	Role          string           `db:"role" json:"role"`
 }
 

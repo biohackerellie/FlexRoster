@@ -19,6 +19,7 @@ type ClassroomDBService interface {
 	DeleteComment(ctx context.Context, teacherId string) error
 	DeleteAvailability(ctx context.Context, teacherId string, date time.Time) error
 	CreateAvailability(ctx context.Context, args []*service.Availability) error
+	NewClassroomTx(ctx context.Context, classrooms []*service.Classroom) error
 }
 
 type LogsDBService interface {
@@ -38,16 +39,17 @@ type StudentDBService interface {
 	AllStudentsMap(ctx context.Context) ([]*service.AllStudentMap, error)
 	RosterByClassroomId(ctx context.Context, classroomId string) ([]*service.StudentWithClassroom, error)
 	RosterById(ctx context.Context, id int32) ([]*service.Student, error)
-	RosterByTeacherId(ctx context.Context, teacherId string) ([]*service.StudentWithUser, error)
+	RosterByTeacherId(ctx context.Context, teacherId *string) ([]*service.StudentWithUser, error)
 	GetAllStudents(ctx context.Context) ([]*service.Student, error)
 	UpdateStudentStatus(ctx context.Context, status *service.Status, studentEmail string) error
-	UpdateStudentRoster(ctx context.Context, classroomId string, status service.Status, studentEmail string) error
+	UpdateStudentRoster(ctx context.Context, classroomId string, status *service.Status, studentEmail string) error
+	NewStudentTx(ctx context.Context, students []*service.Student) error
 }
 
 type UserDBService interface {
 	GetTeacher(ctx context.Context, id string) (*service.Teacher, error)
 	GetUser(ctx context.Context, id string) (*service.User, error)
 	GetTeacherWithRoster(ctx context.Context, id string) (*service.TeacherWithRoster, error)
-
+	CreateUserTx(ctx context.Context, users []*service.User) error
 	GetStudent(ctx context.Context, id string) (*service.StudentWithUser, error)
 }

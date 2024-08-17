@@ -123,7 +123,7 @@ type NewRequestParams struct {
 	CurrentTeacherName string        `db:"currentTeacherName" json:"currentTeacherName"`
 	NewTeacher         string        `db:"newTeacher" json:"newTeacher"`
 	NewTeacherName     string        `db:"newTeacherName" json:"newTeacherName"`
-	Arrived            pgtype.Bool   `db:"arrived" json:"arrived"`
+	Arrived            *bool         `db:"arrived" json:"arrived"`
 }
 
 func (q *Queries) NewRequest(ctx context.Context, arg NewRequestParams) error {

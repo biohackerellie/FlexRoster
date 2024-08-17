@@ -44,38 +44,3 @@ func (r iteratorForCreateAvailability) Err() error {
 func (q *Queries) CreateAvailability(ctx context.Context, arg []CreateAvailabilityParams) (int64, error) {
 	return q.db.CopyFrom(ctx, []string{"availability"}, []string{"id", "teacherId", "classroomId", "date", "available"}, &iteratorForCreateAvailability{rows: arg})
 }
-
-// iteratorForNewStudent implements pgx.CopyFromSource.
-type iteratorForNewStudent struct {
-	rows                 []NewStudentParams
-	skippedFirstNextCall bool
-}
-
-func (r *iteratorForNewStudent) Next() bool {
-	if len(r.rows) == 0 {
-		return false
-	}
-	if !r.skippedFirstNextCall {
-		r.skippedFirstNextCall = true
-		return true
-	}
-	r.rows = r.rows[1:]
-	return len(r.rows) > 0
-}
-
-func (r iteratorForNewStudent) Values() ([]interface{}, error) {
-	return []interface{}{
-		r.rows[0].StudentEmail,
-		r.rows[0].StudentName,
-		r.rows[0].Status,
-		r.rows[0].ClassroomId,
-	}, nil
-}
-
-func (r iteratorForNewStudent) Err() error {
-	return nil
-}
-
-func (q *Queries) NewStudent(ctx context.Context, arg []NewStudentParams) (int64, error) {
-	return q.db.CopyFrom(ctx, []string{"students"}, []string{"studentEmail", "studentName", "status", "classroomId"}, &iteratorForNewStudent{rows: arg})
-}

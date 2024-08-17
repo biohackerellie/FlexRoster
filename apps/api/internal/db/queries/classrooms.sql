@@ -10,6 +10,10 @@ SELECT * FROM "availability";
 -- name: TeacherAvailabilityQuery :many
 SELECT * FROM "availability" WHERE "teacherId" = $1;
 
+
+-- name: NewClassroom :exec
+INSERT INTO "classrooms" ("id", "roomNumber", "teacherName", "teacherId", "isFlex") VALUES ($1, $2, $3, $4, $5);
+
 -- name: ClassroomQuery :many
 SELECT 
   c."id", 

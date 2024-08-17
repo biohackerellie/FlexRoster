@@ -55,13 +55,13 @@ LEFT JOIN "availability" a ON c."id" = a."classroomId" AND a."date" = CURRENT_DA
 `
 
 type ClassroomQueryRow struct {
-	ID          string      `db:"id" json:"id"`
-	RoomNumber  string      `db:"roomNumber" json:"roomNumber"`
-	TeacherName string      `db:"teacherName" json:"teacherName"`
-	TeacherId   pgtype.Text `db:"teacherId" json:"teacherId"`
-	Comment     pgtype.Text `db:"comment" json:"comment"`
-	IsFlex      pgtype.Bool `db:"isFlex" json:"isFlex"`
-	Available   bool        `db:"available" json:"available"`
+	ID          string  `db:"id" json:"id"`
+	RoomNumber  string  `db:"roomNumber" json:"roomNumber"`
+	TeacherName string  `db:"teacherName" json:"teacherName"`
+	TeacherId   *string `db:"teacherId" json:"teacherId"`
+	Comment     *string `db:"comment" json:"comment"`
+	IsFlex      *bool   `db:"isFlex" json:"isFlex"`
+	Available   bool    `db:"available" json:"available"`
 }
 
 func (q *Queries) ClassroomQuery(ctx context.Context) ([]ClassroomQueryRow, error) {
@@ -136,13 +136,13 @@ FROM "classrooms" c
 `
 
 type ClassroomsWithRosterCountRow struct {
-	ID          string      `db:"id" json:"id"`
-	RoomNumber  string      `db:"roomNumber" json:"roomNumber"`
-	TeacherName string      `db:"teacherName" json:"teacherName"`
-	TeacherId   pgtype.Text `db:"teacherId" json:"teacherId"`
-	Comment     pgtype.Text `db:"comment" json:"comment"`
-	IsFlex      pgtype.Bool `db:"isFlex" json:"isFlex"`
-	Count       int64       `db:"count" json:"count"`
+	ID          string  `db:"id" json:"id"`
+	RoomNumber  string  `db:"roomNumber" json:"roomNumber"`
+	TeacherName string  `db:"teacherName" json:"teacherName"`
+	TeacherId   *string `db:"teacherId" json:"teacherId"`
+	Comment     *string `db:"comment" json:"comment"`
+	IsFlex      *bool   `db:"isFlex" json:"isFlex"`
+	Count       int64   `db:"count" json:"count"`
 }
 
 func (q *Queries) ClassroomsWithRosterCount(ctx context.Context) ([]ClassroomsWithRosterCountRow, error) {
@@ -188,7 +188,7 @@ func (q *Queries) CountRosterByClassroomId(ctx context.Context, classroomid stri
 
 type CreateAvailabilityParams struct {
 	ID          string      `db:"id" json:"id"`
-	TeacherId   pgtype.Text `db:"teacherId" json:"teacherId"`
+	TeacherId   *string     `db:"teacherId" json:"teacherId"`
 	ClassroomId string      `db:"classroomId" json:"classroomId"`
 	Date        pgtype.Date `db:"date" json:"date"`
 	Available   bool        `db:"available" json:"available"`
@@ -200,8 +200,8 @@ WHERE "teacherId" = $1
 `
 
 type CreateCommentParams struct {
-	TeacherId pgtype.Text `db:"teacherId" json:"teacherId"`
-	Comment   pgtype.Text `db:"comment" json:"comment"`
+	TeacherId *string `db:"teacherId" json:"teacherId"`
+	Comment   *string `db:"comment" json:"comment"`
 }
 
 func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) error {
@@ -215,7 +215,7 @@ WHERE "teacherId" = $1 AND "date" = $2
 `
 
 type DeleteAvailabilityParams struct {
-	TeacherId pgtype.Text `db:"teacherId" json:"teacherId"`
+	TeacherId *string     `db:"teacherId" json:"teacherId"`
 	Date      pgtype.Date `db:"date" json:"date"`
 }
 
@@ -229,8 +229,31 @@ UPDATE "classrooms" SET "comment" = NULL
 WHERE "teacherId" = $1
 `
 
-func (q *Queries) DeleteComment(ctx context.Context, teacherid pgtype.Text) error {
+func (q *Queries) DeleteComment(ctx context.Context, teacherid *string) error {
 	_, err := q.db.Exec(ctx, deleteComment, teacherid)
+	return err
+}
+
+const newClassroom = `-- name: NewClassroom :exec
+INSERT INTO "classrooms" ("id", "roomNumber", "teacherName", "teacherId", "isFlex") VALUES ($1, $2, $3, $4, $5)
+`
+
+type NewClassroomParams struct {
+	ID          string  `db:"id" json:"id"`
+	RoomNumber  string  `db:"roomNumber" json:"roomNumber"`
+	TeacherName string  `db:"teacherName" json:"teacherName"`
+	TeacherId   *string `db:"teacherId" json:"teacherId"`
+	IsFlex      *bool   `db:"isFlex" json:"isFlex"`
+}
+
+func (q *Queries) NewClassroom(ctx context.Context, arg NewClassroomParams) error {
+	_, err := q.db.Exec(ctx, newClassroom,
+		arg.ID,
+		arg.RoomNumber,
+		arg.TeacherName,
+		arg.TeacherId,
+		arg.IsFlex,
+	)
 	return err
 }
 
@@ -248,11 +271,11 @@ WHERE c."id" = $1
 `
 
 type RoomByIdQueryRow struct {
-	ID          string      `db:"id" json:"id"`
-	RoomNumber  string      `db:"roomNumber" json:"roomNumber"`
-	TeacherName pgtype.Text `db:"teacherName" json:"teacherName"`
-	TeacherId   string      `db:"teacherId" json:"teacherId"`
-	Available   bool        `db:"available" json:"available"`
+	ID          string  `db:"id" json:"id"`
+	RoomNumber  string  `db:"roomNumber" json:"roomNumber"`
+	TeacherName *string `db:"teacherName" json:"teacherName"`
+	TeacherId   string  `db:"teacherId" json:"teacherId"`
+	Available   bool    `db:"available" json:"available"`
 }
 
 func (q *Queries) RoomByIdQuery(ctx context.Context, id string) (RoomByIdQueryRow, error) {
@@ -272,7 +295,7 @@ const teacherAvailabilityQuery = `-- name: TeacherAvailabilityQuery :many
 SELECT id, "classroomId", date, available, "teacherId" FROM "availability" WHERE "teacherId" = $1
 `
 
-func (q *Queries) TeacherAvailabilityQuery(ctx context.Context, teacherid pgtype.Text) ([]Availability, error) {
+func (q *Queries) TeacherAvailabilityQuery(ctx context.Context, teacherid *string) ([]Availability, error) {
 	rows, err := q.db.Query(ctx, teacherAvailabilityQuery, teacherid)
 	if err != nil {
 		return nil, err
@@ -306,7 +329,7 @@ SELECT EXISTS (
 ) AS "available"
 `
 
-func (q *Queries) TeacherAvailableToday(ctx context.Context, teacherid pgtype.Text) (bool, error) {
+func (q *Queries) TeacherAvailableToday(ctx context.Context, teacherid *string) (bool, error) {
 	row := q.db.QueryRow(ctx, teacherAvailableToday, teacherid)
 	var available bool
 	err := row.Scan(&available)
