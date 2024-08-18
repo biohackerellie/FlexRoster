@@ -53,22 +53,13 @@ func randString(n int) string {
 	return string(b)
 }
 
-// SeedDatabase is for seeding random fake data for testing into the database. it starts with users, then classrooms, then students
-
 func (s *Scripts) SeedDatabase(ctx context.Context) error {
 	teacherAmount := 5
 	classroomAmount := 5
 	studentAmount := 45
-	/**
-	*  make a slice of 50 names
-	*  then check for any duplicates
-	*  if duplicate, remove from slice and add new name
-	*  create a slice of 5 teachers, 45 students
-	*
-	 */
 
 	uniqueNames := make(map[string]struct{})
-	names := make([]string, 0, 50) // Use 0 length but capacity of 50
+	names := make([]string, 0, 50)
 	count := 0
 	for i := 0; i < 50; i++ {
 		count += 1
@@ -79,16 +70,6 @@ func (s *Scripts) SeedDatabase(ctx context.Context) error {
 			s.log.Info("Creating Name", "name", name, "count", count)
 		}
 	}
-
-	// If fewer than 50 unique names were generated, generate more
-	// for len(names) < 50 {
-	// 	s.log.Info("Generating more names", "count", len(names))
-	// 	name := getName(int64(len(names))).randomName()
-	// 	if _, exists := uniqueNames[name]; !exists {
-	// 		uniqueNames[name] = struct{}{}
-	// 		names = append(names, name)
-	// 	}
-	// }
 
 	teacherNames := names[:5]
 	studentNames := names[5:]
@@ -133,7 +114,6 @@ func (s *Scripts) SeedDatabase(ctx context.Context) error {
 	if err := s.classroomRepo.NewClassroomTx(ctx, classrooms); err != nil {
 		s.log.Error("error creating classrooms", "err", err)
 	}
-	// for students, we need to divide them evenly between classrooms. for this example we have 45 students and 5 classrooms so each classroom will have 9 students
 	s.log.Info("Creating Students")
 	students := make([]*service.Student, len(studentNames))
 	classroomCount := len(classrooms)
@@ -145,7 +125,6 @@ func (s *Scripts) SeedDatabase(ctx context.Context) error {
 		}
 		classroomIndex := i % classroomCount
 		name := studentNames[i]
-		// student emails ar firstlast@domain
 		emailName := strings.ReplaceAll(name, " ", "")
 		student := &service.Student{
 			Id:           int32(i),

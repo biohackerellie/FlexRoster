@@ -3,7 +3,7 @@ package scripts
 import (
 	"api/internal/lib/logger"
 	"api/internal/ports"
-	// "api/internal/redis"
+	"api/internal/redis"
 )
 
 type Scripts struct {
@@ -12,7 +12,7 @@ type Scripts struct {
 	studentRepo   ports.StudentDBService
 	logsRepo      ports.LogsDBService
 	log           *logger.Logger
-	// cache         *redis.RClient
+	cache         *redis.RClient
 }
 
 func NewScript(classroomRepo ports.ClassroomDBService, studentRepo ports.StudentDBService, userRepo ports.UserDBService) *Scripts {
@@ -20,7 +20,7 @@ func NewScript(classroomRepo ports.ClassroomDBService, studentRepo ports.Student
 		classroomRepo: classroomRepo,
 		studentRepo:   studentRepo,
 		userRepo:      userRepo,
-		// cache:         redis.NewRedis(),
+		cache:         redis.NewRedis(),
 	}
 }
 
