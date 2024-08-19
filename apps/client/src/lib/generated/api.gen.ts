@@ -6,831 +6,1153 @@
 // webrpc-gen -schema=server.ridl -target=typescript -client -out=../client/src/lib/generated/api.gen.ts
 
 // WebRPC description and code-gen version
-export const WebRPCVersion = "v1"
+export const WebRPCVersion = "v1";
 
 // Schema version of your RIDL schema
-export const WebRPCSchemaVersion = "v0.0.1"
+export const WebRPCSchemaVersion = "v0.0.1";
 
 // Schema hash generated from your RIDL schema
-export const WebRPCSchemaHash = "5ba8dc4351ab9fcc6bbb3e6a180801272c886b33"
+export const WebRPCSchemaHash = "5ba8dc4351ab9fcc6bbb3e6a180801272c886b33";
 
 //
 // Types
 //
 
-
 export enum LogType {
-  error = 'error',
-  request = 'request',
-  attendance = 'attendance',
-  message = 'message'
+  error = "error",
+  request = "request",
+  attendance = "attendance",
+  message = "message",
 }
 
 export enum RequestStatus {
-  pending = 'pending',
-  approved = 'approved',
-  denied = 'denied',
-  arrived = 'arrived'
+  pending = "pending",
+  approved = "approved",
+  denied = "denied",
+  arrived = "arrived",
 }
 
 export enum Status {
-  transferredA = 'transferredA',
-  transferredN = 'transferredN',
-  default = 'default'
+  transferredA = "transferredA",
+  transferredN = "transferredN",
+  default = "default",
 }
 
 export interface Logs {
-  id: string
-  user: string
-  type: LogType
-  action: string
+  id: string;
+  user: string;
+  type: LogType;
+  action: string;
 }
 
 export interface Classroom {
-  id: string
-  roomNumber: string
-  teacherName: string
-  teacherId: string
-  comment: string
-  available: boolean
-  isFlex: boolean
+  id: string;
+  roomNumber: string;
+  teacherName: string;
+  teacherId: string;
+  comment: string;
+  available: boolean;
+  isFlex: boolean;
 }
 
 export interface Availability {
-  date: string
-  id: string
-  classroomId: string
-  teacherId: string
-  available: boolean
+  date: string;
+  id: string;
+  classroomId: string;
+  teacherId: string;
+  available: boolean;
 }
 
 export interface ClassroomWithChatID {
-  chatId: string
-  Classroom: Classroom
-  availableDates: Array<string>
+  chatId: string;
+  Classroom: Classroom;
+  availableDates: Array<string>;
 }
 
 export interface TodaysAvailability {
-  id: string
-  available: boolean
+  id: string;
+  available: boolean;
 }
 
 export interface ClassroomWithAvailable {
-  Classroom: Classroom
-  availableDates: Array<string>
+  Classroom: Classroom;
+  availableDates: Array<string>;
 }
 
 export interface ClassroomWithCount {
-  Classroom: Classroom
-  count: number
+  Classroom: Classroom;
+  count: number;
 }
 
 export interface Request {
-  ID: number
-  StudentID: string
-  StudentName: string
-  NewTeacher: string
-  NewTeacherName: string
-  CurrentTeacher: string
-  CurrentTeacherName: string
-  DateRequested: string
-  Status: RequestStatus
-  Arrived: boolean
-  Timestamp: string
+  ID: number;
+  StudentID: string;
+  StudentName: string;
+  NewTeacher: string;
+  NewTeacherName: string;
+  CurrentTeacher: string;
+  CurrentTeacherName: string;
+  DateRequested: string;
+  Status: RequestStatus;
+  Arrived: boolean;
+  Timestamp: string;
 }
 
 export interface Student {
-  StudentEmail: string
-  StudentName: string
-  ClassroomId: string
-  Status: Status
-  ID: number
+  StudentEmail: string;
+  StudentName: string;
+  ClassroomId: string;
+  Status: Status;
+  ID: number;
 }
 
 export interface AllStudentMap {
-  StudentEmail: string
-  StudentName: string
-  Status: Status
-  TeacherName: string
-  RosterId: number
+  StudentEmail: string;
+  StudentName: string;
+  Status: Status;
+  TeacherName: string;
+  RosterId: number;
 }
 
 export interface StudentWithClassroom {
-  student: Student
-  classroom: Classroom
-  Available: boolean
+  student: Student;
+  classroom: Classroom;
+  Available: boolean;
 }
 
 export interface User {
-  ID: string
-  Name: string
-  Email: string
-  EmailVerified: string
-  Image: string
-  Role: string
+  ID: string;
+  Name: string;
+  Email: string;
+  EmailVerified: string;
+  Image: string;
+  Role: string;
 }
 
 export interface Teacher {
-  user: User
-  classroom: Classroom
+  user: User;
+  classroom: Classroom;
 }
 
 export interface TeacherWithRoster {
-  user: User
-  student: Student
-  classroom: Classroom
+  user: User;
+  student: Student;
+  classroom: Classroom;
 }
 
 export interface StudentWithUser {
-  StudentEmail: string
-  StudentName: string
-  Status: Status
-  StudentId: string
-  RoomNumber: string
-  TeacherName: string
-  ClassroomId: string
-  Comment: string
-  TeacherId: string
+  StudentEmail: string;
+  StudentName: string;
+  Status: Status;
+  StudentId: string;
+  RoomNumber: string;
+  TeacherName: string;
+  ClassroomId: string;
+  Comment: string;
+  TeacherId: string;
 }
 
 export interface StudentRequests {
-  student: Student
-  requests: Array<Request>
-  classroom: Classroom
+  student: Student;
+  requests: Array<Request>;
+  classroom: Classroom;
 }
 
 export interface TeacherRequests {
-  IncomingRequests: Array<Request>
-  OutgoingRequests: Array<Request>
+  IncomingRequests: Array<Request>;
+  OutgoingRequests: Array<Request>;
 }
 
 export interface StudentDetails {
-  Student: StudentWithUser
-  Requests: Array<Request>
+  Student: StudentWithUser;
+  Requests: Array<Request>;
 }
 
 export interface ClassroomService {
-  getClasses(args: GetClassesArgs, headers?: object, signal?: AbortSignal): Promise<GetClassesReturn>
-  getSpecificClassroom(args: GetSpecificClassroomArgs, headers?: object, signal?: AbortSignal): Promise<GetSpecificClassroomReturn>
-  newComment(args: NewCommentArgs, headers?: object, signal?: AbortSignal): Promise<NewCommentReturn>
-  deleteComment(args: DeleteCommentArgs, headers?: object, signal?: AbortSignal): Promise<DeleteCommentReturn>
-  setAvailability(args: SetAvailabilityArgs, headers?: object, signal?: AbortSignal): Promise<SetAvailabilityReturn>
-  roomsWithCount(headers?: object, signal?: AbortSignal): Promise<RoomsWithCountReturn>
-  getAvailability(args: GetAvailabilityArgs, headers?: object, signal?: AbortSignal): Promise<GetAvailabilityReturn>
-  deleteAvailability(args: DeleteAvailabilityArgs, headers?: object, signal?: AbortSignal): Promise<DeleteAvailabilityReturn>
+  getClasses(
+    args: GetClassesArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetClassesReturn>;
+  getSpecificClassroom(
+    args: GetSpecificClassroomArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetSpecificClassroomReturn>;
+  newComment(
+    args: NewCommentArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<NewCommentReturn>;
+  deleteComment(
+    args: DeleteCommentArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<DeleteCommentReturn>;
+  setAvailability(
+    args: SetAvailabilityArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<SetAvailabilityReturn>;
+  roomsWithCount(
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<RoomsWithCountReturn>;
+  getAvailability(
+    args: GetAvailabilityArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetAvailabilityReturn>;
+  deleteAvailability(
+    args: DeleteAvailabilityArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<DeleteAvailabilityReturn>;
 }
 
 export interface GetClassesArgs {
-  id: string
+  id: string;
 }
 
 export interface GetClassesReturn {
-  classrooms: Array<ClassroomWithChatID>  
+  classrooms: Array<ClassroomWithChatID>;
 }
 export interface GetSpecificClassroomArgs {
-  id: string
+  id: string;
 }
 
 export interface GetSpecificClassroomReturn {
-  classroom: Classroom  
+  classroom: Classroom;
 }
 export interface NewCommentArgs {
-  id: string
-  comment: string
+  id: string;
+  comment: string;
 }
 
-export interface NewCommentReturn {  
-}
+export interface NewCommentReturn {}
 export interface DeleteCommentArgs {
-  id: string
+  id: string;
 }
 
-export interface DeleteCommentReturn {  
-}
+export interface DeleteCommentReturn {}
 export interface SetAvailabilityArgs {
-  teacherId: string
-  classroomId: string
-  dates: Array<string>
+  teacherId: string;
+  classroomId: string;
+  dates: Array<string>;
 }
 
-export interface SetAvailabilityReturn {  
-}
-export interface RoomsWithCountArgs {
-}
+export interface SetAvailabilityReturn {}
+export interface RoomsWithCountArgs {}
 
 export interface RoomsWithCountReturn {
-  classrooms: Array<ClassroomWithCount>  
+  classrooms: Array<ClassroomWithCount>;
 }
 export interface GetAvailabilityArgs {
-  id: string
+  id: string;
 }
 
 export interface GetAvailabilityReturn {
-  availability: Array<Availability>  
+  availability: Array<Availability>;
 }
 export interface DeleteAvailabilityArgs {
-  id: string
-  date: string
+  id: string;
+  date: string;
 }
 
-export interface DeleteAvailabilityReturn {  
-}
+export interface DeleteAvailabilityReturn {}
 
 export interface RequestService {
-  getRequests(args: GetRequestsArgs, headers?: object, signal?: AbortSignal): Promise<GetRequestsReturn>
-  getAllRequests(headers?: object, signal?: AbortSignal): Promise<GetAllRequestsReturn>
-  newRequest(args: NewRequestArgs, headers?: object, signal?: AbortSignal): Promise<NewRequestReturn>
-  updateRequest(args: UpdateRequestArgs, headers?: object, signal?: AbortSignal): Promise<UpdateRequestReturn>
-  getTeacherRequests(args: GetTeacherRequestsArgs, headers?: object, signal?: AbortSignal): Promise<GetTeacherRequestsReturn>
+  getRequests(
+    args: GetRequestsArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetRequestsReturn>;
+  getAllRequests(
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetAllRequestsReturn>;
+  newRequest(
+    args: NewRequestArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<NewRequestReturn>;
+  updateRequest(
+    args: UpdateRequestArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<UpdateRequestReturn>;
+  getTeacherRequests(
+    args: GetTeacherRequestsArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetTeacherRequestsReturn>;
 }
 
 export interface GetRequestsArgs {
-  userId: string
+  userId: string;
 }
 
 export interface GetRequestsReturn {
-  requests: Array<Request>  
+  requests: Array<Request>;
 }
-export interface GetAllRequestsArgs {
-}
+export interface GetAllRequestsArgs {}
 
 export interface GetAllRequestsReturn {
-  requests: Array<Request>  
+  requests: Array<Request>;
 }
 export interface NewRequestArgs {
-  studentName: string
-  teacherRequest: boolean
-  studentID: string
-  requestStatus: RequestStatus
-  dateRequested: string
-  newTeacher: string
-  newTeacherName: string
-  currentTeacher: string
-  currentTeacherName: string
+  studentName: string;
+  teacherRequest: boolean;
+  studentID: string;
+  requestStatus: RequestStatus;
+  dateRequested: string;
+  newTeacher: string;
+  newTeacherName: string;
+  currentTeacher: string;
+  currentTeacherName: string;
 }
 
-export interface NewRequestReturn {  
-}
+export interface NewRequestReturn {}
 export interface UpdateRequestArgs {
-  id: number
-  status: RequestStatus
+  id: number;
+  status: RequestStatus;
 }
 
-export interface UpdateRequestReturn {  
-}
+export interface UpdateRequestReturn {}
 export interface GetTeacherRequestsArgs {
-  teacherId: string
+  teacherId: string;
 }
 
 export interface GetTeacherRequestsReturn {
-  requests: TeacherRequests  
+  requests: TeacherRequests;
 }
 
 export interface StudentService {
-  allStudentsMap(headers?: object, signal?: AbortSignal): Promise<AllStudentsMapReturn>
-  rosterByClassroomId(args: RosterByClassroomIdArgs, headers?: object, signal?: AbortSignal): Promise<RosterByClassroomIdReturn>
-  rosterById(args: RosterByIdArgs, headers?: object, signal?: AbortSignal): Promise<RosterByIdReturn>
-  rosterByTeacherId(args: RosterByTeacherIdArgs, headers?: object, signal?: AbortSignal): Promise<RosterByTeacherIdReturn>
-  getAllStudents(headers?: object, signal?: AbortSignal): Promise<GetAllStudentsReturn>
-  updateStudentStatus(args: UpdateStudentStatusArgs, headers?: object, signal?: AbortSignal): Promise<UpdateStudentStatusReturn>
+  allStudentsMap(
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<AllStudentsMapReturn>;
+  rosterByClassroomId(
+    args: RosterByClassroomIdArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<RosterByClassroomIdReturn>;
+  rosterById(
+    args: RosterByIdArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<RosterByIdReturn>;
+  rosterByTeacherId(
+    args: RosterByTeacherIdArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<RosterByTeacherIdReturn>;
+  getAllStudents(
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetAllStudentsReturn>;
+  updateStudentStatus(
+    args: UpdateStudentStatusArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<UpdateStudentStatusReturn>;
 }
 
-export interface AllStudentsMapArgs {
-}
+export interface AllStudentsMapArgs {}
 
 export interface AllStudentsMapReturn {
-  students: Array<AllStudentMap>  
+  students: Array<AllStudentMap>;
 }
 export interface RosterByClassroomIdArgs {
-  classroomId: string
+  classroomId: string;
 }
 
 export interface RosterByClassroomIdReturn {
-  students: Array<StudentWithClassroom>  
+  students: Array<StudentWithClassroom>;
 }
 export interface RosterByIdArgs {
-  id: number
+  id: number;
 }
 
 export interface RosterByIdReturn {
-  students: Array<Student>  
+  students: Array<Student>;
 }
 export interface RosterByTeacherIdArgs {
-  teacherId: string
+  teacherId: string;
 }
 
 export interface RosterByTeacherIdReturn {
-  students: Array<StudentWithUser>  
+  students: Array<StudentWithUser>;
 }
-export interface GetAllStudentsArgs {
-}
+export interface GetAllStudentsArgs {}
 
 export interface GetAllStudentsReturn {
-  students: Array<Student>  
+  students: Array<Student>;
 }
 export interface UpdateStudentStatusArgs {
-  status: Status
-  studentEmail: string
+  status: Status;
+  studentEmail: string;
 }
 
-export interface UpdateStudentStatusReturn {  
-}
+export interface UpdateStudentStatusReturn {}
 
 export interface UserService {
-  getTeacher(args: GetTeacherArgs, headers?: object, signal?: AbortSignal): Promise<GetTeacherReturn>
-  getUser(args: GetUserArgs, headers?: object, signal?: AbortSignal): Promise<GetUserReturn>
-  getTeacherWithRoster(args: GetTeacherWithRosterArgs, headers?: object, signal?: AbortSignal): Promise<GetTeacherWithRosterReturn>
-  getStudent(args: GetStudentArgs, headers?: object, signal?: AbortSignal): Promise<GetStudentReturn>
-  getStudentDetails(args: GetStudentDetailsArgs, headers?: object, signal?: AbortSignal): Promise<GetStudentDetailsReturn>
+  getTeacher(
+    args: GetTeacherArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetTeacherReturn>;
+  getUser(
+    args: GetUserArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetUserReturn>;
+  getTeacherWithRoster(
+    args: GetTeacherWithRosterArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetTeacherWithRosterReturn>;
+  getStudent(
+    args: GetStudentArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetStudentReturn>;
+  getStudentDetails(
+    args: GetStudentDetailsArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetStudentDetailsReturn>;
 }
 
 export interface GetTeacherArgs {
-  id: string
+  id: string;
 }
 
 export interface GetTeacherReturn {
-  teacher: Teacher  
+  teacher: Teacher;
 }
 export interface GetUserArgs {
-  id: string
+  id: string;
 }
 
 export interface GetUserReturn {
-  user: User  
+  user: User;
 }
 export interface GetTeacherWithRosterArgs {
-  id: string
+  id: string;
 }
 
 export interface GetTeacherWithRosterReturn {
-  teacherWithRoster: TeacherWithRoster  
+  teacherWithRoster: TeacherWithRoster;
 }
 export interface GetStudentArgs {
-  id: string
+  id: string;
 }
 
 export interface GetStudentReturn {
-  student: StudentWithUser  
+  student: StudentWithUser;
 }
 export interface GetStudentDetailsArgs {
-  id: string
+  id: string;
 }
 
 export interface GetStudentDetailsReturn {
-  details: StudentDetails  
+  details: StudentDetails;
 }
 
-
-  
 //
 // Client
 //
 export class ClassroomService implements ClassroomService {
-  protected hostname: string
-  protected fetch: Fetch
-  protected path = '/rpc/ClassroomService/'
+  protected hostname: string;
+  protected fetch: Fetch;
+  protected path = "/rpc/ClassroomService/";
 
   constructor(hostname: string, fetch: Fetch) {
-    this.hostname = hostname
-    this.fetch = (input: RequestInfo, init?: RequestInit) => fetch(input, init)
+    this.hostname = hostname;
+    this.fetch = (input: RequestInfo, init?: RequestInit) => fetch(input, init);
   }
 
   private url(name: string): string {
-    return this.hostname + this.path + name
+    return this.hostname + this.path + name;
   }
-  
-  getClasses = (args: GetClassesArgs, headers?: object, signal?: AbortSignal): Promise<GetClassesReturn> => {
+
+  getClasses = (
+    args: GetClassesArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetClassesReturn> => {
     return this.fetch(
-      this.url('GetClasses'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          classrooms: <Array<ClassroomWithChatID>>(_data.classrooms),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  getSpecificClassroom = (args: GetSpecificClassroomArgs, headers?: object, signal?: AbortSignal): Promise<GetSpecificClassroomReturn> => {
+      this.url("GetClasses"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            classrooms: <Array<ClassroomWithChatID>>_data.classrooms,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  getSpecificClassroom = (
+    args: GetSpecificClassroomArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetSpecificClassroomReturn> => {
     return this.fetch(
-      this.url('GetSpecificClassroom'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          classroom: <Classroom>(_data.classroom),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  newComment = (args: NewCommentArgs, headers?: object, signal?: AbortSignal): Promise<NewCommentReturn> => {
+      this.url("GetSpecificClassroom"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            classroom: <Classroom>_data.classroom,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  newComment = (
+    args: NewCommentArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<NewCommentReturn> => {
     return this.fetch(
-      this.url('NewComment'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {}
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  deleteComment = (args: DeleteCommentArgs, headers?: object, signal?: AbortSignal): Promise<DeleteCommentReturn> => {
+      this.url("NewComment"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {};
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  deleteComment = (
+    args: DeleteCommentArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<DeleteCommentReturn> => {
     return this.fetch(
-      this.url('DeleteComment'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {}
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  setAvailability = (args: SetAvailabilityArgs, headers?: object, signal?: AbortSignal): Promise<SetAvailabilityReturn> => {
+      this.url("DeleteComment"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {};
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  setAvailability = (
+    args: SetAvailabilityArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<SetAvailabilityReturn> => {
     return this.fetch(
-      this.url('SetAvailability'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {}
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  roomsWithCount = (headers?: object, signal?: AbortSignal): Promise<RoomsWithCountReturn> => {
+      this.url("SetAvailability"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {};
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  roomsWithCount = (
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<RoomsWithCountReturn> => {
     return this.fetch(
-      this.url('RoomsWithCount'),
-      createHTTPRequest({}, headers, signal)
-      ).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          classrooms: <Array<ClassroomWithCount>>(_data.classrooms),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  getAvailability = (args: GetAvailabilityArgs, headers?: object, signal?: AbortSignal): Promise<GetAvailabilityReturn> => {
+      this.url("RoomsWithCount"),
+      createHTTPRequest({}, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            classrooms: <Array<ClassroomWithCount>>_data.classrooms,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  getAvailability = (
+    args: GetAvailabilityArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetAvailabilityReturn> => {
     return this.fetch(
-      this.url('GetAvailability'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          availability: <Array<Availability>>(_data.availability),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  deleteAvailability = (args: DeleteAvailabilityArgs, headers?: object, signal?: AbortSignal): Promise<DeleteAvailabilityReturn> => {
+      this.url("GetAvailability"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            availability: <Array<Availability>>_data.availability,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  deleteAvailability = (
+    args: DeleteAvailabilityArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<DeleteAvailabilityReturn> => {
     return this.fetch(
-      this.url('DeleteAvailability'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {}
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
+      this.url("DeleteAvailability"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {};
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
 }
 export class RequestService implements RequestService {
-  protected hostname: string
-  protected fetch: Fetch
-  protected path = '/rpc/RequestService/'
+  protected hostname: string;
+  protected fetch: Fetch;
+  protected path = "/rpc/RequestService/";
 
   constructor(hostname: string, fetch: Fetch) {
-    this.hostname = hostname
-    this.fetch = (input: RequestInfo, init?: RequestInit) => fetch(input, init)
+    this.hostname = hostname;
+    this.fetch = (input: RequestInfo, init?: RequestInit) => fetch(input, init);
   }
 
   private url(name: string): string {
-    return this.hostname + this.path + name
+    return this.hostname + this.path + name;
   }
-  
-  getRequests = (args: GetRequestsArgs, headers?: object, signal?: AbortSignal): Promise<GetRequestsReturn> => {
+
+  getRequests = (
+    args: GetRequestsArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetRequestsReturn> => {
     return this.fetch(
-      this.url('GetRequests'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          requests: <Array<Request>>(_data.requests),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  getAllRequests = (headers?: object, signal?: AbortSignal): Promise<GetAllRequestsReturn> => {
+      this.url("GetRequests"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            requests: <Array<Request>>_data.requests,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  getAllRequests = (
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetAllRequestsReturn> => {
     return this.fetch(
-      this.url('GetAllRequests'),
-      createHTTPRequest({}, headers, signal)
-      ).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          requests: <Array<Request>>(_data.requests),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  newRequest = (args: NewRequestArgs, headers?: object, signal?: AbortSignal): Promise<NewRequestReturn> => {
+      this.url("GetAllRequests"),
+      createHTTPRequest({}, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            requests: <Array<Request>>_data.requests,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  newRequest = (
+    args: NewRequestArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<NewRequestReturn> => {
     return this.fetch(
-      this.url('NewRequest'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {}
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  updateRequest = (args: UpdateRequestArgs, headers?: object, signal?: AbortSignal): Promise<UpdateRequestReturn> => {
+      this.url("NewRequest"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {};
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  updateRequest = (
+    args: UpdateRequestArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<UpdateRequestReturn> => {
     return this.fetch(
-      this.url('UpdateRequest'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {}
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  getTeacherRequests = (args: GetTeacherRequestsArgs, headers?: object, signal?: AbortSignal): Promise<GetTeacherRequestsReturn> => {
+      this.url("UpdateRequest"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {};
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  getTeacherRequests = (
+    args: GetTeacherRequestsArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetTeacherRequestsReturn> => {
     return this.fetch(
-      this.url('GetTeacherRequests'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          requests: <TeacherRequests>(_data.requests),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
+      this.url("GetTeacherRequests"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            requests: <TeacherRequests>_data.requests,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
 }
 export class StudentService implements StudentService {
-  protected hostname: string
-  protected fetch: Fetch
-  protected path = '/rpc/StudentService/'
+  protected hostname: string;
+  protected fetch: Fetch;
+  protected path = "/rpc/StudentService/";
 
   constructor(hostname: string, fetch: Fetch) {
-    this.hostname = hostname
-    this.fetch = (input: RequestInfo, init?: RequestInit) => fetch(input, init)
+    this.hostname = hostname;
+    this.fetch = (input: RequestInfo, init?: RequestInit) => fetch(input, init);
   }
 
   private url(name: string): string {
-    return this.hostname + this.path + name
+    return this.hostname + this.path + name;
   }
-  
-  allStudentsMap = (headers?: object, signal?: AbortSignal): Promise<AllStudentsMapReturn> => {
+
+  allStudentsMap = (
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<AllStudentsMapReturn> => {
     return this.fetch(
-      this.url('AllStudentsMap'),
-      createHTTPRequest({}, headers, signal)
-      ).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          students: <Array<AllStudentMap>>(_data.students),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  rosterByClassroomId = (args: RosterByClassroomIdArgs, headers?: object, signal?: AbortSignal): Promise<RosterByClassroomIdReturn> => {
+      this.url("AllStudentsMap"),
+      createHTTPRequest({}, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            students: <Array<AllStudentMap>>_data.students,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  rosterByClassroomId = (
+    args: RosterByClassroomIdArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<RosterByClassroomIdReturn> => {
     return this.fetch(
-      this.url('RosterByClassroomId'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          students: <Array<StudentWithClassroom>>(_data.students),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  rosterById = (args: RosterByIdArgs, headers?: object, signal?: AbortSignal): Promise<RosterByIdReturn> => {
+      this.url("RosterByClassroomId"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            students: <Array<StudentWithClassroom>>_data.students,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  rosterById = (
+    args: RosterByIdArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<RosterByIdReturn> => {
     return this.fetch(
-      this.url('RosterById'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          students: <Array<Student>>(_data.students),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  rosterByTeacherId = (args: RosterByTeacherIdArgs, headers?: object, signal?: AbortSignal): Promise<RosterByTeacherIdReturn> => {
+      this.url("RosterById"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            students: <Array<Student>>_data.students,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  rosterByTeacherId = (
+    args: RosterByTeacherIdArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<RosterByTeacherIdReturn> => {
     return this.fetch(
-      this.url('RosterByTeacherId'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          students: <Array<StudentWithUser>>(_data.students),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  getAllStudents = (headers?: object, signal?: AbortSignal): Promise<GetAllStudentsReturn> => {
+      this.url("RosterByTeacherId"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            students: <Array<StudentWithUser>>_data.students,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  getAllStudents = (
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetAllStudentsReturn> => {
     return this.fetch(
-      this.url('GetAllStudents'),
-      createHTTPRequest({}, headers, signal)
-      ).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          students: <Array<Student>>(_data.students),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  updateStudentStatus = (args: UpdateStudentStatusArgs, headers?: object, signal?: AbortSignal): Promise<UpdateStudentStatusReturn> => {
+      this.url("GetAllStudents"),
+      createHTTPRequest({}, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            students: <Array<Student>>_data.students,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  updateStudentStatus = (
+    args: UpdateStudentStatusArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<UpdateStudentStatusReturn> => {
     return this.fetch(
-      this.url('UpdateStudentStatus'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {}
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
+      this.url("UpdateStudentStatus"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {};
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
 }
 export class UserService implements UserService {
-  protected hostname: string
-  protected fetch: Fetch
-  protected path = '/rpc/UserService/'
+  protected hostname: string;
+  protected fetch: Fetch;
+  protected path = "/rpc/UserService/";
 
   constructor(hostname: string, fetch: Fetch) {
-    this.hostname = hostname
-    this.fetch = (input: RequestInfo, init?: RequestInit) => fetch(input, init)
+    this.hostname = hostname;
+    this.fetch = (input: RequestInfo, init?: RequestInit) => fetch(input, init);
   }
 
   private url(name: string): string {
-    return this.hostname + this.path + name
+    return this.hostname + this.path + name;
   }
-  
-  getTeacher = (args: GetTeacherArgs, headers?: object, signal?: AbortSignal): Promise<GetTeacherReturn> => {
+
+  getTeacher = (
+    args: GetTeacherArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetTeacherReturn> => {
     return this.fetch(
-      this.url('GetTeacher'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          teacher: <Teacher>(_data.teacher),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  getUser = (args: GetUserArgs, headers?: object, signal?: AbortSignal): Promise<GetUserReturn> => {
+      this.url("GetTeacher"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            teacher: <Teacher>_data.teacher,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  getUser = (
+    args: GetUserArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetUserReturn> => {
     return this.fetch(
-      this.url('GetUser'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          user: <User>(_data.user),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  getTeacherWithRoster = (args: GetTeacherWithRosterArgs, headers?: object, signal?: AbortSignal): Promise<GetTeacherWithRosterReturn> => {
+      this.url("GetUser"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            user: <User>_data.user,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  getTeacherWithRoster = (
+    args: GetTeacherWithRosterArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetTeacherWithRosterReturn> => {
     return this.fetch(
-      this.url('GetTeacherWithRoster'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          teacherWithRoster: <TeacherWithRoster>(_data.teacherWithRoster),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  getStudent = (args: GetStudentArgs, headers?: object, signal?: AbortSignal): Promise<GetStudentReturn> => {
+      this.url("GetTeacherWithRoster"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            teacherWithRoster: <TeacherWithRoster>_data.teacherWithRoster,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  getStudent = (
+    args: GetStudentArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetStudentReturn> => {
     return this.fetch(
-      this.url('GetStudent'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          student: <StudentWithUser>(_data.student),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
-  getStudentDetails = (args: GetStudentDetailsArgs, headers?: object, signal?: AbortSignal): Promise<GetStudentDetailsReturn> => {
+      this.url("GetStudent"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            student: <StudentWithUser>_data.student,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
+
+  getStudentDetails = (
+    args: GetStudentDetailsArgs,
+    headers?: object,
+    signal?: AbortSignal,
+  ): Promise<GetStudentDetailsReturn> => {
     return this.fetch(
-      this.url('GetStudentDetails'),
-      createHTTPRequest(args, headers, signal)).then((res) => {
-      return buildResponse(res).then(_data => {
-        return {
-          details: <StudentDetails>(_data.details),
-        }
-      })
-    }, (error) => {
-      throw WebrpcRequestFailedError.new({ cause: `fetch(): ${error.message || ''}` })
-    })
-  }
-  
+      this.url("GetStudentDetails"),
+      createHTTPRequest(args, headers, signal),
+    ).then(
+      (res) => {
+        return buildResponse(res).then((_data) => {
+          return {
+            details: <StudentDetails>_data.details,
+          };
+        });
+      },
+      (error) => {
+        throw WebrpcRequestFailedError.new({
+          cause: `fetch(): ${error.message || ""}`,
+        });
+      },
+    );
+  };
 }
 
-  const createHTTPRequest = (body: object = {}, headers: object = {}, signal: AbortSignal | null = null): object => {
+const createHTTPRequest = (
+  body: object = {},
+  headers: object = {},
+  signal: AbortSignal | null = null,
+): object => {
   return {
-    method: 'POST',
-    headers: { ...headers, 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { ...headers, "Content-Type": "application/json" },
     body: JSON.stringify(body || {}),
-    signal
-  }
-}
+    signal,
+  };
+};
 
 const buildResponse = (res: Response): Promise<any> => {
-  return res.text().then(text => {
-    let data
+  return res.text().then((text) => {
+    let data;
     try {
-      data = JSON.parse(text)
-    } catch(error) {
-      let message = ''
-      if (error instanceof Error)  {
-        message = error.message
+      data = JSON.parse(text);
+    } catch (error) {
+      let message = "";
+      if (error instanceof Error) {
+        message = error.message;
       }
       throw WebrpcBadResponseError.new({
         status: res.status,
-        cause: `JSON.parse(): ${message}: response text: ${text}`},
-      )
+        cause: `JSON.parse(): ${message}: response text: ${text}`,
+      });
     }
     if (!res.ok) {
-      const code: number = (typeof data.code === 'number') ? data.code : 0
-      throw (webrpcErrorByCode[code] || WebrpcError).new(data)
+      const code: number = typeof data.code === "number" ? data.code : 0;
+      throw (webrpcErrorByCode[code] || WebrpcError).new(data);
     }
-    return data
-  })
-}
+    return data;
+  });
+};
 
 //
 // Errors
 //
 
 export class WebrpcError extends Error {
-  name: string
-  code: number
-  message: string
-  status: number
-  cause?: string
+  name: string;
+  code: number;
+  message: string;
+  status: number;
+  cause?: string;
 
   /** @deprecated Use message instead of msg. Deprecated in webrpc v0.11.0. */
-  msg: string
+  msg: string;
 
-  constructor(name: string, code: number, message: string, status: number, cause?: string) {
-    super(message)
-    this.name = name || 'WebrpcError'
-    this.code = typeof code === 'number' ? code : 0
-    this.message = message || `endpoint error ${this.code}`
-    this.msg = this.message
-    this.status = typeof status === 'number' ? status : 0
-    this.cause = cause
-    Object.setPrototypeOf(this, WebrpcError.prototype)
+  constructor(
+    name: string,
+    code: number,
+    message: string,
+    status: number,
+    cause?: string,
+  ) {
+    super(message);
+    this.name = name || "WebrpcError";
+    this.code = typeof code === "number" ? code : 0;
+    this.message = message || `endpoint error ${this.code}`;
+    this.msg = this.message;
+    this.status = typeof status === "number" ? status : 0;
+    this.cause = cause;
+    Object.setPrototypeOf(this, WebrpcError.prototype);
   }
 
   static new(payload: any): WebrpcError {
-    return new this(payload.error, payload.code, payload.message || payload.msg, payload.status, payload.cause)
+    return new this(
+      payload.error,
+      payload.code,
+      payload.message || payload.msg,
+      payload.status,
+      payload.cause,
+    );
   }
 }
 
@@ -838,177 +1160,175 @@ export class WebrpcError extends Error {
 
 export class WebrpcEndpointError extends WebrpcError {
   constructor(
-    name: string = 'WebrpcEndpoint',
+    name: string = "WebrpcEndpoint",
     code: number = 0,
-    message: string = 'endpoint error',
+    message: string = "endpoint error",
     status: number = 0,
-    cause?: string
+    cause?: string,
   ) {
-    super(name, code, message, status, cause)
-    Object.setPrototypeOf(this, WebrpcEndpointError.prototype)
+    super(name, code, message, status, cause);
+    Object.setPrototypeOf(this, WebrpcEndpointError.prototype);
   }
 }
 
 export class WebrpcRequestFailedError extends WebrpcError {
   constructor(
-    name: string = 'WebrpcRequestFailed',
+    name: string = "WebrpcRequestFailed",
     code: number = -1,
-    message: string = 'request failed',
+    message: string = "request failed",
     status: number = 0,
-    cause?: string
+    cause?: string,
   ) {
-    super(name, code, message, status, cause)
-    Object.setPrototypeOf(this, WebrpcRequestFailedError.prototype)
+    super(name, code, message, status, cause);
+    Object.setPrototypeOf(this, WebrpcRequestFailedError.prototype);
   }
 }
 
 export class WebrpcBadRouteError extends WebrpcError {
   constructor(
-    name: string = 'WebrpcBadRoute',
+    name: string = "WebrpcBadRoute",
     code: number = -2,
-    message: string = 'bad route',
+    message: string = "bad route",
     status: number = 0,
-    cause?: string
+    cause?: string,
   ) {
-    super(name, code, message, status, cause)
-    Object.setPrototypeOf(this, WebrpcBadRouteError.prototype)
+    super(name, code, message, status, cause);
+    Object.setPrototypeOf(this, WebrpcBadRouteError.prototype);
   }
 }
 
 export class WebrpcBadMethodError extends WebrpcError {
   constructor(
-    name: string = 'WebrpcBadMethod',
+    name: string = "WebrpcBadMethod",
     code: number = -3,
-    message: string = 'bad method',
+    message: string = "bad method",
     status: number = 0,
-    cause?: string
+    cause?: string,
   ) {
-    super(name, code, message, status, cause)
-    Object.setPrototypeOf(this, WebrpcBadMethodError.prototype)
+    super(name, code, message, status, cause);
+    Object.setPrototypeOf(this, WebrpcBadMethodError.prototype);
   }
 }
 
 export class WebrpcBadRequestError extends WebrpcError {
   constructor(
-    name: string = 'WebrpcBadRequest',
+    name: string = "WebrpcBadRequest",
     code: number = -4,
-    message: string = 'bad request',
+    message: string = "bad request",
     status: number = 0,
-    cause?: string
+    cause?: string,
   ) {
-    super(name, code, message, status, cause)
-    Object.setPrototypeOf(this, WebrpcBadRequestError.prototype)
+    super(name, code, message, status, cause);
+    Object.setPrototypeOf(this, WebrpcBadRequestError.prototype);
   }
 }
 
 export class WebrpcBadResponseError extends WebrpcError {
   constructor(
-    name: string = 'WebrpcBadResponse',
+    name: string = "WebrpcBadResponse",
     code: number = -5,
-    message: string = 'bad response',
+    message: string = "bad response",
     status: number = 0,
-    cause?: string
+    cause?: string,
   ) {
-    super(name, code, message, status, cause)
-    Object.setPrototypeOf(this, WebrpcBadResponseError.prototype)
+    super(name, code, message, status, cause);
+    Object.setPrototypeOf(this, WebrpcBadResponseError.prototype);
   }
 }
 
 export class WebrpcServerPanicError extends WebrpcError {
   constructor(
-    name: string = 'WebrpcServerPanic',
+    name: string = "WebrpcServerPanic",
     code: number = -6,
-    message: string = 'server panic',
+    message: string = "server panic",
     status: number = 0,
-    cause?: string
+    cause?: string,
   ) {
-    super(name, code, message, status, cause)
-    Object.setPrototypeOf(this, WebrpcServerPanicError.prototype)
+    super(name, code, message, status, cause);
+    Object.setPrototypeOf(this, WebrpcServerPanicError.prototype);
   }
 }
 
 export class WebrpcInternalErrorError extends WebrpcError {
   constructor(
-    name: string = 'WebrpcInternalError',
+    name: string = "WebrpcInternalError",
     code: number = -7,
-    message: string = 'internal error',
+    message: string = "internal error",
     status: number = 0,
-    cause?: string
+    cause?: string,
   ) {
-    super(name, code, message, status, cause)
-    Object.setPrototypeOf(this, WebrpcInternalErrorError.prototype)
+    super(name, code, message, status, cause);
+    Object.setPrototypeOf(this, WebrpcInternalErrorError.prototype);
   }
 }
 
 export class WebrpcClientDisconnectedError extends WebrpcError {
   constructor(
-    name: string = 'WebrpcClientDisconnected',
+    name: string = "WebrpcClientDisconnected",
     code: number = -8,
-    message: string = 'client disconnected',
+    message: string = "client disconnected",
     status: number = 0,
-    cause?: string
+    cause?: string,
   ) {
-    super(name, code, message, status, cause)
-    Object.setPrototypeOf(this, WebrpcClientDisconnectedError.prototype)
+    super(name, code, message, status, cause);
+    Object.setPrototypeOf(this, WebrpcClientDisconnectedError.prototype);
   }
 }
 
 export class WebrpcStreamLostError extends WebrpcError {
   constructor(
-    name: string = 'WebrpcStreamLost',
+    name: string = "WebrpcStreamLost",
     code: number = -9,
-    message: string = 'stream lost',
+    message: string = "stream lost",
     status: number = 0,
-    cause?: string
+    cause?: string,
   ) {
-    super(name, code, message, status, cause)
-    Object.setPrototypeOf(this, WebrpcStreamLostError.prototype)
+    super(name, code, message, status, cause);
+    Object.setPrototypeOf(this, WebrpcStreamLostError.prototype);
   }
 }
 
 export class WebrpcStreamFinishedError extends WebrpcError {
   constructor(
-    name: string = 'WebrpcStreamFinished',
+    name: string = "WebrpcStreamFinished",
     code: number = -10,
-    message: string = 'stream finished',
+    message: string = "stream finished",
     status: number = 0,
-    cause?: string
+    cause?: string,
   ) {
-    super(name, code, message, status, cause)
-    Object.setPrototypeOf(this, WebrpcStreamFinishedError.prototype)
+    super(name, code, message, status, cause);
+    Object.setPrototypeOf(this, WebrpcStreamFinishedError.prototype);
   }
 }
-
 
 // Schema errors
 
 export class NoRequestForUErrorError extends WebrpcError {
   constructor(
-    name: string = 'NoRequestForUError',
+    name: string = "NoRequestForUError",
     code: number = 1000,
-    message: string = 'You already Made a request for that day ð¤¡',
+    message: string = "You already Made a request for that day ð¤¡",
     status: number = 0,
-    cause?: string
+    cause?: string,
   ) {
-    super(name, code, message, status, cause)
-    Object.setPrototypeOf(this, NoRequestForUErrorError.prototype)
+    super(name, code, message, status, cause);
+    Object.setPrototypeOf(this, NoRequestForUErrorError.prototype);
   }
 }
 
-
 export enum errors {
-  WebrpcEndpoint = 'WebrpcEndpoint',
-  WebrpcRequestFailed = 'WebrpcRequestFailed',
-  WebrpcBadRoute = 'WebrpcBadRoute',
-  WebrpcBadMethod = 'WebrpcBadMethod',
-  WebrpcBadRequest = 'WebrpcBadRequest',
-  WebrpcBadResponse = 'WebrpcBadResponse',
-  WebrpcServerPanic = 'WebrpcServerPanic',
-  WebrpcInternalError = 'WebrpcInternalError',
-  WebrpcClientDisconnected = 'WebrpcClientDisconnected',
-  WebrpcStreamLost = 'WebrpcStreamLost',
-  WebrpcStreamFinished = 'WebrpcStreamFinished',
-  NoRequestForUError = 'NoRequestForUError',
+  WebrpcEndpoint = "WebrpcEndpoint",
+  WebrpcRequestFailed = "WebrpcRequestFailed",
+  WebrpcBadRoute = "WebrpcBadRoute",
+  WebrpcBadMethod = "WebrpcBadMethod",
+  WebrpcBadRequest = "WebrpcBadRequest",
+  WebrpcBadResponse = "WebrpcBadResponse",
+  WebrpcServerPanic = "WebrpcServerPanic",
+  WebrpcInternalError = "WebrpcInternalError",
+  WebrpcClientDisconnected = "WebrpcClientDisconnected",
+  WebrpcStreamLost = "WebrpcStreamLost",
+  WebrpcStreamFinished = "WebrpcStreamFinished",
+  NoRequestForUError = "NoRequestForUError",
 }
 
 const webrpcErrorByCode: { [code: number]: any } = {
@@ -1024,7 +1344,9 @@ const webrpcErrorByCode: { [code: number]: any } = {
   [-9]: WebrpcStreamLostError,
   [-10]: WebrpcStreamFinishedError,
   [1000]: NoRequestForUErrorError,
-}
+};
 
-export type Fetch = (input: RequestInfo, init?: RequestInit) => Promise<Response>
-
+export type Fetch = (
+  input: RequestInfo,
+  init?: RequestInit,
+) => Promise<Response>;

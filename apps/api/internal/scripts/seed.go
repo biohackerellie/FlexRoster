@@ -56,7 +56,6 @@ func randString(n int) string {
 func (s *Scripts) SeedDatabase(ctx context.Context) error {
 	teacherAmount := 5
 	classroomAmount := 5
-	studentAmount := 45
 
 	uniqueNames := make(map[string]struct{})
 	names := make([]string, 0, 50)
@@ -67,7 +66,6 @@ func (s *Scripts) SeedDatabase(ctx context.Context) error {
 		if _, exists := uniqueNames[name]; !exists {
 			uniqueNames[name] = struct{}{}
 			names = append(names, name)
-			s.log.Info("Creating Name", "name", name, "count", count)
 		}
 	}
 
@@ -108,9 +106,6 @@ func (s *Scripts) SeedDatabase(ctx context.Context) error {
 		classrooms[i] = classroom
 
 	}
-	for _, c := range classrooms {
-		s.log.Info("Creating Classroom", "classroom", c)
-	}
 	if err := s.classroomRepo.NewClassroomTx(ctx, classrooms); err != nil {
 		s.log.Error("error creating classrooms", "err", err)
 	}
@@ -118,13 +113,9 @@ func (s *Scripts) SeedDatabase(ctx context.Context) error {
 	students := make([]*service.Student, len(studentNames))
 	classroomCount := len(classrooms)
 
-	for i := 0; i < studentAmount; i++ {
+	for i, name := range studentNames {
 
-		if i >= len(studentNames) {
-			return nil
-		}
 		classroomIndex := i % classroomCount
-		name := studentNames[i]
 		emailName := strings.ReplaceAll(name, " ", "")
 		student := &service.Student{
 			Id:           int32(i),
@@ -133,11 +124,11 @@ func (s *Scripts) SeedDatabase(ctx context.Context) error {
 			ClassroomId:  classrooms[classroomIndex].Id,
 		}
 		students[i] = student
-		s.log.Info("Creating Student", "student", student)
 
 	}
 	if err := s.studentRepo.NewStudentTx(ctx, students); err != nil {
 		s.log.Error("error creating students", "err", err)
 	}
+
 	return nil
 }

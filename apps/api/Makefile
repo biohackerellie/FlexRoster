@@ -16,3 +16,6 @@ migrate:
 
 build-scripts:
 	go build -o ./bin/scripts/ ./cmd/scriptRunner/main.go
+
+seed:
+	./bin/scripts/main -seed
