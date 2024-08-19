@@ -66,3 +66,32 @@ func (r *RClient) Get(key string) (string, error) {
 func (r *RClient) Clear(key string) error {
 	return r.Redis.Del(r.ctx, key).Err()
 }
+
+type XReadGroupArgs struct {
+	Group    string
+	Consumer string
+	Streams  []string
+	Count    int64
+	Block    time.Duration
+}
+
+func (r *RClient) ReadStream(args *XReadGroupArgs) ([]redis.XStream, error) {
+	return r.Redis.XReadGroup(r.ctx, &redis.XReadGroupArgs{
+		Group:    args.Group,
+		Consumer: args.Consumer,
+		Streams:  args.Streams,
+		Count:    args.Count,
+		Block:    args.Block,
+	}).Result()
+}
+
+func (r *RClient) XAdd(stream string, values ...*redis.XMessage) (string, error) {
+	return r.Redis.XAdd(r.ctx, &redis.XAddArgs{
+		Stream: stream,
+		Values: values,
+	}).Result()
+}
+
+func (r *RClient) XRange(stream, start, stop string) ([]redis.XMessage, error) {
+	return r.Redis.XRange(r.ctx, stream, start, stop).Result()
+}

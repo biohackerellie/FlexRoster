@@ -5,7 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"api/internal/lib/helpers"
+	errors "api/internal/lib/errors"
+
 	"api/internal/lib/logger"
 	classroom "api/internal/service"
 
@@ -69,7 +70,7 @@ func (s *ClassroomDBService) GetAvailability(ctx context.Context) ([]*classroom.
 			ClassroomId: r.ClassroomId,
 			Date:        r.Date.Time,
 			Available:   r.Available,
-			TeacherId:   r.TeacherId.String,
+			TeacherId:   *r.TeacherId,
 		}
 		response[i] = mappedResponse
 	}
@@ -77,8 +78,7 @@ func (s *ClassroomDBService) GetAvailability(ctx context.Context) ([]*classroom.
 }
 
 func (s *ClassroomDBService) GetTeacherAvailability(ctx context.Context, teacherId string) ([]*classroom.Availability, error) {
-	ID := helpers.StringToPGText(teacherId)
-	res, err := s.q.TeacherAvailabilityQuery(ctx, ID)
+	res, err := s.q.TeacherAvailabilityQuery(ctx, &teacherId)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func (s *ClassroomDBService) GetTeacherAvailability(ctx context.Context, teacher
 			ClassroomId: r.ClassroomId,
 			Date:        r.Date.Time,
 			Available:   r.Available,
-			TeacherId:   r.TeacherId.String,
+			TeacherId:   *r.TeacherId,
 		}
 		response[i] = mappedResponse
 	}
@@ -98,9 +98,7 @@ func (s *ClassroomDBService) GetTeacherAvailability(ctx context.Context, teacher
 }
 
 func (s *ClassroomDBService) TeacherAvailableToday(ctx context.Context, teacherId string) (bool, error) {
-	id := pgtype.Text{}
-	id.String = teacherId
-	available, err := s.q.TeacherAvailableToday(ctx, id)
+	available, err := s.q.TeacherAvailableToday(ctx, &teacherId)
 	if err != nil {
 		return false, err
 	}
@@ -115,7 +113,7 @@ func (s *ClassroomDBService) GetRoomByTeacherId(ctx context.Context, id string) 
 	return &classroom.Classroom{
 		Id:          res.ID,
 		RoomNumber:  res.RoomNumber,
-		TeacherName: res.TeacherName.String,
+		TeacherName: *res.TeacherName,
 		TeacherId:   res.TeacherId,
 		Available:   res.Available,
 	}, nil
@@ -133,9 +131,9 @@ func (s *ClassroomDBService) RoomsWithRosterCount(ctx context.Context) ([]*class
 				Id:          r.ID,
 				RoomNumber:  r.RoomNumber,
 				TeacherName: r.TeacherName,
-				TeacherId:   r.TeacherId.String,
-				Comment:     r.Comment.String,
-				IsFlex:      r.IsFlex.Bool,
+				TeacherId:   *r.TeacherId,
+				Comment:     *r.Comment,
+				IsFlex:      *r.IsFlex,
 			},
 			Count: r.Count,
 		}
@@ -156,7 +154,7 @@ func (s *ClassroomDBService) ClassroomSchedule(ctx context.Context, classroomid 
 			ClassroomId: r.Availability.ClassroomId,
 			Date:        r.Availability.Date.Time,
 			Available:   r.Availability.Available,
-			TeacherId:   r.Availability.TeacherId.String,
+			TeacherId:   *r.Availability.TeacherId,
 		}
 		result[i] = mappedResponse
 	}
@@ -164,28 +162,24 @@ func (s *ClassroomDBService) ClassroomSchedule(ctx context.Context, classroomid 
 }
 
 func (s *ClassroomDBService) CreateComment(ctx context.Context, teacherId string, comment string) error {
-	ID := helpers.StringToPGText(teacherId)
-	Comment := helpers.StringToPGText(comment)
 	args := CreateCommentParams{
-		TeacherId: ID,
-		Comment:   Comment,
+		TeacherId: &teacherId,
+		Comment:   &comment,
 	}
 	err := s.q.CreateComment(ctx, args)
 	return err
 }
 
 func (s *ClassroomDBService) DeleteComment(ctx context.Context, teacherId string) error {
-	ID := helpers.StringToPGText(teacherId)
-	err := s.q.DeleteComment(ctx, ID)
+	err := s.q.DeleteComment(ctx, &teacherId)
 	return err
 }
 
 func (s *ClassroomDBService) DeleteAvailability(ctx context.Context, teacherId string, date time.Time) error {
-	ID := helpers.StringToPGText(teacherId)
 	DATE := pgtype.Date{}
 	DATE.Time = date
 	args := DeleteAvailabilityParams{
-		TeacherId: ID,
+		TeacherId: &teacherId,
 		Date:      DATE,
 	}
 	err := s.q.DeleteAvailability(ctx, args)
@@ -197,7 +191,7 @@ func (s *ClassroomDBService) CreateAvailability(ctx context.Context, args []*cla
 	for _, arg := range args {
 		availability = append(availability, CreateAvailabilityParams{
 			ID:          arg.Id,
-			TeacherId:   helpers.StringToPGText(arg.TeacherId),
+			TeacherId:   &arg.TeacherId,
 			ClassroomId: arg.ClassroomId,
 			Date:        pgtype.Date{Time: arg.Date},
 			Available:   arg.Available,
@@ -224,12 +218,36 @@ func (s *ClassroomDBService) mapClassroom(r ClassroomQueryRow, ch chan<- *classr
 			Id:          r.ID,
 			RoomNumber:  r.RoomNumber,
 			TeacherName: r.TeacherName,
-			TeacherId:   r.TeacherId.String,
-			Comment:     r.Comment.String,
-			IsFlex:      r.IsFlex.Bool,
+			TeacherId:   *r.TeacherId,
+			Comment:     *r.Comment,
+			IsFlex:      *r.IsFlex,
 			Available:   r.Available,
 		},
 		AvailableDates: dates,
 	}
 	ch <- mappedResponse
+}
+
+func (s *ClassroomDBService) NewClassroomTx(ctx context.Context, classrooms []*classroom.Classroom) error {
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
+	qtx := s.q.WithTx(tx)
+	flex := true
+	flexPtr := &flex
+	for _, classroom := range classrooms {
+		err := qtx.NewClassroom(ctx, NewClassroomParams{
+			ID:          classroom.Id,
+			RoomNumber:  classroom.RoomNumber,
+			TeacherName: classroom.TeacherName,
+			TeacherId:   &classroom.TeacherId,
+			IsFlex:      flexPtr,
+		})
+		if err != nil {
+			return err
+		}
+	}
+	return tx.Commit(ctx)
 }

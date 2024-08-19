@@ -45,7 +45,7 @@ WHERE "studentEmail" = $3;
 -- name: DeleteStudent :exec
 DELETE FROM "students" WHERE "studentEmail" = $1;
 
--- name: NewStudent :copyfrom
+-- name: NewStudent :exec
 INSERT INTO "students" ("studentEmail", "studentName", "status", "classroomId")
 VALUES ($1, $2, $3, $4);
 

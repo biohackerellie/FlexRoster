@@ -15,3 +15,6 @@ FROM "user" u
 JOIN "students" s ON s."studentEmail" = u."email"
 JOIN "classrooms" c ON c."id" = s."classroomId"
 WHERE "user"."id" = $1;
+
+-- name: CreateUser :exec
+INSERT INTO "user" ("id", "name", "email", "role") VALUES ($1, $2, $3, $4);

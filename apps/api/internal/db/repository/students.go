@@ -4,9 +4,9 @@ import (
 	"context"
 
 	config "api/internal/config"
+	errors "api/internal/lib/errors"
 	"api/internal/lib/logger"
 	student "api/internal/service"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type StudentDBService struct {
@@ -94,10 +94,8 @@ func (s *StudentDBService) RosterById(ctx context.Context, id int32) ([]*student
 	return response, nil
 }
 
-func (s *StudentDBService) RosterByTeacherId(ctx context.Context, teacherId string) ([]*student.StudentWithUser, error) {
-	id := pgtype.Text{}
-	id.String = teacherId
-	res, err := s.q.RosterByTeacherId(ctx, id)
+func (s *StudentDBService) RosterByTeacherId(ctx context.Context, teacherId *string) ([]*student.StudentWithUser, error) {
+	res, err := s.q.RosterByTeacherId(ctx, teacherId)
 	if err != nil {
 		return nil, err
 	}
@@ -107,11 +105,11 @@ func (s *StudentDBService) RosterByTeacherId(ctx context.Context, teacherId stri
 			StudentEmail: r.StudentEmail,
 			StudentName:  r.StudentName,
 			Status:       student.Status(r.Status),
-			StudentId:    r.StudentId.String,
+			StudentId:    *r.StudentId,
 			RoomNumber:   r.RoomNumber,
 			TeacherName:  r.TeacherName,
 			ClassroomId:  r.ClassroomId,
-			Comment:      r.Comment.String,
+			Comment:      *r.Comment,
 		}
 		response[i] = mappedRes
 	}
@@ -139,19 +137,40 @@ func (s *StudentDBService) GetAllStudents(ctx context.Context) ([]*student.Stude
 	return response, nil
 }
 
-func (s *StudentDBService) UpdateStudentStatus(ctx context.Context, status Status, studentEmail string) error {
+func (s *StudentDBService) UpdateStudentStatus(ctx context.Context, status *student.Status, studentEmail string) error {
 	err := s.q.UpdateStudentStatus(ctx, UpdateStudentStatusParams{
-		Status:       status,
+		Status:       Status(*status),
 		StudentEmail: studentEmail,
 	})
 	return err
 }
 
-func (s *StudentDBService) UpdateStudentRoster(ctx context.Context, classroomId string, status Status, studentEmail string) error {
+func (s *StudentDBService) UpdateStudentRoster(ctx context.Context, classroomId string, status *student.Status, studentEmail string) error {
 	err := s.q.UpdateRoster(ctx, UpdateRosterParams{
 		ClassroomId:  classroomId,
-		Status:       status,
+		Status:       Status(*status),
 		StudentEmail: studentEmail,
 	})
 	return err
+}
+
+func (s *StudentDBService) NewStudentTx(ctx context.Context, students []*student.Student) error {
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
+	qtx := s.q.WithTx(tx)
+	for _, student := range students {
+		err := qtx.NewStudent(ctx, NewStudentParams{
+			StudentEmail: student.StudentEmail,
+			StudentName:  student.StudentName,
+			Status:       "default",
+			ClassroomId:  student.ClassroomId,
+		})
+		if err != nil {
+			return err
+		}
+	}
+	return tx.Commit(ctx)
 }

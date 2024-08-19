@@ -56,7 +56,7 @@ func (s *RequestDBService) GetRequests(ctx context.Context, userId string) ([]*r
 			CurrentTeacherName: r.Request.CurrentTeacherName,
 			DateRequested:      r.Request.DateRequested.Time,
 			Status:             request.RequestStatus(r.Request.Status),
-			Arrived:            r.Request.Arrived.Bool,
+			Arrived:            *r.Request.Arrived,
 			Timestamp:          r.Request.Timestamp,
 		}
 
@@ -82,7 +82,7 @@ func (s *RequestDBService) GetAllRequests(ctx context.Context) ([]*request.Reque
 			CurrentTeacherName: r.CurrentTeacherName,
 			DateRequested:      r.DateRequested.Time,
 			Status:             request.RequestStatus(r.Status),
-			Arrived:            r.Arrived.Bool,
+			Arrived:            *r.Arrived,
 			Timestamp:          r.Timestamp,
 		}
 		response[i] = mappedRes
@@ -91,6 +91,8 @@ func (s *RequestDBService) GetAllRequests(ctx context.Context) ([]*request.Reque
 }
 
 func (s *RequestDBService) NewRequest(ctx context.Context, studentName string, studentID string, requestStatus RequestStatus, dateRequested time.Time, newTeacher string, newTeacherName string, currentTeacher string, currentTeacherName string) error {
+	status := false
+	statusPtr := &status
 	err := s.q.NewRequest(ctx, NewRequestParams{
 		Status:             requestStatus,
 		StudentName:        studentName,
@@ -100,7 +102,7 @@ func (s *RequestDBService) NewRequest(ctx context.Context, studentName string, s
 		CurrentTeacherName: currentTeacherName,
 		NewTeacher:         newTeacher,
 		NewTeacherName:     newTeacherName,
-		Arrived:            pgtype.Bool{Bool: false},
+		Arrived:            statusPtr,
 	})
 	return err
 }
