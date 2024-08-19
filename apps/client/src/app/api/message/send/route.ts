@@ -12,13 +12,14 @@ import { toPusherKey } from "@/lib/utils";
 export async function POST(req: Request) {
   try {
     const { chatId, text }: { chatId: string; text: string } = await req.json();
-    const filter = await profanityFilter(text);
-    if (filter.isProfanity) {
-      return new Response(
-        `Gasp, you sad a no-no word! Dont say ${filter.flaggedFor}!`,
-        { status: 202 },
-      );
-    }
+
+    // const filter = await profanityFilter(text);
+    // if (filter.isProfanity) {
+    //   return new Response(
+    //     `Gasp, you sad a no-no word! Dont say ${filter.flaggedFor}!`,
+    //     { status: 202 },
+    //   );
+    // }
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
 

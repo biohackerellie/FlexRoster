@@ -2,6 +2,8 @@ import { Elysia, t } from "elysia";
 
 import { getAlerts, getInbox, sendToInbox } from "~/lib/redis";
 
+const T = t.Union([t.String(), t.Number()]);
+
 export const inboxRoutes = new Elysia({ prefix: "/inbox" })
   .onError({ as: "scoped" }, ({ code, error, set }) => {
     switch (code) {
@@ -40,6 +42,8 @@ export const inboxRoutes = new Elysia({ prefix: "/inbox" })
         message: t.Object({
           senderId: t.String(),
           text: t.String(),
+          timestamp: T,
+          id: t.Optional(t.String()),
         }),
       }),
     },

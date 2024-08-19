@@ -28,10 +28,11 @@ export function InformationCircleIcon(
 }
 
 const TypeToEmoji = {
-  default: "💡",
-  error: "🚫",
-  info: <InformationCircleIcon className="mt-1" />,
-  warning: "⚠️",
+  default: "🤔",
+  error: "😡",
+  info: "🤔",
+  warning: "😲",
+  success: "😊",
 };
 
 type CalloutType = keyof typeof TypeToEmoji;
@@ -48,6 +49,9 @@ const classes: Record<CalloutType, string> = {
   ),
   warning: clsx(
     "border-yellow-200 bg-yellow-100 text-yellow-900 dark:border-yellow-200/30 dark:bg-yellow-700/30 dark:text-yellow-200",
+  ),
+  success: clsx(
+    "border-green-200 bg-green-100 text-green-900 dark:border-green-200/30 dark:bg-green-900/30 dark:text-green-200",
   ),
 };
 

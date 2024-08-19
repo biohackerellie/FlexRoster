@@ -23,32 +23,19 @@ export async function Header() {
               FlexRoster
             </span>
           </Link>
+        </div>
+        <div className="flex items-center space-x-2 md:space-x-4">
           {session && (
             <div className="hidden md:flex">
               <Navbar userId={session.user.id} role={session.user.roles} />
             </div>
           )}
-        </div>
-        <div className="flex items-center space-x-2 md:space-x-4">
+
           <MobileDropdown
             items={{
               docs: siteConfig.docNav,
             }}
           />
-          <div className="hidden sm:flex">
-            <Link
-              href="https://github.com/biohackerellie/FlexRoster"
-              target="_blank"
-              rel="noreferrer"
-              className={buttonVariants({
-                size: "icon",
-                variant: "ghost",
-              })}
-            >
-              <Icons.gitHub className="h-6 w-6" />
-              <span className="sr-only">GitHub</span>
-            </Link>
-          </div>
         </div>
       </div>
     </header>

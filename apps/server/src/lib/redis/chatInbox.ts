@@ -21,8 +21,8 @@ export async function getInbox(chatId: string): Promise<Message[]> {
 
     const reversedDbMessages = dbMessages.reverse();
 
-    const messages = messageArrayValidator.parse(reversedDbMessages);
-    return messages;
+    // const messages = messageArrayValidator.parse(reversedDbMessages);
+    return reversedDbMessages;
   } catch (e) {
     console.error(e);
     throw new NotFoundError();
@@ -30,14 +30,13 @@ export async function getInbox(chatId: string): Promise<Message[]> {
 }
 
 // send message to chat by chatId
-export async function sendToInbox(chatId: string, message: any) {
+export async function sendToInbox(chatId: string, message: Message) {
   try {
-    const messageData = messageValidator.parse(message);
     const client = createClient();
     await client.zadd(
       `chat:${chatId}`,
-      messageData.timestamp,
-      JSON.stringify(messageData),
+      message.timestamp,
+      JSON.stringify(message),
     );
     await client.quit();
 

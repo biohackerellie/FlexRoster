@@ -1,0 +1,40 @@
+import { LineChart, MessageCircle } from "lucide-react";
+import { Link } from "next-view-transitions";
+
+export const metadata = { title: "Teacher Requests and Messages" };
+
+# Teacher Requests and Messages
+
+<Callout type="warning">Only teachers have access to these pages.</Callout>
+
+### Table of Contents
+
+## Requests
+
+<Callout type="info">
+  <LineChart />
+  The Request page can be accessed by clicking on the chart icon on the top bar.
+</Callout>
+
+![Requests](https://github.com/biohackerellie/images/blob/main/apps/flexroster/teacherRequest.png?raw=true)
+
+The `Requests` tab shows all pending requests from students wanting to transfer to your room. The `Outgoing` tab shows all pending requests from students who are in your default Flex roster to another teacher.
+
+### Approving or Denying Requests
+
+<Callout type="info">
+  To approve or deny a request, click on the flashing pending icon, then on
+  either `approve` or `deny`.
+  ![approval](https://github.com/biohackerellie/images/blob/main/apps/flexroster/teacher12.png?raw=true)
+</Callout>
+
+If you approve the request, the student will be automatically transferred to your class roster for the day but will still need to be marked as arrived. <Link href="/help/teacher-dashboard#marking-students-as-arrived" className="text-blue-500">`Click here`</Link> to learn how to mark students as arrived.
+
+## Messages
+
+<Callout type="info">
+  <MessageCircle />
+  The Messages page can be accessed by clicking on the message icon on the top
+  bar.
+</Callout>
+Messages is the tab to view all unread messages from students

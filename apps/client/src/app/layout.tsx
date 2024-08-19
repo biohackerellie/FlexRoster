@@ -5,6 +5,7 @@ import { ViewTransitions } from "next-view-transitions";
 
 import { cn } from "@local/ui";
 
+import { Footer } from "@/components/footer";
 import { ThemeWrapper } from "@/components/theme-wrapper";
 import { Header } from "../components/header";
 

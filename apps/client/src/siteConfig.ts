@@ -55,14 +55,34 @@ export const siteConfig = {
           href: "/help/introduction",
           items: [],
         },
+        {
+          title: "Student Guide",
+          href: "/help/students",
+          items: [],
+        },
+        {
+          title: "FAQ",
+          href: "/help/faq",
+          items: [],
+        },
       ],
     },
     {
-      title: "Guides",
+      title: "Staff Guides",
       items: [
         {
-          title: "Students",
-          href: "/help/students",
+          title: "Teacher Dashboard",
+          href: "/help/teacher-dashboard",
+          items: [],
+        },
+        {
+          title: "Teacher Requests and Messages",
+          href: "/help/requests-messages",
+          items: [],
+        },
+        {
+          title: "Student Directories",
+          href: "/help/student-directories",
           items: [],
         },
       ],

@@ -1,0 +1,47 @@
+import { Search, Users2 } from "lucide-react";
+import { Link } from "next-view-transitions";
+
+export const metadata = { title: "Student Directories" };
+
+# Student Directories
+
+### Table of Contents
+
+## Class Rosters
+
+<Callout type="info">
+  <Users2 />
+  You can access the class roster page by clicking on the roster icon in the
+  navigation bar.
+</Callout>
+
+![Roster page](https://github.com/biohackerellie/images/blob/main/apps/flexroster/allRosters.png?raw=true)
+
+On the Rosters page, you can view all the teachers and their current class sizes. Clicking on the `Students` button will take you to the student directory for that teacher.
+
+## All Students
+
+<Callout type="info">
+  <Search />
+  You can access the student directory page by clicking on the student icon in
+  the navigation bar.
+</Callout>
+
+![Student directory](https://github.com/biohackerellie/images/blob/main/apps/flexroster/AllStudents.png?raw=true)
+
+The student directory page displays all students in the school. You can search for a specific student by typing their name in the search bar, or you can filter by their status. Similar to the status section on the <Link href="/help/teacher-dashboard#filtering-students">`Teacher Dashboard`</Link>, you'll be able to see if a student is assigned to their default room or if they have transferred.
+
+Clicking on the `Details` button will take you to the student details page.
+
+### Student Details
+
+![Student Details](https://github.com/biohackerellie/images/blob/main/apps/flexroster/StudentDetails.png?raw=true)
+
+On the details page, you can view the student's information, including their current location and status as well as a history of their requests.
+
+<Callout type="success">
+  Teachers also have the ability to manually assign a student to their room for
+  a given day. This is similar to how students make{" "}
+  <Link href="/help/students#making-a-request">`requests`</Link> however, the
+  request will automatically be approved if made by a teacher.
+</Callout>
