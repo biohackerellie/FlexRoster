@@ -45,12 +45,12 @@
     "@types/chalk-animation": "^1.6.3",
     "@types/fs-extra": "^11.0.4",
     "@types/gradient-string": "^1.1.6",
-    "@types/node": "^20.14.15",
+    "@types/node": "^20.16.1",
     "bun-types": "^1.1.24",
     "dotenv-cli": "^7.4.2",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "type-fest": "^4.24.0",
+    "type-fest": "^4.25.0",
     "typescript": "catalog:"
   },
   "prettier": "@local/prettier-config"
