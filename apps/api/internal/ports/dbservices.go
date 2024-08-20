@@ -24,7 +24,7 @@ type ClassroomDBService interface {
 
 type LogsDBService interface {
 	GetAllLogs(ctx context.Context) ([]*service.Logs, error)
-	AddLog(ctx context.Context, id string, user string, logType string, action string) error
+	AddLog(ctx context.Context, id string, user *string, logType string, action string) error
 	AddLogs(ctx context.Context, logs []*service.Logs) error
 }
 

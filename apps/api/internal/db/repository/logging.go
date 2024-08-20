@@ -46,6 +46,11 @@ func (s *LoggingDBService) GetAllLogs(ctx context.Context) ([]*service.Logs, err
 }
 
 func (s *LoggingDBService) AddLog(ctx context.Context, id string, user *string, logType string, action string) error {
+	if user != nil {
+		s.logger.Info("Inserting log with user ID: ", "user", *user)
+	} else {
+		s.logger.Info("Inserting log with no user ID")
+	}
 	err := s.q.CreateLog(ctx, CreateLogParams{
 		ID:     id,
 		User:   user,

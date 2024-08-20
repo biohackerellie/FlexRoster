@@ -19,3 +19,6 @@ build-scripts:
 
 seed:
 	./bin/scripts/main -seed
+
+logs:
+	./bin/scripts/main -logs

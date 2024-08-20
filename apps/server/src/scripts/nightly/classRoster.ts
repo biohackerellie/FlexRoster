@@ -65,7 +65,6 @@ export async function RosterSync() {
         });
       });
     }
-    logger.info("RosterData: ", JSON.stringify(rosterData));
     const rosterEmails = new Set(rosterData.map((r) => r.studentEmail));
     // const ignoredEmails = new Set(ignoredStudentUsers);
 
