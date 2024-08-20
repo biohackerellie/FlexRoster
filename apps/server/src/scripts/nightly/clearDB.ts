@@ -1,4 +1,4 @@
-import { db, eq, schema } from "@local/db";
+import { db, schema } from "@local/db";
 
 export async function clearDB() {
   try {

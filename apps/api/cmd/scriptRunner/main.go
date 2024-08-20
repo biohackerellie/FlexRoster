@@ -14,14 +14,20 @@ import (
 
 	repository "api/internal/db/repository"
 	"api/internal/scripts"
-
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/redis/go-redis/v9"
 )
 
 func main() {
 	log := logger.New()
 
 	config := config.GetEnv()
+
+	redisHost1 := config.REDIS_HOST1 + ":6379"
+	cache := redis.NewClient(&redis.Options{
+		Addr: redisHost1,
+	})
+	defer cache.Close()
 
 	dbconfig, err := pgxpool.ParseConfig(config.DSN)
 	if err != nil {
@@ -36,15 +42,22 @@ func main() {
 	if err := db.Ping(timeout); err != nil {
 		log.Fatal(err)
 	}
+	pong := cache.Ping(timeout)
+	log.Info("Redis ping", "pong", pong)
+	if err := pong.Err(); err != nil {
+		log.Fatal(err)
+	}
 	cancel()
 
 	userRepo := repository.NewUsersDBService(db).WithLogs(log)
 	classroomRepo := repository.NewClassroomDBService(db).WithLogs(log)
 	studentRepo := repository.NewStudentDBService(db).WithLogs(log)
+	logsRepo := repository.NewLoggingBService(db).WithLogs(log)
 
-	scriptRunner := scripts.NewScript(classroomRepo, studentRepo, userRepo).WithLogger(log)
+	scriptRunner := scripts.NewScript(classroomRepo, studentRepo, userRepo, logsRepo).WithLogger(log).WithCache(cache)
 
 	seedFlag := flag.Bool("seed", false, "seed the database")
+	logFlag := flag.Bool("logs", false, "process logs")
 
 	flag.Parse()
 
@@ -62,6 +75,25 @@ func main() {
 				log.Fatal("error seeding database", "err", err)
 			} else {
 				log.Info("Database seeding completed successfully.")
+			}
+		case sig := <-waitForShutdown(log):
+			log.Warn("Received signal:", sig, "Shutting down.")
+			cancel()
+		}
+	} else if *logFlag {
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+		done := make(chan error, 1)
+		go func() {
+			done <- scriptRunner.ProcessLogs(ctx)
+		}()
+
+		select {
+		case err := <-done:
+			if err != nil {
+				log.Fatal("error processing logs", "err", err)
+			} else {
+				log.Info("Logs processed successfully.")
 			}
 		case sig := <-waitForShutdown(log):
 			log.Warn("Received signal:", sig, "Shutting down.")

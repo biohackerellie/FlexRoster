@@ -1,11 +1,13 @@
 package scripts
 
-// import (
-// 	"context"
+import (
+	"context"
+	"strconv"
 
-// 	"api/internal/redis"
-// 	"api/internal/service"
-// )
+	"api/internal/service"
+
+	"github.com/redis/go-redis/v9"
+)
 
 // type Log struct {
 // 	ID     string
@@ -17,45 +19,56 @@ package scripts
 // 	Logs   []Log
 // }
 
-// func (s *Scripts) ProcessLogs(ctx context.Context) error {
-// 	var rawLogs []RawLog
-// 	dbLogs := make([]service.Logs, 0, 10)
-// 	streams, err := s.cache.ReadStream(&redis.XReadGroupArgs{
-// 		Group:    "log-consumer-group",
-// 		Consumer: "log-consumer",
-// 		Streams:  []string{"logs", ">"},
-// 		Count:    10,
-// 		Block:    2000,
-// 	})
-// 	if err != nil {
-// 		s.log.Error("error reading stream", "err", err)
-// 		return err
-// 	}
-// 	for _, stream := range streams {
-// 		var logs []Log
-// 		for _, message := range stream.Messages {
-// 			log := Log{
-// 				ID:     message.ID,
-// 				Values: message.Values,
-// 			}
-// 			logs = append(logs, log)
-// 		}
-// 		rawLog := RawLog{
-// 			Stream: stream.Stream,
-// 			Logs:   logs,
-// 		}
-// 		rawLogs = append(rawLogs, rawLog)
-// 	}
+func (s *Scripts) ProcessLogs(ctx context.Context) error {
+	dbLogs := make([]*service.Logs, 0, 10)
+	streams, err := s.cache.XReadGroup(ctx, &redis.XReadGroupArgs{
+		Group:    "log-consumer-group",
+		Consumer: "log-consumer",
+		Streams:  []string{"logs", ">"},
+		Count:    10,
+		Block:    2000,
+	}).Result()
+	if err != nil {
+		s.log.Error("error reading stream", "err", err)
+	}
 
-// 	for _, rawLog := range rawLogs {
-// 		for _, log := range rawLog.Logs {
-// 			dbLog := service.Logs{
-// 				ID: log.ID,
-// 				Values: log.Values{
-// 					"stream": rawLog.Stream,
-// 				},
-// 			}
-// 			dbLogs = append(dbLogs, dbLog)
-// 		}
-// 	}
-// }
+	for _, stream := range streams {
+		for _, message := range stream.Messages {
+			logObject := make(map[string]interface{})
+			logObject["id"] = message.ID
+
+			for key, value := range message.Values {
+				strValue := value.(string)
+				if key == "timestamp" {
+					parsedTimestamp, _ := strconv.Atoi(strValue)
+					logObject[key] = parsedTimestamp
+				} else {
+					logObject[key] = strValue
+				}
+			}
+
+			log := &service.Logs{
+				Id:     logObject["id"].(string),
+				User:   logObject["user"].(string),
+				Type:   service.LogType(logObject["type"].(string)),
+				Action: logObject["action"].(string),
+			}
+
+			dbLogs = append(dbLogs, log)
+		}
+		if err := s.logsRepo.AddLogs(ctx, dbLogs); err != nil {
+			s.log.Error("error adding logs", "err", err)
+			return err
+		}
+		ids := make([]string, 0, len(stream.Messages))
+		for _, msg := range stream.Messages {
+			ids = append(ids, msg.ID)
+		}
+		r := s.cache.XAck(ctx, "logs", "log-consumer", ids...)
+		if r.Err() != nil {
+			s.log.Error("error acknowledging messages", "err", r)
+			return r.Err()
+		}
+	}
+	return nil
+}

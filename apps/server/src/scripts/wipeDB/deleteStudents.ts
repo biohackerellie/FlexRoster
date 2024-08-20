@@ -11,7 +11,13 @@ async function deleteStudentUsers() {
     logger.debug("Deleted all students");
     process.exit(0);
   } catch (error) {
-    throw new Error();
+    if (error instanceof Error) {
+      logger.error(error.message);
+      throw error;
+    } else {
+      logger.error("Failed to delete students");
+      throw error;
+    }
   }
 }
 
