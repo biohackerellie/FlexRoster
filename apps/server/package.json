@@ -20,7 +20,7 @@
     "build:local": "bun --env-file=../../.env --env-file=../../.env.config build  ./src/index.ts --outdir ./dist --target bun",
     "build:bun": "/root/.bun/bin/bun build ./src/index.ts --outdir ./dist --target bun",
     "nightly": "bun --env-file=../../.env --env-file=../../.env.config run ./src/scripts/nightly.ts",
-    "cache:reset": "bun --env-file=../../.env --env-file=../../.env.config run ./src/scripts/nightly/redisInit.ts && bun --env-file=../../.env run ./src/scripts/nightly/cacheRosters.ts",
+    "cache:reset": "bun --env-file=../../.env --env-file=../../.env.config run ./src/scripts/nightly/redisInit.ts" ,
     "with-env": "bun --env-file=../../.env --"
   },
   "dependencies": {

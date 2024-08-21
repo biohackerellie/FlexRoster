@@ -25,8 +25,8 @@ func NewScript(classroomRepo ports.ClassroomDBService, studentRepo ports.Student
 }
 
 func (a *Scripts) WithLogger(log *logger.Logger) *Scripts {
-	log.With("layer", "Scripts", "name", "ScriptRunner")
-	a.log = log
+	logger := log.With("module", "scripts")
+	a.log = logger
 	return a
 }
 

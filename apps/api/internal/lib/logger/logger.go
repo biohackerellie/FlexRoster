@@ -58,8 +58,10 @@ func Styles() *log.Styles {
 	return styles
 }
 
-func (l *Logger) With(args ...interface{}) {
-	l.logger.With(args...)
+func (l *Logger) With(keyvals ...interface{}) *Logger {
+	return &Logger{
+		logger: l.logger.With(keyvals...),
+	}
 }
 
 func (l *Logger) Info(msg interface{}, fields ...interface{}) {

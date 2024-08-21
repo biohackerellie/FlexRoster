@@ -62,7 +62,6 @@ export async function getClasses(id: string) {
       returnData.classes = formatClasses(validatedClasses, id);
     } else {
       const dbData = await aggregateClassroomData();
-      logger.error(dbData);
 
       if (dbData?.length) {
         const parsedData = studentClassesArrayValidator.parse(dbData);
