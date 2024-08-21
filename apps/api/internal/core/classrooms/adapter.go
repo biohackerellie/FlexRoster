@@ -3,19 +3,20 @@ package classrooms
 import (
 	"api/internal/lib/logger"
 	"api/internal/ports"
-	"api/internal/redis"
+
+	"github.com/redis/rueidis"
 )
 
 type Adapter struct {
 	classroomRepo ports.ClassroomDBService
 	log           *logger.Logger
-	cache         *redis.RClient
+	client        rueidis.Client
 }
 
-func NewAdapter(classroomRepo ports.ClassroomDBService) *Adapter {
+func NewAdapter(classroomRepo ports.ClassroomDBService, client rueidis.Client) *Adapter {
 	return &Adapter{
 		classroomRepo: classroomRepo,
-		cache:         redis.NewRedis(),
+		client:        client,
 	}
 }
 

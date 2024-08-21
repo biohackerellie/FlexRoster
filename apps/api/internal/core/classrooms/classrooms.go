@@ -11,6 +11,7 @@ import (
 	"api/internal/lib/helpers"
 	stringHelpers "api/internal/lib/strings"
 	"api/internal/service"
+	"github.com/redis/rueidis"
 )
 
 var today = time.Now().Format("2006-01-02")
@@ -18,13 +19,8 @@ var today = time.Now().Format("2006-01-02")
 func (a *Adapter) GetClasses(ctx context.Context, id string) ([]*service.ClassroomWithChatID, error) {
 	cacheKey := stringHelpers.CacheKey("StudentCache", id)
 	var returnData []*service.ClassroomWithChatID
-	cachedData, err := a.cache.Get(cacheKey)
+	err := rueidis.DecodeSliceOfJSON(a.client.Do(ctx, a.client.B().Get().Key(cacheKey).Build()), &returnData)
 	if err == nil {
-		err := json.Unmarshal([]byte(cachedData), &returnData)
-		if err != nil {
-			a.log.Error("error unmarshalling cached data: ", "err", err)
-			return nil, fmt.Errorf("error unmarshalling cached data: %w", err)
-		}
 		return returnData, nil
 	}
 	classes, err := a.classroomRepo.GetClassrooms(context.Background())
@@ -59,7 +55,7 @@ func (a *Adapter) GetClasses(ctx context.Context, id string) ([]*service.Classro
 		a.log.Error("error marshalling classes: ", "err", err)
 		return nil, err
 	}
-	err = a.cache.Set(cacheKey, classesString, 10*time.Minute)
+	err = a.client.Do(ctx, a.client.B().Set().Key(cacheKey).Value(classesString).Ex(1000)10*time.Minute).Error()
 	if err != nil {
 		return nil, fmt.Errorf("error setting cache: %w", err)
 	}

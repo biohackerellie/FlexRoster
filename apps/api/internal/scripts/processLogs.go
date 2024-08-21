@@ -5,8 +5,6 @@ import (
 	"strconv"
 
 	"api/internal/service"
-
-	"github.com/redis/go-redis/v9"
 )
 
 // type Log struct {
@@ -21,29 +19,26 @@ import (
 
 func (s *Scripts) ProcessLogs(ctx context.Context) error {
 	dbLogs := make([]*service.Logs, 0, 10)
-	streams, err := s.cache.XReadGroup(ctx, &redis.XReadGroupArgs{
-		Group:    "log-consumer-group",
-		Consumer: "log-consumer",
-		Streams:  []string{"logs", ">"},
-		Count:    10,
-		Block:    2000,
-	}).Result()
+	consumer := "log-consumer"
+	group := "log-consumer-group"
+	streams, err := s.client.Do(ctx, s.client.B().Xreadgroup().Group(group, consumer).Streams().Key("logs").Id(">").Build()).AsXRead()
 	if err != nil {
-		s.log.Error("error reading stream", "err", err)
+		if err.Error() == "redis nil message" {
+			s.log.Info("no logs to process")
+			return nil
+		}
+		return err
 	}
-
+	s.log.Info("processing logs", "streams", streams)
 	for _, stream := range streams {
-		for _, message := range stream.Messages {
+		for _, message := range stream {
 			logObject := make(map[string]interface{})
-			logObject["id"] = message.ID
-
-			for key, value := range message.Values {
-				strValue := value.(string)
+			for key, value := range message.FieldValues {
 				if key == "timestamp" {
-					parsedTimestamp, _ := strconv.Atoi(strValue)
+					parsedTimestamp, _ := strconv.Atoi(value)
 					logObject[key] = parsedTimestamp
 				} else {
-					logObject[key] = strValue
+					logObject[key] = value
 				}
 			}
 
@@ -60,14 +55,14 @@ func (s *Scripts) ProcessLogs(ctx context.Context) error {
 			s.log.Error("error adding logs", "err", err)
 			return err
 		}
-		ids := make([]string, 0, len(stream.Messages))
-		for _, msg := range stream.Messages {
+		ids := make([]string, 0, len(stream))
+		for _, msg := range stream {
 			ids = append(ids, msg.ID)
 		}
-		r := s.cache.XAck(ctx, "logs", "log-consumer", ids...)
-		if r.Err() != nil {
+		r := s.client.Do(ctx, s.client.B().Xack().Key("logs").Group(group).Id(ids...).Build()).Error()
+		if r != nil {
 			s.log.Error("error acknowledging messages", "err", r)
-			return r.Err()
+			return r
 		}
 	}
 	return nil

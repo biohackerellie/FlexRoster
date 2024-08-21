@@ -53,3 +53,9 @@ type UserDBService interface {
 	CreateUserTx(ctx context.Context, users []*service.User) error
 	GetStudent(ctx context.Context, id string) (*service.StudentWithUser, error)
 }
+
+type Cache interface {
+	Set(key string, value interface{}, expires time.Duration) error
+	Get(key string) (string, error)
+	Clear(key string) error
+}

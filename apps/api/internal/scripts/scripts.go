@@ -3,7 +3,7 @@ package scripts
 import (
 	"api/internal/lib/logger"
 	"api/internal/ports"
-	"github.com/redis/go-redis/v9"
+	"github.com/redis/rueidis"
 )
 
 type Scripts struct {
@@ -12,7 +12,7 @@ type Scripts struct {
 	studentRepo   ports.StudentDBService
 	logsRepo      ports.LogsDBService
 	log           *logger.Logger
-	cache         *redis.Client
+	client        rueidis.Client
 }
 
 func NewScript(classroomRepo ports.ClassroomDBService, studentRepo ports.StudentDBService, userRepo ports.UserDBService, logsRepo ports.LogsDBService) *Scripts {
@@ -30,7 +30,7 @@ func (a *Scripts) WithLogger(log *logger.Logger) *Scripts {
 	return a
 }
 
-func (a *Scripts) WithCache(cache *redis.Client) *Scripts {
-	a.cache = cache
+func (a *Scripts) WithCache(cache rueidis.Client) *Scripts {
+	a.client = cache
 	return a
 }

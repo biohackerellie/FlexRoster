@@ -194,7 +194,7 @@
 
   // extension settings
   "vscode-neovim.useWSL": true,
-  "vscode-neovim.neovimPath": "/usr/local/bin/nvim",
+  "vscode-neovim.neovimPath": "/opt/nvim-linux64/bin/nvim",
   "vim.enableNeovim": true,
-  "vim.neovimPath": "/usr/local/bin/nvim"
+  "vim.neovimPath": "/opt/nvim-linux64/bin/nvim"
 }

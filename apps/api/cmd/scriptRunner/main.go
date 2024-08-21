@@ -11,11 +11,10 @@ import (
 	"api/internal/lib/logger"
 
 	"api/internal/config"
-
 	repository "api/internal/db/repository"
 	"api/internal/scripts"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/redis/go-redis/v9"
+	"github.com/redis/rueidis"
 )
 
 func main() {
@@ -24,9 +23,7 @@ func main() {
 	config := config.GetEnv()
 
 	redisHost1 := config.REDIS_HOST1 + ":6379"
-	cache := redis.NewClient(&redis.Options{
-		Addr: redisHost1,
-	})
+	cache, err := rueidis.NewClient(rueidis.ClientOption{InitAddress: []string{redisHost1}})
 	defer cache.Close()
 
 	dbconfig, err := pgxpool.ParseConfig(config.DSN)
@@ -42,9 +39,7 @@ func main() {
 	if err := db.Ping(timeout); err != nil {
 		log.Fatal(err)
 	}
-	pong := cache.Ping(timeout)
-	log.Info("Redis ping", "pong", pong)
-	if err := pong.Err(); err != nil {
+	if err := cache.Do(timeout, cache.B().Ping().Build()).Error(); err != nil {
 		log.Fatal(err)
 	}
 	cancel()
