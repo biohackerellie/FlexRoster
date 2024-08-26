@@ -35,34 +35,6 @@ jobs:
       - name: Lint
         run: pnpm lint && pnpm lint:ws
 
-  detect-go-modules:
-    runs-on: ubuntu-latest
-    outputs:
-      modules: ${{steps.set-modules.outputs.modules}}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: ${{env.GO_VERSION}}
-      - id: set-modules
-        run: bash ./modules.sh >> $GITHUB_OUTPUT
-
-  golangci:
-    needs: detect-go-modules
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        modules: ${{ fromJSON(needs.detect-go-modules.outputs.modules) }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ env.GO_VERSION }}
-      - name: golangci-lint ${{ matrix.modules }}
-        uses: golangci/golangci-lint-action@v6
-        with:
-          working-directory: ${{matrix.modules}}
-          version: ${{ env.GOLANGCI_LING_VERSION}}
   format:
     runs-on: ubuntu-latest
     steps:

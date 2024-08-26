@@ -55,7 +55,7 @@ func (a *Adapter) GetClasses(ctx context.Context, id string) ([]*service.Classro
 		a.log.Error("error marshalling classes: ", "err", err)
 		return nil, err
 	}
-	err = a.client.Do(ctx, a.client.B().Set().Key(cacheKey).Value(classesString).Ex(1000)10*time.Minute).Error()
+	err = a.client.Do(ctx, a.client.B().Set().Key(cacheKey).Value(classesString).Ex(1000).Error(),
 	if err != nil {
 		return nil, fmt.Errorf("error setting cache: %w", err)
 	}
