@@ -51,14 +51,14 @@ export default function RootLayout({
         <head />
         <body
           className={cn(
-            "min-h-screen font-sans antialiased",
+            "h-screen font-sans antialiased",
             fontSans.variable,
             fontCal.variable,
             fontMono.variable,
           )}
         >
           <ThemeProvider attribute="class" enableSystem={false}>
-            <ThemeWrapper className="relative flex min-h-screen flex-col">
+            <ThemeWrapper>
               <Header />
               <div className="flex-1">{children}</div>
             </ThemeWrapper>

@@ -60,7 +60,7 @@ function ThemeToggle() {
             </TooltipTrigger>
             <PopoverContent
               align="start"
-              className="z-60 w-[340px] rounded-[12px] bg-white p-6 dark:bg-zinc-950"
+              className="z-100 w-[340px] rounded-[12px] bg-white p-6 dark:bg-zinc-950"
             >
               <Customizer />
             </PopoverContent>

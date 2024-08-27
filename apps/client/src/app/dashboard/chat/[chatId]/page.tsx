@@ -35,7 +35,7 @@ export default async function ChatPage({ params }: PageProps) {
   const { chatPartner, userId } = chat!;
 
   return (
-    <div className="flex h-full max-h-[calc(100vh-6rem)] flex-1 flex-col justify-between">
+    <div className="flex h-full max-h-[calc(100vh-6rem)] min-h-[calc(100vh-10rem)] shrink flex-col justify-between">
       <div className="flex justify-between border-b-2 border-gray-200 py-3 sm:items-center">
         <div className="relative flex items-center space-x-4">
           <div className="flex flex-col leading-tight">
@@ -59,7 +59,7 @@ export default async function ChatPage({ params }: PageProps) {
           chatPartner={chatPartner}
         />
       </React.Suspense>
-      <div></div>
+
       <React.Suspense
         fallback={<Loader2 className="text-primary-500 h-6 w-6 animate-spin" />}
       >
