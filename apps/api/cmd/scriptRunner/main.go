@@ -8,13 +8,13 @@ import (
 	"syscall"
 	"time"
 
-	"api/internal/lib/logger"
-
 	"api/internal/config"
 	repository "api/internal/db/repository"
+	"api/internal/lib/logger"
+	rclient "api/internal/redis"
 	"api/internal/scripts"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/redis/rueidis"
+	"github.com/redis/go-redis/v9"
 )
 
 func main() {
@@ -22,24 +22,26 @@ func main() {
 
 	config := config.GetEnv()
 
-	redisHost1 := config.REDIS_HOST1 + ":6379"
-	cache, err := rueidis.NewClient(rueidis.ClientOption{InitAddress: []string{redisHost1}})
+	redisHost1 := config.REDIS_HOST1
+	opt, _ := redis.ParseURL(redisHost1)
+	log.Info("Connecting to Redis", "host", opt)
+	cache := redis.NewClient(opt)
 	defer cache.Close()
 
 	dbconfig, err := pgxpool.ParseConfig(config.DSN)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("error parsing db config", "err", err)
 	}
 	db, err := pgxpool.NewWithConfig(context.Background(), dbconfig)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("error connecting to database", "err", err)
 	}
 	defer db.Close()
 	timeout, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	if err := db.Ping(timeout); err != nil {
 		log.Fatal(err)
 	}
-	if err := cache.Do(timeout, cache.B().Ping().Build()).Error(); err != nil {
+	if err := cache.Ping(timeout).Err(); err != nil {
 		log.Fatal(err)
 	}
 	cancel()
@@ -48,9 +50,8 @@ func main() {
 	classroomRepo := repository.NewClassroomDBService(db).WithLogs(log)
 	studentRepo := repository.NewStudentDBService(db).WithLogs(log)
 	logsRepo := repository.NewLoggingBService(db).WithLogs(log)
-
-	scriptRunner := scripts.NewScript(classroomRepo, studentRepo, userRepo, logsRepo).WithLogger(log).WithCache(cache)
-
+	redisClient := rclient.NewRedis(cache)
+	scriptRunner := scripts.NewScript(redisClient, classroomRepo, studentRepo, userRepo, logsRepo).WithLogger(log)
 	seedFlag := flag.Bool("seed", false, "seed the database")
 	logFlag := flag.Bool("logs", false, "process logs")
 

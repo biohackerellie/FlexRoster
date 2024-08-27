@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"api/internal/service"
+
+	"github.com/redis/go-redis/v9"
 )
 
 type ClassroomDBService interface {
@@ -54,8 +56,12 @@ type UserDBService interface {
 	GetStudent(ctx context.Context, id string) (*service.StudentWithUser, error)
 }
 
-type Cache interface {
+type RClient interface {
 	Set(key string, value interface{}, expires time.Duration) error
 	Get(key string) (string, error)
 	Clear(key string) error
+	ReadStream(args *redis.XReadGroupArgs) ([]redis.XStream, error)
+	XAdd(stream string, values ...*redis.XMessage) (string, error)
+	XRange(stream, start, stop string) ([]redis.XMessage, error)
+	XAck(stream string, consumer string, ids ...string) error
 }

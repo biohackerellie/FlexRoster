@@ -1,3 +1,4 @@
+
 services:
   server:
     container_name: bun-api
@@ -17,5 +18,4 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
-    env_file:
-      - .env
+

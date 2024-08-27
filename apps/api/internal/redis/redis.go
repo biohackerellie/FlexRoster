@@ -5,35 +5,60 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/redis/rueidis"
+	"github.com/redis/go-redis/v9"
 )
 
 type RClient struct {
-	client rueidis.Client
+	Redis *redis.Client
+	ctx   context.Context
 }
 
-func (r *RClient) Set(key string, value string, ctx context.Context) error {
-	return r.client.Do(ctx, r.client.B().Set().Key(key).Value(value).Build()).Error()
+func NewRedis(client *redis.Client) *RClient {
+	return &RClient{
+		Redis: client,
+		ctx:   context.Background(),
+	}
 }
 
-func (r *RClient) Get(ctx context.Context, key string) (string, error) {
-	res, err := r.client.Do(ctx, r.client.B().Get().Key(key).Build()).ToString()
-	if err.Error() == "redis nil message" {
+func (r *RClient) Set(key string, value interface{}, expires time.Duration) error {
+	return r.Redis.Set(r.ctx, key, value, expires).Err()
+}
+
+func (r *RClient) Get(key string) (string, error) {
+	val, err := r.Redis.Get(r.ctx, key).Result()
+	if err == redis.Nil {
 		return "", err
 	} else if err != nil {
 		return "", fmt.Errorf("error getting key: %w", err)
 	}
-	return res, nil
+	return val, nil
 }
 
-func (r *RClient) Clear(key string, ctx context.Context) error {
-	return r.client.Do(ctx, r.client.B().Del().Key(key).Build()).Error()
+func (r *RClient) Clear(key string) error {
+	return r.Redis.Del(r.ctx, key).Err()
 }
 
-type XReadGroupArgs struct {
-	Group    string
-	Consumer string
-	Streams  []string
-	Count    int64
-	Block    time.Duration
+func (r *RClient) ReadStream(args *redis.XReadGroupArgs) ([]redis.XStream, error) {
+	return r.Redis.XReadGroup(r.ctx, &redis.XReadGroupArgs{
+		Group:    args.Group,
+		Consumer: args.Consumer,
+		Streams:  args.Streams,
+		Count:    args.Count,
+		Block:    args.Block,
+	}).Result()
+}
+
+func (r *RClient) XAdd(stream string, values ...*redis.XMessage) (string, error) {
+	return r.Redis.XAdd(r.ctx, &redis.XAddArgs{
+		Stream: stream,
+		Values: values,
+	}).Result()
+}
+
+func (r *RClient) XRange(stream, start, stop string) ([]redis.XMessage, error) {
+	return r.Redis.XRange(r.ctx, stream, start, stop).Result()
+}
+
+func (r *RClient) XAck(stream string, consumer string, ids ...string) error {
+	return r.Redis.XAck(r.ctx, stream, consumer, ids...).Err()
 }
