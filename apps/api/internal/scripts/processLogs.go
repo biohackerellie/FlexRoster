@@ -5,6 +5,8 @@ import (
 	"strconv"
 
 	"api/internal/service"
+
+	"github.com/redis/go-redis/v9"
 )
 
 // type Log struct {
@@ -19,26 +21,30 @@ import (
 
 func (s *Scripts) ProcessLogs(ctx context.Context) error {
 	dbLogs := make([]*service.Logs, 0, 10)
-	consumer := "log-consumer"
-	group := "log-consumer-group"
-	streams, err := s.client.Do(ctx, s.client.B().Xreadgroup().Group(group, consumer).Streams().Key("logs").Id(">").Build()).AsXRead()
+	args := &redis.XReadGroupArgs{
+		Group:    "log-consumer-group",
+		Consumer: "log-consumer",
+		Streams:  []string{"logs", ">"},
+		Count:    10,
+		Block:    2000,
+	}
+	streams, err := s.cache.ReadStream(args)
 	if err != nil {
-		if err.Error() == "redis nil message" {
-			s.log.Info("no logs to process")
-			return nil
-		}
 		return err
 	}
-	s.log.Info("processing logs", "streams", streams)
+
 	for _, stream := range streams {
-		for _, message := range stream {
+		for _, message := range stream.Messages {
 			logObject := make(map[string]interface{})
-			for key, value := range message.FieldValues {
+			logObject["id"] = message.ID
+
+			for key, value := range message.Values {
+				strValue := value.(string)
 				if key == "timestamp" {
-					parsedTimestamp, _ := strconv.Atoi(value)
+					parsedTimestamp, _ := strconv.Atoi(strValue)
 					logObject[key] = parsedTimestamp
 				} else {
-					logObject[key] = value
+					logObject[key] = strValue
 				}
 			}
 
@@ -55,11 +61,11 @@ func (s *Scripts) ProcessLogs(ctx context.Context) error {
 			s.log.Error("error adding logs", "err", err)
 			return err
 		}
-		ids := make([]string, 0, len(stream))
-		for _, msg := range stream {
+		ids := make([]string, 0, len(stream.Messages))
+		for _, msg := range stream.Messages {
 			ids = append(ids, msg.ID)
 		}
-		r := s.client.Do(ctx, s.client.B().Xack().Key("logs").Group(group).Id(ids...).Build()).Error()
+		r := s.cache.XAck("logs", "log-consumer", ids...)
 		if r != nil {
 			s.log.Error("error acknowledging messages", "err", r)
 			return r

@@ -15,7 +15,7 @@ migrate:
   	--to "file://internal/db/repository/schema.sql"
 
 build-scripts:
-	go build -o ./bin/scripts/ ./cmd/scriptRunner/main.go
+	go build -o ./bin/scripts/ ./cmd/scriptRunner/main.go && cp .env ./bin/scripts/
 
 seed:
 	./bin/scripts/main -seed

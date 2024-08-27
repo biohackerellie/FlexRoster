@@ -26,6 +26,7 @@ export const env = createEnv({
     NEXT_PUBLIC_API_PORT: z.string(),
     NEXT_PUBLIC_HOST: z.string().url(),
     NEXT_PUBLIC_PORT: z.string(),
+    NEXT_PUBLIC_DEMO: z.preprocess((val) => val === "true", z.boolean()),
   },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
@@ -41,6 +42,7 @@ export const env = createEnv({
     NEXT_PUBLIC_API_PORT: process.env.NEXT_PUBLIC_API_PORT,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_PORT: process.env.NEXT_PUBLIC_PORT,
+    NEXT_PUBLIC_DEMO: process.env.NEXT_PUBLIC_DEMO,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     AZURE_AD_CLIENT_ID: process.env.AZURE_AD_CLIENT_ID,
     AZURE_AD_CLIENT_SECRET: process.env.AZURE_AD_CLIENT_SECRET,

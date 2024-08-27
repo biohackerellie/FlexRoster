@@ -6,8 +6,6 @@ import { env } from "~/env";
 export function createClient() {
   try {
     const config: RedisOptions = {
-      host: env.REDIS_HOST1,
-      port: 6379,
       showFriendlyErrorStack: true,
       enableAutoPipelining: true,
       maxRetriesPerRequest: 0,
@@ -19,7 +17,7 @@ export function createClient() {
       },
     } as RedisOptions;
 
-    const redis = new Redis(config);
+    const redis = new Redis(env.REDIS_HOST1, config);
     redis.on("error", (error: unknown) => {
       console.warn("[Redis] Error", error);
     });
