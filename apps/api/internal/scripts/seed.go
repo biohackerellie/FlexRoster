@@ -111,10 +111,11 @@ func (s *Scripts) SeedDatabase(ctx context.Context) error {
 		classroomIndex := i % classroomCount
 		emailName := strings.ReplaceAll(name, " ", "")
 		student := &service.Student{
-			Id:           int32(i),
-			StudentName:  name,
-			StudentEmail: fmt.Sprintf("%s@domain.com", emailName),
-			ClassroomId:  classrooms[classroomIndex].Id,
+			Id:                 int32(i),
+			StudentName:        name,
+			StudentEmail:       fmt.Sprintf("%s@domain.com", emailName),
+			ClassroomId:        classrooms[classroomIndex].Id,
+			DefaultClassroomId: classrooms[classroomIndex].Id,
 		}
 		students[i] = student
 		s.log.Info("Creating Student", "student", student)

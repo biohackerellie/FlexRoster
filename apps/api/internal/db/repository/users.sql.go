@@ -99,7 +99,7 @@ func (q *Queries) GetUser(ctx context.Context, id string) (GetUserRow, error) {
 }
 
 const userRosterQuery = `-- name: UserRosterQuery :one
-SELECT u.id, u.name, u.email, u."emailVerified", u.image, u.role, s."studentEmail", s."studentName", s."classroomId", s.status, s.id, c.id, c."roomNumber", c."teacherName", c."teacherId", c.comment, c."isFlex" 
+SELECT u.id, u.name, u.email, u."emailVerified", u.image, u.role, s."studentEmail", s."studentName", s."classroomId", s.status, s."defaultClassroomId", s.id, c.id, c."roomNumber", c."teacherName", c."teacherId", c.comment, c."isFlex" 
 FROM "user" u
 JOIN "students" s ON s."studentEmail" = u."email"
 JOIN "classrooms" c ON c."id" = s."classroomId"
@@ -126,6 +126,7 @@ func (q *Queries) UserRosterQuery(ctx context.Context, id string) (UserRosterQue
 		&i.Student.StudentName,
 		&i.Student.ClassroomId,
 		&i.Student.Status,
+		&i.Student.DefaultClassroomId,
 		&i.Student.ID,
 		&i.Classroom.ID,
 		&i.Classroom.RoomNumber,

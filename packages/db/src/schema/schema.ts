@@ -34,6 +34,7 @@ export const requestStatus = pgEnum("RequestStatus", [
   "approved",
   "denied",
   "arrived",
+  "cancelled",
 ]);
 
 /**
@@ -47,10 +48,11 @@ export const students = pgTable(
     classroomId: text("classroomId")
       .notNull()
       .references(() => classrooms.id, {
-        onDelete: "cascade",
-        onUpdate: "cascade",
+        onDelete: "set null",
+        onUpdate: "set null",
       }),
     status: status("status").default("default").notNull(),
+    defaultClassroomId: text("defaultClassroomId").notNull(),
     id: serial("id").primaryKey().notNull(),
   },
   (students) => {
@@ -65,6 +67,7 @@ export const studentRelations = relations(students, ({ one }) => ({
     fields: [students.classroomId],
     references: [classrooms.id],
   }),
+
   users: one(users, {
     fields: [students.studentEmail],
     references: [users.email],

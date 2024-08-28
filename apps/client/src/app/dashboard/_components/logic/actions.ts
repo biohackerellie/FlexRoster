@@ -16,9 +16,13 @@ import { getErrorMessage } from "@/lib/errorHandler";
 import { pusherServer } from "@/lib/pusher";
 import { convertUTCDateToLocalDate, toPusherKey } from "@/lib/utils";
 
-export async function Attendance(studentId: string) {
+export async function Attendance(
+  studentId: string,
+  status: "arrived" | "default",
+) {
   const { data: res, error } = await client.api.rosters.attendance.post({
     studentId: studentId,
+    status: status,
   });
 
   if (error) {
@@ -122,7 +126,6 @@ export async function setAvailability(
       }
     }
     if (dates.length > 0) {
-      logger.info("dates", dates);
       await client.api.classes.availability.post({
         classroomId: classroomId,
         teacherId: teacherId,

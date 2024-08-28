@@ -5,7 +5,7 @@ import { env } from "./env";
 
 app.listen(env.SERVER_PORT, () => {
   logger.info(
-    `💩 FLEXible pile of shit being served at ${app.server?.hostname}:${app.server?.port}`,
+    `Server is running at ${app.server?.hostname}:${app.server?.port} 🎉`,
   );
 });
 

@@ -8,7 +8,7 @@ import {
   getAvailability,
   getClassById,
   getClasses,
-  resetOneClass,
+  // resetOneClass,
   setAvailability,
 } from "./handlers";
 
@@ -31,11 +31,11 @@ export const classRoutes = new Elysia({ prefix: "/classes" })
     }),
   })
   .get("/secretary", () => classroomsWithRosterCount())
-  .post("/refresh/:id", ({ params: { id } }) => resetOneClass(id), {
-    params: t.Object({
-      id: t.String(),
-    }),
-  })
+  // .post("/refresh/:id", ({ params: { id } }) => resetOneClass(id), {
+  //   params: t.Object({
+  //     id: t.String(),
+  //   }),
+  // })
   .patch(
     "/comments/create/:id",
     ({ params: { id }, body: { comment }, error }) =>

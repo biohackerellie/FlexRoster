@@ -89,6 +89,7 @@ CREATE TABLE IF NOT EXISTS "students" (
 	"studentName" text NOT NULL,
 	"classroomId" text NOT NULL,
 	"status" "Status" DEFAULT 'default' NOT NULL,
+	"defaultClassroomId" text NOT NULL,
 	"id" serial PRIMARY KEY NOT NULL,
 	CONSTRAINT "students_studentEmail_unique" UNIQUE("studentEmail")
 );
@@ -109,18 +110,6 @@ CREATE TABLE IF NOT EXISTS "verificationToken" (
 	"expires" timestamp NOT NULL,
 	CONSTRAINT "verificationToken_identifier_token_pk" PRIMARY KEY("identifier","token")
 );
-CREATE VIEW availability_view AS
-SELECT
-  c."id",
-  c."roomNumber",
-  c."teacherName",
-  c."teacherId",
-  c."comment",
-  c."isFlex",
-  COALESCE(JSON_AGG(a.*), []) AS "availability"
-FROM "classrooms" c
-JOIN "availability" a ON c."id" = a."classroomId"
-GROUP BY c."id", a."id";
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "account" ADD CONSTRAINT "account_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
@@ -177,7 +166,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "students" ADD CONSTRAINT "students_classroomId_classrooms_id_fk" FOREIGN KEY ("classroomId") REFERENCES "public"."classrooms"("id") ON DELETE cascade ON UPDATE cascade;
+ ALTER TABLE "students" ADD CONSTRAINT "students_classroomId_classrooms_id_fk" FOREIGN KEY ("classroomId") REFERENCES "public"."classrooms"("id") ON DELETE set null ON UPDATE set null;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

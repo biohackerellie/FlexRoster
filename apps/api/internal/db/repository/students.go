@@ -163,10 +163,11 @@ func (s *StudentDBService) NewStudentTx(ctx context.Context, students []*student
 	qtx := s.q.WithTx(tx)
 	for _, student := range students {
 		err := qtx.NewStudent(ctx, NewStudentParams{
-			StudentEmail: student.StudentEmail,
-			StudentName:  student.StudentName,
-			Status:       "default",
-			ClassroomId:  student.ClassroomId,
+			StudentEmail:       student.StudentEmail,
+			StudentName:        student.StudentName,
+			Status:             "default",
+			ClassroomId:        student.ClassroomId,
+			DefaultClassroomId: student.DefaultClassroomId,
 		})
 		if err != nil {
 			return err

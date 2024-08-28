@@ -1,6 +1,6 @@
 {
-  "id": "ee92d2cf-ed43-4c6a-aeed-c8cf8ecafc0f",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "eb44dd7a-32dc-4f6a-82f6-f5f12887914b",
+  "prevId": "ee92d2cf-ed43-4c6a-aeed-c8cf8ecafc0f",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -621,7 +621,7 @@
     "public.RequestStatus": {
       "name": "RequestStatus",
       "schema": "public",
-      "values": ["pending", "approved", "denied", "arrived"]
+      "values": ["pending", "approved", "denied", "arrived", "cancelled"]
     },
     "public.Role": {
       "name": "Role",

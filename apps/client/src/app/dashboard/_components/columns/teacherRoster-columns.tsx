@@ -8,6 +8,7 @@ import { Link } from "next-view-transitions";
 import { Badge } from "@local/ui/badge";
 import { Button } from "@local/ui/button";
 import { DataTableColumnHeader } from "@local/ui/data-table-column-header";
+import { Popover, PopoverContent, PopoverTrigger } from "@local/ui/popover";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
 import { statusOptions } from "@/lib/constants";
@@ -34,7 +35,7 @@ export function columns(): ColumnDef<TeacherTable>[] {
         );
         if (!status) return null;
         const id: string = row.getValue("studentId");
-
+        console.log(id);
         if (status.value === "default") {
           return <Badge variant="outline">Default</Badge>;
         } else if (status.value === "transferredN") {
@@ -42,13 +43,42 @@ export function columns(): ColumnDef<TeacherTable>[] {
             <div className="text-md max-w-[80px] overflow-ellipsis leading-none">
               <Tooltip>
                 <TooltipTrigger className="cursor-pointer" asChild>
-                  <Badge
-                    variant="destructive"
-                    className="animate-pulse"
-                    onClick={() => setAttendance(id)}
-                  >
-                    transfer
-                  </Badge>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Badge variant="destructive" className="animate-pulse">
+                        transfer
+                      </Badge>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-80">
+                      <div className="grid gap-4">
+                        <div className="grid gap-4">
+                          <div className="grid grid-cols-3 items-center gap-4 gap-y-2 border-b">
+                            <p className="col-span-2 text-sm font-medium leading-none text-muted-foreground">
+                              Mark as arrived:
+                            </p>
+                            <Button
+                              variant="outline"
+                              onClick={() => setAttendance(id, "arrived")}
+                              className="pb-2"
+                            >
+                              Arrived
+                            </Button>
+                          </div>
+                          <div className="grid grid-cols-3 items-center gap-4">
+                            <p className="col-span-2 text-sm font-medium leading-none text-muted-foreground">
+                              Reset student to default classroom:
+                            </p>
+                            <Button
+                              variant="outline"
+                              onClick={() => setAttendance(id, "default")}
+                            >
+                              Default
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </TooltipTrigger>
                 <TooltipContent>Click when student arrives</TooltipContent>
               </Tooltip>
@@ -106,9 +136,12 @@ export function columns(): ColumnDef<TeacherTable>[] {
   ];
 }
 
-const setAttendance = async (studentId: string) => {
+const setAttendance = async (
+  studentId: string,
+  status: "arrived" | "default",
+) => {
   try {
-    const response = await Attendance(studentId);
+    const response = await Attendance(studentId, status);
     return response;
   } catch (e) {
     console.error(e);

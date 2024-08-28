@@ -89,6 +89,7 @@ CREATE TABLE IF NOT EXISTS "students" (
 	"studentName" text NOT NULL,
 	"classroomId" text NOT NULL,
 	"status" "Status" DEFAULT 'default' NOT NULL,
+  "defaultClassroomId" text NOT NULL,
 	"id" serial PRIMARY KEY NOT NULL,
 	CONSTRAINT "students_studentEmail_unique" UNIQUE("studentEmail")
 );

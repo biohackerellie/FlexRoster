@@ -46,8 +46,8 @@ WHERE "studentEmail" = $3;
 DELETE FROM "students" WHERE "studentEmail" = $1;
 
 -- name: NewStudent :exec
-INSERT INTO "students" ("studentEmail", "studentName", "status", "classroomId")
-VALUES ($1, $2, $3, $4);
+INSERT INTO "students" ("studentEmail", "studentName", "status", "classroomId", "defaultClassroomId")
+VALUES ($1, $2, $3, $4, $5);
 
 -- name: UpdateStudentStatus :exec
 UPDATE "students"

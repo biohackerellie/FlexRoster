@@ -12,30 +12,31 @@ import (
 )
 
 const allStudentDetails = `-- name: AllStudentDetails :many
-SELECT "studentEmail", "studentName", "classroomId", status, students.id, "user".id, name, email, "emailVerified", image, role, classrooms.id, "roomNumber", "teacherName", "teacherId", comment, "isFlex" FROM "students"
+SELECT "studentEmail", "studentName", "classroomId", status, "defaultClassroomId", students.id, "user".id, name, email, "emailVerified", image, role, classrooms.id, "roomNumber", "teacherName", "teacherId", comment, "isFlex" FROM "students"
 LEFT JOIN "user" ON "students"."studentEmail" = "user"."email"
 LEFT JOIN "classrooms" ON "students"."classroomId" = "classrooms"."id"
 WHERE "students"."id" = $1
 `
 
 type AllStudentDetailsRow struct {
-	StudentEmail  string           `db:"studentEmail" json:"studentEmail"`
-	StudentName   string           `db:"studentName" json:"studentName"`
-	ClassroomId   string           `db:"classroomId" json:"classroomId"`
-	Status        Status           `db:"status" json:"status"`
-	ID            int32            `db:"id" json:"id"`
-	ID_2          *string          `db:"id_2" json:"id_2"`
-	Name          *string          `db:"name" json:"name"`
-	Email         *string          `db:"email" json:"email"`
-	EmailVerified pgtype.Timestamp `db:"emailVerified" json:"emailVerified"`
-	Image         *string          `db:"image" json:"image"`
-	Role          *string          `db:"role" json:"role"`
-	ID_3          *string          `db:"id_3" json:"id_3"`
-	RoomNumber    *string          `db:"roomNumber" json:"roomNumber"`
-	TeacherName   *string          `db:"teacherName" json:"teacherName"`
-	TeacherId     *string          `db:"teacherId" json:"teacherId"`
-	Comment       *string          `db:"comment" json:"comment"`
-	IsFlex        *bool            `db:"isFlex" json:"isFlex"`
+	StudentEmail       string           `db:"studentEmail" json:"studentEmail"`
+	StudentName        string           `db:"studentName" json:"studentName"`
+	ClassroomId        string           `db:"classroomId" json:"classroomId"`
+	Status             Status           `db:"status" json:"status"`
+	DefaultClassroomId string           `db:"defaultClassroomId" json:"defaultClassroomId"`
+	ID                 int32            `db:"id" json:"id"`
+	ID_2               *string          `db:"id_2" json:"id_2"`
+	Name               *string          `db:"name" json:"name"`
+	Email              *string          `db:"email" json:"email"`
+	EmailVerified      pgtype.Timestamp `db:"emailVerified" json:"emailVerified"`
+	Image              *string          `db:"image" json:"image"`
+	Role               *string          `db:"role" json:"role"`
+	ID_3               *string          `db:"id_3" json:"id_3"`
+	RoomNumber         *string          `db:"roomNumber" json:"roomNumber"`
+	TeacherName        *string          `db:"teacherName" json:"teacherName"`
+	TeacherId          *string          `db:"teacherId" json:"teacherId"`
+	Comment            *string          `db:"comment" json:"comment"`
+	IsFlex             *bool            `db:"isFlex" json:"isFlex"`
 }
 
 func (q *Queries) AllStudentDetails(ctx context.Context, id int32) ([]AllStudentDetailsRow, error) {
@@ -52,6 +53,7 @@ func (q *Queries) AllStudentDetails(ctx context.Context, id int32) ([]AllStudent
 			&i.StudentName,
 			&i.ClassroomId,
 			&i.Status,
+			&i.DefaultClassroomId,
 			&i.ID,
 			&i.ID_2,
 			&i.Name,
@@ -126,15 +128,16 @@ func (q *Queries) DeleteStudent(ctx context.Context, studentemail string) error 
 }
 
 const newStudent = `-- name: NewStudent :exec
-INSERT INTO "students" ("studentEmail", "studentName", "status", "classroomId")
-VALUES ($1, $2, $3, $4)
+INSERT INTO "students" ("studentEmail", "studentName", "status", "classroomId", "defaultClassroomId")
+VALUES ($1, $2, $3, $4, $5)
 `
 
 type NewStudentParams struct {
-	StudentEmail string `db:"studentEmail" json:"studentEmail"`
-	StudentName  string `db:"studentName" json:"studentName"`
-	Status       Status `db:"status" json:"status"`
-	ClassroomId  string `db:"classroomId" json:"classroomId"`
+	StudentEmail       string `db:"studentEmail" json:"studentEmail"`
+	StudentName        string `db:"studentName" json:"studentName"`
+	Status             Status `db:"status" json:"status"`
+	ClassroomId        string `db:"classroomId" json:"classroomId"`
+	DefaultClassroomId string `db:"defaultClassroomId" json:"defaultClassroomId"`
 }
 
 func (q *Queries) NewStudent(ctx context.Context, arg NewStudentParams) error {
@@ -143,6 +146,7 @@ func (q *Queries) NewStudent(ctx context.Context, arg NewStudentParams) error {
 		arg.StudentName,
 		arg.Status,
 		arg.ClassroomId,
+		arg.DefaultClassroomId,
 	)
 	return err
 }
@@ -204,7 +208,7 @@ func (q *Queries) RosterByClassroomId(ctx context.Context, classroomid string) (
 }
 
 const rosterById = `-- name: RosterById :many
-SELECT "studentEmail", "studentName", "classroomId", status, id FROM "students" WHERE "id" = $1
+SELECT "studentEmail", "studentName", "classroomId", status, "defaultClassroomId", id FROM "students" WHERE "id" = $1
 `
 
 func (q *Queries) RosterById(ctx context.Context, id int32) ([]Student, error) {
@@ -221,6 +225,7 @@ func (q *Queries) RosterById(ctx context.Context, id int32) ([]Student, error) {
 			&i.StudentName,
 			&i.ClassroomId,
 			&i.Status,
+			&i.DefaultClassroomId,
 			&i.ID,
 		); err != nil {
 			return nil, err
@@ -282,7 +287,7 @@ func (q *Queries) RosterByTeacherId(ctx context.Context, teacherid *string) ([]R
 }
 
 const rosterQuery = `-- name: RosterQuery :many
-SELECT "studentEmail", "studentName", "classroomId", status, id FROM "students"
+SELECT "studentEmail", "studentName", "classroomId", status, "defaultClassroomId", id FROM "students"
 `
 
 func (q *Queries) RosterQuery(ctx context.Context) ([]Student, error) {
@@ -299,6 +304,7 @@ func (q *Queries) RosterQuery(ctx context.Context) ([]Student, error) {
 			&i.StudentName,
 			&i.ClassroomId,
 			&i.Status,
+			&i.DefaultClassroomId,
 			&i.ID,
 		); err != nil {
 			return nil, err

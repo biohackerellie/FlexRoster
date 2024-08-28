@@ -124,6 +124,8 @@ struct Student
     + json = StudentName
   - classroomId: string
     + json = ClassroomId
+  - defaultClassroomId: string
+    + json = defaultClassroomId
   - status: Status
     + json = Status
   - id: int32

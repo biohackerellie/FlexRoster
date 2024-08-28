@@ -22,6 +22,7 @@
     "db:push": "pnpm -F db push",
     "db:studio": "pnpm -F db studio",
     "db:migrate": "pnpm -F db migrate",
+    "db:migrate:prod": "pnpm -F db migrate-prod",
     "db:gen": "pnpm -F db gen",
     "db:introspect": "pnpm -F db introspect",
     "format": "turbo format --continue -- --cache --cache-location .turbo/.cache/.prettiercache",

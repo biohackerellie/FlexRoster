@@ -246,11 +246,12 @@ type Session struct {
 }
 
 type Student struct {
-	StudentEmail string `db:"studentEmail" json:"studentEmail"`
-	StudentName  string `db:"studentName" json:"studentName"`
-	ClassroomId  string `db:"classroomId" json:"classroomId"`
-	Status       Status `db:"status" json:"status"`
-	ID           int32  `db:"id" json:"id"`
+	StudentEmail       string `db:"studentEmail" json:"studentEmail"`
+	StudentName        string `db:"studentName" json:"studentName"`
+	ClassroomId        string `db:"classroomId" json:"classroomId"`
+	Status             Status `db:"status" json:"status"`
+	DefaultClassroomId string `db:"defaultClassroomId" json:"defaultClassroomId"`
+	ID                 int32  `db:"id" json:"id"`
 }
 
 type User struct {

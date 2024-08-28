@@ -29,23 +29,23 @@ import { getAvailability } from "../classes/handlers";
 export async function getRosters() {
   try {
     let data: AllStudents[] = [];
-    const cacheKey = getHashKey("ALlStudents");
-    const cachedData = await getKV(cacheKey);
-    if (cachedData) {
-      const cacheArray = JSON.parse(cachedData);
+    // const cacheKey = getHashKey("ALlStudents");
+    // const cachedData = await getKV(cacheKey);
+    // if (cachedData) {
+    //   const cacheArray = JSON.parse(cachedData);
 
-      if (cacheArray?.length) {
-        const validated = allStudentsArrayValidator.parse(cacheArray);
-        data = validated;
-      }
-    } else {
-      const dbData = await allStudentsMap.execute({});
-      if (dbData?.length) {
-        const parsedData = allStudentsArrayValidator.parse(dbData);
-        await setKV(cacheKey, JSON.stringify(parsedData), 120);
-        data = parsedData;
-      }
+    //   if (cacheArray?.length) {
+    //     const validated = allStudentsArrayValidator.parse(cacheArray);
+    //     data = validated;
+    //   }
+    // } else {
+    const dbData = await allStudentsMap.execute({});
+    if (dbData?.length) {
+      const parsedData = allStudentsArrayValidator.parse(dbData);
+      // await setKV(cacheKey, JSON.stringify(parsedData), 120);
+      data = parsedData;
     }
+    /* } */
     if (!data) throw new NotFoundError("No rosters found");
     return data;
   } catch (e) {
@@ -91,11 +91,12 @@ export async function getTeacherRoster(userId: string) {
         available = availability[0]!.available;
       }
       const dbData = await rosterByTeacherId.execute({ userId: userId });
-
+      logger.info("dbData", dbData);
       if (dbData?.length) {
         const result = dbData.map((student) => {
           return {
             ...student,
+
             available: available,
             teacherId: userId,
             chatId: student.studentId
@@ -118,35 +119,69 @@ export async function getTeacherRoster(userId: string) {
   }
 }
 
-export async function setAttendance(studentId: string) {
+interface AttendanceResponse {
+  timestamp: string;
+  newTeacher: string;
+  currentTeacher: string;
+}
+export async function setAttendance(
+  studentId: string,
+  status: "arrived" | "default",
+) {
   try {
-    const studentRaw = await userQuery.execute({ id: studentId });
+    let updated: AttendanceResponse;
+    const studentRaw = await userRosterQuery.execute({ id: studentId });
     const student = studentRaw[0]!;
-    const updated = await db.transaction(async (tx) => {
-      await tx
-        .update(schema.students)
-        .set({ status: "transferredA" })
-        .where(eq(schema.students.studentEmail, student?.email));
-      await tx
-        .update(schema.requests)
-        .set({ status: "arrived" })
-        .where(eq(schema.requests.studentId, studentId));
+    if (status === "arrived") {
+      updated = await db.transaction(async (tx) => {
+        await tx
+          .update(schema.students)
+          .set({ status: "transferredA" })
+          .where(eq(schema.students.id, student.students.id));
+        await tx
+          .update(schema.requests)
+          .set({ status: "arrived" })
+          .where(eq(schema.requests.studentId, studentId));
 
-      const [updatedRequest] = await tx
-        .select({
-          timestamp: schema.requests.timestamp,
-          newTeacher: schema.requests.newTeacher,
-          currentTeacher: schema.requests.currentTeacher,
-        })
-        .from(schema.requests)
-        .where(eq(schema.requests.studentId, student?.id));
-      return updatedRequest!;
-    });
-
-    await removeSingleRequest(student?.id, updated.timestamp);
-    await removeSingleRequest(updated.newTeacher, updated.timestamp);
-    await removeSingleRequest(updated.currentTeacher, updated.timestamp);
-
+        const [updatedRequest] = await tx
+          .select({
+            timestamp: schema.requests.timestamp,
+            newTeacher: schema.requests.newTeacher,
+            currentTeacher: schema.requests.currentTeacher,
+          })
+          .from(schema.requests)
+          .where(eq(schema.requests.studentId, student.user.id));
+        return updatedRequest!;
+      });
+    } else {
+      updated = await db.transaction(async (tx) => {
+        await tx
+          .update(schema.students)
+          .set({
+            status: "default",
+            classroomId: student.students.defaultClassroomId,
+          })
+          .where(eq(schema.students.id, student.students.id));
+        await tx
+          .update(schema.requests)
+          .set({ status: "cancelled" })
+          .where(eq(schema.requests.studentId, studentId));
+        const [updatedRequest] = await tx
+          .select({
+            timestamp: schema.requests.timestamp,
+            newTeacher: schema.requests.newTeacher,
+            currentTeacher: schema.requests.currentTeacher,
+          })
+          .from(schema.requests)
+          .where(eq(schema.requests.studentId, studentId));
+        return updatedRequest!;
+      });
+    }
+    if (updated) {
+      await removeSingleRequest(studentId, updated.timestamp);
+      await removeSingleRequest(updated.newTeacher, updated.timestamp);
+      await removeSingleRequest(updated.currentTeacher, updated.timestamp);
+    }
     return new Response("OK", { status: 200 });
   } catch (e) {
     console.error(e);
