@@ -15,6 +15,7 @@ interface Roster {
   studentEmail: string;
   studentName: string;
   classroomId: string;
+  defaultClassroomId: string;
 }
 
 export async function RosterSync() {
@@ -62,6 +63,7 @@ export async function RosterSync() {
           studentEmail: user.email ?? "",
           studentName: `${user.givenName} ${user.familyName}`,
           classroomId: c.id,
+          defaultClassroomId: c.id,
         });
       });
     }

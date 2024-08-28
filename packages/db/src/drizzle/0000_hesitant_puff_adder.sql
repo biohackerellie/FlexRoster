@@ -1,5 +1,5 @@
 DO $$ BEGIN
- CREATE TYPE "public"."RequestStatus" AS ENUM('pending', 'approved', 'denied', 'arrived');
+ CREATE TYPE "public"."RequestStatus" AS ENUM('pending', 'approved', 'denied', 'arrived', 'cancelled');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -84,15 +84,17 @@ CREATE TABLE IF NOT EXISTS "session" (
 	"expires" timestamp NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "students" (
-	"studentEmail" text NOT NULL,
-	"studentName" text NOT NULL,
-	"classroomId" text NOT NULL,
-	"status" "Status" DEFAULT 'default' NOT NULL,
-	"defaultClassroomId" text NOT NULL,
-	"id" serial PRIMARY KEY NOT NULL,
-	CONSTRAINT "students_studentEmail_unique" UNIQUE("studentEmail")
-);
+
+DROP TABLE IF EXISTS "students";
+-- CREATE TABLE IF NOT EXISTS "students" (
+-- 	"studentEmail" text NOT NULL,
+-- 	"studentName" text NOT NULL,
+-- 	"classroomId" text,
+-- 	"status" "Status" DEFAULT 'default' NOT NULL,
+-- 	"defaultClassroomId" text NOT NULL,
+-- 	"id" serial PRIMARY KEY NOT NULL,
+-- 	CONSTRAINT "students_studentEmail_unique" UNIQUE("studentEmail")
+-- );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user" (
 	"id" varchar(255) PRIMARY KEY NOT NULL,

@@ -45,12 +45,10 @@ export const students = pgTable(
   {
     studentEmail: text("studentEmail").notNull().unique(),
     studentName: text("studentName").notNull(),
-    classroomId: text("classroomId")
-      .notNull()
-      .references(() => classrooms.id, {
-        onDelete: "set null",
-        onUpdate: "set null",
-      }),
+    classroomId: text("classroomId").references(() => classrooms.id, {
+      onDelete: "set null",
+      onUpdate: "set null",
+    }),
     status: status("status").default("default").notNull(),
     defaultClassroomId: text("defaultClassroomId").notNull(),
     id: serial("id").primaryKey().notNull(),

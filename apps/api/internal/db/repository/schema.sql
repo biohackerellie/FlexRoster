@@ -1,4 +1,10 @@
 
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO public;
+
+
 CREATE TYPE "RequestStatus" AS ENUM('pending', 'approved', 'denied', 'arrived');
 CREATE TYPE "Role" AS ENUM('secretary', 'teacher', 'student', 'admin');
 CREATE TYPE "Status" AS ENUM('transferredA', 'transferredN', 'default');
@@ -83,6 +89,7 @@ CREATE TABLE IF NOT EXISTS "session" (
 	"userId" text NOT NULL,
 	"expires" timestamp NOT NULL
 );
+
 
 CREATE TABLE IF NOT EXISTS "students" (
 	"studentEmail" text NOT NULL,

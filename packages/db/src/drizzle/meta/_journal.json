@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1724852617123,
-      "tag": "0000_curly_thunderball",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1724854151463,
-      "tag": "0001_fuzzy_triathlon",
+      "when": 1724863824279,
+      "tag": "0000_hesitant_puff_adder",
       "breakpoints": true
     }
   ]

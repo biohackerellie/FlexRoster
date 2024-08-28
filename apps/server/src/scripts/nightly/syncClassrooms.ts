@@ -97,6 +97,7 @@ async function syncClassrooms() {
       await db.transaction(async (tx) => {
         for (const room of fetchedClasses) {
           if (
+            room.teacher &&
             excludedTeachers.some((name) =>
               room.teacher.toLowerCase().includes(name.toLowerCase()),
             )
@@ -117,7 +118,7 @@ async function syncClassrooms() {
             user = findUserIdByName(teacherName, allTeachers);
           }
           if (!user) {
-            logger.error(`Could not find user for ${teacherName}`);
+            logger.warn(`Could not find user for ${teacherName}`);
             continue;
           }
           await tx
@@ -211,7 +212,7 @@ async function syncClassrooms() {
               user = findUserIdByName(teacherName, allTeachers);
             }
             if (!user) {
-              logger.error(`Could not find user for ${teacherName}`);
+              logger.warn(`Could not find user for ${teacherName}`);
               continue;
             }
             await tx
@@ -243,11 +244,10 @@ async function syncClassrooms() {
       process.exit(0);
     }
   } catch (error) {
-    throw new Error();
+    if (error instanceof Error) {
+      logger.error(error.message);
+    }
   }
 }
 
-syncClassrooms().catch((e) => {
-  logger.error(e);
-  process.exit(1);
-});
+syncClassrooms();
