@@ -1,9 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "curl -fsSL https://bun.sh/install | bash pnpm install",
-  "git": {
-    "deploymentEnabled": false
-  },
   "github": {
     "autoJobCancelation": true
   }
