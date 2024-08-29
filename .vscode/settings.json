@@ -1,6 +1,6 @@
 {
   "editor.cursorBlinking": "phase",
-  "workbench.colorTheme": "Catppuccin Frappé",
+  "workbench.colorTheme": "Alex's Dark Theme",
   "editor.cursorSmoothCaretAnimation": "on",
   "editor.cursorSurroundingLinesStyle": "all",
   "editor.smoothScrolling": true,
@@ -139,7 +139,8 @@
   "editor.guides.indentation": false,
   "editor.hideCursorInOverviewRuler": true,
   // "editor.lineHeight": 30,
-  "editor.lineNumbers": "on",
+  "editor.lineNumbers": "relative",
+
   "editor.matchBrackets": "near",
   "editor.minimap.enabled": false,
   "editor.occurrencesHighlight": "off",
@@ -190,11 +191,7 @@
   "workbench.sideBar.location": "left",
   "supermaven.enable": {
     "*": true
-  },
+  }
 
   // extension settings
-  "vscode-neovim.useWSL": true,
-  "vscode-neovim.neovimPath": "/opt/nvim-linux64/bin/nvim",
-  "vim.enableNeovim": true,
-  "vim.neovimPath": "/opt/nvim-linux64/bin/nvim"
 }

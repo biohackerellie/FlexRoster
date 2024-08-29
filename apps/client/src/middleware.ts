@@ -4,6 +4,8 @@ import NextAuth from "next-auth";
 
 import authConfig from "@local/auth/auth.config";
 
+import { env } from "./env";
+
 const { auth: middleware } = NextAuth(authConfig);
 
 export default middleware((req) => {
@@ -19,9 +21,11 @@ export default middleware((req) => {
 
     return NextResponse.next();
   }
-  const role = token.user?.roles || "student";
+  let role = token.user?.roles || "student";
   const id = token.user?.id || "0";
-
+  if (env.NEXT_PUBLIC_DEMO === true) {
+    role = "admin";
+  }
   switch (role) {
     case "student":
       if (path === "/dashboard") {
