@@ -1,11 +1,6 @@
 import { NotFoundError } from "elysia";
 
-import type {
-  Logs,
-  Request,
-  RequestStatus,
-  TeacherRequestQuery,
-} from "@local/utils";
+import type { Logs, Request, RequestStatus } from "@local/utils";
 import { db, eq, schema } from "@local/db";
 import {
   logger,
@@ -14,17 +9,16 @@ import {
   teacherRequestQueryValidator,
 } from "@local/utils";
 
-import { clearKV, getKV, newLog, setKV } from "~/lib/redis";
+// import { clearKV, getKV, newLog, setKV } from "~/lib/redis";
 import {
   getClassroomIdByTeacher,
   userQuery,
   userRequestQuery,
   userRosterQuery,
 } from "~/lib/sql";
-import { getHashKey } from "~/lib/utils";
+// import { getHashKey } from "~/lib/utils";
 import { NoRequestForUError } from "~/lib/utils/Errors";
 
-type selectRequest = typeof schema.requests.$inferSelect;
 type insertRequest = typeof schema.requests.$inferInsert;
 type newRequestProps = Partial<insertRequest>;
 interface RequestProps extends newRequestProps {
@@ -38,8 +32,6 @@ export async function newRequest({
   teacherRequest,
 }: RequestProps) {
   try {
-    const studentRequestKey = `requests:${studentId}`;
-    const teacherRequestKey = `requests:${newTeacher}:teacher`;
     logger.debug(
       "studentId",
       studentId,
@@ -56,12 +48,7 @@ export async function newRequest({
     if (teacherRequest) {
       status = "approved";
     }
-    const kvRequests = await getKV(studentRequestKey);
-    if (kvRequests) {
-      requests = requestArrayValidator.parse(JSON.parse(kvRequests));
-    } else {
-      requests = await userRequestQuery.execute({ userId: studentId });
-    }
+    requests = await userRequestQuery.execute({ userId: studentId });
     if (requests.length > 0) {
       for (const r of requests) {
         if (r.dateRequested === dateRequested!) {
@@ -73,8 +60,6 @@ export async function newRequest({
         }
       }
     }
-    await clearKV(studentRequestKey);
-    await clearKV(teacherRequestKey);
     const studentRaw = await userRosterQuery.execute({ id: studentId });
     if (studentRaw.length === 0) {
       throw new NotFoundError("No student found with that ID");
@@ -92,13 +77,13 @@ export async function newRequest({
 
     const requestData: insertRequest = {
       status: status,
-      studentName: student?.user.name!,
-      studentId: student?.user.id!,
+      studentName: student?.user.name ?? " ",
+      studentId: student?.user.id ?? " ",
       dateRequested: dateRequested!,
       currentTeacher: currentTeacher,
       currentTeacherName,
       newTeacher: newTeacher!,
-      newTeacherName: newTeacherData?.name!,
+      newTeacherName: newTeacherData?.name ?? "",
       arrived: null,
       timestamp,
       id: Math.floor(Math.random() * 1000000),
@@ -116,7 +101,7 @@ export async function newRequest({
             classroomId: newClassroomId[0]?.classroomId,
             status: "transferredN",
           })
-          .where(eq(schema.students.studentEmail, student?.user.email!));
+          .where(eq(schema.students.studentEmail, student?.user.email ?? ""));
 
         await tx.insert(schema.requests).values(validatedRequest);
         log = {
@@ -145,19 +130,7 @@ export async function newRequest({
 }
 
 export async function getTeacherRequests(userId: string) {
-  const teacherRequestKey = getHashKey(`requests:${userId}:teacher`);
   try {
-    const cacheRequests = await getKV(teacherRequestKey);
-    if (cacheRequests) {
-      logger.debug("cacheHit");
-      logger.debug(JSON.parse(cacheRequests));
-      return teacherRequestQueryValidator.parse(JSON.parse(cacheRequests));
-    }
-  } catch (e) {
-    logger.error("Error retrieving from cache", e);
-  }
-  try {
-    logger.debug("cacheMiss");
     const requests = await userRequestQuery.execute({ userId: userId });
     if (requests.length === 0) {
       return { incomingRequests: [], outgoingRequests: [] };
@@ -179,11 +152,6 @@ export async function getTeacherRequests(userId: string) {
       outgoingRequests,
     });
 
-    try {
-      await setKV(teacherRequestKey, JSON.stringify(validatedRequests));
-    } catch (e) {
-      logger.error("Error writing to cache", e);
-    }
     return validatedRequests;
   } catch (e) {
     logger.error("Error processing requests", e);
@@ -197,22 +165,12 @@ export async function getTeacherRequests(userId: string) {
 
 export async function getRequests(userId: string) {
   try {
-    const cacheRequests = await getKV(`requests:${userId}`);
-
-    if (cacheRequests) {
-      const validatedData = requestArrayValidator.parse(
-        JSON.parse(cacheRequests),
-      );
-      return validatedData;
-    } else {
-      const requests = await userRequestQuery.execute({ userId: userId });
-      if (requests.length === 0) {
-        return;
-      }
-      const validatedRequests = requestArrayValidator.parse(requests);
-      await setKV(`requests:${userId}`, JSON.stringify(validatedRequests));
-      return requests;
+    const requests = await userRequestQuery.execute({ userId: userId });
+    if (requests.length === 0) {
+      return;
     }
+    const validatedRequests = requestArrayValidator.parse(requests);
+    return validatedRequests;
   } catch (e) {
     logger.error(e);
     if (e instanceof Error) {

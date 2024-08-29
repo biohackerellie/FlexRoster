@@ -17,11 +17,7 @@ import {
   roomByIdQuery,
   userRosterQuery,
 } from "~/lib/sql";
-import {
-  convertUTCDateToLocalDate,
-  formatClasses,
-} from "~/lib/utils";
-
+import { convertUTCDateToLocalDate, formatClasses } from "~/lib/utils";
 
 export async function getClasses(id: string) {
   const today = convertUTCDateToLocalDate(new Date());
@@ -32,33 +28,31 @@ export async function getClasses(id: string) {
       currentClass: "",
     };
 
-    const studentCacheKey = `StudentCache-${id}`;
-    const cachedStudentData = await getKV(studentCacheKey);
+    // const studentCacheKey = `StudentCache-${id}`;
+    // const cachedStudentData = await getKV(studentCacheKey);
 
-    if (cachedStudentData) {
-      const validatedStudentData = StudentDashboardDataValidator.parse(
-        JSON.parse(cachedStudentData),
-      );
-      return validatedStudentData;
-    }
+    // if (cachedStudentData) {
+    //   const validatedStudentData = StudentDashboardDataValidator.parse(
+    //     JSON.parse(cachedStudentData),
+    //   );
+    //   return validatedStudentData;
+    // }
 
-    const classesKey = `AvailableClasses`;
-    const cachedClasses = await getKV(classesKey);
+    // const classesKey = `AvailableClasses`;
+    // const cachedClasses = await getKV(classesKey);
 
-    if (cachedClasses) {
-      const validatedClasses = studentClassesArrayValidator.parse(
-        JSON.parse(cachedClasses),
-      );
+    // if (cachedClasses) {
+    //   const validatedClasses = studentClassesArrayValidator.parse(
+    //     JSON.parse(cachedClasses),
+    //   );
 
-      returnData.classes = formatClasses(validatedClasses, id);
-    } else {
-      const dbData = await aggregateClassroomData();
+    //   returnData.classes = formatClasses(validatedClasses, id);
+    // } else {
+    const dbData = await aggregateClassroomData();
 
-      if (dbData?.length) {
-        const parsedData = studentClassesArrayValidator.parse(dbData);
-        await setKV(classesKey, JSON.stringify(parsedData), 1200);
-        returnData.classes = formatClasses(parsedData, id);
-      }
+    if (dbData?.length) {
+      const parsedData = studentClassesArrayValidator.parse(dbData);
+      returnData.classes = formatClasses(parsedData, id);
     }
 
     const [student] = await userRosterQuery.execute({ id: id });
@@ -69,7 +63,7 @@ export async function getClasses(id: string) {
     }
 
     const validatedReturnData = StudentDashboardDataValidator.parse(returnData);
-    await setKV(studentCacheKey, JSON.stringify(validatedReturnData), 1200);
+    // await setKV(studentCacheKey, JSON.stringify(validatedReturnData), 1200);
 
     return validatedReturnData;
   } catch (e) {
@@ -150,7 +144,7 @@ export async function getClassById(id: string) {
 
 export async function createComment(id: string, comment: string) {
   try {
-    await clearKV(`TeacherRoster-${id}`);
+    // await clearKV(`TeacherRoster-${id}`);
 
     await db
       .update(schema.classrooms)
@@ -183,7 +177,7 @@ export async function setAvailability(
   dates: Date[],
 ) {
   try {
-    await clearKV(`TeacherRoster-${teacherId}`);
+    // await clearKV(`TeacherRoster-${teacherId}`);
     logger.debug("passed in dates", dates);
     const existingAvailability = await db
       .select()
@@ -237,7 +231,7 @@ export async function getAvailability(id: string) {
 
 export async function deleteAvailability(id: string, date: Date) {
   try {
-    await clearKV(`TeacherRoster-${id}`);
+    // await clearKV(`TeacherRoster-${id}`);
 
     const deleteDate = convertUTCDateToLocalDate(date);
     await db
