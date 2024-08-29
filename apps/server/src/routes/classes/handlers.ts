@@ -11,26 +11,17 @@ import {
   StudentDashboardDataValidator,
 } from "@local/utils";
 
-import type { RosterResponse } from "~/lib/types";
-import { env } from "~/env";
 import { clearKV, getKV, setKV } from "~/lib/redis";
 import {
   aggregateClassroomData,
-  getClassroomIdByTeacher,
   roomByIdQuery,
-  rosterByIDQuery,
   userRosterQuery,
 } from "~/lib/sql";
 import {
   convertUTCDateToLocalDate,
-  fetcher,
   formatClasses,
-  getHashKey,
-  icAuth,
-  icStudentQuery,
 } from "~/lib/utils";
 
-type insertClassRoster = typeof schema.students.$inferInsert;
 
 export async function getClasses(id: string) {
   const today = convertUTCDateToLocalDate(new Date());
