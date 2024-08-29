@@ -1,6 +1,5 @@
 import type { DefaultSession, NextAuthConfig } from "next-auth";
 import azureAd from "next-auth/providers/azure-ad";
-import google from "next-auth/providers/google";
 
 import { env } from "../env";
 
@@ -23,25 +22,20 @@ declare module "next-auth" {
 
 export default {
   providers: [
-    env.DEMO
-      ? google({
-          clientId: env.GOOGLE_CLIENT_ID,
-          clientSecret: env.GOOGLE_CLIENT_SECRET,
-        })
-      : azureAd({
-          clientId: env.AZURE_AD_CLIENT_ID,
-          clientSecret: env.AZURE_AD_CLIENT_SECRET,
-          tenantId: env.AZURE_AD_TENANT_ID,
-          profile(profile) {
-            return {
-              id: profile.oid,
-              name: profile.name,
-              email: profile.email,
-              roles: profile.roles[0] || "student",
-            };
-          },
-          allowDangerousEmailAccountLinking: true,
-        }),
+    azureAd({
+      clientId: env.AZURE_AD_CLIENT_ID,
+      clientSecret: env.AZURE_AD_CLIENT_SECRET,
+      tenantId: env.AZURE_AD_TENANT_ID,
+      profile(profile) {
+        return {
+          id: profile.oid,
+          name: profile.name,
+          email: profile.email,
+          roles: profile.roles[0] || "student",
+        };
+      },
+      allowDangerousEmailAccountLinking: true,
+    }),
   ],
 
   trustHost: true,

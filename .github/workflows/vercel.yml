@@ -1,0 +1,38 @@
+name: vercel deployment
+
+on:
+  pull_request:
+    types: [closed]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{github.ref != 'refs/heads/main'}}
+env:
+  FORCE_COLOR: 3
+  VERCEL_TOKEN_ID: ${{ secrets.TURBO_TOKEN }}
+  VERCEL_ORG_ID: ${{ vars.TURBO_TEAM }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  deploy:
+    if: ${{github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup
+        uses: ./tooling/github/setup
+      - name: Install vercel cli
+        run: pnpm add -g vercel@latest
+      - name: Pull vercel env
+        run: vercel pull --yes --environment=production --token ${{ secrets.TURBO_TOKEN}}
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.TURBO_TOKEN }}
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.TURBO_TOKEN }}
+  dontDeploy:
+    if: github.event.pull_request.merged == false
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo PR #${{ github.event.number }} has been closed without being merged
