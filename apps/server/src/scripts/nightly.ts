@@ -20,8 +20,6 @@ if (processLogs.exitCode === 1) {
   console.error(processLogs.stderr);
   process.exit(1);
 }
-await $`echo "Logs processed"`;
-
 const azure = await $`bun ./nightly/azure/index.ts`;
 if (azure.exitCode === 1) {
   console.error(azure.stderr);

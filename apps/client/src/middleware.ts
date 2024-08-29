@@ -22,7 +22,7 @@ export default middleware((req) => {
     return NextResponse.next();
   }
   let role = token?.user?.roles ?? "student";
-  const id = token?.user?.id ?? "0";
+  const id = token?.user?.id ?? "test-user";
   if (env.NEXT_PUBLIC_DEMO === true) {
     role = "admin";
   }

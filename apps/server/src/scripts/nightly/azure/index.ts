@@ -51,16 +51,24 @@ async function azureTeachers(): Promise<AzureUser[]> {
     const helpdeskLink: string | undefined = createAzureQueryString(
       env.AZURE_HELPDESK_GROUP,
     );
+    const othersLink: string | undefined = createAzureQueryString(
+      env.AZURE_OTHERUSERS_GROUP,
+    );
     const staffPromise = fetchAllUsers(staffLink, token);
 
     const helpdeskPromise = fetchAllUsers(helpdeskLink, token);
-    const [staffData, helpdeskData] = await Promise.all([
+    const othersPromise = fetchAllUsers(othersLink, token);
+
+    const [staffData, helpdeskData, othersData] = await Promise.all([
       staffPromise,
       helpdeskPromise,
+      othersPromise,
     ]);
     // Fetch all classrooms from the database
     let teacherCount = 0;
     let helpdeskCount = 0;
+    let otherCount = 0;
+
     // Use a transaction to insert all the users into the database at the same time
     const existingUsers = await db
       .select({ id: schema.users.id })
@@ -68,16 +76,17 @@ async function azureTeachers(): Promise<AzureUser[]> {
       .where(eq(schema.users.role, "teacher"));
     const existingIds = new Set(existingUsers.map((u) => u.id));
     const newTeachers = staffData.filter((u) => !existingIds.has(u.id));
-
+    othersData.forEach((u) => {
+      if (!existingIds.has(u.id)) {
+        newTeachers.push(u);
+        otherCount++;
+      }
+    });
     await db.transaction(async (tx) => {
       for (const teacher of newTeachers) {
         logger.debug("adding: ", teacher.userPrincipalName);
         let role: "teacher" | "secretary" = "teacher";
-        if (
-          secretaries.includes(
-            teacher.userPrincipalName as (typeof secretaries)[number],
-          )
-        ) {
+        if (secretaries.includes(teacher.userPrincipalName)) {
           role = "secretary";
         }
         await tx
@@ -114,7 +123,7 @@ async function azureTeachers(): Promise<AzureUser[]> {
       }
     });
     logger.debug(
-      `Added ${teacherCount} teachers and ${helpdeskCount} helpdesk users to the database.`,
+      `Added ${teacherCount} teachers and ${helpdeskCount} helpdesk users and ${otherCount} others to the database.`,
     );
     process.exit(0);
   } catch (error) {

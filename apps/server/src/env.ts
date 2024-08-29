@@ -34,6 +34,7 @@ export const env = createEnv({
     AZURE_STUDENT_GROUP: z.string(),
     AZURE_TEACHER_GROUP: z.string(),
     AZURE_HELPDESK_GROUP: z.string(),
+    AZURE_OTHERUSERS_GROUP: z.string(),
     SECRETARIES: z.preprocess(
       (val) => JSON.parse(val as string),
       z.array(z.string()),
@@ -81,7 +82,7 @@ export const env = createEnv({
     AZURE_STUDENT_GROUP: process.env.AZURE_STUDENT_GROUP,
     AZURE_TEACHER_GROUP: process.env.AZURE_TEACHER_GROUP,
     AZURE_HELPDESK_GROUP: process.env.AZURE_HELPDESK_GROUP,
-
+    AZURE_OTHERUSERS_GROUP: process.env.AZURE_OTHERUSERS_GROUP,
     SECRETARIES: process.env.SECRETARIES,
     PREFERRED_NAMES: process.env.PREFERRED_NAMES,
     EXCLUDED_TEACHERS: process.env.EXCLUDED_TEACHERS,
