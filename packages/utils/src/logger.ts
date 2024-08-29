@@ -18,4 +18,23 @@ export const logger = {
   },
 };
 
-export type Logger = typeof logger;
+// export type Logger = typeof logger;
+//
+
+class Logger{
+  caller: string;
+  constructor(caller: string) {
+    this.caller = caller;
+  }
+
+  error(...args: unknown[]) {
+    console.error(
+      chalk.red(chalk.bold("[ERROR]")),
+      chalk.dim(`[${this.caller}]`),
+      ...args,
+    );
+  }
+}
+
+export default Logger;
+
