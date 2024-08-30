@@ -4,7 +4,6 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
 import { decode, getToken } from "next-auth/jwt";
 
-
 import { db, InferSelectModel, pgTable, PgTableFn, schema } from "@local/db";
 
 import { env } from "../env";
@@ -52,10 +51,7 @@ function dumbAdapter(
       return pgTable(name, columns, extraConfig);
   }
 }
-export const adapter = DrizzleAdapter(
-  db,
-
-) as Adapter;
+export const adapter = DrizzleAdapter(db) as Adapter;
 
 export const {
   handlers: { GET, POST },
@@ -63,7 +59,7 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
-  secret: env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   adapter: adapter,
   session: {
     strategy: "jwt",

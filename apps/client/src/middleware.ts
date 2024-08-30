@@ -14,15 +14,18 @@ export default middleware((req) => {
 
   const path = req.nextUrl.pathname;
 
-  if (!token && env.NEXT_PUBLIC_DEMO !== true) {
+  if (!token) {
     if (path.startsWith("/dashboard")) {
+      if (env.NEXT_PUBLIC_DEMO === true) {
+        return NextResponse.next();
+      }
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
     return NextResponse.next();
   }
   let role = token?.user?.roles ?? "student";
-  const id = token?.user?.id ?? "test-user";
+  const id = env.NEXT_PUBLIC_DEMO ? "Test-Id" : token?.user?.id;
   if (env.NEXT_PUBLIC_DEMO === true) {
     role = "admin";
   }

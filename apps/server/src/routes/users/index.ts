@@ -13,4 +13,3 @@ export const userRoutes = new Elysia({ prefix: "/users" })
   .get("/student/details/:id", ({ params: { id } }) => getStudentDetails(id), {
     params: t.Object({ id: t.String() }),
   });
-

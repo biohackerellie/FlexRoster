@@ -13,6 +13,7 @@ import {
 } from "@local/ui/card";
 import { searchParamsValidator } from "@local/utils";
 
+import { env } from "@/env";
 import { getDefaultRoster } from "../../_components/logic/queries";
 import TeacherRosterTable from "../../_components/tables/teacherTable";
 
@@ -32,7 +33,12 @@ export default async function TeacherDashboardPage({
     if (userId === teacherId) {
       isTeacher = true;
     }
+  } else if (env.NEXT_PUBLIC_DEMO) {
+    console.log("Demo mode");
+
+    isTeacher = true;
   }
+
   const search = searchParamsValidator.parse(searchParams);
   return (
     <div>

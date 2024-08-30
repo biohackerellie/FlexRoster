@@ -4,12 +4,29 @@ import { auth } from "@local/auth";
 import { buttonVariants } from "@local/ui/button";
 
 import { Icons } from "@/components/icons";
+import { env } from "@/env";
 import { siteConfig } from "@/siteConfig";
 import { MobileDropdown } from "../app/help/_components/mobileNav";
 import { Navbar } from "./navbar";
 
 export async function Header() {
   const session = await auth();
+  let canRender = false;
+  let userId;
+  let roles;
+  if (!session) {
+    if (env.NEXT_PUBLIC_DEMO) {
+      canRender = true;
+      userId = "Test-Id";
+      roles = "admin";
+    } else {
+      canRender = false;
+    }
+  } else {
+    canRender = true;
+    userId = session.user.id;
+    roles = session.user.roles;
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur">
@@ -25,12 +42,13 @@ export async function Header() {
           </Link>
         </div>
         <div className="flex items-center space-x-2 md:space-x-4">
-          {session && (
-            <div className="hidden md:flex">
-              <Navbar userId={session.user.id} role={session.user.roles} />
-            </div>
+          {canRender && (
+            <>
+              <div className="hidden md:flex">
+                <Navbar userId={userId} role={roles} />
+              </div>
+            </>
           )}
-
           <MobileDropdown
             items={{
               docs: siteConfig.docNav,

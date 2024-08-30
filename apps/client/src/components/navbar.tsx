@@ -13,6 +13,7 @@ import { Link } from "next-view-transitions";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
+import { env } from "@/env";
 import { useChatNotifications } from "@/hooks";
 import ThemeToggle from "./toggleTheme";
 
@@ -92,6 +93,10 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
     default:
       links = studentLinks;
       break;
+  }
+
+  if (env.NEXT_PUBLIC_DEMO) {
+    links = teacherLinks;
   }
 
   if (userId) {

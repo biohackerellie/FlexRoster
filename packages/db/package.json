@@ -20,14 +20,12 @@
     "gen": "pnpm drizzle-kit generate --config src/drizzle.config.ts",
     "introspect": "pnpm with-env drizzle-kit introspect:pg --config src/drizzle.config.ts",
     "migrate": "pnpm with-env tsx src/migrate.ts",
-    
     "migrate-prod": "pnpm with-env-prod tsx src/migrate.ts",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env": "dotenv -e ../../.env --",
     "with-env-prod": "dotenv -e ../../.env.production --"
-      
   },
   "dependencies": {
     "@auth/core": "^0.34.2",
