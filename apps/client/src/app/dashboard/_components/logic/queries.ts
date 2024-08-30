@@ -69,6 +69,7 @@ export async function getDefaultRoster(
 
   if (error) {
     logger.error(error);
+    return [];
   }
   if (!data) {
     return [];
