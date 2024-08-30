@@ -11,6 +11,7 @@ import type { CreateCommentSchema, DatePickerSchema } from "@local/utils";
 import { auth } from "@local/auth";
 import { logger } from "@local/utils";
 
+import { env } from "@/env";
 import { client } from "@/lib/eden";
 import { getErrorMessage } from "@/lib/errorHandler";
 import { pusherServer } from "@/lib/pusher";
@@ -213,13 +214,13 @@ export async function RequestRoom(
     let teacher = "";
     let teacherRequest = false;
     const session = await auth();
-    const userId = session?.user?.id!;
+    const userId = session?.user?.id;
     if (input.studentId) {
       student = input.studentId;
-      teacher = userId;
+      teacher = userId ?? "Test-Id";
       teacherRequest = true;
     } else if (input.teacherId) {
-      student = userId;
+      student = userId ?? "test-student";
       teacher = input.teacherId;
     }
     logger.info("requested Date", input.requestedDate);
