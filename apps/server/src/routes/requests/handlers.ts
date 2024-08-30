@@ -9,7 +9,7 @@ import {
   teacherRequestQueryValidator,
 } from "@local/utils";
 
-// import { clearKV, getKV, newLog, setKV } from "~/lib/redis";
+import { clearKV, getKV, newLog, setKV } from "~/lib/redis";
 import {
   getClassroomIdByTeacher,
   userQuery,
