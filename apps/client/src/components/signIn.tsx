@@ -10,10 +10,7 @@ const LoginButton = () => {
         action={async () => {
           "use server";
           if (env.NEXT_PUBLIC_DEMO) {
-            await signIn("google", {
-              redirect: true,
-              redirectTo: "/dashboard",
-            });
+            await signIn("google");
           } else {
             await signIn("azure-ad", {
               redirect: true,
