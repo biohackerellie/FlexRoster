@@ -9,7 +9,7 @@ import {
   teacherRequestQueryValidator,
 } from "@local/utils";
 
-import { clearKV, getKV, newLog, setKV } from "~/lib/redis";
+import { newLog } from "~/lib/redis";
 import {
   getClassroomIdByTeacher,
   userQuery,
@@ -234,12 +234,7 @@ export async function requestApproval(
       action: `User ${newTeacherId} ${status} request ${requestId} for student ${student.user.id} from teacher ${teacherId} to teacher ${newTeacherId}`,
     };
 
-    await Promise.all([
-      clearKV(`requests:${studentId}`),
-      clearKV(`requests:${teacherId}:teacher`),
-      clearKV(`requests:${newTeacherId}:teacher`),
-      newLog(log),
-    ]);
+    await newLog(log);
     return new Response("OK", { status: 200 });
   } catch (e) {
     throw new NotFoundError("No requests found");

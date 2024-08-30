@@ -11,7 +11,6 @@ import {
   StudentDashboardDataValidator,
 } from "@local/utils";
 
-import { clearKV, getKV, setKV } from "~/lib/redis";
 import {
   aggregateClassroomData,
   roomByIdQuery,
@@ -157,7 +156,6 @@ export async function createComment(id: string, comment: string) {
 
 export async function deleteComment(id: string) {
   try {
-    await clearKV(`TeacherRoster-${id}`);
     await db
       .update(schema.classrooms)
       .set({ comment: null })

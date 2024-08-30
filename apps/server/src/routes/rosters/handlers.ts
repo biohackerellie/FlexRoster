@@ -8,13 +8,13 @@ import {
   teacherRosterArrayValidator,
 } from "@local/utils";
 
-import {
-  getKV,
-  getRequestKV,
-  removeSingleRequest,
-  setClassRoomKV,
-  setKV,
-} from "~/lib/redis";
+// import {
+//   getKV,
+//   getRequestKV,
+//   removeSingleRequest,
+//   setClassRoomKV,
+//   setKV,
+// } from "~/lib/redis";
 import {
   allStudentsMap,
   rosterByClassroomId,
@@ -71,43 +71,32 @@ export async function getTeacherRoster(userId: string) {
   try {
     let data: TeacherRoster[] = [];
 
-    let today: Date | string = new Date();
+    const today: Date | string = new Date();
     today.setHours(0, 0, 0, 0);
 
     let available = false;
-    const cacheKey = `TeacherRoster-${userId}`;
-    const cachedData = await getKV(cacheKey);
-    if (cachedData) {
-      const cacheArray = JSON.parse(cachedData);
-      if (cacheArray?.length) {
-        const validated = teacherRosterArrayValidator.parse(cacheArray);
-        data = validated;
-      }
-    } else {
-      const availability = await teacherAvailableTodayQuery.execute({
-        teacherId: userId,
-      });
-      if (availability && availability.length > 0) {
-        available = availability[0]!.available;
-      }
-      const dbData = await rosterByTeacherId.execute({ userId: userId });
-      logger.info("dbData", dbData);
-      if (dbData?.length) {
-        const result = dbData.map((student) => {
-          return {
-            ...student,
+    const availability = await teacherAvailableTodayQuery.execute({
+      teacherId: userId,
+    });
+    if (availability && availability.length > 0) {
+      available = availability[0]!.available;
+    }
+    const dbData = await rosterByTeacherId.execute({ userId: userId });
+    logger.info("dbData", dbData);
+    if (dbData?.length) {
+      const result = dbData.map((student) => {
+        return {
+          ...student,
 
-            available: available,
-            teacherId: userId,
-            chatId: student.studentId
-              ? `/dashboard/chat/${chatHrefConstructor(userId, student.studentId)}`
-              : null,
-          };
-        });
-        const parsedData = teacherRosterArrayValidator.parse(result);
-        await setKV(cacheKey, JSON.stringify(parsedData), 1200);
-        data = parsedData;
-      }
+          available: available,
+          teacherId: userId,
+          chatId: student.studentId
+            ? `/dashboard/chat/${chatHrefConstructor(userId, student.studentId)}`
+            : null,
+        };
+      });
+      const parsedData = teacherRosterArrayValidator.parse(result);
+      data = parsedData;
     }
     if (!data) throw new NotFoundError("No rosters found");
     return data;
@@ -119,21 +108,15 @@ export async function getTeacherRoster(userId: string) {
   }
 }
 
-interface AttendanceResponse {
-  timestamp: string;
-  newTeacher: string;
-  currentTeacher: string;
-}
 export async function setAttendance(
   studentId: string,
   status: "arrived" | "default",
 ) {
   try {
-    let updated: AttendanceResponse;
     const studentRaw = await userRosterQuery.execute({ id: studentId });
     const student = studentRaw[0]!;
     if (status === "arrived") {
-      updated = await db.transaction(async (tx) => {
+      await db.transaction(async (tx) => {
         await tx
           .update(schema.students)
           .set({ status: "transferredA" })
@@ -154,7 +137,7 @@ export async function setAttendance(
         return updatedRequest!;
       });
     } else {
-      updated = await db.transaction(async (tx) => {
+      await db.transaction(async (tx) => {
         await tx
           .update(schema.students)
           .set({
@@ -176,11 +159,6 @@ export async function setAttendance(
           .where(eq(schema.requests.studentId, studentId));
         return updatedRequest!;
       });
-    }
-    if (updated) {
-      await removeSingleRequest(studentId, updated.timestamp);
-      await removeSingleRequest(updated.newTeacher, updated.timestamp);
-      await removeSingleRequest(updated.currentTeacher, updated.timestamp);
     }
     return new Response("OK", { status: 200 });
   } catch (e) {
