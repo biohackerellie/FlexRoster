@@ -7,14 +7,13 @@ import createJiti from "jiti";
 import rehypePrettyCode from "rehype-pretty-code";
 import remarkToc from "remark-toc";
 import { getSingletonHighlighter as getHighlighter } from "shiki";
-import { env } from "@/env";
 dns.setDefaultResultOrder("ipv4first");
 createJiti(fileURLToPath(import.meta.url))("./src/env");
 createJiti(fileURLToPath(import.meta.url))("@local/auth/env");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: env.NEXT_PUBLIC_DEMO ? null : "standalone",
+  // output: process.env.NEXT_PUBLIC_DEMO === "true" ? null : "standalone",
   pageExtensions: ["js", "jsx", "ts", "tsx", "mdx"],
   redirects: async () => [
     {
