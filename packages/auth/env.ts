@@ -10,8 +10,6 @@ export const env = createEnv({
     AZURE_AD_TENANT_ID: z.string().min(1),
     DATABASE_URL: z.string().min(1),
     DEMO: z.preprocess((val) => val === "true", z.boolean()),
-    GOOGLE_CLIENT_ID: z.string(),
-    GOOGLE_CLIENT_SECRET: z.string(),
   },
   client: {},
   experimental__runtimeEnv: {},
