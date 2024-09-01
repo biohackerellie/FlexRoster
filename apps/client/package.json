@@ -28,7 +28,7 @@
     "@t3-oss/env-nextjs": "^0.11.1",
     "@tanstack/react-table": "^8.20.5",
     "auth": "^1.1.1",
-    "axios": "^1.7.6",
+    "axios": "^1.7.7",
     "babel-plugin-react-compiler": "0.0.0-experimental-487cb0e-20240529",
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.1.3",
