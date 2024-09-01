@@ -74,7 +74,7 @@
     "dotenv-cli": "^7.4.2",
     "eslint": "catalog:",
     "jiti": "^1.21.6",
-    "postcss": "^8.4.41",
+    "postcss": "^8.4.42",
     "prettier": "catalog:",
     "tailwindcss": "^3.4.10",
     "typescript": "catalog:"
