@@ -179,5 +179,3 @@ RosterSync().catch((e) => {
   console.error(e);
   process.exit(1);
 });
-
-// const ignoredStudentUsers = ["elliana_kerns@laurel.k12.mt.us"];

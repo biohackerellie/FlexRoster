@@ -14,10 +14,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "mini-svg-data-uri": "^1.4.4",
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.10",
-    "tailwindcss-animate": "^1.0.7",
-    "mini-svg-data-uri": "^1.4.4"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@local/eslint-config": "workspace:*",

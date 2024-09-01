@@ -37,11 +37,11 @@ function Calendar({
 
         month_caption: "font-bold mt-2 mb-3",
         month: "space-y-4",
-        button_next: cn(
+        button_previous: cn(
           buttonVariants({ variant: "outline" }),
           "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
         ),
-        button_previous: cn(
+        button_next: cn(
           buttonVariants({ variant: "outline" }),
           "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
         ),

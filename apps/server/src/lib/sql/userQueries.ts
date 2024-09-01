@@ -42,7 +42,7 @@ export const userRosterQuery = db
   )
   .innerJoin(
     schema.classrooms,
-    eq(schema.students.classroomId, schema.classrooms.id),
+    eq(schema.students.defaultClassroomId, schema.classrooms.id),
   )
   .where(eq(schema.users.id, sql.placeholder("id")))
   .prepare("userRoster");
