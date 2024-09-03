@@ -61,7 +61,7 @@ importers:
     dependencies:
       '@elysiajs/eden':
         specifier: ^1.1.2
-        version: 1.1.2(elysia@1.1.11(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.3))
+        version: 1.1.2(elysia@1.1.11(@sinclair/typebox@0.33.9)(openapi-types@12.1.3)(typescript@5.5.3))
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.0(react@19.0.0-rc-fb9a90fa48-20240614))
@@ -115,7 +115,7 @@ importers:
         version: 3.1.3(date-fns@3.6.0)
       elysia:
         specifier: ^1.1.11
-        version: 1.1.11(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.3)
+        version: 1.1.11(@sinclair/typebox@0.33.9)(openapi-types@12.1.3)(typescript@5.5.3)
       framer-motion:
         specifier: ^11.3.31
         version: 11.3.31(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
@@ -257,22 +257,22 @@ importers:
         version: 0.7.0
       '@elysiajs/cors':
         specifier: ^1.1.0
-        version: 1.1.0(elysia@1.1.11(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.3))
+        version: 1.1.0(elysia@1.1.11(@sinclair/typebox@0.33.9)(openapi-types@12.1.3)(typescript@5.5.3))
       '@elysiajs/swagger':
         specifier: ^1.1.1
-        version: 1.1.1(elysia@1.1.11(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.3))
+        version: 1.1.1(elysia@1.1.11(@sinclair/typebox@0.33.9)(openapi-types@12.1.3)(typescript@5.5.3))
       '@local/db':
         specifier: workspace:*
         version: link:../../packages/db
       '@sinclair/typebox':
-        specifier: ^0.33.7
-        version: 0.33.7
+        specifier: ^0.33.9
+        version: 0.33.9
       '@t3-oss/env-core':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.5.3)(zod@3.23.8)
       elysia:
         specifier: ^1.1.11
-        version: 1.1.11(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.3)
+        version: 1.1.11(@sinclair/typebox@0.33.9)(openapi-types@12.1.3)(typescript@5.5.3)
       execa:
         specifier: ^9.3.1
         version: 9.3.1
@@ -2385,8 +2385,8 @@ packages:
   '@shikijs/twoslash@1.10.3':
     resolution: {integrity: sha512-9HlQgvy51jnO46Tcr87A7v6gxlzdKzcpYk15/CQfO48svAslOf+6QYXf0Gao3HWPywOwVj2alMAe0zQhT59y9w==}
 
-  '@sinclair/typebox@0.33.7':
-    resolution: {integrity: sha512-et38XPs6GMoB6XugH+Spp/HRv5gHYffw7rXC3caen/dIKC7Q6sqs6eEH9Yd9UKziUkOQdrLr9OXUULAc+pRMng==}
+  '@sinclair/typebox@0.33.9':
+    resolution: {integrity: sha512-agK7y8hO5Gz4Thu5kxTtLiZudNRflR1rTwmnWW5skxMd/+aqQ9XQene8HyyBsiajs5HV6ZQ/pCd3IKsqIfu4Kw==}
 
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
@@ -7223,17 +7223,17 @@ snapshots:
 
   '@drizzle-team/brocli@0.10.1': {}
 
-  '@elysiajs/cors@1.1.0(elysia@1.1.11(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.3))':
+  '@elysiajs/cors@1.1.0(elysia@1.1.11(@sinclair/typebox@0.33.9)(openapi-types@12.1.3)(typescript@5.5.3))':
     dependencies:
-      elysia: 1.1.11(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.3)
+      elysia: 1.1.11(@sinclair/typebox@0.33.9)(openapi-types@12.1.3)(typescript@5.5.3)
 
-  '@elysiajs/eden@1.1.2(elysia@1.1.11(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.3))':
+  '@elysiajs/eden@1.1.2(elysia@1.1.11(@sinclair/typebox@0.33.9)(openapi-types@12.1.3)(typescript@5.5.3))':
     dependencies:
-      elysia: 1.1.11(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.3)
+      elysia: 1.1.11(@sinclair/typebox@0.33.9)(openapi-types@12.1.3)(typescript@5.5.3)
 
-  '@elysiajs/swagger@1.1.1(elysia@1.1.11(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.3))':
+  '@elysiajs/swagger@1.1.1(elysia@1.1.11(@sinclair/typebox@0.33.9)(openapi-types@12.1.3)(typescript@5.5.3))':
     dependencies:
-      elysia: 1.1.11(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.3)
+      elysia: 1.1.11(@sinclair/typebox@0.33.9)(openapi-types@12.1.3)(typescript@5.5.3)
       lodash.clonedeep: 4.5.0
       openapi-types: 12.1.3
 
@@ -8491,7 +8491,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@sinclair/typebox@0.33.7': {}
+  '@sinclair/typebox@0.33.9': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
@@ -9848,9 +9848,9 @@ snapshots:
 
   electron-to-chromium@1.5.4: {}
 
-  elysia@1.1.11(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.3):
+  elysia@1.1.11(@sinclair/typebox@0.33.9)(openapi-types@12.1.3)(typescript@5.5.3):
     dependencies:
-      '@sinclair/typebox': 0.33.7
+      '@sinclair/typebox': 0.33.9
       cookie: 0.6.0
       fast-decode-uri-component: 1.0.1
     optionalDependencies:
