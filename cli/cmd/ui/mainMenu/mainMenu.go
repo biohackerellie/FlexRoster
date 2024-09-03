@@ -79,13 +79,13 @@ func (m *MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case "j", "down":
 			m.Choice++
-			if m.Choice > 4 {
+			if m.Choice > 5 {
 				m.Choice = 0
 			}
 		case "k", "up":
 			m.Choice--
 			if m.Choice < 0 {
-				m.Choice = 4
+				m.Choice = 5
 			}
 		case "enter":
 			switch m.Choice {
@@ -104,6 +104,9 @@ func (m *MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case 4:
 				buildScreen := Builder()
 				return RootScreen().SwitchScreen(&buildScreen)
+			case 5:
+				techScreen := InitialTechModel()
+				return RootScreen().SwitchScreen(&techScreen)
 			}
 		}
 	}
@@ -127,6 +130,7 @@ func (m *MenuModel) View() string {
 		checkbox("Excluded Teachers", c == 2),
 		checkbox("Semester Class Name", c == 3),
 		checkbox("Build and Deploy Changes", c == 4),
+		checkbox("Tech Department", c == 5),
 	)
 	s = fmt.Sprintf(tpl, choices)
 

@@ -20,10 +20,6 @@ const ConfigDisplayStringTemplate = `
 
 %v			
 
-## Tech Department
-
-%v
-
 ## Preferred Names
 
 %v
@@ -34,6 +30,12 @@ const ConfigDisplayStringTemplate = `
 
 ## Semester Class Name: 
 %v
+
+## Tech Department
+
+%v
+
+
 `
 
 var helpStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("241")).Render
@@ -65,12 +67,14 @@ func ViewConfiguration() (*configView, error) {
 	preferredNames := formatPreferredNames(CurrentConfig.PreferredNames)
 	excludedTeachers := fmt.Sprintf("%v", CurrentConfig.ExcludedTeachers)
 	semesterClassName := CurrentConfig.SemesterClassName
+	techDepartment := fmt.Sprintf("%v", CurrentConfig.TechDepartment)
 	configDisplayString := fmt.Sprintf(
 		ConfigDisplayStringTemplate,
 		secretaries,
 		preferredNames,
 		excludedTeachers,
 		semesterClassName,
+		techDepartment,
 	)
 	renderer, err := glamour.NewTermRenderer(
 		glamour.WithAutoStyle(),
