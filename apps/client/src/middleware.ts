@@ -49,10 +49,13 @@ export default middleware((req) => {
       if (path === "/dashboard/student") {
         return NextResponse.redirect(new URL(`/dashboard/staff/`, req.url));
       }
+      if (path === "/dashboard/admin") {
+        return NextResponse.redirect(new URL(`/dashboard/staff/`, req.url));
+      }
       break;
     case "admin":
       if (path === "/dashboard") {
-        return NextResponse.redirect(new URL("/dashboard/staff", req.url));
+        return NextResponse.redirect(new URL("/dashboard/admin", req.url));
       }
 
       break;
@@ -64,6 +67,9 @@ export default middleware((req) => {
         return NextResponse.redirect(new URL("/dashboard/staff", req.url));
       }
       if (path.startsWith("/dashboard/chat")) {
+        return NextResponse.redirect(new URL("/dashboard/staff", req.url));
+      }
+      if (path === "/dashboard/admin") {
         return NextResponse.redirect(new URL("/dashboard/staff", req.url));
       }
 
