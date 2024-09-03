@@ -75,6 +75,7 @@ func ViewConfiguration() (*configView, error) {
 		excludedTeachers,
 		semesterClassName,
 		techDepartment,
+		techDepartment
 	)
 	renderer, err := glamour.NewTermRenderer(
 		glamour.WithAutoStyle(),
