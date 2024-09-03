@@ -42,7 +42,7 @@ sudo ./deploy.sh
 4. Download the Cli tar from github releases and extract it to your local machine. _Make sure to replace the version number with the latest release._
 
 ```bash
-curl -OL https://github.com/biohackerellie/FlexRoster/releases/download/v1.4.5/FlexRoster_1.4.5_linux_amd64.tar.gz && sudo tar  -C /usr/local/bin -xzf FlexRoster_1.4.5_linux_amd64.tar.gz
+curl -OL https://github.com/biohackerellie/FlexRoster/releases/download/v1.4.6/FlexRoster_1.4.6_linux_amd64.tar.gz && sudo tar  -C /usr/local/bin -xzf FlexRoster_1.4.6_linux_amd64.tar.gz
 
 ```
 
