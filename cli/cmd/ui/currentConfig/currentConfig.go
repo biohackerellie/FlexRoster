@@ -20,6 +20,9 @@ const ConfigDisplayStringTemplate = `
 
 %v			
 
+## Tech Department
+
+%v
 
 ## Preferred Names
 

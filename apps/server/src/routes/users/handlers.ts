@@ -2,6 +2,7 @@ import { NotFoundError } from "elysia";
 
 import type { Request, Student, User } from "@local/utils";
 import { db, eq, schema, sql } from "@local/db";
+import { logger } from "@local/utils";
 
 import {
   allStudentDetails,
@@ -13,6 +14,7 @@ import {
 export async function getDBUser(id: string) {
   try {
     const user = await userQuery.execute({ id: id });
+    logger.info("User found in DB", { user });
     const result = user[0] ?? null;
     if (result === null) {
       throw new NotFoundError("No user found with that ID");

@@ -24,6 +24,7 @@ type FlexConfig struct {
 	ExcludedTeachers  []string         `json:"excludedTeachers"`
 	SemesterClassName string           `json:"semesterClassName"`
 	IsRedisCluster    bool             `json:"isRedisCluster"`
+	TechDepartment    []string         `json:"techDepartment"`
 }
 
 const (
@@ -33,6 +34,7 @@ const (
 	excludedTeachersKey  = "EXCLUDED_TEACHERS"
 	semesterClassNameKey = "SEMESTER_CLASS_NAME"
 	isRedisClusterKey    = "IS_REDIS_CLUSTER"
+	techDepartmentKey    = "TECH_DEPARTMENT_EMAILS"
 )
 
 func readEnvFile(filePath string) map[string]string {
@@ -64,7 +66,11 @@ func envToFlexConfig(envMap map[string]string) *FlexConfig {
 			log.Fatalf("Error parsing %s: %v", secretariesKey, err)
 		}
 	}
-
+	if techDepartment, ok := envMap[techDepartmentKey]; ok {
+		if err := json.Unmarshal([]byte(techDepartment), &config.TechDepartment); err != nil {
+			log.Fatalf("Error parsing %s: %v", techDepartmentKey, err)
+		}
+	}
 	if preferredNames, ok := envMap[preferredNamesKey]; ok {
 		if err := json.Unmarshal([]byte(preferredNames), &config.PreferredNames); err != nil {
 			log.Fatalf("Error parsing %s: %v", preferredNamesKey, err)
@@ -135,6 +141,9 @@ func updateConfigFields(config, args *FlexConfig) {
 	if len(args.Secretaries) > 0 {
 		config.Secretaries = args.Secretaries
 	}
+	if len(args.TechDepartment) > 0 {
+		config.TechDepartment = args.TechDepartment
+	}
 	if len(args.PreferredNames) > 0 {
 		config.PreferredNames = args.PreferredNames
 	}
@@ -158,6 +167,13 @@ func envMapFromFlexConfig(config *FlexConfig) map[string]string {
 			log.Fatalf("Error marshalling secretaries: %v", err)
 		}
 		envMap[secretariesKey] = string(secretaries)
+	}
+	if len(config.TechDepartment) > 0 {
+		techDepartment, err := json.Marshal(config.TechDepartment)
+		if err != nil {
+			log.Fatalf("Error marshalling techDepartment: %v", err)
+		}
+		envMap[techDepartmentKey] = string(techDepartment)
 	}
 
 	if len(config.PreferredNames) > 0 {

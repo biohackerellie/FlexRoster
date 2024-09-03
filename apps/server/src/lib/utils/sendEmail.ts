@@ -10,19 +10,21 @@ interface emailData {
 
 export default async function sendEmail(data: emailData) {
   try {
-    await fetch(`${env.EMAIL_API}}`, {
+    const toEmail = data.to ?? env.TECH_DEPARTMENT_EMAILS.join(",");
+    const res = await fetch(`${env.EMAIL_API}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-api-key": env.EMAIL_API_KEY,
       },
       body: JSON.stringify({
-        to: data.to ?? env.TECH_DEPARTMENT_EMAILS.join(","),
+        to: toEmail,
         from: "FLEXROSTER Update",
         subject: data.subject,
         html: `${data.message}`,
       }),
     });
+    logger.info(`Email sent: ${res.status}`);
   } catch (error) {
     logger.error(`Error sending email: ${error}`);
   }
