@@ -1,3 +1,4 @@
+import { unstable_after as after } from "next/server";
 import { nanoid } from "nanoid";
 import { z } from "zod";
 
@@ -5,6 +6,7 @@ import type { Logs, Message } from "@local/utils";
 import { auth } from "@local/auth";
 import { messageValidator } from "@local/utils";
 
+import { env } from "@/env";
 import { client } from "@/lib/eden";
 import { pusherServer } from "@/lib/pusher";
 import { toPusherKey } from "@/lib/utils";
@@ -13,13 +15,6 @@ export async function POST(req: Request) {
   try {
     const { chatId, text }: { chatId: string; text: string } = await req.json();
 
-    // const filter = await profanityFilter(text);
-    // if (filter.isProfanity) {
-    //   return new Response(
-    //     `Gasp, you sad a no-no word! Dont say ${filter.flaggedFor}!`,
-    //     { status: 202 },
-    //   );
-    // }
     if (!chatId) throw new Error("ChatId is required");
     const session = await auth();
 
@@ -63,6 +58,9 @@ export async function POST(req: Request) {
 
     await client.api.inbox({ chatId: chatId }).post({ message });
     await client.api.logs.new.post({ log });
+    after(() => {
+      void profanityFilter(message.text, message.senderId, friendId!);
+    });
     return new Response("success", { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
@@ -80,7 +78,11 @@ const profanityFilterSchema = z.object({
   flaggedFor: z.string(),
 });
 
-async function profanityFilter(message: string) {
+async function profanityFilter(
+  message: string,
+  messageFrom: string,
+  messageTo: string,
+) {
   const res = await fetch("https://vector.profanity.dev", {
     method: "POST",
     headers: {
@@ -90,6 +92,11 @@ async function profanityFilter(message: string) {
   }).then((res) => res.json());
 
   const result = profanityFilterSchema.parse(res);
-
-  return result;
+  if (result.isProfanity) {
+    const email = {
+      message: `Message from ${messageFrom} to ${messageTo} was flagged for profanity. The message was: ${message}`,
+      subject: "FlexRoster Profanity Alert",
+    };
+    await client.api.inbox.profanity.post({ message: email });
+  }
 }

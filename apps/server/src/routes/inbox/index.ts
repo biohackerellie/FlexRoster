@@ -1,6 +1,7 @@
 import { Elysia, t } from "elysia";
 
 import { getAlerts, getInbox, sendToInbox } from "~/lib/redis";
+import sendEmail from "~/lib/utils/sendEmail";
 
 const T = t.Union([t.String(), t.Number()]);
 
@@ -31,6 +32,16 @@ export const inboxRoutes = new Elysia({ prefix: "/inbox" })
       chatId: t.String(),
     }),
   })
+  .post("/profanity", ({ body: { message } }) => sendEmail(message), {
+    body: t.Object({
+      message: t.Object({
+        to: t.Optional(t.String()),
+        message: t.String(),
+        subject: t.String(),
+      }),
+    }),
+  })
+
   .post(
     "/:chatId",
     ({ params: { chatId }, body: { message } }) => sendToInbox(chatId, message),

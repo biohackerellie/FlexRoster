@@ -24,6 +24,8 @@ export const env = createEnv({
     REDIS_HOST2: z.string(),
     REDIS_HOST3: z.string(),
     REDIS_PORT: z.string(),
+    EMAIL_API: z.string(),
+    EMAIL_API_KEY: z.string(),
     ONEROSTER_CLIENT_ID: z.string(),
     ONEROSTER_CLIENT_SECRET: z.string(),
     ONEROSTER_BASE_URL: z.string(),
@@ -39,6 +41,11 @@ export const env = createEnv({
       (val) => JSON.parse(val as string),
       z.array(z.string()),
     ),
+    TECH_DEPARTMENT_EMAILS: z.preprocess(
+      (val) => JSON.parse(val as string),
+      z.array(z.string()),
+    ),
+
     PREFERRED_NAMES: z.preprocess(
       (val) => JSON.parse(val as string),
       z.array(
@@ -77,7 +84,8 @@ export const env = createEnv({
     ONEROSTER_APPNAME: process.env.ONEROSTER_APPNAME,
     XSRF_TOKEN: process.env.XSRF_TOKEN,
     LHS_SOURCE_ID: process.env.LHS_SOURCE_ID,
-
+    EMAIL_API: process.env.EMAIL_API,
+    EMAIL_API_KEY: process.env.EMAIL_API_KEY,
     WORKING_DIR: process.env.WORKING_DIR,
     AZURE_STUDENT_GROUP: process.env.AZURE_STUDENT_GROUP,
     AZURE_TEACHER_GROUP: process.env.AZURE_TEACHER_GROUP,
@@ -88,6 +96,7 @@ export const env = createEnv({
     EXCLUDED_TEACHERS: process.env.EXCLUDED_TEACHERS,
     SEMESTER_CLASS_NAME: process.env.SEMESTER_CLASS_NAME,
     IS_REDIS_CLUSTER: process.env.IS_REDIS_CLUSTER,
+    TECH_DEPARTMENT_EMAILS: process.env.TECH_DEPARTMENT_EMAILS,
   },
   skipValidation:
     !!process.env.CI ||

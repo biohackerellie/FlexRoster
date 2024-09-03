@@ -16,8 +16,9 @@ import {
   userRequestQuery,
   userRosterQuery,
 } from "~/lib/sql";
-// import { getHashKey } from "~/lib/utils";
 import { NoRequestForUError } from "~/lib/utils/Errors";
+// import { getHashKey } from "~/lib/utils";
+import sendEmail from "~/lib/utils/sendEmail";
 
 type insertRequest = typeof schema.requests.$inferInsert;
 type newRequestProps = Partial<insertRequest>;
@@ -119,6 +120,12 @@ export async function newRequest({
       };
     }
     await newLog(log!);
+    const emailData = {
+      to: newTeacherData?.email ?? "",
+      subject: "New Transfer Request",
+      message: `<h1>Transfer Request</h1> <p>${student?.user.name} has requested to transfer to your class on ${dateRequested}</p>`,
+    };
+    await sendEmail(emailData);
   } catch (e) {
     if (e instanceof Error) {
       logger.error(e);
@@ -233,7 +240,12 @@ export async function requestApproval(
       type: "request",
       action: `User ${newTeacherId} ${status} request ${requestId} for student ${student.user.id} from teacher ${teacherId} to teacher ${newTeacherId}`,
     };
-
+    const emailData = {
+      to: student.user.email,
+      subject: "Transfer Request",
+      message: `<h1>Transfer Request</h1> <p>Your request to transfer to a new teacher has been ${status}</p>`,
+    };
+    await sendEmail(emailData);
     await newLog(log);
     return new Response("OK", { status: 200 });
   } catch (e) {
