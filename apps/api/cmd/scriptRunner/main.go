@@ -13,6 +13,7 @@ import (
 	"api/internal/lib/logger"
 	rclient "api/internal/redis"
 	"api/internal/scripts"
+
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
 )
@@ -22,10 +23,11 @@ func main() {
 
 	config := config.GetEnv()
 
-	redisHost1 := config.REDIS_HOST1
-	opt, _ := redis.ParseURL(redisHost1)
-	log.Info("Connecting to Redis", "host", opt)
-	cache := redis.NewClient(opt)
+	redisHost1 := config.REDIS_HOST1 + ":" + config.REDIS_PORT
+	log.Info("Connecting to Redis", "host", redisHost1)
+	cache := redis.NewClient(&redis.Options{
+		Addr: redisHost1,
+	})
 	defer cache.Close()
 
 	dbconfig, err := pgxpool.ParseConfig(config.DSN)

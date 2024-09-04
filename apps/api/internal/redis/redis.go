@@ -38,6 +38,13 @@ func (r *RClient) Clear(key string) error {
 	return r.Redis.Del(r.ctx, key).Err()
 }
 
+func (r *RClient) ZRange(key string) ([]string, error) {
+	return r.Redis.ZRange(r.ctx, key, 0, -1).Result()
+}
+
+func (r *RClient) ZAdd(key string, members ...redis.Z) error {
+	return r.Redis.ZAdd(r.ctx, key, members...).Err()
+}
 func (r *RClient) ReadStream(args *redis.XReadGroupArgs) ([]redis.XStream, error) {
 	return r.Redis.XReadGroup(r.ctx, &redis.XReadGroupArgs{
 		Group:    args.Group,

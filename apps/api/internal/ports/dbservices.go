@@ -64,4 +64,6 @@ type RClient interface {
 	XAdd(stream string, values ...*redis.XMessage) (string, error)
 	XRange(stream, start, stop string) ([]redis.XMessage, error)
 	XAck(stream string, consumer string, ids ...string) error
+	ZRange(key string) ([]string, error)
+	ZAdd(key string, members ...redis.Z) error
 }

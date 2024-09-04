@@ -15,11 +15,11 @@ await $`pwd`;
 //   process.exit(1);
 // }
 
-const processLogs = await $`bun ./processLogs.ts`;
-if (processLogs.exitCode === 1) {
-  console.error(processLogs.stderr);
-  process.exit(1);
-}
+// const processLogs = await $`bun ./processLogs.ts`;
+// if (processLogs.exitCode === 1) {
+//   console.error(processLogs.stderr);
+//   process.exit(1);
+// }
 const azure = await $`bun ./nightly/azure/index.ts`;
 if (azure.exitCode === 1) {
   console.error(azure.stderr);
