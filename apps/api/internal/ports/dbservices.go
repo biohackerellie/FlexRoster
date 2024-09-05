@@ -54,6 +54,7 @@ type UserDBService interface {
 	GetTeacherWithRoster(ctx context.Context, id string) (*service.TeacherWithRoster, error)
 	CreateUserTx(ctx context.Context, users []*service.User) error
 	GetStudent(ctx context.Context, id string) (*service.StudentWithUser, error)
+	GetexistingTeachers(ctx context.Context) ([]string, error)
 }
 
 type RClient interface {

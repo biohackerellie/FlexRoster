@@ -133,3 +133,11 @@ func (s *UsersDBService) CreateUserTx(ctx context.Context, users []*user.User) e
 	}
 	return tx.Commit(ctx)
 }
+
+func (s *UsersDBService) GetexistingTeachers(ctx context.Context) ([]string, error) {
+	res, err := s.q.GetAllTeacherIds(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

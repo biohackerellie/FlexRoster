@@ -12,7 +12,7 @@ import (
 )
 
 const createUser = `-- name: CreateUser :exec
-INSERT INTO "user" ("id", "name", "email", "role") VALUES ($1, $2, $3, $4)
+INSERT INTO "user" ("id", "name", "email", "role") VALUES ($1, $2, $3, $4) ON CONFLICT("id") DO UPDATE SET "name" = $2, "email" = $3, "role" = $4
 `
 
 type CreateUserParams struct {
@@ -30,6 +30,30 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 		arg.Role,
 	)
 	return err
+}
+
+const getAllTeacherIds = `-- name: GetAllTeacherIds :many
+SELECT "id" FROM "user" WHERE "role" = 'teacher'
+`
+
+func (q *Queries) GetAllTeacherIds(ctx context.Context) ([]string, error) {
+	rows, err := q.db.Query(ctx, getAllTeacherIds)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []string
+	for rows.Next() {
+		var id string
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getTeacher = `-- name: GetTeacher :one

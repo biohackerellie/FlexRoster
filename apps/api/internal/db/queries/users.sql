@@ -17,4 +17,7 @@ JOIN "classrooms" c ON c."id" = s."classroomId"
 WHERE "user"."id" = $1;
 
 -- name: CreateUser :exec
-INSERT INTO "user" ("id", "name", "email", "role") VALUES ($1, $2, $3, $4);
+INSERT INTO "user" ("id", "name", "email", "role") VALUES ($1, $2, $3, $4) ON CONFLICT("id") DO UPDATE SET "name" = $2, "email" = $3, "role" = $4; 
+
+-- name: GetAllTeacherIds :many
+SELECT "id" FROM "user" WHERE "role" = 'teacher'; 
