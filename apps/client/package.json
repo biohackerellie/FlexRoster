@@ -68,7 +68,7 @@
     "@local/prettier-config": "workspace:*",
     "@local/tailwind-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
-    "@types/node": "^20.16.4",
+    "@types/node": "^20.16.5",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
     "autoprefixer": "^10.4.20",
