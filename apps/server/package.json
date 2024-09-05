@@ -26,7 +26,7 @@
   "dependencies": {
     "@clack/core": "^0.3.4",
     "@clack/prompts": "^0.7.0",
-    "@elysiajs/cors": "^1.1.0",
+    "@elysiajs/cors": "^1.1.1",
     "@elysiajs/swagger": "^1.1.1",
     "@local/db": "workspace:*",
     "@sinclair/typebox": "^0.33.9",
