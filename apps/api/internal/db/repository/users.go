@@ -6,6 +6,7 @@ import (
 	config "api/internal/config"
 	errors "api/internal/lib/errors"
 	"api/internal/lib/logger"
+	"api/internal/service"
 	user "api/internal/service"
 )
 
@@ -140,4 +141,21 @@ func (s *UsersDBService) GetexistingTeachers(ctx context.Context) ([]string, err
 		return nil, err
 	}
 	return res, nil
+}
+
+func (s *UsersDBService) GetAllTeachers(ctx context.Context) ([]*service.User, error) {
+	res, err := s.q.GetAllTeachers(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*service.User, 0)
+	for _, r := range res {
+		result = append(result, &service.User{
+			Id:    r.User.ID,
+			Name:  *r.User.Name,
+			Email: r.User.Email,
+			Role:  r.User.Role,
+		})
+	}
+	return result, nil
 }

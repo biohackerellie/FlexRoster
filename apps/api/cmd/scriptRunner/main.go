@@ -56,7 +56,7 @@ func main() {
 	scriptRunner := scripts.NewScript(redisClient, classroomRepo, studentRepo, userRepo, logsRepo).WithLogger(log)
 	seedFlag := flag.Bool("seed", false, "seed the database")
 	logFlag := flag.Bool("logs", false, "process logs")
-
+	azureFlag := flag.Bool("azure", false, "sync azure users")
 	flag.Parse()
 
 	if *seedFlag {

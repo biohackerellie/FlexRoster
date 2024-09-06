@@ -56,6 +56,41 @@ func (q *Queries) GetAllTeacherIds(ctx context.Context) ([]string, error) {
 	return items, nil
 }
 
+const getAllTeachers = `-- name: GetAllTeachers :many
+SELECT u.id, u.name, u.email, u."emailVerified", u.image, u.role FROM "user" u WHERE "role" = 'teacher'
+`
+
+type GetAllTeachersRow struct {
+	User User `db:"user" json:"user"`
+}
+
+func (q *Queries) GetAllTeachers(ctx context.Context) ([]GetAllTeachersRow, error) {
+	rows, err := q.db.Query(ctx, getAllTeachers)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAllTeachersRow
+	for rows.Next() {
+		var i GetAllTeachersRow
+		if err := rows.Scan(
+			&i.User.ID,
+			&i.User.Name,
+			&i.User.Email,
+			&i.User.EmailVerified,
+			&i.User.Image,
+			&i.User.Role,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getTeacher = `-- name: GetTeacher :one
 SELECT "user".id, name, email, "emailVerified", image, role, classrooms.id, "roomNumber", "teacherName", "teacherId", comment, "isFlex" FROM "user"
 LEFT JOIN "classrooms" ON "classrooms"."teacherId" = "user"."id"

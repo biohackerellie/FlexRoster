@@ -58,6 +58,27 @@ func (s *ClassroomDBService) GetClassrooms(ctx context.Context) ([]*classroom.Cl
 	return response, nil
 }
 
+func (s *ClassroomDBService) GetClassroomsNoDates(ctx context.Context) ([]*classroom.Classroom, error) {
+	res, err := s.q.ClassroomQuery(ctx)
+	if err != nil {
+		return nil, err
+	}
+	response := make([]*classroom.Classroom, len(res))
+	for i, r := range res {
+		mappedResponse := &classroom.Classroom{
+			Id:          r.ID,
+			RoomNumber:  r.RoomNumber,
+			TeacherName: r.TeacherName,
+			TeacherId:   *r.TeacherId,
+			Comment:     *r.Comment,
+			IsFlex:      *r.IsFlex,
+			Available:   r.Available,
+		}
+		response[i] = mappedResponse
+	}
+	return response, nil
+}
+
 func (s *ClassroomDBService) GetAvailability(ctx context.Context) ([]*classroom.Availability, error) {
 	res, err := s.q.AvailabilityQuery(ctx)
 	if err != nil {
@@ -245,6 +266,41 @@ func (s *ClassroomDBService) NewClassroomTx(ctx context.Context, classrooms []*c
 			TeacherId:   &classroom.TeacherId,
 			IsFlex:      flexPtr,
 		})
+		if err != nil {
+			return err
+		}
+	}
+	return tx.Commit(ctx)
+}
+
+func (s *ClassroomDBService) UpdateClassroomTx(ctx context.Context, classrooms []*classroom.Classroom) error {
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
+	qtx := s.q.WithTx(tx)
+	for _, classroom := range classrooms {
+		err := qtx.UpdateClassroom(ctx, UpdateClassroomParams{
+			ID:         classroom.Id,
+			RoomNumber: classroom.RoomNumber,
+		})
+		if err != nil {
+			return err
+		}
+	}
+	return tx.Commit(ctx)
+}
+
+func (s *ClassroomDBService) DeleteClassroomTx(ctx context.Context, ids []string) error {
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
+	qtx := s.q.WithTx(tx)
+	for _, id := range ids {
+		err := qtx.DeleteClassrooms(ctx, id)
 		if err != nil {
 			return err
 		}

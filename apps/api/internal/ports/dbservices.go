@@ -11,6 +11,7 @@ import (
 
 type ClassroomDBService interface {
 	GetClassrooms(ctx context.Context) ([]*service.ClassroomWithAvailable, error)
+	GetClassroomsNoDates(ctx context.Context) ([]*service.Classroom, error)
 	GetAvailability(ctx context.Context) ([]*service.Availability, error)
 	TeacherAvailableToday(ctx context.Context, teacherId string) (bool, error)
 	GetTeacherAvailability(ctx context.Context, teacherId string) ([]*service.Availability, error)
@@ -22,6 +23,8 @@ type ClassroomDBService interface {
 	DeleteAvailability(ctx context.Context, teacherId string, date time.Time) error
 	CreateAvailability(ctx context.Context, args []*service.Availability) error
 	NewClassroomTx(ctx context.Context, classrooms []*service.Classroom) error
+	UpdateClassroomTx(ctx context.Context, classrooms []*service.Classroom) error
+	DeleteClassroomTx(ctx context.Context, classrooms []string) error
 }
 
 type LogsDBService interface {
@@ -55,6 +58,7 @@ type UserDBService interface {
 	CreateUserTx(ctx context.Context, users []*service.User) error
 	GetStudent(ctx context.Context, id string) (*service.StudentWithUser, error)
 	GetexistingTeachers(ctx context.Context) ([]string, error)
+	GetAllTeachers(ctx context.Context) ([]*service.User, error)
 }
 
 type RClient interface {

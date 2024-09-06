@@ -1,13 +1,14 @@
 package strings
 
 import (
+	arrays "api/internal/lib/arrays"
+	classroom "api/internal/service"
 	"crypto/sha256"
 	"fmt"
+	"regexp"
 	"slices"
 	"strconv"
 	"strings"
-
-	classroom "api/internal/service"
 )
 
 const TimeFormat = "00:00"
@@ -32,17 +33,18 @@ func CacheKey(t string, i string) string {
  * @returns The formatted teacher name.
  */
 func FormatTeacherNames(teacherName string) string {
-	// Split the teacher name into parts.
 	parts := strings.Split(teacherName, ", ")
-	// Reverse the order of the parts.
 	slices.Reverse(parts)
-	// delete middle initial
-	switch len(parts) {
-	case 3:
-		parts = append(parts[:1], parts[2:]...)
+	formattedName := strings.Join(parts, " ")
+
+	formattedParts := strings.Split(formattedName, " ")
+	if len(formattedParts) > 2 {
+		formattedParts = arrays.EZFilter(formattedParts, func(el string) bool {
+			return len(el) > 1
+		})
 	}
-	// Join the parts back together.
-	return strings.Join(parts, " ")
+	teacher := strings.Join(formattedParts, " ")
+	return teacher
 }
 
 func ChatHrefConstructor(id1 string, id2 string) string {
@@ -75,4 +77,45 @@ func GetHashKey(_filter string) string {
 	bs := h.Sum(nil)
 
 	return fmt.Sprintf("%x", bs)
+}
+
+func SafeStringPtr(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
+}
+
+var nicknameMap = map[string]string{
+	"mike":  "michael",
+	"matt":  "matthew",
+	"steve": "steven",
+	"jim":   "james",
+	"jimmy": "james",
+	"liz":   "elizabeth",
+	"beth":  "elizabeth",
+	"dan":   "daniel",
+	"chris": "christopher",
+	"jon":   "jonathan",
+	"jonny": "jonathan",
+	"john":  "jonathan",
+	"joe":   "joseph",
+	"nick":  "nicholas",
+	"jen":   "jennifer",
+	"dave":  "david",
+	"doug":  "douglas",
+	"dug":   "douglas",
+	"kate":  "katherine",
+}
+
+func Normalize(name string) []string {
+	lower := strings.ToLower(name)
+	split := regexp.MustCompile(`\s+|,|\.`).Split(lower, -1)
+	for i, part := range split {
+		part = strings.Trim(part, " ")
+		if val, ok := nicknameMap[part]; ok {
+			split[i] = val
+		}
+	}
+	return split
 }

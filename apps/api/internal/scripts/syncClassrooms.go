@@ -2,13 +2,14 @@ package scripts
 
 import (
 	"api/internal/config"
-	"api/internal/lib/icAuth"
+	"api/internal/lib/arrays"
+
 	"api/internal/service"
 	"context"
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"time"
+
+	"sync"
+
+	"golang.org/x/sync/errgroup"
 )
 
 type LinkObject struct {
@@ -37,57 +38,196 @@ type ClassResponse struct {
 
 var env = config.GetEnv()
 
-type ChanResponse[T any] struct {
-	data []*T
-	err  error
+type ChanResponse struct {
+	dbData  []*service.Classroom
+	icData  []*service.Classroom
+	dbUsers []*service.User
+	err     error
 }
 
-func (s *Scripts) SyncClassrooms() {
-	existingClasses := make(chan ChanResponse[service.ClassroomWithAvailable])
-	ctx := context.Background()
+func (s *Scripts) SyncClassrooms(ctx context.Context) error {
+	results := make(chan ChanResponse)
+
+	var wg sync.WaitGroup
+	wg.Add(3)
 	go func() {
-		defer close(existingClasses)
-		classes, err := s.classroomRepo.GetClassrooms(ctx)
-		existingClasses <- ChanResponse[service.ClassroomWithAvailable]{data: classes, err: err}
+		defer wg.Done()
+		classes, err := s.classroomRepo.GetClassroomsNoDates(ctx)
+		results <- ChanResponse{dbData: classes, err: err}
+	}()
+	go func() {
+		defer wg.Done()
+		icClasses, err := s.GetClasses()
+		results <- ChanResponse{icData: icClasses, err: err}
+	}()
+	go func() {
+		defer wg.Done()
+		users, err := s.userRepo.GetAllTeachers(ctx)
+		results <- ChanResponse{dbUsers: users, err: err}
 	}()
 
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	var (
+		dbClasses     []*service.Classroom
+		campusClasses []*service.Classroom
+		dbTeachers    []*service.User
+		fetchErr      error
+	)
+	for res := range results {
+		if res.err != nil {
+			fetchErr = res.err
+			break
+		}
+		if res.dbData != nil {
+			dbClasses = res.dbData
+		}
+		if res.icData != nil {
+			campusClasses = res.icData
+		}
+		if res.dbUsers != nil {
+			dbTeachers = res.dbUsers
+		}
+	}
+
+	if fetchErr != nil {
+		s.log.Error("Error retrieving data", "err", fetchErr)
+		return fetchErr
+	}
+	if len(dbClasses) == 0 {
+		err := s.AddAllClassesToDB(ctx, campusClasses, dbTeachers)
+		if err != nil {
+			s.log.Error("Error adding all classes to DB", "err", err)
+			return err
+		}
+		return nil
+	} else {
+		err := s.UpdateExistingClasses(ctx, dbClasses, campusClasses, dbTeachers)
+		if err != nil {
+			s.log.Error("Error updating existing classes", "err", err)
+			return err
+
+		}
+	}
+	return nil
 }
 
-func (s *Scripts) getClasses() (*ClassResponse, error) {
-	token, err := icAuth.IcAuth(s.cache)
+func (s *Scripts) AddAllClassesToDB(ctx context.Context, classes []*service.Classroom, users []*service.User) error {
+	s.log.Info("No classrooms found in DB, adding all from Infinite Campus")
+	var (
+		dataToInsert []*service.Classroom
+		mu           sync.Mutex
+	)
+	concurrencyLimit := 10
+	sem := make(chan struct{}, concurrencyLimit)
+	g, ctx := errgroup.WithContext(ctx)
+	newTeacherCount := 0
+	for _, class := range classes {
+		class := class
+		sem <- struct{}{}
+		g.Go(func() error {
+			defer func() { <-sem }()
+			teacher, userId, err := s.Formatting(class, users)
+			if err != nil {
+				return err
+			}
+			class.TeacherName = teacher
+			class.TeacherId = userId
+			mu.Lock()
+			dataToInsert = append(dataToInsert, class)
+			newTeacherCount++
+			mu.Unlock()
+			return nil
+		})
+	}
+	if err := g.Wait(); err != nil {
+		return err
+	}
+	s.log.Info("Adding new classrooms to DB", "count", newTeacherCount)
+	err := s.classroomRepo.NewClassroomTx(ctx, dataToInsert)
 	if err != nil {
-		return nil, err
+		s.log.Error("Error inserting classrooms", "err", err)
+		return err
 	}
-	client := &http.Client{
-		Timeout: time.Second * 10,
-	}
-	req, err := http.NewRequest("GET", s.ICClassQuery(), nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("X-XSRF-TOKEN", env.XSRF_TOKEN)
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	var res ClassResponse
-	err = json.NewDecoder(resp.Body).Decode(&res)
-	if err != nil {
-		return nil, err
-	}
-
-	return &res, nil
+	return nil
 }
 
-func (s *Scripts) ICQuery() string {
-	appName := env.ONEROSTER_APPNAME
-	return fmt.Sprintf("https://mtdecloud2.infinitecampus.org/campus/api/oneroster/v1p2/%s/ims/oneroster/rostering/v1p2", appName)
-}
+func (s *Scripts) UpdateExistingClasses(ctx context.Context, dbClasses []*service.Classroom, campusClasses []*service.Classroom, users []*service.User) error {
+	availableClasses := arrays.EZFilter(dbClasses, func(class *service.Classroom) bool {
+		return class.Available == true
+	})
 
-func (s *Scripts) ICClassQuery() string {
-	SourceID := env.LHS_SOURCE_ID
-	return fmt.Sprintf("%s/schools/%s/classes?limit=1200", s.ICQuery(), SourceID)
+	availableIds, existingIds, fetchedIds := s.CreateClassSets(availableClasses, dbClasses, campusClasses)
+	classesToDelete := arrays.EZFilter(dbClasses, func(class *service.Classroom) bool {
+		_, ok := fetchedIds[class.Id]
+		return !ok
+	})
+
+	classesToDeleteIds := arrays.EZMap(classesToDelete, func(class *service.Classroom) string {
+		return class.Id
+	})
+
+	classesToUpdate := arrays.EZFilter(campusClasses, func(class *service.Classroom) bool {
+		return arrays.EZSome(dbClasses, func(dbClass *service.Classroom) bool {
+			return dbClass.Id == class.Id &&
+				dbClass.RoomNumber != class.RoomNumber &&
+				availableIds[dbClass.Id] == struct{}{}
+		})
+	})
+
+	classesToInsert := arrays.EZFilter(campusClasses, func(class *service.Classroom) bool {
+		_, ok := existingIds[class.Id]
+		return !ok
+	})
+
+	mu := sync.Mutex{}
+	concurrencyLimit := 10
+	sem := make(chan struct{}, concurrencyLimit)
+	g, ctx := errgroup.WithContext(ctx)
+	if len(classesToDelete) > 0 {
+		sem <- struct{}{}
+		g.Go(func() error {
+			return RunInMutex(sem, &mu, func() error {
+				return s.classroomRepo.DeleteClassroomTx(ctx, classesToDeleteIds)
+			})
+		})
+	}
+	if len(classesToUpdate) > 0 {
+		sem <- struct{}{}
+		g.Go(func() error {
+			return RunInMutex(sem, &mu, func() error {
+				return s.classroomRepo.UpdateClassroomTx(ctx, classesToUpdate)
+			})
+		})
+	}
+	if len(classesToInsert) > 0 {
+		dataToInsert := make([]*service.Classroom, 0)
+		var toInsertMu sync.Mutex
+		for _, class := range classesToInsert {
+			sem <- struct{}{}
+			g.Go(func() error {
+				defer func() { <-sem }()
+				teacher, userId, err := s.Formatting(class, users)
+				if err != nil {
+					return err
+				}
+				class.TeacherName = teacher
+				class.TeacherId = userId
+
+				toInsertMu.Lock()
+				dataToInsert = append(dataToInsert, class)
+				toInsertMu.Unlock()
+
+				return nil
+			})
+		}
+	}
+	if err := g.Wait(); err != nil {
+		return err
+	}
+	return nil
+
 }

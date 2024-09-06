@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// EZMap applies a function to each element of a slice and returns a new slice with the results. similar to Array.prototype.map in JavaScript.
 func EZMap[T any, M any](a []T, f func(T) M) []M {
 	n := make([]M, len(a))
 
@@ -13,6 +14,19 @@ func EZMap[T any, M any](a []T, f func(T) M) []M {
 	}
 
 	return n
+}
+
+// EZSet applies a function to each element of a slice and returns a map with the specified key and value, similar to new Set(array.map()) in JavaScript.
+
+func EZSet[T any, K comparable](data []T, extractKey func(T) K) map[K]struct{} {
+	result := make(map[K]struct{})
+
+	for _, element := range data {
+		key := extractKey(element)
+		result[key] = struct{}{} // struct{} is a zero-size value in Go
+	}
+
+	return result
 }
 
 func EZFilter[T any](input []T, comparator func(el T) bool) []T {
@@ -83,4 +97,27 @@ func EZSum[T any, V int64 | float64 | int | time.Duration](input []T, f func(el 
 	}
 
 	return sum
+}
+
+func EZConcat[T any](first []T, second []T) []T {
+	n := len(first)
+	return append(first[:n:n], second...)
+}
+
+func EZEvery(input []string, predicate func(value string) bool) bool {
+	for _, v := range input {
+		if !predicate(v) {
+			return false
+		}
+	}
+	return true
+}
+
+func EZSome[T any](arr []T, predicate func(T) bool) bool {
+	for _, element := range arr {
+		if predicate(element) {
+			return true
+		}
+	}
+	return false
 }

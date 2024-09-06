@@ -21,3 +21,6 @@ INSERT INTO "user" ("id", "name", "email", "role") VALUES ($1, $2, $3, $4) ON CO
 
 -- name: GetAllTeacherIds :many
 SELECT "id" FROM "user" WHERE "role" = 'teacher'; 
+
+-- name: GetAllTeachers :many
+SELECT sqlc.embed(u) FROM "user" u WHERE "role" = 'teacher';
