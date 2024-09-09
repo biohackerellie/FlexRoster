@@ -38,6 +38,7 @@ func (s *Scripts) AzureUsers() error {
 
 	token, err := s.azureAuth()
 	if err != nil {
+		s.log.Error("error getting azure token")
 		return err
 	}
 
@@ -62,6 +63,7 @@ func (s *Scripts) AzureUsers() error {
 	go func() {
 		defer wg.Done()
 		data, err := fetchAllUsers(staffLink, token)
+		s.log.Debug(data)
 		results <- result{data, err, staffGroup}
 	}()
 	go func() {
@@ -96,6 +98,7 @@ func (s *Scripts) AzureUsers() error {
 		return err
 	}
 	existingTeacherIds := make(map[string]bool)
+	s.log.Info("Existing teachers", "info", existingTeachers)
 	secMap := make(map[string]bool)
 	for _, id := range existingTeachers {
 		existingTeacherIds[id] = true
@@ -129,7 +132,6 @@ func (s *Scripts) AzureUsers() error {
 			})
 		}
 	}
-
 	if len(newTeachers) > 0 {
 		err = s.userRepo.CreateUserTx(ctx, newTeachers)
 		if err != nil {
@@ -151,7 +153,7 @@ func fetchAllUsers(link string, token string) ([]AzureUser, error) {
 		}
 
 		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
-		req.Header.Set("ConistencyLevel", "eventual")
+		req.Header.Set("ConsistencyLevel", "eventual")
 
 		client := &http.Client{}
 		resp, err := client.Do(req)
@@ -167,8 +169,8 @@ func fetchAllUsers(link string, token string) ([]AzureUser, error) {
 		}
 
 		users = append(users, res.Value...)
-
 		link = res.NextLink
+		fmt.Println(link)
 	}
 
 	return users, nil
@@ -177,7 +179,7 @@ func fetchAllUsers(link string, token string) ([]AzureUser, error) {
 func (s *Scripts) azureAuth() (string, error) {
 	token, err := s.cache.Get("azureToken")
 	if err != nil {
-		newToken, err := fetchNewToken()
+		newToken, err := s.fetchNewToken()
 		if err != nil {
 			return "", err
 		}
@@ -193,16 +195,18 @@ type TokenResponse struct {
 	ExpiresIn   int    `json:"expires_in"`
 }
 
-func fetchNewToken() (TokenResponse, error) {
+func (s *Scripts) fetchNewToken() (TokenResponse, error) {
 	data := url.Values{}
 	data.Add("client_id", Config.AZURE_AD_CLIENT_ID)
 	data.Add("scope", "https://graph.microsoft.com/.default")
 	data.Add("client_secret", Config.AZURE_AD_CLIENT_SECRET)
 	data.Add("grant_type", "client_credentials")
-
-	req, err := http.NewRequest("POST", "https://login.microsoftonline.com/"+Config.AZURE_AD_TENANT_ID+"/oauth2/v2.0/token", bytes.NewBufferString(data.Encode()))
+	requestUrl := fmt.Sprintf("https://login.microsoftonline.com/%s/oauth2/v2.0/token", Config.AZURE_AD_TENANT_ID)
+	s.log.Info("Fetching new token with client id", "info", requestUrl)
+	req, err := http.NewRequest("POST", requestUrl, bytes.NewBufferString(data.Encode()))
 
 	if err != nil {
+
 		return TokenResponse{}, err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")

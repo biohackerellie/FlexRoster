@@ -22,3 +22,6 @@ seed:
 
 logs:
 	./bin/scripts/main -logs
+
+nightly:
+	./bin/scripts/main -nightly

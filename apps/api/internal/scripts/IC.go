@@ -42,7 +42,7 @@ func (s *Scripts) GetClasses() ([]*service.Classroom, error) {
 
 }
 
-var VemesterClassName = env.SEMESTER_CLASS_NAME
+var semesterClassName = env.SEMESTER_CLASS_NAME
 
 // func that performs multiple mutations on the class data
 

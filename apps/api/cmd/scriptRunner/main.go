@@ -22,7 +22,7 @@ func main() {
 	log := logger.New()
 
 	config := config.GetEnv()
-
+	log.Info(config)
 	redisHost1 := config.REDIS_HOST1 + ":" + config.REDIS_PORT
 	log.Info("Connecting to Redis", "host", redisHost1)
 	cache := redis.NewClient(&redis.Options{
@@ -56,7 +56,8 @@ func main() {
 	scriptRunner := scripts.NewScript(redisClient, classroomRepo, studentRepo, userRepo, logsRepo).WithLogger(log)
 	seedFlag := flag.Bool("seed", false, "seed the database")
 	logFlag := flag.Bool("logs", false, "process logs")
-	azureFlag := flag.Bool("azure", false, "sync azure users")
+	nightlyFlag := flag.Bool("nightly", false, "run nightly script")
+
 	flag.Parse()
 
 	if *seedFlag {
@@ -97,7 +98,27 @@ func main() {
 			log.Warn("Received signal:", sig, "Shutting down.")
 			cancel()
 		}
+
+	} else if *nightlyFlag {
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+		done := make(chan error, 1)
+		go func() {
+			done <- scriptRunner.Nightly(ctx)
+		}()
+		select {
+		case err := <-done:
+			if err != nil {
+				log.Fatal("error running nightly script", "err", err)
+			} else {
+				log.Info("Nightly script completed successfully.")
+			}
+		case sig := <-waitForShutdown(log):
+			log.Warn("Received signal:", sig, "Shutting down.")
+			cancel()
+		}
 	} else {
+
 		flag.Usage()
 	}
 	waitForShutdown(log)
