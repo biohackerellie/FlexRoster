@@ -7,40 +7,47 @@ import (
 )
 
 type Env struct {
-	SERVER_HOST             string           `mapstructure:"SERVER_HOST"`
-	SERVER_PORT             string           `mapstructure:"SERVER_PORT"`
-	DSN                     string           `mapstructure:"DSN"`
-	REDIS_HOST1             string           `mapstructure:"REDIS_HOST1"`
-	REDIS_HOST2             string           `mapstructure:"REDIS_HOST2"`
-	REDIS_HOST3             string           `mapstructure:"REDIS_HOST3"`
-	REDIS_PORT              string           `mapstructure:"REDIS_PORT"`
-	ONEROSTER_CLIENT_ID     string           `mapstructure:"ONEROSTER_CLIENT_ID"`
-	ONEROSTER_CLIENT_SECRET string           `mapstructure:"ONEROSTER_CLIENT_SECRET"`
-	LHS_SOURCE_ID           string           `mapstructure:"LHS_SOURCE_ID"`
-	XSRF_TOKEN              string           `mapstructure:"XSRF_TOKEN"`
-	REDIS_URL               string           `mapstructure:"REDIS_URL"`
-	REDIS_PASSWORD          string           `mapstructure:"REDIS_PASSWORD"`
-	AZURE_TEACHER_GROUP     string           `mapstructure:"AZURE_TEACHER_GROUP"`
-	SECRETARIES             []string         `json:"SECRETARIES"`
-	AZURE_HELPDESK_GROUP    string           `mapstructure:"AZURE_HELPDESK_GROUP"`
-	AZURE_OTHERUSERS_GROUP  string           `mapstructure:"AZURE_OTHERUSERS_GROUP"`
-	AZURE_AD_CLIENT_ID      string           `mapstructure:"AZURE_AD_CLIENT_ID"`
-	AZURE_AD_CLIENT_SECRET  string           `mapstructure:"AZURE_AD_CLIENT_SECRET"`
-	AZURE_AD_TENANT_ID      string           `mapstructure:"AZURE_AD_TENANT_ID"`
-	ONEROSTER_APPNAME       string           `mapstructure:"ONEROSTER_APPNAME"`
-	SEMESTER_CLASS_NAME     string           `mapstructure:"SEMESTER_CLASS_NAME"`
-	PREFERRED_NAMES         []PreferredNames `json:"PREFERRED_NAMES"`
+	ClientHost          string `mapstructure:"client_host"`
+	AzureADClientID     string `mapstructure:"azure_ad_client_id"`
+	AzureADClientSecret string `mapstructure:"azure_ad_client_secret"`
+	AzureADTenantID     string `mapstructure:"azure_ad_tenant_id"`
+
+	ServerPort            string           `mapstructure:"server_port"`
+	ServerHost            string           `mapstructure:"server_host"`
+	OnerosterClientID     string           `mapstructure:"oneroster_client_id"`
+	OnerosterClientSecret string           `mapstructure:"oneroster_client_secret"`
+	OnerosterAppName      string           `mapstructure:"oneroster_appname"`
+	OnerosterBaseURL      string           `mapstructure:"oneroster_base_url"`
+	DSN                   string           `mapstructure:"dsn"`
+	XSRFToken             string           `mapstructure:"xsrf_token"`
+	RedisHost             string           `mapstructure:"redis_host"`
+	RedisPort             string           `mapstructure:"redis_port"`
+	SourceID              string           `mapstructure:"source_id"`
+	WorkingDir            string           `mapstructure:"working_dir"`
+	AzureStudentGroup     string           `mapstructure:"azure_student_group"`
+	AzureTeacherGroup     string           `mapstructure:"azure_teacher_group"`
+	AzureHelpdeskGroup    string           `mapstructure:"azure_helpdesk_group"`
+	AzureOtherUsersGroup  string           `mapstructure:"azure_otherusers_group"`
+	EmailAPI              string           `mapstructure:"email_api"`
+	EmailAPIKey           string           `mapstructure:"email_api_key"`
+	SemesterClassName     string           `mapstructure:"semester_class_name"`
+	Secretaries           []string         `mapstructure:"secretaries"`
+	PreferredNames        []PreferredNames `mapstructure:"preferred_names"`
+	ExcludedTeachers      []string         `mapstructure:"excluded_teachers"`
+	TechDepartmentEmails  []string         `mapstructure:"tech_department_emails"`
 }
+
 type PreferredNames struct {
-	GivenName     string `json:"givenName"`
-	PreferredName string `json:"preferredName"`
+	GivenName     string `mapstructure:"givenName"`
+	PreferredName string `mapstructure:"preferredName"`
 }
 
 func loadEnv() (env *Env, err error) {
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("../../")
 	viper.AddConfigPath("$HOME/github/FlexRoster/apps/api")
-	viper.SetConfigFile(".env")
+	viper.SetConfigFile("config.yaml")
+	viper.SetConfigType("yaml")
 	viper.AutomaticEnv()
 	err = viper.ReadInConfig()
 	if err != nil {

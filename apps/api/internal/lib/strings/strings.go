@@ -80,10 +80,16 @@ func GetHashKey(_filter string) string {
 }
 
 func SafeStringPtr(s *string) string {
-	if s == nil {
-		return ""
+	if s != nil {
+		return *s
 	}
-	return *s
+	return ""
+}
+func SafeBoolPointer(b *bool) bool {
+	if b != nil {
+		return *b
+	}
+	return false
 }
 
 var nicknameMap = map[string]string{

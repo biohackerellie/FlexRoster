@@ -11,7 +11,7 @@ import (
 	"sync"
 )
 
-var preferredNames = env.PREFERRED_NAMES
+var preferredNames = env.PreferredNames
 
 func (s *Scripts) Formatting(class *service.Classroom, users []*service.User) (teacher string, userId string, errors error) {
 	teacherName := str.FormatTeacherNames(class.TeacherName)

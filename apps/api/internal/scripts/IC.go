@@ -26,7 +26,7 @@ func (s *Scripts) GetClasses() ([]*service.Classroom, error) {
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("X-XSRF-TOKEN", env.XSRF_TOKEN)
+	req.Header.Set("X-XSRF-TOKEN", env.XSRFToken)
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	resp, err := client.Do(req)
 	if err != nil {
@@ -34,15 +34,18 @@ func (s *Scripts) GetClasses() ([]*service.Classroom, error) {
 	}
 	defer resp.Body.Close()
 	var res ClassResponse
+	s.log.Info("IC Response", "status", resp.Status)
+
 	err = json.NewDecoder(resp.Body).Decode(&res)
 	if err != nil {
 		return nil, err
 	}
-	return s.mutateClassData(res.Classes), nil
+	result := s.mutateClassData(res.Classes)
+	return result, nil
 
 }
 
-var semesterClassName = env.SEMESTER_CLASS_NAME
+var semesterClassName = env.SemesterClassName
 
 // func that performs multiple mutations on the class data
 
@@ -112,11 +115,48 @@ func (s *Scripts) mutateClassData(c []ClassInfo) []*service.Classroom {
 // Get classRooms from Infinite Campus
 
 func (s *Scripts) ICQuery() string {
-	appName := env.ONEROSTER_APPNAME
+	appName := env.OnerosterAppName
 	return fmt.Sprintf("https://mtdecloud2.infinitecampus.org/campus/api/oneroster/v1p2/%s/ims/oneroster/rostering/v1p2", appName)
 }
 
 func (s *Scripts) ICClassQuery() string {
-	SourceID := env.LHS_SOURCE_ID
+	SourceID := env.SourceID
 	return fmt.Sprintf("%s/schools/%s/classes?limit=1200", s.ICQuery(), SourceID)
+}
+
+func (s *Scripts) GetICStudents(classId string) ([]*service.Student, error) {
+	token, err := icAuth.IcAuth(s.cache)
+	if err != nil {
+		return nil, err
+	}
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
+	req, err := http.NewRequest("GET", s.ICQuery(), nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-XSRF-TOKEN", env.XSRFToken)
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	var res RosterResponse
+	s.log.Info("IC Response", "status", resp.Status)
+
+	err = json.NewDecoder(resp.Body).Decode(&res)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*service.Student, 0)
+	for _, student := range res.Students {
+		fullName := fmt.Sprintf("%s %s", student.FirstName, student)
+		result = append(result, &service.Student{
+			StudentEmail: student.Email,
+			StudentName: student.,
+			
+
 }

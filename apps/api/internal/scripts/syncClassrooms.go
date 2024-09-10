@@ -7,34 +7,11 @@ import (
 	"api/internal/service"
 	"context"
 
+	"fmt"
 	"sync"
 
 	"golang.org/x/sync/errgroup"
 )
-
-type LinkObject struct {
-	Href      string `json:"href"`
-	SourcedId string `json:"sourcedId"`
-	Type      string `json:"type"`
-}
-
-type ClassInfo struct {
-	SourcedId        string       `json:"sourcedId"`
-	Status           string       `json:"status"`
-	DateLastModified string       `json:"dateLastModified"`
-	Title            string       `json:"title"`
-	ClassType        string       `json:"classType"`
-	ClassCode        string       `json:"classCode"`
-	Location         *string      `json:"location,omitempty"`
-	Course           LinkObject   `json:"course"`
-	School           LinkObject   `json:"school"`
-	Terms            []LinkObject `json:"terms"`
-	Periods          []string     `json:"periods"`
-}
-
-type ClassResponse struct {
-	Classes []ClassInfo `json:"classes"`
-}
 
 var env = config.GetEnv()
 
@@ -47,7 +24,9 @@ type ChanResponse struct {
 
 func (s *Scripts) SyncClassrooms(ctx context.Context) error {
 	results := make(chan ChanResponse)
-
+	if s.classroomRepo == nil {
+		return fmt.Errorf("classroomRepo is nil")
+	}
 	var wg sync.WaitGroup
 	wg.Add(3)
 	go func() {
@@ -84,12 +63,21 @@ func (s *Scripts) SyncClassrooms(ctx context.Context) error {
 		}
 		if res.dbData != nil {
 			dbClasses = res.dbData
+			s.log.Info("DB Classrooms fetched", "count", len(dbClasses))
+		} else {
+			s.log.Warn("No classrooms found in DB")
 		}
 		if res.icData != nil {
 			campusClasses = res.icData
+			s.log.Info("Campus Classrooms fetched", "count", len(campusClasses))
+		} else {
+			s.log.Warn("No classrooms found in Infinite Campus")
 		}
 		if res.dbUsers != nil {
 			dbTeachers = res.dbUsers
+			s.log.Info("DB Teachers fetched", "count", len(dbTeachers))
+		} else {
+			s.log.Warn("No teachers found in DB")
 		}
 	}
 
@@ -132,7 +120,8 @@ func (s *Scripts) AddAllClassesToDB(ctx context.Context, classes []*service.Clas
 			defer func() { <-sem }()
 			teacher, userId, err := s.Formatting(class, users)
 			if err != nil {
-				return err
+				s.log.Warn("Error formatting teacher", "err", err)
+				return nil
 			}
 			class.TeacherName = teacher
 			class.TeacherId = userId
@@ -147,7 +136,7 @@ func (s *Scripts) AddAllClassesToDB(ctx context.Context, classes []*service.Clas
 		return err
 	}
 	s.log.Info("Adding new classrooms to DB", "count", newTeacherCount)
-	err := s.classroomRepo.NewClassroomTx(ctx, dataToInsert)
+	err := s.classroomRepo.NewClassroomTx(context.Background(), dataToInsert)
 	if err != nil {
 		s.log.Error("Error inserting classrooms", "err", err)
 		return err
@@ -212,7 +201,8 @@ func (s *Scripts) UpdateExistingClasses(ctx context.Context, dbClasses []*servic
 				defer func() { <-sem }()
 				teacher, userId, err := s.Formatting(class, users)
 				if err != nil {
-					return err
+					s.log.Warn("Error formatting teacher", "err", err)
+					return nil
 				}
 				class.TeacherName = teacher
 				class.TeacherId = userId

@@ -13,26 +13,14 @@ import (
 	"time"
 )
 
-type AzureResponse[T any] struct {
-	Context  string `json:"@odata.context"`
-	NextLink string `json:"@odata.nextLink"`
-	Value    []T    `json:"value"`
-}
-
-type AzureUser struct {
-	ID                string `json:"id"`
-	DisplayName       string `json:"displayName"`
-	UserPrincipalName string `json:"userPrincipalName"`
-}
-
 var Config = config.GetEnv()
 
 func (s *Scripts) AzureUsers() error {
 
 	var (
-		secretaries    = Config.SECRETARIES
-		staffLink      = createQueryString(Config.AZURE_TEACHER_GROUP)
-		otherUsersLink = createQueryString(Config.AZURE_OTHERUSERS_GROUP)
+		secretaries    = Config.Secretaries
+		staffLink      = createQueryString(Config.AzureTeacherGroup)
+		otherUsersLink = createQueryString(Config.AzureOtherUsersGroup)
 		ctx            = context.Background()
 	)
 
@@ -62,13 +50,13 @@ func (s *Scripts) AzureUsers() error {
 
 	go func() {
 		defer wg.Done()
-		data, err := fetchAllUsers(staffLink, token)
-		s.log.Debug(data)
+		data, err := s.fetchAllUsers(staffLink, token)
+		s.log.Debug("users fetched: ", "info", data)
 		results <- result{data, err, staffGroup}
 	}()
 	go func() {
 		defer wg.Done()
-		data, err := fetchAllUsers(otherUsersLink, token)
+		data, err := s.fetchAllUsers(otherUsersLink, token)
 		results <- result{data, err, otherGroup}
 	}()
 
@@ -98,7 +86,6 @@ func (s *Scripts) AzureUsers() error {
 		return err
 	}
 	existingTeacherIds := make(map[string]bool)
-	s.log.Info("Existing teachers", "info", existingTeachers)
 	secMap := make(map[string]bool)
 	for _, id := range existingTeachers {
 		existingTeacherIds[id] = true
@@ -143,12 +130,14 @@ func (s *Scripts) AzureUsers() error {
 	return nil
 }
 
-func fetchAllUsers(link string, token string) ([]AzureUser, error) {
+func (s *Scripts) fetchAllUsers(link string, token string) ([]AzureUser, error) {
 	var users []AzureUser
 
 	for link != "" {
+		s.log.Debug("Fetching users", "link", link)
 		req, err := http.NewRequest("GET", link, nil)
 		if err != nil {
+			s.log.Error("Error fetching users", "stage", "1")
 			return nil, err
 		}
 
@@ -158,6 +147,7 @@ func fetchAllUsers(link string, token string) ([]AzureUser, error) {
 		client := &http.Client{}
 		resp, err := client.Do(req)
 		if err != nil {
+			s.log.Error("Error fetching users", "stage", "2")
 			return nil, err
 		}
 		defer resp.Body.Close()
@@ -165,12 +155,14 @@ func fetchAllUsers(link string, token string) ([]AzureUser, error) {
 		var res AzureResponse[AzureUser]
 		err = json.NewDecoder(resp.Body).Decode(&res)
 		if err != nil {
+			s.log.Error("Error fetching users", "stage", "3")
 			return nil, err
 		}
 
 		users = append(users, res.Value...)
 		link = res.NextLink
-		fmt.Println(link)
+		s.log.Debug("Next link", "link", link)
+		s.log.Debug("Users", "users", users)
 	}
 
 	return users, nil
@@ -197,16 +189,15 @@ type TokenResponse struct {
 
 func (s *Scripts) fetchNewToken() (TokenResponse, error) {
 	data := url.Values{}
-	data.Add("client_id", Config.AZURE_AD_CLIENT_ID)
+	data.Add("client_id", Config.AzureADClientID)
 	data.Add("scope", "https://graph.microsoft.com/.default")
-	data.Add("client_secret", Config.AZURE_AD_CLIENT_SECRET)
+	data.Add("client_secret", Config.AzureADClientSecret)
 	data.Add("grant_type", "client_credentials")
-	requestUrl := fmt.Sprintf("https://login.microsoftonline.com/%s/oauth2/v2.0/token", Config.AZURE_AD_TENANT_ID)
-	s.log.Info("Fetching new token with client id", "info", requestUrl)
+	requestUrl := fmt.Sprintf("https://login.microsoftonline.com/%s/oauth2/v2.0/token", Config.AzureADTenantID)
 	req, err := http.NewRequest("POST", requestUrl, bytes.NewBufferString(data.Encode()))
 
 	if err != nil {
-
+		s.log.Error("Error querying msGraph", "stage", "1")
 		return TokenResponse{}, err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -215,6 +206,7 @@ func (s *Scripts) fetchNewToken() (TokenResponse, error) {
 	resp, err := client.Do(req)
 
 	if err != nil {
+		s.log.Error("Error querying msGraph", "stage", "2")
 		return TokenResponse{}, err
 	}
 	defer resp.Body.Close()
@@ -224,6 +216,7 @@ func (s *Scripts) fetchNewToken() (TokenResponse, error) {
 	var tokenResponse TokenResponse
 	err = json.NewDecoder(resp.Body).Decode(&tokenResponse)
 	if err != nil {
+		s.log.Error("Error querying msGraph", "stage", "3")
 		return TokenResponse{}, err
 	}
 	return tokenResponse, nil

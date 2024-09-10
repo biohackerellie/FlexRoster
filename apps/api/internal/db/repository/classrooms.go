@@ -10,6 +10,8 @@ import (
 	"api/internal/lib/logger"
 	classroom "api/internal/service"
 
+	str "api/internal/lib/strings"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -69,9 +71,9 @@ func (s *ClassroomDBService) GetClassroomsNoDates(ctx context.Context) ([]*class
 			Id:          r.ID,
 			RoomNumber:  r.RoomNumber,
 			TeacherName: r.TeacherName,
-			TeacherId:   *r.TeacherId,
-			Comment:     *r.Comment,
-			IsFlex:      *r.IsFlex,
+			TeacherId:   str.SafeStringPtr(r.TeacherId),
+			Comment:     str.SafeStringPtr(r.Comment),
+			IsFlex:      str.SafeBoolPointer(r.IsFlex),
 			Available:   r.Available,
 		}
 		response[i] = mappedResponse
@@ -91,7 +93,7 @@ func (s *ClassroomDBService) GetAvailability(ctx context.Context) ([]*classroom.
 			ClassroomId: r.ClassroomId,
 			Date:        r.Date.Time,
 			Available:   r.Available,
-			TeacherId:   *r.TeacherId,
+			TeacherId:   str.SafeStringPtr(r.TeacherId),
 		}
 		response[i] = mappedResponse
 	}
@@ -111,7 +113,7 @@ func (s *ClassroomDBService) GetTeacherAvailability(ctx context.Context, teacher
 			ClassroomId: r.ClassroomId,
 			Date:        r.Date.Time,
 			Available:   r.Available,
-			TeacherId:   *r.TeacherId,
+			TeacherId:   str.SafeStringPtr(r.TeacherId),
 		}
 		response[i] = mappedResponse
 	}
@@ -152,9 +154,9 @@ func (s *ClassroomDBService) RoomsWithRosterCount(ctx context.Context) ([]*class
 				Id:          r.ID,
 				RoomNumber:  r.RoomNumber,
 				TeacherName: r.TeacherName,
-				TeacherId:   *r.TeacherId,
-				Comment:     *r.Comment,
-				IsFlex:      *r.IsFlex,
+				TeacherId:   str.SafeStringPtr(r.TeacherId),
+				Comment:     str.SafeStringPtr(r.Comment),
+				IsFlex:      str.SafeBoolPointer(r.IsFlex),
 			},
 			Count: r.Count,
 		}
@@ -175,7 +177,7 @@ func (s *ClassroomDBService) ClassroomSchedule(ctx context.Context, classroomid 
 			ClassroomId: r.Availability.ClassroomId,
 			Date:        r.Availability.Date.Time,
 			Available:   r.Availability.Available,
-			TeacherId:   *r.Availability.TeacherId,
+			TeacherId:   str.SafeStringPtr(r.Availability.TeacherId),
 		}
 		result[i] = mappedResponse
 	}
@@ -239,9 +241,9 @@ func (s *ClassroomDBService) mapClassroom(r ClassroomQueryRow, ch chan<- *classr
 			Id:          r.ID,
 			RoomNumber:  r.RoomNumber,
 			TeacherName: r.TeacherName,
-			TeacherId:   *r.TeacherId,
-			Comment:     *r.Comment,
-			IsFlex:      *r.IsFlex,
+			TeacherId:   str.SafeStringPtr(r.TeacherId),
+			Comment:     str.SafeStringPtr(r.Comment),
+			IsFlex:      str.SafeBoolPointer(r.IsFlex),
 			Available:   r.Available,
 		},
 		AvailableDates: dates,
@@ -306,4 +308,24 @@ func (s *ClassroomDBService) DeleteClassroomTx(ctx context.Context, ids []string
 		}
 	}
 	return tx.Commit(ctx)
+}
+
+func (s *ClassroomDBService) GetFlexClasses(ctx context.Context) ([]*classroom.Classroom, error) {
+	res, err := s.q.GetFlexClassrooms(ctx)
+	if err != nil {
+		return nil, err
+	}
+	response := make([]*classroom.Classroom, len(res))
+	for i, r := range res {
+		mappedResponse := &classroom.Classroom{
+			Id:          r.ID,
+			RoomNumber:  r.RoomNumber,
+			TeacherName: r.TeacherName,
+			TeacherId:   str.SafeStringPtr(r.TeacherId),
+			Comment:     str.SafeStringPtr(r.Comment),
+			IsFlex:      str.SafeBoolPointer(r.IsFlex),
+		}
+		response[i] = mappedResponse
+	}
+	return response, nil
 }

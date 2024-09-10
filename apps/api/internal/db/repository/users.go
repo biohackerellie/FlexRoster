@@ -1,13 +1,13 @@
 package db
 
 import (
-	"context"
-
 	config "api/internal/config"
 	errors "api/internal/lib/errors"
 	"api/internal/lib/logger"
+	str "api/internal/lib/strings"
 	"api/internal/service"
 	user "api/internal/service"
+	"context"
 )
 
 type UsersDBService struct {
@@ -152,7 +152,7 @@ func (s *UsersDBService) GetAllTeachers(ctx context.Context) ([]*service.User, e
 	for _, r := range res {
 		result = append(result, &service.User{
 			Id:    r.User.ID,
-			Name:  *r.User.Name,
+			Name:  str.SafeStringPtr(r.User.Name),
 			Email: r.User.Email,
 			Role:  r.User.Role,
 		})

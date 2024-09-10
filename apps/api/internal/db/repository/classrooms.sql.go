@@ -243,6 +243,37 @@ func (q *Queries) DeleteComment(ctx context.Context, teacherid *string) error {
 	return err
 }
 
+const getFlexClassrooms = `-- name: GetFlexClassrooms :many
+SELECT id, "roomNumber", "teacherName", "teacherId", comment, "isFlex" FROM "classrooms" WHERE "isFlex" = TRUE
+`
+
+func (q *Queries) GetFlexClassrooms(ctx context.Context) ([]Classroom, error) {
+	rows, err := q.db.Query(ctx, getFlexClassrooms)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Classroom
+	for rows.Next() {
+		var i Classroom
+		if err := rows.Scan(
+			&i.ID,
+			&i.RoomNumber,
+			&i.TeacherName,
+			&i.TeacherId,
+			&i.Comment,
+			&i.IsFlex,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const newClassroom = `-- name: NewClassroom :exec
 INSERT INTO "classrooms" ("id", "roomNumber", "teacherName", "teacherId", "isFlex") VALUES ($1, $2, $3, $4, $5)
 `

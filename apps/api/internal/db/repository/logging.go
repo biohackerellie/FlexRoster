@@ -1,11 +1,11 @@
 package db
 
 import (
-	"context"
-
 	errors "api/internal/lib/errors"
 	"api/internal/lib/logger"
+	str "api/internal/lib/strings"
 	"api/internal/service"
+	"context"
 )
 
 type LoggingDBService struct {
@@ -37,7 +37,7 @@ func (s *LoggingDBService) GetAllLogs(ctx context.Context) ([]*service.Logs, err
 	for i, r := range res {
 		data[i] = &service.Logs{
 			Id:     r.Log.ID,
-			User:   *r.Log.User,
+			User:   str.SafeStringPtr(r.Log.User),
 			Type:   service.LogType(r.Log.Type),
 			Action: r.Log.Action,
 		}

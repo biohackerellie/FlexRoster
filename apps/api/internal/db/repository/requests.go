@@ -2,10 +2,11 @@ package db
 
 import (
 	"context"
-	"time"
 
 	config "api/internal/config"
 	"api/internal/lib/logger"
+	str "api/internal/lib/strings"
+	"api/internal/service"
 	request "api/internal/service"
 
 	"github.com/jackc/pgx/v5"
@@ -56,7 +57,7 @@ func (s *RequestDBService) GetRequests(ctx context.Context, userId string) ([]*r
 			CurrentTeacherName: r.Request.CurrentTeacherName,
 			DateRequested:      r.Request.DateRequested.Time,
 			Status:             request.RequestStatus(r.Request.Status),
-			Arrived:            *r.Request.Arrived,
+			Arrived:            str.SafeBoolPointer(r.Request.Arrived),
 			Timestamp:          r.Request.Timestamp,
 		}
 
@@ -82,7 +83,7 @@ func (s *RequestDBService) GetAllRequests(ctx context.Context) ([]*request.Reque
 			CurrentTeacherName: r.CurrentTeacherName,
 			DateRequested:      r.DateRequested.Time,
 			Status:             request.RequestStatus(r.Status),
-			Arrived:            *r.Arrived,
+			Arrived:            str.SafeBoolPointer(r.Arrived),
 			Timestamp:          r.Timestamp,
 		}
 		response[i] = mappedRes
@@ -90,27 +91,27 @@ func (s *RequestDBService) GetAllRequests(ctx context.Context) ([]*request.Reque
 	return response, nil
 }
 
-func (s *RequestDBService) NewRequest(ctx context.Context, studentName string, studentID string, requestStatus RequestStatus, dateRequested time.Time, newTeacher string, newTeacherName string, currentTeacher string, currentTeacherName string) error {
+func (s *RequestDBService) NewRequest(ctx context.Context, r *service.Request) error {
 	status := false
 	statusPtr := &status
 	err := s.q.NewRequest(ctx, NewRequestParams{
-		Status:             requestStatus,
-		StudentName:        studentName,
-		StudentId:          studentID,
-		DateRequested:      pgtype.Date{Time: dateRequested},
-		CurrentTeacher:     currentTeacher,
-		CurrentTeacherName: currentTeacherName,
-		NewTeacher:         newTeacher,
-		NewTeacherName:     newTeacherName,
+		Status:             RequestStatus(r.Status),
+		StudentName:        r.StudentName,
+		StudentId:          r.StudentID,
+		DateRequested:      pgtype.Date{Time: r.DateRequested},
+		CurrentTeacher:     r.CurrentTeacher,
+		CurrentTeacherName: r.CurrentTeacherName,
+		NewTeacher:         r.NewTeacher,
+		NewTeacherName:     r.NewTeacherName,
 		Arrived:            statusPtr,
 	})
 	return err
 }
 
-func (s *RequestDBService) UpdateRequest(ctx context.Context, id int32, status RequestStatus) error {
+func (s *RequestDBService) UpdateRequest(ctx context.Context, id int32, status service.RequestStatus) error {
 	err := s.q.UpdateRequest(ctx, UpdateRequestParams{
 		ID:     id,
-		Status: status,
+		Status: RequestStatus(status),
 	})
 	return err
 }

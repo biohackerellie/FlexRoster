@@ -25,6 +25,7 @@ type ClassroomDBService interface {
 	NewClassroomTx(ctx context.Context, classrooms []*service.Classroom) error
 	UpdateClassroomTx(ctx context.Context, classrooms []*service.Classroom) error
 	DeleteClassroomTx(ctx context.Context, classrooms []string) error
+	GetFlexClasses(ctx context.Context) ([]*service.Classroom, error)
 }
 
 type LogsDBService interface {
@@ -37,7 +38,7 @@ type RequestDBService interface {
 	GetRequests(ctx context.Context, userId string) ([]*service.Request, error)
 	GetAllRequests(ctx context.Context) ([]*service.Request, error)
 	NewRequest(ctx context.Context, request *service.Request) error
-	UpdateRequest(ctx context.Context, id int32, status *service.RequestStatus) error
+	UpdateRequest(ctx context.Context, id int32, status service.RequestStatus) error
 }
 
 type StudentDBService interface {

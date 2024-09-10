@@ -89,3 +89,6 @@ WHERE "id" = $1;
 
 -- name: DeleteClassrooms :exec
 DELETE FROM "classrooms" WHERE "id" = $1;
+
+-- name: GetFlexClassrooms :many
+SELECT * FROM "classrooms" WHERE "isFlex" = TRUE;
