@@ -141,8 +141,8 @@ importers:
         specifier: 5.0.0-beta.20
         version: 5.0.0-beta.20(next@15.0.0-rc.0(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@0.0.0-experimental-487cb0e-20240529)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       next-logger:
-        specifier: ^5.0.0
-        version: 5.0.0(next@15.0.0-rc.0(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@0.0.0-experimental-487cb0e-20240529)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(pino@8.20.0)
+        specifier: ^5.0.1
+        version: 5.0.1(next@15.0.0-rc.0(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@0.0.0-experimental-487cb0e-20240529)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(pino@8.20.0)
       next-themes:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
@@ -5259,8 +5259,8 @@ packages:
       nodemailer:
         optional: true
 
-  next-logger@5.0.0:
-    resolution: {integrity: sha512-nhqW3gIzGsJOzJuG43BXL+KAgoTef0fhI15mrfFUyQ9OENHuoQN4von/OY/PXELOlNSO1hxBpD+HlUc2NM+qyw==}
+  next-logger@5.0.1:
+    resolution: {integrity: sha512-zWTPtS0YwTB+4iSK4VxUVtCYt+zg8+Sx2Tjbtgmpd4SXsFnWdmCbXAeFZFKtEH8yNlucLCUaj0xqposMQ9rKRg==}
     peerDependencies:
       next: '>=9.0.0'
       pino: ^8.0.0 || ^9.0.0
@@ -12102,7 +12102,7 @@ snapshots:
       next: 15.0.0-rc.0(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@0.0.0-experimental-487cb0e-20240529)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       react: 19.0.0-rc-fb9a90fa48-20240614
 
-  next-logger@5.0.0(next@15.0.0-rc.0(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@0.0.0-experimental-487cb0e-20240529)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(pino@8.20.0):
+  next-logger@5.0.1(next@15.0.0-rc.0(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@0.0.0-experimental-487cb0e-20240529)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(pino@8.20.0):
     dependencies:
       lilconfig: 3.1.2
       next: 15.0.0-rc.0(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@0.0.0-experimental-487cb0e-20240529)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
