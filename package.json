@@ -44,5 +44,5 @@
     "typescript": "catalog:"
   },
   "prettier": "@local/prettier-config",
-  "packageManager": "pnpm@9.9.0"
+  "packageManager": "pnpm@9.10.0"
 }
