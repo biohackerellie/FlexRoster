@@ -66,25 +66,30 @@ func (s *RequestDBService) GetRequests(ctx context.Context, userId string) ([]*r
 	return response, nil
 }
 
-func (s *RequestDBService) GetAllRequests(ctx context.Context) ([]*request.Request, error) {
-	res, err := s.q.ALlRequests(ctx)
+func (s *RequestDBService) GetAllRequests(ctx context.Context) ([]*request.RequestWithNewClassroom, error) {
+	res, err := s.q.StudentRequestsQuery(ctx)
 	if err != nil {
 		return nil, err
 	}
-	response := make([]*request.Request, len(res))
+	response := make([]*request.RequestWithNewClassroom, len(res))
 	for i, r := range res {
-		mappedRes := &request.Request{
-			Id:                 r.ID,
-			StudentID:          r.StudentId,
-			StudentName:        r.StudentName,
-			NewTeacher:         r.NewTeacher,
-			NewTeacherName:     r.NewTeacherName,
-			CurrentTeacher:     r.CurrentTeacher,
-			CurrentTeacherName: r.CurrentTeacherName,
-			DateRequested:      r.DateRequested.Time,
-			Status:             request.RequestStatus(r.Status),
-			Arrived:            str.SafeBoolPointer(r.Arrived),
-			Timestamp:          r.Timestamp,
+		mappedRes := &request.RequestWithNewClassroom{
+			Request: &request.Request{
+				Id:                 r.Request.ID,
+				StudentID:          r.Request.StudentId,
+				StudentName:        r.Request.StudentName,
+				NewTeacher:         r.Request.NewTeacher,
+				NewTeacherName:     r.Request.NewTeacherName,
+				CurrentTeacher:     r.Request.CurrentTeacher,
+				CurrentTeacherName: r.Request.CurrentTeacherName,
+				DateRequested:      r.Request.DateRequested.Time,
+				Status:             request.RequestStatus(r.Request.Status),
+				Arrived:            str.SafeBoolPointer(r.Request.Arrived),
+				Timestamp:          r.Request.Timestamp,
+			},
+			Classroom: &request.Classroom{
+				Id: r.Classroom.ID,
+			},
 		}
 		response[i] = mappedRes
 	}

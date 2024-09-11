@@ -36,7 +36,7 @@ type LogsDBService interface {
 
 type RequestDBService interface {
 	GetRequests(ctx context.Context, userId string) ([]*service.Request, error)
-	GetAllRequests(ctx context.Context) ([]*service.Request, error)
+	GetAllRequests(ctx context.Context) ([]*service.RequestWithNewClassroom, error)
 	NewRequest(ctx context.Context, request *service.Request) error
 	UpdateRequest(ctx context.Context, id int32, status service.RequestStatus) error
 }
@@ -50,6 +50,8 @@ type StudentDBService interface {
 	UpdateStudentStatus(ctx context.Context, status *service.Status, studentEmail string) error
 	UpdateStudentRoster(ctx context.Context, classroomId string, status *service.Status, studentEmail string) error
 	NewStudentTx(ctx context.Context, students []*service.Student) error
+	DeleteStudentTx(ctx context.Context, students []*service.Student) error
+	UpdateStudentsTx(ctx context.Context, students []*service.Student) error
 }
 
 type UserDBService interface {

@@ -1,7 +1,6 @@
 package scripts
 
 import (
-	"api/internal/config"
 	"api/internal/lib/arrays"
 
 	"api/internal/service"
@@ -12,8 +11,6 @@ import (
 
 	"golang.org/x/sync/errgroup"
 )
-
-var env = config.GetEnv()
 
 type ChanResponse struct {
 	dbData  []*service.Classroom

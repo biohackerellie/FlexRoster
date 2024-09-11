@@ -3,17 +3,20 @@ package scripts
 import (
 	"api/internal/config"
 	arrays "api/internal/lib/arrays"
+	helpers "api/internal/lib/helpers"
 	str "api/internal/lib/strings"
 	"api/internal/service"
+	"context"
 	"fmt"
 	"slices"
 	"strings"
 	"sync"
+
+	"golang.org/x/sync/errgroup"
 )
 
-var preferredNames = env.PreferredNames
-
 func (s *Scripts) Formatting(class *service.Classroom, users []*service.User) (teacher string, userId string, errors error) {
+	var preferredNames = s.config.PreferredNames
 	teacherName := str.FormatTeacherNames(class.TeacherName)
 	preferredName := slices.IndexFunc(preferredNames, func(c config.PreferredNames) bool {
 		return c.GivenName == teacherName
@@ -104,4 +107,165 @@ func RunInMutex(sem chan struct{}, mu *sync.Mutex, f func() error) error {
 	mu.Lock()
 	defer mu.Unlock()
 	return f()
+}
+func (s *Scripts) GetStudentsWithRequestsToday(requests []*service.RequestWithNewClassroom, students []*service.Student, ctx context.Context) []*service.Student {
+	var studentsWithRequestsToday []*service.Student
+	mu := sync.Mutex{}
+	concurrencyLimit := 10
+	sem := make(chan struct{}, concurrencyLimit)
+	g, ctx := errgroup.WithContext(ctx)
+	for _, student := range students {
+		student := student
+		sem <- struct{}{}
+		g.Go(func() error {
+			defer func() { <-sem }()
+			ok, id := doesStudentHaveRequestToday(requests, student.StudentName)
+			if ok {
+				mu.Lock()
+				studentsWithRequestsToday = append(studentsWithRequestsToday, &service.Student{
+					StudentEmail:       student.StudentEmail,
+					StudentName:        student.StudentName,
+					Status:             service.Status_transferredN,
+					ClassroomId:        id,
+					DefaultClassroomId: student.DefaultClassroomId,
+					Id:                 student.Id,
+				},
+				)
+				mu.Unlock()
+			}
+			return nil
+		})
+	}
+	if err := g.Wait(); err != nil {
+		return nil
+	}
+	if len(studentsWithRequestsToday) == 0 {
+		s.log.Warn("No students with requests found today")
+		return nil
+	}
+	s.log.Info("Students with requests found today", "count", len(studentsWithRequestsToday))
+	return studentsWithRequestsToday
+}
+
+func doesStudentHaveRequestToday(requests []*service.RequestWithNewClassroom, studentName string) (result bool, classId string) {
+	result = false
+	classId = ""
+	for _, req := range requests {
+		if helpers.IsDateToday(req.Request.DateRequested.String()) {
+			if req.Request.StudentName == studentName {
+				result = true
+				classId = req.Classroom.Id
+				break
+			}
+		}
+	}
+	return result, classId
+}
+
+type studentSets struct {
+	withRequestsSet map[string]struct{}
+	existingSet     map[string]struct{}
+	rosterDataSet   map[string]struct{}
+}
+type Result struct {
+	studentsToDelete []*service.Student
+	studentsToUpdate []*service.Student
+	studentsToAdd    []*service.Student
+}
+
+func (s *Scripts) StudentSets(withRequests, existingStudents, rosterData []*service.Student) (studentsToDelete, studentsToUpdate, studentsToAdd []*service.Student) {
+	var wg sync.WaitGroup
+	results := make(chan studentSets)
+
+	wg.Add(3)
+	go func() {
+		defer wg.Done()
+		results <- studentSets{withRequestsSet: arrays.EZSet(withRequests, func(student *service.Student) string {
+			return student.StudentEmail
+		})}
+	}()
+	go func() {
+		defer wg.Done()
+		results <- studentSets{existingSet: arrays.EZSet(existingStudents, func(student *service.Student) string {
+			return student.StudentEmail
+		})}
+	}()
+	go func() {
+		defer wg.Done()
+		results <- studentSets{rosterDataSet: arrays.EZSet(rosterData, func(student *service.Student) string {
+			return student.StudentEmail
+		})}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	var (
+		withRequestsSet map[string]struct{}
+		existingSet     map[string]struct{}
+		rosterDataSet   map[string]struct{}
+	)
+
+	for res := range results {
+		if res.withRequestsSet != nil {
+			withRequestsSet = res.withRequestsSet
+		}
+		if res.existingSet != nil {
+			existingSet = res.existingSet
+		}
+		if res.rosterDataSet != nil {
+			rosterDataSet = res.rosterDataSet
+		}
+	}
+
+	finalResult := make(chan Result)
+
+	wg.Add(3)
+	go func() {
+		defer wg.Done()
+		finalResult <- Result{studentsToDelete: arrays.EZFilter(existingStudents, func(student *service.Student) bool {
+			_, ok := rosterDataSet[student.StudentEmail]
+			return !ok
+		})}
+	}()
+	go func() {
+		defer wg.Done()
+		finalResult <- Result{
+			studentsToUpdate: arrays.EZFilter(rosterData, func(s *service.Student) bool {
+				_, ok := existingSet[s.StudentEmail]
+				_, ok2 := withRequestsSet[s.StudentEmail]
+				return ok && !ok2
+			})}
+	}()
+	go func() {
+		defer wg.Done()
+		finalResult <- Result{
+			studentsToAdd: arrays.EZFilter(rosterData, func(s *service.Student) bool {
+				_, ok := existingSet[s.StudentEmail]
+				_, ok2 := withRequestsSet[s.StudentEmail]
+				return !ok && !ok2
+			})}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(finalResult)
+	}()
+
+	// Collect the final results
+	for res := range finalResult {
+		if res.studentsToDelete != nil {
+			studentsToDelete = res.studentsToDelete
+		}
+		if res.studentsToUpdate != nil {
+			studentsToUpdate = res.studentsToUpdate
+		}
+		if res.studentsToAdd != nil {
+			studentsToAdd = res.studentsToAdd
+		}
+	}
+
+	return studentsToDelete, studentsToUpdate, studentsToAdd
 }

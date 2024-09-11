@@ -142,15 +142,19 @@ func (q *Queries) NewRequest(ctx context.Context, arg NewRequestParams) error {
 }
 
 const studentRequestsQuery = `-- name: StudentRequestsQuery :many
-SELECT requests.id, requests."studentId", requests."studentName", requests."newTeacher", requests."newTeacherName", requests."currentTeacher", requests."currentTeacherName", requests."dateRequested", requests.status, requests.arrived, requests.timestamp FROM "requests"
-JOIN "user" ON "requests"."studentId" = "user"."id"
-JOIN "students" ON "user"."email" = "students"."studentEmail"
-JOIN "classrooms" ON "requests.newTeacher" = "classrooms"."teacherId"
+SELECT r.id, r."studentId", r."studentName", r."newTeacher", r."newTeacherName", r."currentTeacher", r."currentTeacherName", r."dateRequested", r.status, r.arrived, r.timestamp, s."studentEmail", s."studentName", s."classroomId", s.status, s."defaultClassroomId", s.id, c.id, c."roomNumber", c."teacherName", c."teacherId", c.comment, c."isFlex", u.id, u.name, u.email, u."emailVerified", u.image, u.role 
+FROM "requests" r
+JOIN "user" u ON r."studentId" = u."id"
+JOIN "students" s ON u."email" = s."studentEmail"
+JOIN "classrooms" c ON r."newTeacher" = c."teacherId"
 WHERE "requests"."dateRequested" >= CURRENT_DATE
 `
 
 type StudentRequestsQueryRow struct {
-	Request Request `db:"request" json:"request"`
+	Request   Request   `db:"request" json:"request"`
+	Student   Student   `db:"student" json:"student"`
+	Classroom Classroom `db:"classroom" json:"classroom"`
+	User      User      `db:"user" json:"user"`
 }
 
 func (q *Queries) StudentRequestsQuery(ctx context.Context) ([]StudentRequestsQueryRow, error) {
@@ -174,6 +178,24 @@ func (q *Queries) StudentRequestsQuery(ctx context.Context) ([]StudentRequestsQu
 			&i.Request.Status,
 			&i.Request.Arrived,
 			&i.Request.Timestamp,
+			&i.Student.StudentEmail,
+			&i.Student.StudentName,
+			&i.Student.ClassroomId,
+			&i.Student.Status,
+			&i.Student.DefaultClassroomId,
+			&i.Student.ID,
+			&i.Classroom.ID,
+			&i.Classroom.RoomNumber,
+			&i.Classroom.TeacherName,
+			&i.Classroom.TeacherId,
+			&i.Classroom.Comment,
+			&i.Classroom.IsFlex,
+			&i.User.ID,
+			&i.User.Name,
+			&i.User.Email,
+			&i.User.EmailVerified,
+			&i.User.Image,
+			&i.User.Role,
 		); err != nil {
 			return nil, err
 		}

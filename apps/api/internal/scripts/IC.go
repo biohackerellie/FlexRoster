@@ -2,7 +2,6 @@ package scripts
 
 import (
 	arrays "api/internal/lib/arrays"
-	"api/internal/lib/icAuth"
 	str "api/internal/lib/strings"
 	"api/internal/service"
 	"encoding/json"
@@ -14,7 +13,7 @@ import (
 )
 
 func (s *Scripts) GetClasses() ([]*service.Classroom, error) {
-	token, err := icAuth.IcAuth(s.cache)
+	token, err := s.IcAuth()
 	if err != nil {
 		return nil, err
 	}
@@ -26,7 +25,7 @@ func (s *Scripts) GetClasses() ([]*service.Classroom, error) {
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("X-XSRF-TOKEN", env.XSRFToken)
+	req.Header.Set("X-XSRF-TOKEN", s.config.XSRFToken)
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	resp, err := client.Do(req)
 	if err != nil {
@@ -45,11 +44,10 @@ func (s *Scripts) GetClasses() ([]*service.Classroom, error) {
 
 }
 
-var semesterClassName = env.SemesterClassName
-
 // func that performs multiple mutations on the class data
 
 func (s *Scripts) mutateClassData(c []ClassInfo) []*service.Classroom {
+	var semesterClassName = s.config.SemesterClassName
 	var wg sync.WaitGroup
 	classChan := make(chan *service.Classroom, len(c)) // Buffered channel to collect results
 
@@ -115,17 +113,17 @@ func (s *Scripts) mutateClassData(c []ClassInfo) []*service.Classroom {
 // Get classRooms from Infinite Campus
 
 func (s *Scripts) ICQuery() string {
-	appName := env.OnerosterAppName
+	appName := s.config.OnerosterAppName
 	return fmt.Sprintf("https://mtdecloud2.infinitecampus.org/campus/api/oneroster/v1p2/%s/ims/oneroster/rostering/v1p2", appName)
 }
 
 func (s *Scripts) ICClassQuery() string {
-	SourceID := env.SourceID
+	SourceID := s.config.SourceID
 	return fmt.Sprintf("%s/schools/%s/classes?limit=1200", s.ICQuery(), SourceID)
 }
 
 func (s *Scripts) GetICStudents(classId string) ([]*service.Student, error) {
-	token, err := icAuth.IcAuth(s.cache)
+	token, err := s.IcAuth()
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +135,7 @@ func (s *Scripts) GetICStudents(classId string) ([]*service.Student, error) {
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("X-XSRF-TOKEN", env.XSRFToken)
+	req.Header.Set("X-XSRF-TOKEN", s.config.XSRFToken)
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	resp, err := client.Do(req)
 	if err != nil {
@@ -152,11 +150,16 @@ func (s *Scripts) GetICStudents(classId string) ([]*service.Student, error) {
 		return nil, err
 	}
 	result := make([]*service.Student, 0)
-	for _, student := range res.Students {
-		fullName := fmt.Sprintf("%s %s", student.FirstName, student)
+	for _, student := range res.Users {
+		fullName := fmt.Sprintf("%s %s", student.GivenName, student.FamilyName)
+		status := service.Status_default
 		result = append(result, &service.Student{
-			StudentEmail: student.Email,
-			StudentName: student.,
-			
-
+			StudentEmail:       student.Email,
+			StudentName:        fullName,
+			ClassroomId:        classId,
+			DefaultClassroomId: classId,
+			Status:             status,
+		})
+	}
+	return result, nil
 }

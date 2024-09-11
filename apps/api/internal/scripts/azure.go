@@ -1,7 +1,6 @@
 package scripts
 
 import (
-	"api/internal/config"
 	"api/internal/service"
 	"bytes"
 	"context"
@@ -13,14 +12,12 @@ import (
 	"time"
 )
 
-var Config = config.GetEnv()
-
 func (s *Scripts) AzureUsers() error {
 
 	var (
-		secretaries    = Config.Secretaries
-		staffLink      = createQueryString(Config.AzureTeacherGroup)
-		otherUsersLink = createQueryString(Config.AzureOtherUsersGroup)
+		secretaries    = s.config.Secretaries
+		staffLink      = createQueryString(s.config.AzureTeacherGroup)
+		otherUsersLink = createQueryString(s.config.AzureOtherUsersGroup)
 		ctx            = context.Background()
 	)
 
@@ -189,11 +186,11 @@ type TokenResponse struct {
 
 func (s *Scripts) fetchNewToken() (TokenResponse, error) {
 	data := url.Values{}
-	data.Add("client_id", Config.AzureADClientID)
+	data.Add("client_id", s.config.AzureADClientID)
 	data.Add("scope", "https://graph.microsoft.com/.default")
-	data.Add("client_secret", Config.AzureADClientSecret)
+	data.Add("client_secret", s.config.AzureADClientSecret)
 	data.Add("grant_type", "client_credentials")
-	requestUrl := fmt.Sprintf("https://login.microsoftonline.com/%s/oauth2/v2.0/token", Config.AzureADTenantID)
+	requestUrl := fmt.Sprintf("https://login.microsoftonline.com/%s/oauth2/v2.0/token", s.config.AzureADTenantID)
 	req, err := http.NewRequest("POST", requestUrl, bytes.NewBufferString(data.Encode()))
 
 	if err != nil {

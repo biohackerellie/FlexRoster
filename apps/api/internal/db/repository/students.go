@@ -146,6 +146,26 @@ func (s *StudentDBService) UpdateStudentStatus(ctx context.Context, status *stud
 	return err
 }
 
+func (s *StudentDBService) UpdateStudentsTx(ctx context.Context, students []*student.Student) error {
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
+	qtx := s.q.WithTx(tx)
+	for _, student := range students {
+		err := qtx.UpdateRoster(ctx, UpdateRosterParams{
+			ClassroomId:  student.ClassroomId,
+			Status:       Status(student.Status),
+			StudentEmail: student.StudentEmail,
+		})
+		if err != nil {
+			return err
+		}
+	}
+	return tx.Commit(ctx)
+}
+
 func (s *StudentDBService) UpdateStudentRoster(ctx context.Context, classroomId string, status *student.Status, studentEmail string) error {
 	err := s.q.UpdateRoster(ctx, UpdateRosterParams{
 		ClassroomId:  classroomId,
@@ -170,6 +190,22 @@ func (s *StudentDBService) NewStudentTx(ctx context.Context, students []*student
 			ClassroomId:        student.ClassroomId,
 			DefaultClassroomId: student.DefaultClassroomId,
 		})
+		if err != nil {
+			return err
+		}
+	}
+	return tx.Commit(ctx)
+}
+
+func (s *StudentDBService) DeleteStudentTx(ctx context.Context, students []*student.Student) error {
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
+	qtx := s.q.WithTx(tx)
+	for _, student := range students {
+		err := qtx.DeleteStudent(ctx, student.StudentEmail)
 		if err != nil {
 			return err
 		}

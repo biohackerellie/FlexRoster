@@ -42,12 +42,8 @@ type PreferredNames struct {
 	PreferredName string `mapstructure:"preferredName"`
 }
 
-func loadEnv() (env *Env, err error) {
-	viper.AddConfigPath(".")
-	viper.AddConfigPath("../../")
-	viper.AddConfigPath("$HOME/github/FlexRoster/apps/api")
-	viper.SetConfigFile("config.yaml")
-	viper.SetConfigType("yaml")
+func loadEnv(path string) (env *Env, err error) {
+	viper.SetConfigFile(path)
 	viper.AutomaticEnv()
 	err = viper.ReadInConfig()
 	if err != nil {
@@ -57,8 +53,9 @@ func loadEnv() (env *Env, err error) {
 	return
 }
 
-func GetEnv() *Env {
-	env, err := loadEnv()
+func GetEnv(path string) *Env {
+
+	env, err := loadEnv(path)
 	if err != nil {
 		fmt.Println("Error loading env")
 	}

@@ -12,10 +12,14 @@ func (s *Scripts) Nightly(ctx context.Context) error {
 	// }
 	// s.log.Info("AzureUsers script complete")
 
-	s.log.Info("Syncing Classroom data")
-	if err := s.SyncClassrooms(ctx); err != nil {
+	// s.log.Info("Syncing Classroom data")
+	// if err := s.SyncClassrooms(ctx); err != nil {
+	// 	return err
+	// }
+	// s.log.Info("Classroom data synced")
+	s.log.Info("Syncing Student data")
+	if err := s.SyncStudents(ctx); err != nil {
 		return err
 	}
-	s.log.Info("Classroom data synced")
 	return nil
 }

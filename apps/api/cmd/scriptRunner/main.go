@@ -18,10 +18,15 @@ import (
 )
 
 func main() {
-
+	// Parse flags
+	configPathFlag := flag.String("config", "", "path to config file")
+	seedFlag := flag.Bool("seed", false, "seed the database")
+	logFlag := flag.Bool("logs", false, "process logs")
+	nightlyFlag := flag.Bool("nightly", false, "run nightly script")
+	flag.Parse()
 	// Initialize logger, config, cache,  and database
 	log := logger.New()
-	config := config.GetEnv()
+	config := config.GetEnv(*configPathFlag)
 
 	cache := initRedis(config, log)
 	defer cache.Close()
@@ -36,13 +41,7 @@ func main() {
 	logsRepo := repository.NewLoggingBService(db).WithLogs(log)
 	requestRepo := repository.NewRequestDBService(db).WithLogs(log)
 	redisClient := rclient.NewRedis(cache)
-	scriptRunner := scripts.NewScript(redisClient, classroomRepo, studentRepo, userRepo, requestRepo, logsRepo).WithLogger(log)
-
-	// Parse flags
-	seedFlag := flag.Bool("seed", false, "seed the database")
-	logFlag := flag.Bool("logs", false, "process logs")
-	nightlyFlag := flag.Bool("nightly", false, "run nightly script")
-	flag.Parse()
+	scriptRunner := scripts.NewScript(redisClient, classroomRepo, studentRepo, userRepo, requestRepo, logsRepo, config).WithLogger(log)
 
 	// Handle flags
 	switch {

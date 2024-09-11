@@ -1,8 +1,6 @@
-package icAuth
+package scripts
 
 import (
-	env "api/internal/config"
-	"api/internal/ports"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -11,20 +9,20 @@ import (
 	"time"
 )
 
-type TokenResponse struct {
+type ICTokenResponse struct {
 	Access_token string `json:"access_token"`
 	Expires_in   int    `json:"expires_in"`
 }
 
-func IcAuth(client ports.RClient) (string, error) {
-
+func (s *Scripts) IcAuth() (string, error) {
+	client := s.cache
 	token, err := client.Get("icToken")
 
 	if err == nil && token != "" {
 		return token, nil
 	}
 
-	newToken, err := newToken()
+	newToken, err := s.newToken()
 	if err != nil {
 		return "", err
 	}
@@ -37,33 +35,33 @@ func IcAuth(client ports.RClient) (string, error) {
 
 // Function to fetch new token from infinite campus
 // Returns: [TokenResponse] and [error]
-func newToken() (TokenResponse, error) {
+func (s *Scripts) newToken() (ICTokenResponse, error) {
 	form := url.Values{}
 	form.Add("grant_type", "client_credentials")
-	form.Add("client_id", env.GetEnv().OnerosterClientID)
-	form.Add("client_secret", env.GetEnv().OnerosterClientSecret)
+	form.Add("client_id", s.config.OnerosterClientID)
+	form.Add("client_secret", s.config.OnerosterClientSecret)
 
 	req, err := http.NewRequest("POST", "https://mtdecloud2.infinitecampus.org/campus/oauth2/token?appName=laurel", bytes.NewBufferString(form.Encode()))
 
 	if err != nil {
-		return TokenResponse{}, err
+		return ICTokenResponse{}, err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return TokenResponse{}, err
+		return ICTokenResponse{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return TokenResponse{}, fmt.Errorf("error fetching token: %v", resp.Status)
+		return ICTokenResponse{}, fmt.Errorf("error fetching token: %v", resp.Status)
 	}
-	var tokenResponse TokenResponse
+	var tokenResponse ICTokenResponse
 	err = json.NewDecoder(resp.Body).Decode(&tokenResponse)
 	if err != nil {
-		return TokenResponse{}, err
+		return ICTokenResponse{}, err
 	}
 	return tokenResponse, nil
 }
