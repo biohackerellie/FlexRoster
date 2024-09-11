@@ -152,6 +152,9 @@ struct StudentWithClassroom
     + json = Available
 
 
+struct RequestWithNewClassroom
+  - request: Request
+  - classroom: Classroom
 
 struct User
   - id: string

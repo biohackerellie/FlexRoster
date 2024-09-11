@@ -1,12 +1,13 @@
 package db
 
 import (
-	"context"
-
 	config "api/internal/config"
 	errors "api/internal/lib/errors"
 	"api/internal/lib/logger"
+	str "api/internal/lib/strings"
+	"api/internal/service"
 	user "api/internal/service"
+	"context"
 )
 
 type UsersDBService struct {
@@ -132,4 +133,29 @@ func (s *UsersDBService) CreateUserTx(ctx context.Context, users []*user.User) e
 		}
 	}
 	return tx.Commit(ctx)
+}
+
+func (s *UsersDBService) GetexistingTeachers(ctx context.Context) ([]string, error) {
+	res, err := s.q.GetAllTeacherIds(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (s *UsersDBService) GetAllTeachers(ctx context.Context) ([]*service.User, error) {
+	res, err := s.q.GetAllTeachers(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*service.User, 0)
+	for _, r := range res {
+		result = append(result, &service.User{
+			Id:    r.User.ID,
+			Name:  str.SafeStringPtr(r.User.Name),
+			Email: r.User.Email,
+			Role:  r.User.Role,
+		})
+	}
+	return result, nil
 }

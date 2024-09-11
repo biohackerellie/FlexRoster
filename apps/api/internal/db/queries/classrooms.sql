@@ -83,3 +83,12 @@ DELETE FROM "availability"
 WHERE "teacherId" = $1 AND "date" = $2;
 
 
+-- name: UpdateClassroom :exec
+UPDATE "classrooms" SET "roomNumber" = $2 
+WHERE "id" = $1;
+
+-- name: DeleteClassrooms :exec
+DELETE FROM "classrooms" WHERE "id" = $1;
+
+-- name: GetFlexClassrooms :many
+SELECT * FROM "classrooms" WHERE "isFlex" = TRUE;

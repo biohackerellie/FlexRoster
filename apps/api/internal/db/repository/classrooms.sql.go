@@ -224,6 +224,15 @@ func (q *Queries) DeleteAvailability(ctx context.Context, arg DeleteAvailability
 	return err
 }
 
+const deleteClassrooms = `-- name: DeleteClassrooms :exec
+DELETE FROM "classrooms" WHERE "id" = $1
+`
+
+func (q *Queries) DeleteClassrooms(ctx context.Context, id string) error {
+	_, err := q.db.Exec(ctx, deleteClassrooms, id)
+	return err
+}
+
 const deleteComment = `-- name: DeleteComment :exec
 UPDATE "classrooms" SET "comment" = NULL
 WHERE "teacherId" = $1
@@ -232,6 +241,37 @@ WHERE "teacherId" = $1
 func (q *Queries) DeleteComment(ctx context.Context, teacherid *string) error {
 	_, err := q.db.Exec(ctx, deleteComment, teacherid)
 	return err
+}
+
+const getFlexClassrooms = `-- name: GetFlexClassrooms :many
+SELECT id, "roomNumber", "teacherName", "teacherId", comment, "isFlex" FROM "classrooms" WHERE "isFlex" = TRUE
+`
+
+func (q *Queries) GetFlexClassrooms(ctx context.Context) ([]Classroom, error) {
+	rows, err := q.db.Query(ctx, getFlexClassrooms)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Classroom
+	for rows.Next() {
+		var i Classroom
+		if err := rows.Scan(
+			&i.ID,
+			&i.RoomNumber,
+			&i.TeacherName,
+			&i.TeacherId,
+			&i.Comment,
+			&i.IsFlex,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const newClassroom = `-- name: NewClassroom :exec
@@ -365,4 +405,19 @@ func (q *Queries) TodaysAvailability(ctx context.Context) ([]TodaysAvailabilityR
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateClassroom = `-- name: UpdateClassroom :exec
+UPDATE "classrooms" SET "roomNumber" = $2 
+WHERE "id" = $1
+`
+
+type UpdateClassroomParams struct {
+	ID         string `db:"id" json:"id"`
+	RoomNumber string `db:"roomNumber" json:"roomNumber"`
+}
+
+func (q *Queries) UpdateClassroom(ctx context.Context, arg UpdateClassroomParams) error {
+	_, err := q.db.Exec(ctx, updateClassroom, arg.ID, arg.RoomNumber)
+	return err
 }

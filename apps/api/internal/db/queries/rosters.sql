@@ -53,3 +53,4 @@ VALUES ($1, $2, $3, $4, $5);
 UPDATE "students"
 SET "status" = $1
 WHERE "studentEmail" = $2;
+

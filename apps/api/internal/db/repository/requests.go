@@ -2,10 +2,11 @@ package db
 
 import (
 	"context"
-	"time"
 
 	config "api/internal/config"
 	"api/internal/lib/logger"
+	str "api/internal/lib/strings"
+	"api/internal/service"
 	request "api/internal/service"
 
 	"github.com/jackc/pgx/v5"
@@ -56,7 +57,7 @@ func (s *RequestDBService) GetRequests(ctx context.Context, userId string) ([]*r
 			CurrentTeacherName: r.Request.CurrentTeacherName,
 			DateRequested:      r.Request.DateRequested.Time,
 			Status:             request.RequestStatus(r.Request.Status),
-			Arrived:            *r.Request.Arrived,
+			Arrived:            str.SafeBoolPointer(r.Request.Arrived),
 			Timestamp:          r.Request.Timestamp,
 		}
 
@@ -65,52 +66,57 @@ func (s *RequestDBService) GetRequests(ctx context.Context, userId string) ([]*r
 	return response, nil
 }
 
-func (s *RequestDBService) GetAllRequests(ctx context.Context) ([]*request.Request, error) {
-	res, err := s.q.ALlRequests(ctx)
+func (s *RequestDBService) GetAllRequests(ctx context.Context) ([]*request.RequestWithNewClassroom, error) {
+	res, err := s.q.StudentRequestsQuery(ctx)
 	if err != nil {
 		return nil, err
 	}
-	response := make([]*request.Request, len(res))
+	response := make([]*request.RequestWithNewClassroom, len(res))
 	for i, r := range res {
-		mappedRes := &request.Request{
-			Id:                 r.ID,
-			StudentID:          r.StudentId,
-			StudentName:        r.StudentName,
-			NewTeacher:         r.NewTeacher,
-			NewTeacherName:     r.NewTeacherName,
-			CurrentTeacher:     r.CurrentTeacher,
-			CurrentTeacherName: r.CurrentTeacherName,
-			DateRequested:      r.DateRequested.Time,
-			Status:             request.RequestStatus(r.Status),
-			Arrived:            *r.Arrived,
-			Timestamp:          r.Timestamp,
+		mappedRes := &request.RequestWithNewClassroom{
+			Request: &request.Request{
+				Id:                 r.Request.ID,
+				StudentID:          r.Request.StudentId,
+				StudentName:        r.Request.StudentName,
+				NewTeacher:         r.Request.NewTeacher,
+				NewTeacherName:     r.Request.NewTeacherName,
+				CurrentTeacher:     r.Request.CurrentTeacher,
+				CurrentTeacherName: r.Request.CurrentTeacherName,
+				DateRequested:      r.Request.DateRequested.Time,
+				Status:             request.RequestStatus(r.Request.Status),
+				Arrived:            str.SafeBoolPointer(r.Request.Arrived),
+				Timestamp:          r.Request.Timestamp,
+			},
+			Classroom: &request.Classroom{
+				Id: r.Classroom.ID,
+			},
 		}
 		response[i] = mappedRes
 	}
 	return response, nil
 }
 
-func (s *RequestDBService) NewRequest(ctx context.Context, studentName string, studentID string, requestStatus RequestStatus, dateRequested time.Time, newTeacher string, newTeacherName string, currentTeacher string, currentTeacherName string) error {
+func (s *RequestDBService) NewRequest(ctx context.Context, r *service.Request) error {
 	status := false
 	statusPtr := &status
 	err := s.q.NewRequest(ctx, NewRequestParams{
-		Status:             requestStatus,
-		StudentName:        studentName,
-		StudentId:          studentID,
-		DateRequested:      pgtype.Date{Time: dateRequested},
-		CurrentTeacher:     currentTeacher,
-		CurrentTeacherName: currentTeacherName,
-		NewTeacher:         newTeacher,
-		NewTeacherName:     newTeacherName,
+		Status:             RequestStatus(r.Status),
+		StudentName:        r.StudentName,
+		StudentId:          r.StudentID,
+		DateRequested:      pgtype.Date{Time: r.DateRequested},
+		CurrentTeacher:     r.CurrentTeacher,
+		CurrentTeacherName: r.CurrentTeacherName,
+		NewTeacher:         r.NewTeacher,
+		NewTeacherName:     r.NewTeacherName,
 		Arrived:            statusPtr,
 	})
 	return err
 }
 
-func (s *RequestDBService) UpdateRequest(ctx context.Context, id int32, status RequestStatus) error {
+func (s *RequestDBService) UpdateRequest(ctx context.Context, id int32, status service.RequestStatus) error {
 	err := s.q.UpdateRequest(ctx, UpdateRequestParams{
 		ID:     id,
-		Status: status,
+		Status: RequestStatus(status),
 	})
 	return err
 }

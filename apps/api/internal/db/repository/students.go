@@ -1,12 +1,12 @@
 package db
 
 import (
-	"context"
-
 	config "api/internal/config"
 	errors "api/internal/lib/errors"
 	"api/internal/lib/logger"
+	str "api/internal/lib/strings"
 	student "api/internal/service"
+	"context"
 )
 
 type StudentDBService struct {
@@ -105,11 +105,11 @@ func (s *StudentDBService) RosterByTeacherId(ctx context.Context, teacherId *str
 			StudentEmail: r.StudentEmail,
 			StudentName:  r.StudentName,
 			Status:       student.Status(r.Status),
-			StudentId:    *r.StudentId,
+			StudentId:    str.SafeStringPtr(r.StudentId),
 			RoomNumber:   r.RoomNumber,
 			TeacherName:  r.TeacherName,
 			ClassroomId:  r.ClassroomId,
-			Comment:      *r.Comment,
+			Comment:      str.SafeStringPtr(r.Comment),
 		}
 		response[i] = mappedRes
 	}
@@ -126,11 +126,12 @@ func (s *StudentDBService) GetAllStudents(ctx context.Context) ([]*student.Stude
 
 	for i, r := range res {
 		mappedResponse := &student.Student{
-			StudentEmail: r.StudentEmail,
-			StudentName:  r.StudentName,
-			ClassroomId:  r.ClassroomId,
-			Status:       student.Status(r.Status),
-			Id:           r.ID,
+			StudentEmail:       r.StudentEmail,
+			StudentName:        r.StudentName,
+			ClassroomId:        r.ClassroomId,
+			DefaultClassroomId: r.DefaultClassroomId,
+			Status:             student.Status(r.Status),
+			Id:                 r.ID,
 		}
 		response[i] = mappedResponse
 	}
@@ -143,6 +144,26 @@ func (s *StudentDBService) UpdateStudentStatus(ctx context.Context, status *stud
 		StudentEmail: studentEmail,
 	})
 	return err
+}
+
+func (s *StudentDBService) UpdateStudentsTx(ctx context.Context, students []*student.Student) error {
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
+	qtx := s.q.WithTx(tx)
+	for _, student := range students {
+		err := qtx.UpdateRoster(ctx, UpdateRosterParams{
+			ClassroomId:  student.ClassroomId,
+			Status:       Status(student.Status),
+			StudentEmail: student.StudentEmail,
+		})
+		if err != nil {
+			return err
+		}
+	}
+	return tx.Commit(ctx)
 }
 
 func (s *StudentDBService) UpdateStudentRoster(ctx context.Context, classroomId string, status *student.Status, studentEmail string) error {
@@ -169,6 +190,22 @@ func (s *StudentDBService) NewStudentTx(ctx context.Context, students []*student
 			ClassroomId:        student.ClassroomId,
 			DefaultClassroomId: student.DefaultClassroomId,
 		})
+		if err != nil {
+			return err
+		}
+	}
+	return tx.Commit(ctx)
+}
+
+func (s *StudentDBService) DeleteStudentTx(ctx context.Context, students []*student.Student) error {
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
+	qtx := s.q.WithTx(tx)
+	for _, student := range students {
+		err := qtx.DeleteStudent(ctx, student.StudentEmail)
 		if err != nil {
 			return err
 		}

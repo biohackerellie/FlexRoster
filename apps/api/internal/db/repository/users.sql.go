@@ -12,7 +12,7 @@ import (
 )
 
 const createUser = `-- name: CreateUser :exec
-INSERT INTO "user" ("id", "name", "email", "role") VALUES ($1, $2, $3, $4)
+INSERT INTO "user" ("id", "name", "email", "role") VALUES ($1, $2, $3, $4) ON CONFLICT("id") DO UPDATE SET "name" = $2, "email" = $3, "role" = $4
 `
 
 type CreateUserParams struct {
@@ -30,6 +30,65 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 		arg.Role,
 	)
 	return err
+}
+
+const getAllTeacherIds = `-- name: GetAllTeacherIds :many
+SELECT "id" FROM "user" WHERE "role" = 'teacher'
+`
+
+func (q *Queries) GetAllTeacherIds(ctx context.Context) ([]string, error) {
+	rows, err := q.db.Query(ctx, getAllTeacherIds)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []string
+	for rows.Next() {
+		var id string
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAllTeachers = `-- name: GetAllTeachers :many
+SELECT u.id, u.name, u.email, u."emailVerified", u.image, u.role FROM "user" u WHERE "role" = 'teacher'
+`
+
+type GetAllTeachersRow struct {
+	User User `db:"user" json:"user"`
+}
+
+func (q *Queries) GetAllTeachers(ctx context.Context) ([]GetAllTeachersRow, error) {
+	rows, err := q.db.Query(ctx, getAllTeachers)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAllTeachersRow
+	for rows.Next() {
+		var i GetAllTeachersRow
+		if err := rows.Scan(
+			&i.User.ID,
+			&i.User.Name,
+			&i.User.Email,
+			&i.User.EmailVerified,
+			&i.User.Image,
+			&i.User.Role,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getTeacher = `-- name: GetTeacher :one

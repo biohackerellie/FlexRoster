@@ -10,6 +10,8 @@ import (
 	"api/internal/lib/logger"
 	classroom "api/internal/service"
 
+	str "api/internal/lib/strings"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -58,6 +60,27 @@ func (s *ClassroomDBService) GetClassrooms(ctx context.Context) ([]*classroom.Cl
 	return response, nil
 }
 
+func (s *ClassroomDBService) GetClassroomsNoDates(ctx context.Context) ([]*classroom.Classroom, error) {
+	res, err := s.q.ClassroomQuery(ctx)
+	if err != nil {
+		return nil, err
+	}
+	response := make([]*classroom.Classroom, len(res))
+	for i, r := range res {
+		mappedResponse := &classroom.Classroom{
+			Id:          r.ID,
+			RoomNumber:  r.RoomNumber,
+			TeacherName: r.TeacherName,
+			TeacherId:   str.SafeStringPtr(r.TeacherId),
+			Comment:     str.SafeStringPtr(r.Comment),
+			IsFlex:      str.SafeBoolPointer(r.IsFlex),
+			Available:   r.Available,
+		}
+		response[i] = mappedResponse
+	}
+	return response, nil
+}
+
 func (s *ClassroomDBService) GetAvailability(ctx context.Context) ([]*classroom.Availability, error) {
 	res, err := s.q.AvailabilityQuery(ctx)
 	if err != nil {
@@ -70,7 +93,7 @@ func (s *ClassroomDBService) GetAvailability(ctx context.Context) ([]*classroom.
 			ClassroomId: r.ClassroomId,
 			Date:        r.Date.Time,
 			Available:   r.Available,
-			TeacherId:   *r.TeacherId,
+			TeacherId:   str.SafeStringPtr(r.TeacherId),
 		}
 		response[i] = mappedResponse
 	}
@@ -90,7 +113,7 @@ func (s *ClassroomDBService) GetTeacherAvailability(ctx context.Context, teacher
 			ClassroomId: r.ClassroomId,
 			Date:        r.Date.Time,
 			Available:   r.Available,
-			TeacherId:   *r.TeacherId,
+			TeacherId:   str.SafeStringPtr(r.TeacherId),
 		}
 		response[i] = mappedResponse
 	}
@@ -131,9 +154,9 @@ func (s *ClassroomDBService) RoomsWithRosterCount(ctx context.Context) ([]*class
 				Id:          r.ID,
 				RoomNumber:  r.RoomNumber,
 				TeacherName: r.TeacherName,
-				TeacherId:   *r.TeacherId,
-				Comment:     *r.Comment,
-				IsFlex:      *r.IsFlex,
+				TeacherId:   str.SafeStringPtr(r.TeacherId),
+				Comment:     str.SafeStringPtr(r.Comment),
+				IsFlex:      str.SafeBoolPointer(r.IsFlex),
 			},
 			Count: r.Count,
 		}
@@ -154,7 +177,7 @@ func (s *ClassroomDBService) ClassroomSchedule(ctx context.Context, classroomid 
 			ClassroomId: r.Availability.ClassroomId,
 			Date:        r.Availability.Date.Time,
 			Available:   r.Availability.Available,
-			TeacherId:   *r.Availability.TeacherId,
+			TeacherId:   str.SafeStringPtr(r.Availability.TeacherId),
 		}
 		result[i] = mappedResponse
 	}
@@ -218,9 +241,9 @@ func (s *ClassroomDBService) mapClassroom(r ClassroomQueryRow, ch chan<- *classr
 			Id:          r.ID,
 			RoomNumber:  r.RoomNumber,
 			TeacherName: r.TeacherName,
-			TeacherId:   *r.TeacherId,
-			Comment:     *r.Comment,
-			IsFlex:      *r.IsFlex,
+			TeacherId:   str.SafeStringPtr(r.TeacherId),
+			Comment:     str.SafeStringPtr(r.Comment),
+			IsFlex:      str.SafeBoolPointer(r.IsFlex),
 			Available:   r.Available,
 		},
 		AvailableDates: dates,
@@ -250,4 +273,59 @@ func (s *ClassroomDBService) NewClassroomTx(ctx context.Context, classrooms []*c
 		}
 	}
 	return tx.Commit(ctx)
+}
+
+func (s *ClassroomDBService) UpdateClassroomTx(ctx context.Context, classrooms []*classroom.Classroom) error {
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
+	qtx := s.q.WithTx(tx)
+	for _, classroom := range classrooms {
+		err := qtx.UpdateClassroom(ctx, UpdateClassroomParams{
+			ID:         classroom.Id,
+			RoomNumber: classroom.RoomNumber,
+		})
+		if err != nil {
+			return err
+		}
+	}
+	return tx.Commit(ctx)
+}
+
+func (s *ClassroomDBService) DeleteClassroomTx(ctx context.Context, ids []string) error {
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
+	qtx := s.q.WithTx(tx)
+	for _, id := range ids {
+		err := qtx.DeleteClassrooms(ctx, id)
+		if err != nil {
+			return err
+		}
+	}
+	return tx.Commit(ctx)
+}
+
+func (s *ClassroomDBService) GetFlexClasses(ctx context.Context) ([]*classroom.Classroom, error) {
+	res, err := s.q.GetFlexClassrooms(ctx)
+	if err != nil {
+		return nil, err
+	}
+	response := make([]*classroom.Classroom, len(res))
+	for i, r := range res {
+		mappedResponse := &classroom.Classroom{
+			Id:          r.ID,
+			RoomNumber:  r.RoomNumber,
+			TeacherName: r.TeacherName,
+			TeacherId:   str.SafeStringPtr(r.TeacherId),
+			Comment:     str.SafeStringPtr(r.Comment),
+			IsFlex:      str.SafeBoolPointer(r.IsFlex),
+		}
+		response[i] = mappedResponse
+	}
+	return response, nil
 }

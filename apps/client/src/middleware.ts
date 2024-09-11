@@ -55,7 +55,7 @@ export default middleware((req) => {
       break;
     case "admin":
       if (path === "/dashboard") {
-        return NextResponse.redirect(new URL("/dashboard/admin", req.url));
+        return NextResponse.redirect(new URL("/dashboard/staff", req.url));
       }
 
       break;
