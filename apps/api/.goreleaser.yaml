@@ -6,6 +6,7 @@ before:
     - go mod tidy
 builds:
   - id: "blah"
+    main: ./cmd/scriptRunner/main.go
     binary: flexscript
     env:
       - CGO_ENABLED=0
