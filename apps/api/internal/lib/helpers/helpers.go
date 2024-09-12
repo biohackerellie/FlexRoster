@@ -39,11 +39,9 @@ func GenRandomKeyString(length int) string {
 }
 
 // for passing in dates from our database, which are formatted like "2021-10-01"
-func IsDateToday(date string) bool {
+func IsDateToday(date time.Time) bool {
+
 	today := time.Now().Format("2006-01-02")
-	parsedInput, err := time.Parse("2006-01-02", date)
-	if err != nil {
-		return false
-	}
-	return parsedInput.Format("2006-01-02") == today
+	comp := date.Format("2006-01-02")
+	return comp == today
 }

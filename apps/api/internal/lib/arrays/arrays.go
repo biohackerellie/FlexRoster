@@ -29,6 +29,26 @@ func EZSet[T any, K comparable](data []T, extractKey func(T) K) map[K]struct{} {
 	return result
 }
 
+func EZIndexOf[T comparable](arr []T, el T) int {
+	for i, v := range arr {
+		if v == el {
+			return i
+		}
+	}
+
+	return -1
+}
+
+func EZLastIndexOf[T comparable](arr []T, el T) int {
+	for i := len(arr) - 1; i >= 0; i-- {
+		if arr[i] == el {
+			return i
+		}
+	}
+
+	return -1
+}
+
 func EZFilter[T any](input []T, comparator func(el T) bool) []T {
 	res := []T{}
 

@@ -4,12 +4,12 @@ WHERE "studentId" = $1 OR "teacherId" = $1 OR "currentTeacher" = $1;
 
 
 -- name: StudentRequestsQuery :many
-SELECT sqlc.embed(r), sqlc.embed(s), sqlc.embed(c), sqlc.embed(u) 
-FROM "requests" r
-JOIN "user" u ON r."studentId" = u."id"
+SELECT sqlc.embed(requests), sqlc.embed(s), sqlc.embed(c), sqlc.embed(u) 
+FROM "requests" 
+JOIN "user" u ON requests."studentId" = u."id"
 JOIN "students" s ON u."email" = s."studentEmail"
-JOIN "classrooms" c ON r."newTeacher" = c."teacherId"
-WHERE "requests"."dateRequested" >= CURRENT_DATE;
+JOIN "classrooms" c ON requests."newTeacher" = c."teacherId"
+WHERE requests."dateRequested" >= CURRENT_DATE;
 
 
 

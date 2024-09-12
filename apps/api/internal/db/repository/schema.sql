@@ -1,10 +1,4 @@
 
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
-GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO public;
-
-
 CREATE TYPE "RequestStatus" AS ENUM('pending', 'approved', 'denied', 'arrived');
 CREATE TYPE "Role" AS ENUM('secretary', 'teacher', 'student', 'admin');
 CREATE TYPE "Status" AS ENUM('transferredA', 'transferredN', 'default');

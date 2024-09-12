@@ -119,8 +119,10 @@ func (s *Scripts) GetStudentsWithRequestsToday(requests []*service.RequestWithNe
 		sem <- struct{}{}
 		g.Go(func() error {
 			defer func() { <-sem }()
-			ok, id := doesStudentHaveRequestToday(requests, student.StudentName)
+			ok, id := s.doesStudentHaveRequestToday(requests, student.StudentName)
+
 			if ok {
+
 				mu.Lock()
 				studentsWithRequestsToday = append(studentsWithRequestsToday, &service.Student{
 					StudentEmail:       student.StudentEmail,
@@ -147,11 +149,13 @@ func (s *Scripts) GetStudentsWithRequestsToday(requests []*service.RequestWithNe
 	return studentsWithRequestsToday
 }
 
-func doesStudentHaveRequestToday(requests []*service.RequestWithNewClassroom, studentName string) (result bool, classId string) {
+func (s *Scripts) doesStudentHaveRequestToday(requests []*service.RequestWithNewClassroom, studentName string) (result bool, classId string) {
 	result = false
 	classId = ""
 	for _, req := range requests {
-		if helpers.IsDateToday(req.Request.DateRequested.String()) {
+		date := req.Request.DateRequested
+
+		if helpers.IsDateToday(date) {
 			if req.Request.StudentName == studentName {
 				result = true
 				classId = req.Classroom.Id
@@ -219,7 +223,7 @@ func (s *Scripts) StudentSets(withRequests, existingStudents, rosterData []*serv
 			rosterDataSet = res.rosterDataSet
 		}
 	}
-
+	s.log.Info("with Requests", "set", withRequestsSet)
 	finalResult := make(chan Result)
 
 	wg.Add(3)
@@ -230,6 +234,7 @@ func (s *Scripts) StudentSets(withRequests, existingStudents, rosterData []*serv
 			return !ok
 		})}
 	}()
+
 	go func() {
 		defer wg.Done()
 		finalResult <- Result{

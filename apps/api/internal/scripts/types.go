@@ -27,16 +27,16 @@ type ClassUser struct {
 	Status           string `json:"status"`
 	DateLastModified string `json:"dateLastModified"`
 	Metadata
-	UserMasterId string    `json:"userMasterIdentifier"`
-	Identifier   string    `json:"identifier"`
-	EnabledUser  bool      `json:"enabledUser"`
-	GivenName    string    `json:"givenName"`
-	FamilyName   string    `json:"familyName"`
-	Email        string    `json:"email"`
-	UserIds      []UserIds `json:"userIds"`
-	Roles        []Roles   `json:"roles"`
-	Agents       struct{}  `json:"agents"`
-	Grades       []string  `json:"grades"`
+	UserMasterId string        `json:"userMasterIdentifier"`
+	Identifier   string        `json:"identifier"`
+	EnabledUser  string        `json:"enabledUser"`
+	GivenName    string        `json:"givenName"`
+	FamilyName   string        `json:"familyName"`
+	Email        string        `json:"email"`
+	UserIds      []UserIds     `json:"userIds"`
+	Roles        []Roles       `json:"roles"`
+	Agents       []interface{} `json:"agents"`
+	Grades       []string      `json:"grades"`
 }
 
 type Roles struct {

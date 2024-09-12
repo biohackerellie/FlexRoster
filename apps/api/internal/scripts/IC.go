@@ -114,12 +114,19 @@ func (s *Scripts) mutateClassData(c []ClassInfo) []*service.Classroom {
 
 func (s *Scripts) ICQuery() string {
 	appName := s.config.OnerosterAppName
-	return fmt.Sprintf("https://mtdecloud2.infinitecampus.org/campus/api/oneroster/v1p2/%s/ims/oneroster/rostering/v1p2", appName)
+	url := fmt.Sprintf("https://mtdecloud2.infinitecampus.org/campus/api/oneroster/v1p2/%s/ims/oneroster/rostering/v1p2", appName)
+	return url
 }
 
 func (s *Scripts) ICClassQuery() string {
 	SourceID := s.config.SourceID
-	return fmt.Sprintf("%s/schools/%s/classes?limit=1200", s.ICQuery(), SourceID)
+	url := fmt.Sprintf("%s/schools/%s/classes?limit=1200", s.ICQuery(), SourceID)
+	return url
+}
+
+func (s *Scripts) IcStudentQuery(classId string) string {
+	url := fmt.Sprintf("%s/classes/%s/students", s.ICQuery(), classId)
+	return url
 }
 
 func (s *Scripts) GetICStudents(classId string) ([]*service.Student, error) {
@@ -130,7 +137,8 @@ func (s *Scripts) GetICStudents(classId string) ([]*service.Student, error) {
 	client := &http.Client{
 		Timeout: time.Second * 10,
 	}
-	req, err := http.NewRequest("GET", s.ICQuery(), nil)
+	requestUrl := s.IcStudentQuery(classId)
+	req, err := http.NewRequest("GET", requestUrl, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +151,6 @@ func (s *Scripts) GetICStudents(classId string) ([]*service.Student, error) {
 	}
 	defer resp.Body.Close()
 	var res RosterResponse
-	s.log.Info("IC Response", "status", resp.Status)
 
 	err = json.NewDecoder(resp.Body).Decode(&res)
 	if err != nil {

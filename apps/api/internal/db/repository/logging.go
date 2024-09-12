@@ -35,8 +35,9 @@ func (s *LoggingDBService) GetAllLogs(ctx context.Context) ([]*service.Logs, err
 	data := make([]*service.Logs, len(res))
 
 	for i, r := range res {
+		id, _ := str.StrToInt(r.Log.ID)
 		data[i] = &service.Logs{
-			Id:     r.Log.ID,
+			Id:     id,
 			User:   str.SafeStringPtr(r.Log.User),
 			Type:   service.LogType(r.Log.Type),
 			Action: r.Log.Action,
@@ -45,14 +46,14 @@ func (s *LoggingDBService) GetAllLogs(ctx context.Context) ([]*service.Logs, err
 	return data, nil
 }
 
-func (s *LoggingDBService) AddLog(ctx context.Context, id string, user *string, logType string, action string) error {
+func (s *LoggingDBService) AddLog(ctx context.Context, id int, user *string, logType string, action string) error {
 	if user != nil {
 		s.logger.Info("Inserting log with user ID: ", "user", *user)
 	} else {
 		s.logger.Info("Inserting log with no user ID")
 	}
 	err := s.q.CreateLog(ctx, CreateLogParams{
-		ID:     id,
+		ID:     str.IntToString(id),
 		User:   user,
 		Type:   logType,
 		Action: action,
@@ -71,9 +72,11 @@ func (s *LoggingDBService) AddLogs(ctx context.Context, logs []*service.Logs) er
 	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
 	qtx := s.q.WithTx(tx)
 	for _, log := range logs {
+		user := &log.User
+		safeUser := str.SafeStringPtr(user)
 		err := qtx.CreateLog(ctx, CreateLogParams{
-			ID:     log.Id,
-			User:   &log.User,
+			ID:     str.IntToString(log.Id),
+			User:   &safeUser,
 			Type:   enumToString(log.Type),
 			Action: log.Action,
 		})

@@ -31,16 +31,19 @@ func (s *Scripts) SyncStudents(ctx context.Context) error {
 	wg.Add(3)
 	go func() {
 		defer wg.Done()
+		s.log.Info("Fetching students from database")
 		students, err := s.studentRepo.GetAllStudents(ctx)
 		results <- InitialData{studentData: students, err: err}
 	}()
 	go func() {
 		defer wg.Done()
+		s.log.Info("Fetching classrooms from database")
 		classes, err := s.classroomRepo.GetFlexClasses(ctx)
 		results <- InitialData{classData: classes, err: err}
 	}()
 	go func() {
 		defer wg.Done()
+		s.log.Info("Fetching requests from database")
 		requests, err := s.requestRepo.GetAllRequests(ctx)
 		results <- InitialData{requestData: requests, err: err}
 	}()
@@ -63,7 +66,7 @@ func (s *Scripts) SyncStudents(ctx context.Context) error {
 		}
 		if res.classData != nil {
 			flexClasses = res.classData
-			s.log.Info("Campus Students fetched", "count", len(flexClasses))
+			s.log.Info("classrooms fetched", "count", len(flexClasses))
 		} else {
 			s.log.Warn("No students found in Infinite Campus")
 		}
@@ -75,11 +78,13 @@ func (s *Scripts) SyncStudents(ctx context.Context) error {
 		}
 	}
 	if fetchErr != nil {
+		s.log.Error("Error fetching data", "err", fetchErr)
 		return fetchErr
 	}
 
 	rosterData, err := s.GetStudentsPerClass(flexClasses)
 	if err != nil {
+		s.log.Error("Error fetching students from Infinite Campus", "err", err)
 		return err
 	}
 
@@ -111,6 +116,15 @@ func (s *Scripts) SyncStudents(ctx context.Context) error {
 		g.Go(func() error {
 			return RunInMutex(sem, &mu, func() error {
 				return s.studentRepo.UpdateStudentsTx(ctx, studentsToUpdate)
+			})
+		})
+	}
+	if len(studentsWithRequestsToday) > 0 {
+		s.log.Info("Updating students with requests", "count", len(studentsWithRequestsToday))
+		sem <- struct{}{}
+		g.Go(func() error {
+			return RunInMutex(sem, &mu, func() error {
+				return s.studentRepo.UpdateStudentsTx(ctx, studentsWithRequestsToday)
 			})
 		})
 	}

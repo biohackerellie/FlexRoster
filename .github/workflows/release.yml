@@ -16,7 +16,35 @@ permissions:
   # issues: write
 
 jobs:
-  goreleaser:
+  # goreleaser-cli:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Set up Go
+  #       uses: actions/setup-go@v5
+  #       with:
+  #         go-version: stable
+  #     # More assembly might be required: Docker logins, GPG, etc.
+  #     # It all depends on your needs.
+  #     - name: Copy Env
+  #       run: cp .env.config.example .env.config
+  #     - name: Tidy Go Modules
+  #       run: go mod tidy
+  #       working-directory: ./cli/
+  #     - name: Run GoReleaser
+  #       uses: goreleaser/goreleaser-action@v6
+  #       with:
+  #         distribution: goreleaser
+  #         version: ${{ env.GITHUB_REF_NAME }}
+  #         args: release --clean
+  #         workdir: "./cli/"
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  goreleaser-api:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,17 +57,15 @@ jobs:
           go-version: stable
       # More assembly might be required: Docker logins, GPG, etc.
       # It all depends on your needs.
-      - name: Copy Env
-        run: cp .env.config.example .env.config
       - name: Tidy Go Modules
         run: go mod tidy
-        working-directory: ./cli/
+        working-directory: ./apps/api/
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
           distribution: goreleaser
           version: ${{ env.GITHUB_REF_NAME }}
           args: release --clean
-          workdir: "./cli/"
+          workdir: "./apps/api/"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
