@@ -22,7 +22,16 @@ func StrToInt64(i string) (int64, error) {
 	}
 	return id, nil
 }
-
+func StrToInt(i string) (int, error) {
+	id, err := strconv.Atoi(i)
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
+}
+func IntToString(i int) string {
+	return strconv.Itoa(i)
+}
 func CacheKey(t string, i string) string {
 	return GetHashKey(t + ":" + i)
 }

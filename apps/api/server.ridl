@@ -11,7 +11,7 @@ enum LogType: string
   - message
 
 struct Logs
-  - id: string
+  - id: int
     + json = id
   - user: string
     + json = user

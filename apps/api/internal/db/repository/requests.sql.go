@@ -142,12 +142,12 @@ func (q *Queries) NewRequest(ctx context.Context, arg NewRequestParams) error {
 }
 
 const studentRequestsQuery = `-- name: StudentRequestsQuery :many
-SELECT r.id, r."studentId", r."studentName", r."newTeacher", r."newTeacherName", r."currentTeacher", r."currentTeacherName", r."dateRequested", r.status, r.arrived, r.timestamp, s."studentEmail", s."studentName", s."classroomId", s.status, s."defaultClassroomId", s.id, c.id, c."roomNumber", c."teacherName", c."teacherId", c.comment, c."isFlex", u.id, u.name, u.email, u."emailVerified", u.image, u.role 
-FROM "requests" r
-JOIN "user" u ON r."studentId" = u."id"
+SELECT requests.id, requests."studentId", requests."studentName", requests."newTeacher", requests."newTeacherName", requests."currentTeacher", requests."currentTeacherName", requests."dateRequested", requests.status, requests.arrived, requests.timestamp, s."studentEmail", s."studentName", s."classroomId", s.status, s."defaultClassroomId", s.id, c.id, c."roomNumber", c."teacherName", c."teacherId", c.comment, c."isFlex", u.id, u.name, u.email, u."emailVerified", u.image, u.role 
+FROM "requests" 
+JOIN "user" u ON requests."studentId" = u."id"
 JOIN "students" s ON u."email" = s."studentEmail"
-JOIN "classrooms" c ON r."newTeacher" = c."teacherId"
-WHERE "requests"."dateRequested" >= CURRENT_DATE
+JOIN "classrooms" c ON requests."newTeacher" = c."teacherId"
+WHERE requests."dateRequested" >= CURRENT_DATE
 `
 
 type StudentRequestsQueryRow struct {

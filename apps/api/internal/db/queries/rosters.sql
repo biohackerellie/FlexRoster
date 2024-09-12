@@ -47,7 +47,13 @@ DELETE FROM "students" WHERE "studentEmail" = $1;
 
 -- name: NewStudent :exec
 INSERT INTO "students" ("studentEmail", "studentName", "status", "classroomId", "defaultClassroomId")
-VALUES ($1, $2, $3, $4, $5);
+VALUES ($1, $2, $3, $4, $5)
+ON CONFLICT ("studentEmail") DO UPDATE
+SET
+  "studentName" = EXCLUDED."studentName",
+  "status" = EXCLUDED."status",
+  "classroomId" = EXCLUDED."classroomId",
+  "defaultClassroomId" = EXCLUDED."defaultClassroomId";
 
 -- name: UpdateStudentStatus :exec
 UPDATE "students"

@@ -327,5 +327,6 @@ func (s *ClassroomDBService) GetFlexClasses(ctx context.Context) ([]*classroom.C
 		}
 		response[i] = mappedResponse
 	}
+
 	return response, nil
 }

@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema-pro.json
+version: 2
+before:
+  hooks:
+    # - go mod download
+    - go mod tidy
+builds:
+  - id: "blah"
+    binary: flexscript
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+    ldflags: -s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}
+    no_unique_dist_dir: true

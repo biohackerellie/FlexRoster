@@ -1,6 +1,7 @@
 package scripts
 
 import (
+	"api/internal/lib/arrays"
 	"api/internal/service"
 	"bytes"
 	"context"
@@ -78,50 +79,49 @@ func (s *Scripts) AzureUsers() error {
 			otherUsersData = res.data
 		}
 	}
-	existingTeachers, err := s.userRepo.GetexistingTeachers(ctx)
+	existingTeachers, err := s.userRepo.GetAllTeachers(ctx)
 	if err != nil {
 		return err
 	}
-	existingTeacherIds := make(map[string]bool)
-	secMap := make(map[string]bool)
-	for _, id := range existingTeachers {
-		existingTeacherIds[id] = true
-	}
-	for _, email := range secretaries {
-		secMap[email] = true
-	}
+	existingTeacherIds := arrays.EZSet(existingTeachers, func(user *service.User) string {
+		return user.Id
+	})
 
-	newTeachers := make([]*service.User, 0)
-	for _, user := range staffData {
-		if _, exists := existingTeacherIds[user.ID]; !exists {
-			role := "teacher"
-			if _, exists := secMap[user.UserPrincipalName]; exists {
-				role = "secretary"
-			}
-			newTeachers = append(newTeachers, &service.User{
-				Id:    user.ID,
-				Name:  user.DisplayName,
-				Email: user.UserPrincipalName,
-				Role:  role,
-			})
-		}
+	newTeachers := arrays.EZFilter(staffData, func(user AzureUser) bool {
+		_, ok := existingTeacherIds[user.ID]
+		return !ok
+	})
+	otherTeachers := arrays.EZFilter(otherUsersData, func(user AzureUser) bool {
+		_, ok := existingTeacherIds[user.ID]
+		return !ok
+	})
+	if len(otherTeachers) > 0 {
+		newTeachers = append(newTeachers, otherTeachers...)
 	}
-	for _, user := range otherUsersData {
-		if _, exists := existingTeacherIds[user.ID]; !exists {
-			newTeachers = append(newTeachers, &service.User{
-				Id:    user.ID,
-				Name:  user.DisplayName,
-				Email: user.UserPrincipalName,
+	usersToInsert := make([]*service.User, 0)
+	for _, teacher := range newTeachers {
+		isSecretary := arrays.EZContains(secretaries, teacher.UserPrincipalName)
+		if isSecretary {
+			usersToInsert = append(usersToInsert, &service.User{
+				Id:    teacher.ID,
+				Name:  teacher.DisplayName,
+				Email: teacher.UserPrincipalName,
+				Role:  "secretary",
+			})
+		} else {
+			usersToInsert = append(usersToInsert, &service.User{
+				Id:    teacher.ID,
+				Name:  teacher.DisplayName,
+				Email: teacher.UserPrincipalName,
 				Role:  "teacher",
 			})
 		}
 	}
-	if len(newTeachers) > 0 {
-		err = s.userRepo.CreateUserTx(ctx, newTeachers)
+	if len(usersToInsert) > 0 {
+		err = s.userRepo.CreateUserTx(ctx, usersToInsert)
 		if err != nil {
 			return err
 		}
-		s.log.Info("New teachers added", "count", len(newTeachers))
 	}
 
 	return nil
