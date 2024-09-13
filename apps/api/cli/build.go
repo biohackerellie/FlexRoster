@@ -1,10 +1,11 @@
-package cmd
+package cli
 
 import (
 	"fmt"
 	"os"
 
-	"github.com/biohackerellie/FlexRoster/cli/cmd/ui/mainMenu"
+	"api/cli/ui/mainMenu"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 )

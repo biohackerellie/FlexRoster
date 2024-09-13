@@ -1,14 +1,15 @@
 package mainMenu
 
 import (
-	"github.com/biohackerellie/FlexRoster/cli/configs"
+	"api/configs"
+
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type techModel struct {
+type ExcludesModel struct {
 	list      list.Model
 	config    *configs.FlexConfig
 	keys      *ListKeyMap
@@ -16,23 +17,23 @@ type techModel struct {
 	textFocus bool
 }
 
-func InitialTechModel() techModel {
+func ExcludedTeachers() ExcludesModel {
 	var (
 		listKeys = newListKeyMap()
 		config   = configs.GetConfig()
 	)
-	techSupport := config.TechDepartment
-	items := make([]list.Item, len(techSupport))
-	for i := range techSupport {
-		items[i] = item{title: techSupport[i]}
+	teachers := config.ExcludedTeachers
+	items := make([]list.Item, len(teachers))
+	for i := range teachers {
+		items[i] = item{title: teachers[i]}
 	}
 	d := list.NewDefaultDelegate()
 
-	techList := list.New(items, d, 50, 25)
-	techList.SetShowHelp(false)
-	techList.Title = "Tech Department"
-	techList.Styles.Title = titleStyle
-	techList.AdditionalFullHelpKeys = func() []key.Binding {
+	secretaryList := list.New(items, d, 50, 25)
+	secretaryList.SetShowHelp(false)
+	secretaryList.Title = "Excluded Teachers"
+	secretaryList.Styles.Title = titleStyle
+	secretaryList.AdditionalFullHelpKeys = func() []key.Binding {
 		return []key.Binding{
 
 			listKeys.toggleFocus,
@@ -42,10 +43,10 @@ func InitialTechModel() techModel {
 		}
 	}
 	ti := textinput.New()
-	ti.Placeholder = "Add a new secretary"
+	ti.Placeholder = "Add a Exclusion"
 	ti.Blur()
-	return techModel{
-		list:   techList,
+	return ExcludesModel{
+		list:   secretaryList,
 		config: config,
 		keys:   listKeys,
 
@@ -54,11 +55,11 @@ func InitialTechModel() techModel {
 	}
 }
 
-func (m techModel) Init() tea.Cmd {
+func (m ExcludesModel) Init() tea.Cmd {
 	return nil
 }
 
-func (m *techModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *ExcludesModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 
 	switch msg := msg.(type) {
@@ -85,6 +86,7 @@ func (m *techModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.list.SetFilteringEnabled(false)
 					m.list.SetShowPagination(true)
 					return m, func() tea.Msg { return redrawMsg{} }
+
 				}
 			case key.Matches(msg, key.NewBinding(key.WithKeys("esc"))):
 				m.textFocus = false
@@ -124,7 +126,7 @@ func (m *techModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 	return m, tea.Batch(cmds...)
 }
-func (m techModel) View() string {
+func (m ExcludesModel) View() string {
 	var view string
 	if m.textFocus {
 		view = appStyle.Render(m.textInput.View())
@@ -137,22 +139,22 @@ func (m techModel) View() string {
 	return view
 }
 
-func (m *techModel) New() item {
+func (m *ExcludesModel) New() item {
 	i := item{
 		title: m.textInput.Value(),
 	}
 
-	m.config.TechDepartment = append(m.config.TechDepartment, i.title)
+	m.config.ExcludedTeachers = append(m.config.ExcludedTeachers, i.title)
 	err := configs.WriteConfig(m.config)
 	if err != nil {
 		return item{title: err.Error()}
 	}
 	return i
 }
-func (m *techModel) Delete(index int, i item) tea.Cmd {
-	for j, s := range m.config.TechDepartment {
+func (m *ExcludesModel) Delete(index int, i item) tea.Cmd {
+	for j, s := range m.config.ExcludedTeachers {
 		if s == i.title {
-			m.config.TechDepartment = append(m.config.TechDepartment[:j], m.config.TechDepartment[j+1:]...)
+			m.config.ExcludedTeachers = append(m.config.ExcludedTeachers[:j], m.config.ExcludedTeachers[j+1:]...)
 			break
 		}
 	}

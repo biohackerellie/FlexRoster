@@ -3,7 +3,8 @@ package mainMenu
 import (
 	"fmt"
 
-	"github.com/biohackerellie/FlexRoster/cli/configs"
+	"api/internal/config"
+
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -25,7 +26,7 @@ type semesterModel struct {
 	textInput     textinput.Model
 	err           error
 	header        string
-	config        *configs.FlexConfig
+	config        *config.Env
 	semesterTitle string
 	mainMenu      MenuModel
 }

@@ -38,14 +38,14 @@ func (s *Scripts) ProcessLogs(ctx context.Context) error {
 	err = s.logsRepo.AddLogs(ctx, dbLogs)
 	if err != nil {
 		s.log.Error("error adding logs to db", "err", err)
-		return err
+		return nil
 	}
 
-	// err = s.cache.Clear("logs")
-	// if err != nil {
-	// 	s.log.Error("error clearing logs from cache", "err", err)
-	// 	return err
-	// }
+	err = s.cache.Clear("logs")
+	if err != nil {
+		s.log.Error("error clearing logs from cache", "err", err)
+		return err
+	}
 	s.log.Info("logs processed", "count", strconv.Itoa(len(dbLogs)))
 	return nil
 }

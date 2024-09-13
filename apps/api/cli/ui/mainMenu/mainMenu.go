@@ -1,9 +1,9 @@
 package mainMenu
 
 import (
+	"api/internal/config"
 	"fmt"
 
-	"github.com/biohackerellie/FlexRoster/cli/configs"
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -16,7 +16,7 @@ var (
 	checkboxStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("39")).Bold(true)
 	dotStyle      = lipgloss.NewStyle().Foreground(lipgloss.Color("236")).Render(dotChar)
 	mainStyle     = lipgloss.NewStyle().MarginLeft(2)
-	config        *configs.FlexConfig
+	Config        *config.Env
 	logoStyle     = lipgloss.NewStyle().
 			BorderStyle(lipgloss.RoundedBorder()).
 			BorderForeground(lipgloss.Color("212")).
@@ -46,7 +46,7 @@ type MenuModel struct {
 	Loaded   bool
 	Logo     string
 	spinner  spinner.Model
-	Config   *configs.FlexConfig
+	Config   *config.Env
 }
 
 func (m MenuModel) Init() tea.Cmd {
@@ -54,7 +54,6 @@ func (m MenuModel) Init() tea.Cmd {
 }
 
 func MainMenuModel() MenuModel {
-	config = configs.GetConfig()
 	s := spinner.New()
 	s.Spinner = spinner.Dot
 
@@ -63,7 +62,7 @@ func MainMenuModel() MenuModel {
 		Choice:   0,
 		Chosen:   false,
 		Quitting: false,
-		Config:   config,
+		Config:   Config,
 		spinner:  s,
 		Logo:     Logo,
 	}

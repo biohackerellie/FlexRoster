@@ -17,7 +17,7 @@ export function createClient() {
       },
     } as RedisOptions;
 
-    const redis = new Redis(env.REDIS_HOST1, config);
+    const redis = new Redis(env.REDIS_HOST, config);
     redis.on("error", (error: unknown) => {
       console.warn("[Redis] Error", error);
     });

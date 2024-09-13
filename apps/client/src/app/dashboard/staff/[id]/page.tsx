@@ -33,10 +33,6 @@ export default async function TeacherDashboardPage({
     if (userId === teacherId) {
       isTeacher = true;
     }
-  } else if (env.NEXT_PUBLIC_DEMO) {
-    console.log("Demo mode");
-
-    isTeacher = true;
   }
 
   const search = searchParamsValidator.parse(searchParams);

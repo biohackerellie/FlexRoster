@@ -1,7 +1,8 @@
 package mainMenu
 
 import (
-	"github.com/biohackerellie/FlexRoster/cli/configs"
+	"api/configs"
+
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"

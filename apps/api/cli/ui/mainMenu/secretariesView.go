@@ -1,14 +1,66 @@
 package mainMenu
 
 import (
-	"github.com/biohackerellie/FlexRoster/cli/configs"
+	"api/configs"
+
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
-type ExcludesModel struct {
+var (
+	appStyle = lipgloss.NewStyle().Padding(1, 2)
+
+	titleStyle = lipgloss.NewStyle().
+			Foreground(lipgloss.Color("#FFFDF5")).
+			Background(lipgloss.Color("#25A065")).
+			Padding(0, 1)
+)
+
+type item struct {
+	title string
+}
+
+type redrawMsg struct{}
+
+func (i item) Title() string       { return i.title }
+func (i item) Description() string { return "" }
+func (i item) FilterValue() string { return i.title }
+
+type ListKeyMap struct {
+	insertItem  key.Binding
+	toggleFocus key.Binding
+	deleteItem  key.Binding
+	back        key.Binding
+}
+
+func newListKeyMap() *ListKeyMap {
+	return &ListKeyMap{
+		insertItem: key.NewBinding(
+			key.WithKeys("enter"),
+			key.WithHelp("enter", "add item"),
+		),
+		toggleFocus: key.NewBinding(
+			key.WithKeys("i"),
+			key.WithHelp("i", "toggle input focus"),
+		),
+		deleteItem: func() key.Binding {
+			b := &key.Binding{}
+			for _, opt := range []key.BindingOpt{key.WithKeys("x", "backspace"), key.WithHelp("x", "delete item")} {
+				opt(b)
+			}
+			return *b
+		}(),
+		back: key.NewBinding(
+			key.WithKeys("q", "esc"),
+			key.WithHelp("q", "back"),
+		),
+	}
+}
+
+type model struct {
 	list      list.Model
 	config    *configs.FlexConfig
 	keys      *ListKeyMap
@@ -16,21 +68,21 @@ type ExcludesModel struct {
 	textFocus bool
 }
 
-func ExcludedTeachers() ExcludesModel {
+func InitialSecModel() model {
 	var (
 		listKeys = newListKeyMap()
 		config   = configs.GetConfig()
 	)
-	teachers := config.ExcludedTeachers
-	items := make([]list.Item, len(teachers))
-	for i := range teachers {
-		items[i] = item{title: teachers[i]}
+	secretaries := config.Secretaries
+	items := make([]list.Item, len(secretaries))
+	for i := range secretaries {
+		items[i] = item{title: secretaries[i]}
 	}
 	d := list.NewDefaultDelegate()
 
 	secretaryList := list.New(items, d, 50, 25)
 	secretaryList.SetShowHelp(false)
-	secretaryList.Title = "Excluded Teachers"
+	secretaryList.Title = "Secretaries"
 	secretaryList.Styles.Title = titleStyle
 	secretaryList.AdditionalFullHelpKeys = func() []key.Binding {
 		return []key.Binding{
@@ -42,9 +94,9 @@ func ExcludedTeachers() ExcludesModel {
 		}
 	}
 	ti := textinput.New()
-	ti.Placeholder = "Add a Exclusion"
+	ti.Placeholder = "Add a new secretary"
 	ti.Blur()
-	return ExcludesModel{
+	return model{
 		list:   secretaryList,
 		config: config,
 		keys:   listKeys,
@@ -54,11 +106,11 @@ func ExcludedTeachers() ExcludesModel {
 	}
 }
 
-func (m ExcludesModel) Init() tea.Cmd {
+func (m model) Init() tea.Cmd {
 	return nil
 }
 
-func (m *ExcludesModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 
 	switch msg := msg.(type) {
@@ -85,7 +137,6 @@ func (m *ExcludesModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.list.SetFilteringEnabled(false)
 					m.list.SetShowPagination(true)
 					return m, func() tea.Msg { return redrawMsg{} }
-
 				}
 			case key.Matches(msg, key.NewBinding(key.WithKeys("esc"))):
 				m.textFocus = false
@@ -125,7 +176,7 @@ func (m *ExcludesModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 	return m, tea.Batch(cmds...)
 }
-func (m ExcludesModel) View() string {
+func (m model) View() string {
 	var view string
 	if m.textFocus {
 		view = appStyle.Render(m.textInput.View())
@@ -138,22 +189,22 @@ func (m ExcludesModel) View() string {
 	return view
 }
 
-func (m *ExcludesModel) New() item {
+func (m *model) New() item {
 	i := item{
 		title: m.textInput.Value(),
 	}
 
-	m.config.ExcludedTeachers = append(m.config.ExcludedTeachers, i.title)
+	m.config.Secretaries = append(m.config.Secretaries, i.title)
 	err := configs.WriteConfig(m.config)
 	if err != nil {
 		return item{title: err.Error()}
 	}
 	return i
 }
-func (m *ExcludesModel) Delete(index int, i item) tea.Cmd {
-	for j, s := range m.config.ExcludedTeachers {
+func (m *model) Delete(index int, i item) tea.Cmd {
+	for j, s := range m.config.Secretaries {
 		if s == i.title {
-			m.config.ExcludedTeachers = append(m.config.ExcludedTeachers[:j], m.config.ExcludedTeachers[j+1:]...)
+			m.config.Secretaries = append(m.config.Secretaries[:j], m.config.Secretaries[j+1:]...)
 			break
 		}
 	}

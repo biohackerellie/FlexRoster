@@ -1,65 +1,15 @@
 package mainMenu
 
 import (
-	"github.com/biohackerellie/FlexRoster/cli/configs"
+	"api/configs"
+
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 )
 
-var (
-	appStyle = lipgloss.NewStyle().Padding(1, 2)
-
-	titleStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#FFFDF5")).
-			Background(lipgloss.Color("#25A065")).
-			Padding(0, 1)
-)
-
-type item struct {
-	title string
-}
-
-type redrawMsg struct{}
-
-func (i item) Title() string       { return i.title }
-func (i item) Description() string { return "" }
-func (i item) FilterValue() string { return i.title }
-
-type ListKeyMap struct {
-	insertItem  key.Binding
-	toggleFocus key.Binding
-	deleteItem  key.Binding
-	back        key.Binding
-}
-
-func newListKeyMap() *ListKeyMap {
-	return &ListKeyMap{
-		insertItem: key.NewBinding(
-			key.WithKeys("enter"),
-			key.WithHelp("enter", "add item"),
-		),
-		toggleFocus: key.NewBinding(
-			key.WithKeys("i"),
-			key.WithHelp("i", "toggle input focus"),
-		),
-		deleteItem: func() key.Binding {
-			b := &key.Binding{}
-			for _, opt := range []key.BindingOpt{key.WithKeys("x", "backspace"), key.WithHelp("x", "delete item")} {
-				opt(b)
-			}
-			return *b
-		}(),
-		back: key.NewBinding(
-			key.WithKeys("q", "esc"),
-			key.WithHelp("q", "back"),
-		),
-	}
-}
-
-type model struct {
+type techModel struct {
 	list      list.Model
 	config    *configs.FlexConfig
 	keys      *ListKeyMap
@@ -67,23 +17,23 @@ type model struct {
 	textFocus bool
 }
 
-func InitialSecModel() model {
+func InitialTechModel() techModel {
 	var (
 		listKeys = newListKeyMap()
 		config   = configs.GetConfig()
 	)
-	secretaries := config.Secretaries
-	items := make([]list.Item, len(secretaries))
-	for i := range secretaries {
-		items[i] = item{title: secretaries[i]}
+	techSupport := config.TechDepartment
+	items := make([]list.Item, len(techSupport))
+	for i := range techSupport {
+		items[i] = item{title: techSupport[i]}
 	}
 	d := list.NewDefaultDelegate()
 
-	secretaryList := list.New(items, d, 50, 25)
-	secretaryList.SetShowHelp(false)
-	secretaryList.Title = "Secretaries"
-	secretaryList.Styles.Title = titleStyle
-	secretaryList.AdditionalFullHelpKeys = func() []key.Binding {
+	techList := list.New(items, d, 50, 25)
+	techList.SetShowHelp(false)
+	techList.Title = "Tech Department"
+	techList.Styles.Title = titleStyle
+	techList.AdditionalFullHelpKeys = func() []key.Binding {
 		return []key.Binding{
 
 			listKeys.toggleFocus,
@@ -95,8 +45,8 @@ func InitialSecModel() model {
 	ti := textinput.New()
 	ti.Placeholder = "Add a new secretary"
 	ti.Blur()
-	return model{
-		list:   secretaryList,
+	return techModel{
+		list:   techList,
 		config: config,
 		keys:   listKeys,
 
@@ -105,11 +55,11 @@ func InitialSecModel() model {
 	}
 }
 
-func (m model) Init() tea.Cmd {
+func (m techModel) Init() tea.Cmd {
 	return nil
 }
 
-func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *techModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 
 	switch msg := msg.(type) {
@@ -175,7 +125,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 	return m, tea.Batch(cmds...)
 }
-func (m model) View() string {
+func (m techModel) View() string {
 	var view string
 	if m.textFocus {
 		view = appStyle.Render(m.textInput.View())
@@ -188,22 +138,22 @@ func (m model) View() string {
 	return view
 }
 
-func (m *model) New() item {
+func (m *techModel) New() item {
 	i := item{
 		title: m.textInput.Value(),
 	}
 
-	m.config.Secretaries = append(m.config.Secretaries, i.title)
+	m.config.TechDepartment = append(m.config.TechDepartment, i.title)
 	err := configs.WriteConfig(m.config)
 	if err != nil {
 		return item{title: err.Error()}
 	}
 	return i
 }
-func (m *model) Delete(index int, i item) tea.Cmd {
-	for j, s := range m.config.Secretaries {
+func (m *techModel) Delete(index int, i item) tea.Cmd {
+	for j, s := range m.config.TechDepartment {
 		if s == i.title {
-			m.config.Secretaries = append(m.config.Secretaries[:j], m.config.Secretaries[j+1:]...)
+			m.config.TechDepartment = append(m.config.TechDepartment[:j], m.config.TechDepartment[j+1:]...)
 			break
 		}
 	}

@@ -81,7 +81,7 @@ func (s *LoggingDBService) AddLogs(ctx context.Context, logs []*service.Logs) er
 			Action: log.Action,
 		})
 		if err != nil {
-			return err
+			continue
 		}
 
 	}

@@ -8,7 +8,6 @@ import {
   logRoutes,
   requestRoutes,
   rosterRoutes,
-  scriptRoutes,
   userRoutes,
 } from "./routes";
 
@@ -35,7 +34,6 @@ const app = new Elysia()
       .use(classRoutes)
       .use(rosterRoutes)
       .use(inboxRoutes)
-      .use(scriptRoutes)
       .use(userRoutes)
       .use(logRoutes)
       .use(requestRoutes),

@@ -1,9 +1,7 @@
 import { Link } from "next-view-transitions";
 
 import { auth } from "@local/auth";
-import { buttonVariants } from "@local/ui/button";
 
-import { Icons } from "@/components/icons";
 import { env } from "@/env";
 import { siteConfig } from "@/siteConfig";
 import { MobileDropdown } from "../app/help/_components/mobileNav";
@@ -15,13 +13,7 @@ export async function Header() {
   let userId;
   let roles;
   if (!session) {
-    if (env.NEXT_PUBLIC_DEMO) {
-      canRender = true;
-      userId = "Test-Id";
-      roles = "admin";
-    } else {
-      canRender = false;
-    }
+    canRender = false;
   } else {
     canRender = true;
     userId = session.user.id;

@@ -61,7 +61,7 @@ func main() {
 		flag.Usage()
 	}
 
-	waitForShutdown(log)
+	waitForShutdown()
 }
 
 // Helper to initialize Redis
@@ -117,14 +117,14 @@ func runWithTimeout(log *logger.Logger, timeout time.Duration, f func(ctx contex
 		} else {
 			log.Info(successMsg)
 		}
-	case sig := <-waitForShutdown(log):
+	case sig := <-waitForShutdown():
 		log.Warn("Received signal", "signal", sig, "Shutting down.")
 		cancel()
 	}
 }
 
 // Handle shutdown signals
-func waitForShutdown(log *logger.Logger) <-chan os.Signal {
+func waitForShutdown() <-chan os.Signal {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, os.Interrupt, syscall.SIGTERM)
 

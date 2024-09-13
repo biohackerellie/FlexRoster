@@ -20,16 +20,11 @@ export default async function StudentDashboard({
 }: {
   searchParams: SearchParams;
 }) {
-  let userId;
-
   const session = await auth();
   if (!session) {
-    if (env.NEXT_PUBLIC_DEMO) {
-      userId = "test-student";
-    } else {
-      return notFound();
-    }
-  } else userId = session?.user?.id;
+    return notFound();
+  }
+  const userId = session?.user?.id;
   const search = searchParamsValidator.parse(searchParams);
   return (
     <div className="flex justify-center align-middle">
