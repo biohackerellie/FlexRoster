@@ -1,7 +1,5 @@
 import { logger } from "@local/utils";
 
-import { env } from "../../env";
-
 interface emailData {
   to?: string;
   message: string;
@@ -10,12 +8,12 @@ interface emailData {
 
 export default async function sendEmail(data: emailData) {
   try {
-    const toEmail = data.to ?? env.TECH_DEPARTMENT_EMAILS.join(",");
-    const res = await fetch(`${env.EMAIL_API}`, {
+    const toEmail = data.to ?? process.env.TECH_DEPARTMENT_EMAILS;
+    const res = await fetch(`${process.env.EMAIL_API}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": env.EMAIL_API_KEY,
+        "x-api-key": process.env.EMAIL_API_KEY!,
       },
       body: JSON.stringify({
         to: toEmail,

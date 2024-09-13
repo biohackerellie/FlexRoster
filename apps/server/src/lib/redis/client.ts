@@ -1,8 +1,6 @@
 import type { RedisOptions } from "ioredis";
 import Redis from "ioredis";
 
-import { env } from "~/env";
-
 export function createClient() {
   try {
     const config: RedisOptions = {
@@ -17,7 +15,7 @@ export function createClient() {
       },
     } as RedisOptions;
 
-    const redis = new Redis(env.REDIS_HOST, config);
+    const redis = new Redis(process.env.REDIS_HOST!, config);
     redis.on("error", (error: unknown) => {
       console.warn("[Redis] Error", error);
     });

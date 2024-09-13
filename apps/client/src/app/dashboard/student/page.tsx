@@ -7,7 +7,6 @@ import { auth } from "@local/auth";
 import { Card, CardContent } from "@local/ui/card";
 import { searchParamsValidator } from "@local/utils";
 
-import { env } from "@/env";
 import {
   getStudentClassesData,
   getStudentRequests,

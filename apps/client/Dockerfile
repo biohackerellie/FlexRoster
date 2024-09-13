@@ -31,7 +31,6 @@ RUN pnpm install
 
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
-COPY .env .env
 # Uncomment and use build args to enable remote caching
 # ARG TURBO_TEAM
 # ENV TURBO_TEAM=$TURBO_TEAM
@@ -49,7 +48,6 @@ RUN adduser --system --uid 1001 nextjs
 USER nextjs
 
 COPY ../../.npmrc .npmrc
-COPY ../../.env .env
 COPY --from=installer /app/apps/client/next.config.js .
 COPY --from=installer /app/apps/client/package.json .
 

@@ -106,12 +106,12 @@ export async function getClassById(id: string) {
 //     const defaultRoster: insertClassRoster[] = [];
 
 //     const data = await fetcher<RosterResponse>(
-//       icStudentQuery(id, env.ONEROSTER_APPNAME),
+//       icStudentQuery(id, process.env.ONEROSTER_APPNAME),
 //       {
 //         method: "GET",
 //         headers: {
 //           accept: "application/json",
-//           "X-XSRF-TOKEN": env.XSRF_TOKEN,
+//           "X-XSRF-TOKEN": process.env.XSRF_TOKEN,
 //           Authorization: `Bearer ${token}`,
 //         },
 //       },

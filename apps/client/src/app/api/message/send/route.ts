@@ -6,7 +6,6 @@ import type { Logs, Message } from "@local/utils";
 import { auth } from "@local/auth";
 import { messageValidator } from "@local/utils";
 
-import { env } from "@/env";
 import { client } from "@/lib/eden";
 import { pusherServer } from "@/lib/pusher";
 import { toPusherKey } from "@/lib/utils";

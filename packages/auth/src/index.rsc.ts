@@ -7,7 +7,6 @@ import { decode, getToken } from "next-auth/jwt";
 
 import { db, InferSelectModel, pgTable, PgTableFn, schema } from "@local/db";
 
-import { env } from "../env";
 import authConfig from "./auth.config";
 
 export type { Session } from "next-auth";
@@ -60,7 +59,7 @@ const {
   signIn,
   signOut,
 } = NextAuth({
-  secret: env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   adapter: adapter,
   session: {
     strategy: "jwt",

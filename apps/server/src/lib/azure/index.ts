@@ -1,4 +1,3 @@
-import { env } from "~/env";
 import { getToken, setToken } from "../redis/";
 import { fetcher } from "../utils";
 
@@ -31,13 +30,13 @@ export async function azureAuth(): Promise<string> {
  */
 async function fetchNewToken(): Promise<TokenResponse> {
   const body = new URLSearchParams({
-    client_id: env.AZURE_AD_CLIENT_ID,
+    client_id: process.env.AZURE_AD_CLIENT_ID,
     scope: "https://graph.microsoft.com/.default",
-    client_secret: env.AZURE_AD_CLIENT_SECRET,
+    client_secret: process.env.AZURE_AD_CLIENT_SECRET,
     grant_type: "client_credentials",
   });
   const data = await fetcher<TokenResponse>(
-    `https://login.microsoftonline.com/${env.AZURE_AD_TENANT_ID}/oauth2/v2.0/token`,
+    `https://login.microsoftonline.com/${process.env.AZURE_AD_TENANT_ID}/oauth2/v2.0/token`,
     {
       method: "POST",
       headers: {

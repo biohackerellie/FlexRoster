@@ -13,7 +13,6 @@ import {
 } from "@local/ui/card";
 import { searchParamsValidator } from "@local/utils";
 
-import { env } from "@/env";
 import { getDefaultRoster } from "../../_components/logic/queries";
 import TeacherRosterTable from "../../_components/tables/teacherTable";
 

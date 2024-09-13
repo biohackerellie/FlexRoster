@@ -11,6 +11,8 @@ services:
         condition: on-failure
     networks:
       - webnet
+    env_file:
+      - .env
 
   client:
     image: docker.laurel.k12.mt.us/flexroster

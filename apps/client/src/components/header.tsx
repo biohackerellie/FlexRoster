@@ -2,7 +2,6 @@ import { Link } from "next-view-transitions";
 
 import { auth } from "@local/auth";
 
-import { env } from "@/env";
 import { siteConfig } from "@/siteConfig";
 import { MobileDropdown } from "../app/help/_components/mobileNav";
 import { Navbar } from "./navbar";

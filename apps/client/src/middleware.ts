@@ -4,8 +4,6 @@ import NextAuth from "next-auth";
 
 import authConfig from "@local/auth/auth.config";
 
-import { env } from "./env";
-
 const { auth: middleware } = NextAuth(authConfig);
 
 export default middleware((req) => {
@@ -16,7 +14,6 @@ export default middleware((req) => {
 
   if (!token) {
     if (path.startsWith("/dashboard")) {
-
       return NextResponse.redirect(new URL("/login", req.url));
     }
 

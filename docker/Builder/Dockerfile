@@ -8,8 +8,6 @@ RUN curl -fsSL https://bun.sh/install | bash
 
 
 RUN git clone "https://github.com/biohackerellie/flexroster.git"
-COPY .env /app/flexroster/.env
-COPY .env /app/flexroster/apps/client/.env
 
 
 CMD [ "/bin/bash" ]
