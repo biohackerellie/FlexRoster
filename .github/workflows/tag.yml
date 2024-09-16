@@ -1,0 +1,18 @@
+name: Auto.Tag
+
+on:
+  - push
+
+jobs:
+  tag:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 22
+    steps:
+      - uses: phish108/autotag-action@v1.1.55
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          with-v: "true"

@@ -50,3 +50,4 @@ packages/config/src/index.ts
 
 cli/configs/config.json
 **/config.json
+env-configmap.yaml
