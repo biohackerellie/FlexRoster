@@ -3,14 +3,14 @@
 import dns from "dns";
 import { fileURLToPath } from "url";
 import withMdx from "@next/mdx";
-import createJiti from "jiti";
+// import createJiti from "jiti";
 import rehypePrettyCode from "rehype-pretty-code";
 import remarkToc from "remark-toc";
 import { getSingletonHighlighter as getHighlighter } from "shiki";
 
 dns.setDefaultResultOrder("ipv4first");
-createJiti(fileURLToPath(import.meta.url))("./src/env");
-createJiti(fileURLToPath(import.meta.url))("@local/auth/env");
+// createJiti(fileURLToPath(import.meta.url))("./src/env");
+// createJiti(fileURLToPath(import.meta.url))("@local/auth/env");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
