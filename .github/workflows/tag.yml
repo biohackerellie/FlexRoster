@@ -2,19 +2,15 @@ name: Auto.Tag
 
 on:
   - push
-permissions:
-  contents: read
-  packages: write
-  attestations: write
-  id-token: write
 
 jobs:
   tag:
+    permissions: write-all
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version:
-          - 12
+          - 22
     steps:
       - uses: phish108/autotag-action@v1.1.55
         with:
