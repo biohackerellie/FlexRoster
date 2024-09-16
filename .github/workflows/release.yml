@@ -12,8 +12,8 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  CLIENT_IMAGE_NAME: flexroster-client
-  SERVER_IMAGE_NAME: flexroster-server
+  CLIENT_IMAGE_NAME: flexclient
+  SERVER_IMAGE_NAME: flexserver
 jobs:
   goreleaser-api:
     permissions:
