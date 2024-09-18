@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  server:
+    image: ghcr.io/biohackerellie/flexserver:main
+    ports:
+      - "3030:3030"
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+    networks:
+      - webnet
+    env_file:
+      - .env
+
+  client:
+    image: ghcr.io/biohackerellie/flexclient:main
+    ports:
+      - "3000:3000"
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+    networks:
+      - webnet
+    env_file:
+      - .env
+
+networks:
+  webnet:

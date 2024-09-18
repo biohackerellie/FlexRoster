@@ -1,31 +1,18 @@
-version: "3.8"
-
 services:
   server:
-    image: docker.laurel.k12.mt.us/bun-api
+    container_name: bun-api
+    image: ghcr.io/biohackerellie/flexserver:main
+    restart: unless-stopped
     ports:
       - "3030:3030"
-    deploy:
-      replicas: 3
-      restart_policy:
-        condition: on-failure
-    networks:
-      - webnet
     env_file:
       - .env
 
   client:
-    image: docker.laurel.k12.mt.us/flexroster
+    container_name: flexroster
+    image: ghcr.io/biohackerellie/flexclient:main
+    restart: unless-stopped
     ports:
       - "3000:3000"
-    deploy:
-      replicas: 3
-      restart_policy:
-        condition: on-failure
-    networks:
-      - webnet
     env_file:
       - .env
-
-networks:
-  webnet:
