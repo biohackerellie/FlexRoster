@@ -61,7 +61,7 @@ importers:
     dependencies:
       '@elysiajs/eden':
         specifier: ^1.1.3
-        version: 1.1.3(elysia@1.1.12(@sinclair/typebox@0.33.11)(openapi-types@12.1.3)(typescript@5.5.3))
+        version: 1.1.3(elysia@1.1.13(@sinclair/typebox@0.33.12)(openapi-types@12.1.3)(typescript@5.5.3))
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.0(react@19.0.0-rc-fb9a90fa48-20240614))
@@ -108,14 +108,14 @@ importers:
         specifier: 0.0.0-experimental-487cb0e-20240529
         version: 0.0.0-experimental-487cb0e-20240529
       date-fns:
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^4.1.0
+        version: 4.1.0
       date-fns-tz:
         specifier: ^3.1.3
-        version: 3.1.3(date-fns@4.0.0)
+        version: 3.1.3(date-fns@4.1.0)
       elysia:
-        specifier: ^1.1.12
-        version: 1.1.12(@sinclair/typebox@0.33.11)(openapi-types@12.1.3)(typescript@5.5.3)
+        specifier: ^1.1.13
+        version: 1.1.13(@sinclair/typebox@0.33.12)(openapi-types@12.1.3)(typescript@5.5.3)
       framer-motion:
         specifier: ^11.5.4
         version: 11.5.4(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
@@ -257,25 +257,25 @@ importers:
         version: 0.7.0
       '@elysiajs/cors':
         specifier: ^1.1.1
-        version: 1.1.1(elysia@1.1.12(@sinclair/typebox@0.33.11)(openapi-types@12.1.3)(typescript@5.5.3))
+        version: 1.1.1(elysia@1.1.13(@sinclair/typebox@0.33.12)(openapi-types@12.1.3)(typescript@5.5.3))
       '@elysiajs/swagger':
         specifier: ^1.1.1
-        version: 1.1.1(elysia@1.1.12(@sinclair/typebox@0.33.11)(openapi-types@12.1.3)(typescript@5.5.3))
+        version: 1.1.1(elysia@1.1.13(@sinclair/typebox@0.33.12)(openapi-types@12.1.3)(typescript@5.5.3))
       '@local/db':
         specifier: workspace:*
         version: link:../../packages/db
       '@sinclair/typebox':
-        specifier: ^0.33.11
-        version: 0.33.11
+        specifier: ^0.33.12
+        version: 0.33.12
       '@t3-oss/env-core':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.5.3)(zod@3.23.8)
       elysia:
-        specifier: ^1.1.12
-        version: 1.1.12(@sinclair/typebox@0.33.11)(openapi-types@12.1.3)(typescript@5.5.3)
+        specifier: ^1.1.13
+        version: 1.1.13(@sinclair/typebox@0.33.12)(openapi-types@12.1.3)(typescript@5.5.3)
       execa:
-        specifier: ^9.3.1
-        version: 9.3.1
+        specifier: ^9.4.0
+        version: 9.4.0
       ioredis:
         specifier: ^5.4.1
         version: 5.4.1
@@ -311,8 +311,8 @@ importers:
         specifier: ^20.16.5
         version: 20.16.5
       bun-types:
-        specifier: ^1.1.27
-        version: 1.1.27
+        specifier: ^1.1.28
+        version: 1.1.28
       dotenv-cli:
         specifier: ^7.4.2
         version: 7.4.2
@@ -379,7 +379,7 @@ importers:
         version: 0.11.1(typescript@5.5.3)(zod@3.23.8)
       drizzle-orm:
         specifier: ^0.33.0
-        version: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.27)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1)
+        version: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.28)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1)
       postgres:
         specifier: ^3.4.4
         version: 3.4.4
@@ -475,8 +475,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0(@types/react-dom@18.3.0)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1)
       date-fns:
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^4.1.0
+        version: 4.1.0
       lucide-react:
         specifier: ^0.441.0
         version: 0.441.0(react@19.0.0-rc-fb9a90fa48-20240614)
@@ -502,8 +502,8 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.12(ts-node@10.9.2(@types/node@20.16.5)(typescript@5.5.3)))
       vaul:
-        specifier: ^0.9.3
-        version: 0.9.3(@types/react-dom@18.3.0)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1)
+        specifier: ^0.9.4
+        version: 0.9.4(@types/react-dom@18.3.0)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1)
     devDependencies:
       '@local/eslint-config':
         specifier: workspace:*
@@ -540,7 +540,7 @@ importers:
     dependencies:
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.27)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8)
+        version: 0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.28)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8)
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -616,14 +616,14 @@ importers:
         specifier: ^9.6.1
         version: 9.6.1
       bun-types:
-        specifier: ^1.1.27
-        version: 1.1.27
+        specifier: ^1.1.28
+        version: 1.1.28
       eslint:
         specifier: 'catalog:'
         version: 9.7.0
       eslint-import-resolver-typescript-bun:
         specifier: ^0.0.104
-        version: 0.0.104(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(bun-types@1.1.27)(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0))(eslint@9.7.0)
+        version: 0.0.104(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(bun-types@1.1.28)(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0))(eslint@9.7.0)
       prettier:
         specifier: 'catalog:'
         version: 3.3.3
@@ -695,8 +695,8 @@ importers:
   tooling/tsconfig:
     dependencies:
       bun-types:
-        specifier: ^1.1.27
-        version: 1.1.27
+        specifier: ^1.1.28
+        version: 1.1.28
 
 packages:
 
@@ -2441,8 +2441,8 @@ packages:
   '@shikijs/vscode-textmate@9.2.2':
     resolution: {integrity: sha512-TMp15K+GGYrWlZM8+Lnj9EaHEFmOen0WJBrfa17hF7taDOYthuPPV0GWzfd/9iMij0akS/8Yw2ikquH7uVi/fg==}
 
-  '@sinclair/typebox@0.33.11':
-    resolution: {integrity: sha512-2+0JxGh5HK1KX660phgcfxw161/TV3n0koonoQ8u65gTeZFHdWI5ujPaGaQmXXtVC6rwEWwPtOoQ8ihyZwt3eg==}
+  '@sinclair/typebox@0.33.12':
+    resolution: {integrity: sha512-d5KrXIdPolLp8VpGpZAQvEz8ioVtFlUQSyCIS2sEBi7FKhceIB7nj9BlNfqqvp5wmOfg8v8bP1rAvYYkjz21/Q==}
 
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
@@ -3014,8 +3014,8 @@ packages:
   builtins@5.1.0:
     resolution: {integrity: sha512-SW9lzGTLvWTP1AY8xeAMZimqDrIaSdLQUcVr9DMef51niJ022Ri87SwRRKYm4A6iHfkPaiVUu/Duw2Wc4J7kKg==}
 
-  bun-types@1.1.27:
-    resolution: {integrity: sha512-rHXAiIDefeMS/fleNM1rRDYqolJGNRdch3+AuCRwcZWaqTa1vjGBNsahH/HVV7Y82frllYhJomCVSEiHzLzkgg==}
+  bun-types@1.1.28:
+    resolution: {integrity: sha512-XiWHzHZIxkgssHSUwJVrkUDHvwhHzE9mrFUMXZ3BKqNiGzL0n/fB/XUQZibcHjg0SvW/Tt5WUNeKmiM9njuy/w==}
 
   bundle-name@4.1.0:
     resolution: {integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==}
@@ -3455,8 +3455,8 @@ packages:
   date-fns@3.6.0:
     resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
 
-  date-fns@4.0.0:
-    resolution: {integrity: sha512-6K33+I8fQ5otvHgLIvKK1xmMbLAh0pduyrx7dwMXKiGYeoWhmk6M3Zoak9n7bXHMJQlHq1yqmdGy1QxKddJjUA==}
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
   dayjs@1.11.11:
     resolution: {integrity: sha512-okzr3f11N6WuqYtZSvm+F776mB41wRZMhKP+hc34YdW+KmtYYK9iqvHSwo2k9FEH3fhGXvOPV6yz2IcSrfRUDg==}
@@ -3729,8 +3729,8 @@ packages:
   electron-to-chromium@1.5.4:
     resolution: {integrity: sha512-orzA81VqLyIGUEA77YkVA1D+N+nNfl2isJVjjmOyrlxuooZ19ynb+dOlaDTqd/idKRS9lDCSBmtzM+kyCsMnkA==}
 
-  elysia@1.1.12:
-    resolution: {integrity: sha512-ewydi2tqm9LEYTv9Ah+Y8Y2/Grvpy02mcICwEkAScfj4eTRK52CFJ7VjAG8/dbMGx+uwmnXjtYpd50lDBnBXNQ==}
+  elysia@1.1.13:
+    resolution: {integrity: sha512-f3wPCR2n+juMOhUE94B0DQYQyj9YMrgXhP62hgQg9G3uHBsr57Iu5VpVbE7Uk9oMtQYP8eRreH/6r54lisHgUQ==}
     peerDependencies:
       '@sinclair/typebox': '>= 0.32.0'
       openapi-types: '>= 12.0.0'
@@ -4048,8 +4048,8 @@ packages:
     resolution: {integrity: sha512-VyhnebXciFV2DESc+p6B+y0LjSm0krU4OgJN44qFAhBY0TJ+1V61tYD2+wHusZ6F9n5K+vl8k0sTy7PEfV4qpg==}
     engines: {node: '>=16.17'}
 
-  execa@9.3.1:
-    resolution: {integrity: sha512-gdhefCCNy/8tpH/2+ajP9IQc14vXchNdd0weyzSJEFURhRMGncQ+zKFxwjAufIewPEJm9BPOaJnvg2UtlH2gPQ==}
+  execa@9.4.0:
+    resolution: {integrity: sha512-yKHlle2YGxZE842MERVIplWwNH5VYmqqcPFgtnlU//K8gxuFFXu0pwd/CrfXTumFpeEiufsP7+opT/bPJa1yVw==}
     engines: {node: ^18.19.0 || >=20.5.0}
 
   extend-shallow@2.0.1:
@@ -5373,6 +5373,10 @@ packages:
   npm-run-path@5.3.0:
     resolution: {integrity: sha512-ppwTtiJZq0O/ai0z7yfudtBpWIoxM8yE6nHi1X47eFR2EWORqfbu6CnPlNsjeN683eT0qG6H/Pyf9fCcvjnnnQ==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
+  npm-run-path@6.0.0:
+    resolution: {integrity: sha512-9qny7Z9DsQU8Ou39ERsPU4OZQlSTP47ShQzuKZ6PRXpYLtIFgl/DEBYEXKlvcEa+9tHVcK8CF81Y2V72qaZhWA==}
+    engines: {node: '>=18'}
 
   npm-to-yarn@3.0.0:
     resolution: {integrity: sha512-76YnmsbfrYp0tMsWxM0RNX0Vs+x8JxpJGu6B/jDn4lW8+laiTcKmKi9MeMh4UikO4RkJ1oqURoDy9bXJmMXS6A==}
@@ -6748,6 +6752,10 @@ packages:
   undici-types@6.19.6:
     resolution: {integrity: sha512-e/vggGopEfTKSvj4ihnOLTsqhrKRN3LeO6qSN/GxohhuRv8qH9bNQ4B8W7e/vFL+0XTnmHPB4/kegunZGA4Org==}
 
+  unicorn-magic@0.3.0:
+    resolution: {integrity: sha512-+QBBXBCvifc56fsbuxZQ6Sic3wqqc3WWaqxs58gvJrcOuN83HGTCwz3oS5phzU9LthRNE9VrJCFCLUgHeeFnfA==}
+    engines: {node: '>=18'}
+
   unified@11.0.5:
     resolution: {integrity: sha512-xKvGhPWw3k84Qjh8bI3ZeJjqnyadK+GEFtazSfZv/rKeTkTjOJho6mFqh2SM96iIcZokxiOpg78GazTSg8+KHA==}
 
@@ -6875,8 +6883,8 @@ packages:
     resolution: {integrity: sha512-YuKoXDAhBYxY7SfOKxHBDoSyENFeW5VvIIQp2TGQuit8gpK6MnWaQelBKxso72DoxTZfZdcP3W90LqpSkgPzLQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
-  vaul@0.9.3:
-    resolution: {integrity: sha512-VNWuzw37fw6DWptl9PMUc9PH5NJpGqpetcxDMRiH/GzH2inJAEMwo/uZqaONlGseeOG8xDtrrp3nYoiZhyabpw==}
+  vaul@0.9.4:
+    resolution: {integrity: sha512-pcyIy1nEk6798ReNQpbVH/T/dYnoJ3bwyq7jmSp134s+bSvpWoSWQthm3/jfsQRvHNYIEK4ZKbkHUJ3YfLfw1w==}
     peerDependencies:
       react: ^16.8 || ^17.0 || ^18.0
       react-dom: ^16.8 || ^17.0 || ^18.0
@@ -7320,17 +7328,17 @@ snapshots:
 
   '@drizzle-team/brocli@0.10.1': {}
 
-  '@elysiajs/cors@1.1.1(elysia@1.1.12(@sinclair/typebox@0.33.11)(openapi-types@12.1.3)(typescript@5.5.3))':
+  '@elysiajs/cors@1.1.1(elysia@1.1.13(@sinclair/typebox@0.33.12)(openapi-types@12.1.3)(typescript@5.5.3))':
     dependencies:
-      elysia: 1.1.12(@sinclair/typebox@0.33.11)(openapi-types@12.1.3)(typescript@5.5.3)
+      elysia: 1.1.13(@sinclair/typebox@0.33.12)(openapi-types@12.1.3)(typescript@5.5.3)
 
-  '@elysiajs/eden@1.1.3(elysia@1.1.12(@sinclair/typebox@0.33.11)(openapi-types@12.1.3)(typescript@5.5.3))':
+  '@elysiajs/eden@1.1.3(elysia@1.1.13(@sinclair/typebox@0.33.12)(openapi-types@12.1.3)(typescript@5.5.3))':
     dependencies:
-      elysia: 1.1.12(@sinclair/typebox@0.33.11)(openapi-types@12.1.3)(typescript@5.5.3)
+      elysia: 1.1.13(@sinclair/typebox@0.33.12)(openapi-types@12.1.3)(typescript@5.5.3)
 
-  '@elysiajs/swagger@1.1.1(elysia@1.1.12(@sinclair/typebox@0.33.11)(openapi-types@12.1.3)(typescript@5.5.3))':
+  '@elysiajs/swagger@1.1.1(elysia@1.1.13(@sinclair/typebox@0.33.12)(openapi-types@12.1.3)(typescript@5.5.3))':
     dependencies:
-      elysia: 1.1.12(@sinclair/typebox@0.33.11)(openapi-types@12.1.3)(typescript@5.5.3)
+      elysia: 1.1.13(@sinclair/typebox@0.33.12)(openapi-types@12.1.3)(typescript@5.5.3)
       lodash.clonedeep: 4.5.0
       openapi-types: 12.1.3
 
@@ -8669,7 +8677,7 @@ snapshots:
 
   '@shikijs/vscode-textmate@9.2.2': {}
 
-  '@sinclair/typebox@0.33.11': {}
+  '@sinclair/typebox@0.33.12': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
@@ -9363,7 +9371,7 @@ snapshots:
     dependencies:
       semver: 7.6.3
 
-  bun-types@1.1.27:
+  bun-types@1.1.28:
     dependencies:
       '@types/node': 20.12.13
       '@types/ws': 8.5.10
@@ -9836,13 +9844,13 @@ snapshots:
       es-errors: 1.3.0
       is-data-view: 1.0.1
 
-  date-fns-tz@3.1.3(date-fns@4.0.0):
+  date-fns-tz@3.1.3(date-fns@4.1.0):
     dependencies:
-      date-fns: 4.0.0
+      date-fns: 4.1.0
 
   date-fns@3.6.0: {}
 
-  date-fns@4.0.0: {}
+  date-fns@4.1.0: {}
 
   dayjs@1.11.11: {}
 
@@ -10005,19 +10013,19 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.27)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1):
+  drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.28)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
       '@types/pg': 8.11.10
       '@types/react': 18.3.3
-      bun-types: 1.1.27
+      bun-types: 1.1.28
       pg: 8.13.0
       postgres: 3.4.4
       react: 18.3.1
 
-  drizzle-zod@0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.27)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8):
+  drizzle-zod@0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.28)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8):
     dependencies:
-      drizzle-orm: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.27)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1)
+      drizzle-orm: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.28)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1)
       zod: 3.23.8
 
   duplexer@0.1.2: {}
@@ -10026,9 +10034,9 @@ snapshots:
 
   electron-to-chromium@1.5.4: {}
 
-  elysia@1.1.12(@sinclair/typebox@0.33.11)(openapi-types@12.1.3)(typescript@5.5.3):
+  elysia@1.1.13(@sinclair/typebox@0.33.12)(openapi-types@12.1.3)(typescript@5.5.3):
     dependencies:
-      '@sinclair/typebox': 0.33.11
+      '@sinclair/typebox': 0.33.12
       cookie: 0.6.0
       fast-decode-uri-component: 1.0.1
     optionalDependencies:
@@ -10272,9 +10280,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript-bun@0.0.104(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(bun-types@1.1.27)(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0))(eslint@9.7.0):
+  eslint-import-resolver-typescript-bun@0.0.104(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(bun-types@1.1.28)(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0))(eslint@9.7.0):
     dependencies:
-      bun-types: 1.1.27
+      bun-types: 1.1.28
       debug: 4.3.6
       eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0))(eslint@9.7.0)
     transitivePeerDependencies:
@@ -10569,7 +10577,7 @@ snapshots:
       signal-exit: 4.1.0
       strip-final-newline: 3.0.0
 
-  execa@9.3.1:
+  execa@9.4.0:
     dependencies:
       '@sindresorhus/merge-streams': 4.0.0
       cross-spawn: 7.0.3
@@ -10578,7 +10586,7 @@ snapshots:
       human-signals: 8.0.0
       is-plain-obj: 4.1.0
       is-stream: 4.0.1
-      npm-run-path: 5.3.0
+      npm-run-path: 6.0.0
       pretty-ms: 9.0.0
       signal-exit: 4.1.0
       strip-final-newline: 4.0.0
@@ -12330,6 +12338,11 @@ snapshots:
     dependencies:
       path-key: 4.0.0
 
+  npm-run-path@6.0.0:
+    dependencies:
+      path-key: 4.0.0
+      unicorn-magic: 0.3.0
+
   npm-to-yarn@3.0.0: {}
 
   oauth4webapi@2.10.4: {}
@@ -13848,6 +13861,8 @@ snapshots:
 
   undici-types@6.19.6: {}
 
+  unicorn-magic@0.3.0: {}
+
   unified@11.0.5:
     dependencies:
       '@types/unist': 3.0.2
@@ -13995,7 +14010,7 @@ snapshots:
     dependencies:
       builtins: 5.1.0
 
-  vaul@0.9.3(@types/react-dom@18.3.0)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1):
+  vaul@0.9.4(@types/react-dom@18.3.0)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1):
     dependencies:
       '@radix-ui/react-dialog': 1.1.1(@types/react-dom@18.3.0)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1)
       react: 19.0.0-rc-fb9a90fa48-20240614
