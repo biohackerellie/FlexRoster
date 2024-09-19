@@ -1,7 +1,7 @@
 package mainMenu
 
 import (
-	"api/configs"
+	configs "api/internal/config"
 
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
@@ -62,7 +62,6 @@ func newListKeyMap() *ListKeyMap {
 
 type model struct {
 	list      list.Model
-	config    *configs.FlexConfig
 	keys      *ListKeyMap
 	textInput textinput.Model
 	textFocus bool
@@ -71,9 +70,8 @@ type model struct {
 func InitialSecModel() model {
 	var (
 		listKeys = newListKeyMap()
-		config   = configs.GetConfig()
 	)
-	secretaries := config.Secretaries
+	secretaries := Config.Secretaries
 	items := make([]list.Item, len(secretaries))
 	for i := range secretaries {
 		items[i] = item{title: secretaries[i]}
@@ -97,9 +95,8 @@ func InitialSecModel() model {
 	ti.Placeholder = "Add a new secretary"
 	ti.Blur()
 	return model{
-		list:   secretaryList,
-		config: config,
-		keys:   listKeys,
+		list: secretaryList,
+		keys: listKeys,
 
 		textInput: ti,
 		textFocus: false,
@@ -159,8 +156,8 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.textInput.Focus()
 				return m, nil
 			case key.Matches(msg, m.keys.back):
-				homeScreen := MainMenuModel()
-				return RootScreen().SwitchScreen(&homeScreen)
+				homeScreen := MainMenuModel(Config)
+				return RootScreen(Config).SwitchScreen(&homeScreen)
 			}
 		}
 	}
@@ -194,21 +191,21 @@ func (m *model) New() item {
 		title: m.textInput.Value(),
 	}
 
-	m.config.Secretaries = append(m.config.Secretaries, i.title)
-	err := configs.WriteConfig(m.config)
+	Config.Secretaries = append(Config.Secretaries, i.title)
+	err := configs.WriteConfig(Config)
 	if err != nil {
 		return item{title: err.Error()}
 	}
 	return i
 }
 func (m *model) Delete(index int, i item) tea.Cmd {
-	for j, s := range m.config.Secretaries {
+	for j, s := range Config.Secretaries {
 		if s == i.title {
-			m.config.Secretaries = append(m.config.Secretaries[:j], m.config.Secretaries[j+1:]...)
+			Config.Secretaries = append(Config.Secretaries[:j], Config.Secretaries[j+1:]...)
 			break
 		}
 	}
-	err := configs.WriteConfig(m.config)
+	err := configs.WriteConfig(Config)
 	if err != nil {
 		return func() tea.Msg { return err }
 	}

@@ -16,13 +16,13 @@ var (
 	checkboxStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("39")).Bold(true)
 	dotStyle      = lipgloss.NewStyle().Foreground(lipgloss.Color("236")).Render(dotChar)
 	mainStyle     = lipgloss.NewStyle().MarginLeft(2)
-	Config        *config.Env
 	logoStyle     = lipgloss.NewStyle().
 			BorderStyle(lipgloss.RoundedBorder()).
 			BorderForeground(lipgloss.Color("212")).
 			Margin(1).
 			Padding(1, 2).
 			Foreground(lipgloss.Color("212"))
+	Config *config.Env
 )
 
 var Logo = logoStyle.Render(`
@@ -53,10 +53,10 @@ func (m MenuModel) Init() tea.Cmd {
 	return tea.Batch(m.spinner.Tick, tea.SetWindowTitle("Be Gay, Do Crime 🏳️‍🌈🏴‍☠️"))
 }
 
-func MainMenuModel() MenuModel {
+func MainMenuModel(config *config.Env) MenuModel {
 	s := spinner.New()
 	s.Spinner = spinner.Dot
-
+	Config = config
 	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
 	return MenuModel{
 		Choice:   0,
@@ -78,34 +78,28 @@ func (m *MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case "j", "down":
 			m.Choice++
-			if m.Choice > 5 {
+			if m.Choice > 3 {
 				m.Choice = 0
 			}
 		case "k", "up":
 			m.Choice--
 			if m.Choice < 0 {
-				m.Choice = 5
+				m.Choice = 3
 			}
 		case "enter":
 			switch m.Choice {
 			case 0:
 				secretariesScreen := InitialSecModel()
-				return RootScreen().SwitchScreen(&secretariesScreen)
+				return RootScreen(m.Config).SwitchScreen(&secretariesScreen)
 			case 1:
 				namesScreen := PreferredNamesTable()
-				return RootScreen().SwitchScreen(&namesScreen)
+				return RootScreen(m.Config).SwitchScreen(&namesScreen)
 			case 2:
 				excludesScreen := ExcludedTeachers()
-				return RootScreen().SwitchScreen(&excludesScreen)
+				return RootScreen(m.Config).SwitchScreen(&excludesScreen)
 			case 3:
 				semesterScreen := SemesterClassName()
-				return RootScreen().SwitchScreen(&semesterScreen)
-			case 4:
-				buildScreen := Builder()
-				return RootScreen().SwitchScreen(&buildScreen)
-			case 5:
-				techScreen := InitialTechModel()
-				return RootScreen().SwitchScreen(&techScreen)
+				return RootScreen(m.Config).SwitchScreen(&semesterScreen)
 			}
 		}
 	}
@@ -123,13 +117,11 @@ func (m *MenuModel) View() string {
 		subtleStyle.Render("q: quit")
 
 	choices := fmt.Sprintf(
-		"%s\n%s\n%s\n%s\n%s",
+		"%s\n%s\n%s\n%s",
 		checkbox("Secretaries", c == 0),
 		checkbox("Preferred Names", c == 1),
 		checkbox("Excluded Teachers", c == 2),
 		checkbox("Semester Class Name", c == 3),
-		checkbox("Build and Deploy Changes", c == 4),
-		checkbox("Tech Department", c == 5),
 	)
 	s = fmt.Sprintf(tpl, choices)
 

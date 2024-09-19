@@ -36,6 +36,11 @@ build-scripts:
 build-windows:
 	cd $(GO_API_ROOT) &&  CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ./bin/flex.exe ./cmd/scriptRunner/main.go
 
+build-cli:
+	cd $(GO_API_ROOT) &&  CGO_ENABLED=0 go build -o ./bin/flex ./cmd/cli/main.go
+
+cli:
+	cd $(GO_API_ROOT) && ./bin/flex --config $(FLEXROOT)/config.yaml config
 seed:
 	./bin/scripts/main -seed
 

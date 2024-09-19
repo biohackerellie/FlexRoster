@@ -1,7 +1,7 @@
 package main
 
 import (
-	"api/cli"
+	cmd "api/cli"
 )
 
 func main() {

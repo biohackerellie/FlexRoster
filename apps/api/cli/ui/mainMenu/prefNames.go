@@ -1,7 +1,7 @@
 package mainMenu
 
 import (
-	"api/configs"
+	configs "api/internal/config"
 
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
@@ -13,8 +13,7 @@ var tableBaseStyle = lipgloss.NewStyle().
 	BorderForeground(lipgloss.Color("240"))
 
 type NamesTable struct {
-	table  table.Model
-	config *configs.FlexConfig
+	table table.Model
 }
 
 func (m NamesTable) Init() tea.Cmd {
@@ -23,8 +22,7 @@ func (m NamesTable) Init() tea.Cmd {
 
 func PreferredNamesTable() NamesTable {
 
-	config := configs.GetConfig()
-	names := config.PreferredNames
+	names := Config.PreferredNames
 	columns := []table.Column{
 		{Title: "Given Name", Width: 20},
 		{Title: "Preferred Name", Width: 20},
@@ -57,8 +55,7 @@ func PreferredNamesTable() NamesTable {
 	t.SetStyles(s)
 
 	return NamesTable{
-		table:  t,
-		config: config,
+		table: t,
 	}
 }
 
@@ -81,10 +78,10 @@ func (m *NamesTable) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case "i":
 			addScreen := AddNamesModel()
-			return RootScreen().SwitchScreen(&addScreen)
+			return RootScreen(Config).SwitchScreen(&addScreen)
 		case "q", "esc":
-			homeScreen := MainMenuModel()
-			return RootScreen().SwitchScreen(&homeScreen)
+			homeScreen := MainMenuModel(Config)
+			return RootScreen(Config).SwitchScreen(&homeScreen)
 
 		}
 	}
@@ -102,21 +99,21 @@ func (m NamesTable) View() string {
 
 func (m *NamesTable) Delete(r table.Row) tea.Cmd {
 	var rows []table.Row
-	for i, name := range m.config.PreferredNames {
+	for i, name := range Config.PreferredNames {
 		if name.GivenName == r[0] && name.PreferredName == r[1] {
-			m.config.PreferredNames = append(m.config.PreferredNames[:i], m.config.PreferredNames[i+1:]...)
-			err := configs.WriteConfig(m.config)
+			Config.PreferredNames = append(Config.PreferredNames[:i], Config.PreferredNames[i+1:]...)
+			err := configs.WriteConfig(Config)
 			if err != nil {
 				return func() tea.Msg { return err }
 			}
 			break
 		}
 	}
-	err := configs.WriteConfig(m.config)
+	err := configs.WriteConfig(Config)
 	if err != nil {
 		return func() tea.Msg { return err }
 	}
-	for _, name := range m.config.PreferredNames {
+	for _, name := range Config.PreferredNames {
 		rows = append(rows, table.Row{name.GivenName, name.PreferredName})
 	}
 	m.table.SetRows(rows)
