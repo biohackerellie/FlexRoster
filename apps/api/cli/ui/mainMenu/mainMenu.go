@@ -78,13 +78,13 @@ func (m *MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case "j", "down":
 			m.Choice++
-			if m.Choice > 3 {
+			if m.Choice > 4 {
 				m.Choice = 0
 			}
 		case "k", "up":
 			m.Choice--
 			if m.Choice < 0 {
-				m.Choice = 3
+				m.Choice = 4
 			}
 		case "enter":
 			switch m.Choice {
@@ -100,7 +100,11 @@ func (m *MenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case 3:
 				semesterScreen := SemesterClassName()
 				return RootScreen(m.Config).SwitchScreen(&semesterScreen)
+			case 4:
+				writeEnv := NewProgBar()
+				return RootScreen(m.Config).SwitchScreen(&writeEnv)
 			}
+
 		}
 	}
 	return m, nil
@@ -117,11 +121,12 @@ func (m *MenuModel) View() string {
 		subtleStyle.Render("q: quit")
 
 	choices := fmt.Sprintf(
-		"%s\n%s\n%s\n%s",
+		"%s\n%s\n%s\n%s\n%s",
 		checkbox("Secretaries", c == 0),
 		checkbox("Preferred Names", c == 1),
 		checkbox("Excluded Teachers", c == 2),
 		checkbox("Semester Class Name", c == 3),
+		checkbox("Make Env File", c == 4),
 	)
 	s = fmt.Sprintf(tpl, choices)
 

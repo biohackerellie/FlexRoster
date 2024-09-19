@@ -4,7 +4,14 @@ import postgres from "postgres";
 
 import * as schema from "./schema/schema";
 
-const sql = postgres(process.env.DIRECT_URL!, { max: 1 });
+const host = process.env.PGHOST ?? "localhost";
+const port = process.env.PGPORT ?? 5432;
+const user = process.env.PGUSER ?? "postgres";
+const password = process.env.PGPASSWORD ?? "password";
+const database = process.env.PGDATABASE ?? "postgres";
+
+const connectionString = `postgresql://${user}:${password}@${host}:${port}/${database}`;
+const sql = postgres(connectionString, { max: 1 });
 
 const db = drizzle(sql, { schema });
 

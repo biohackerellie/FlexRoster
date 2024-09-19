@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -13,6 +14,7 @@ import (
 
 	"api/internal/config"
 	"api/internal/core/classrooms"
+
 	// "api/internal/core/requests"
 	repository "api/internal/db/repository"
 
@@ -25,9 +27,10 @@ import (
 func main() {
 	log := logger.New()
 
-	config := config.GetEnv()
+	config := config.GetEnv("./config.yaml")
 	// db connection
-	dbconfig, err := pgxpool.ParseConfig(config.DSN)
+	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", config.PgHost, config.PgPort, config.PgUser, config.PgPassword, config.PgDatabase)
+	dbconfig, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
 		log.Fatal(err)
 	}

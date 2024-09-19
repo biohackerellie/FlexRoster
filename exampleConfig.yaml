@@ -5,7 +5,11 @@ azure_helpdesk_group: 00000000-0000-0000-0000-000000000000
 azure_otherusers_group: 00000000-0000-0000-0000-000000000000
 azure_student_group: 00000000-0000-0000-0000-000000000000
 azure_teacher_group: 00000000-0000-0000-0000-000000000000
-dsn: host=sample.host port=5432 user=postgres password=postgres dbname=postgres sslmode=disable TimeZone=Your/Timezone
+pgport: "5432"
+pguser: postgres
+pgpassword: postgres
+pgdatabase: postgres
+pghost: localhost
 email_api: https://api.example.com/email
 email_api_key: your-email-api-key
 oneroster_appname: example_appname

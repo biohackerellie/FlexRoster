@@ -11,32 +11,42 @@ import (
 )
 
 type Env struct {
-	AzureADClientID     string `mapstructure:"azure_ad_client_id"`
-	AzureADClientSecret string `mapstructure:"azure_ad_client_secret"`
-	AzureADTenantID     string `mapstructure:"azure_ad_tenant_id"`
-
-	ServerPort            string           `mapstructure:"server_port"`
-	ServerHost            string           `mapstructure:"server_host"`
-	OnerosterClientID     string           `mapstructure:"oneroster_client_id"`
-	OnerosterClientSecret string           `mapstructure:"oneroster_client_secret"`
-	OnerosterAppName      string           `mapstructure:"oneroster_appname"`
-	OnerosterBaseURL      string           `mapstructure:"oneroster_base_url"`
-	DSN                   string           `mapstructure:"dsn"`
-	XSRFToken             string           `mapstructure:"xsrf_token"`
-	RedisHost             string           `mapstructure:"redis_host"`
-	RedisPort             string           `mapstructure:"redis_port"`
-	SourceID              string           `mapstructure:"source_id"`
-	AzureStudentGroup     string           `mapstructure:"azure_student_group"`
-	AzureTeacherGroup     string           `mapstructure:"azure_teacher_group"`
-	AzureHelpdeskGroup    string           `mapstructure:"azure_helpdesk_group"`
-	AzureOtherUsersGroup  string           `mapstructure:"azure_otherusers_group"`
-	EmailAPI              string           `mapstructure:"email_api"`
-	EmailAPIKey           string           `mapstructure:"email_api_key"`
-	SemesterClassName     string           `mapstructure:"semester_class_name"`
-	Secretaries           []string         `mapstructure:"secretaries"`
-	PreferredNames        []PreferredNames `mapstructure:"preferred_names"`
-	ExcludedTeachers      []string         `mapstructure:"excluded_teachers"`
-	TechDepartmentEmails  []string         `mapstructure:"tech_department_emails"`
+	AzureADClientID         string           `mapstructure:"azure_ad_client_id"`
+	AzureADClientSecret     string           `mapstructure:"azure_ad_client_secret"`
+	AzureADTenantID         string           `mapstructure:"azure_ad_tenant_id"`
+	PgPort                  string           `mapstructure:"pgport"`
+	PgUser                  string           `mapstructure:"pguser"`
+	PgPassword              string           `mapstructure:"pgpassword"`
+	PgHost                  string           `mapstructure:"pghost"`
+	PgDatabase              string           `mapstructure:"pgdatabase"`
+	ServerPort              string           `mapstructure:"server_port"`
+	ServerHost              string           `mapstructure:"server_host"`
+	OnerosterClientID       string           `mapstructure:"oneroster_client_id"`
+	OnerosterClientSecret   string           `mapstructure:"oneroster_client_secret"`
+	OnerosterAppName        string           `mapstructure:"oneroster_appname"`
+	OnerosterBaseURL        string           `mapstructure:"oneroster_base_url"`
+	XSRFToken               string           `mapstructure:"xsrf_token"`
+	RedisHost               string           `mapstructure:"redis_host"`
+	RedisPort               string           `mapstructure:"redis_port"`
+	SourceID                string           `mapstructure:"source_id"`
+	AzureStudentGroup       string           `mapstructure:"azure_student_group"`
+	AzureTeacherGroup       string           `mapstructure:"azure_teacher_group"`
+	AzureHelpdeskGroup      string           `mapstructure:"azure_helpdesk_group"`
+	AzureOtherUsersGroup    string           `mapstructure:"azure_otherusers_group"`
+	EmailAPI                string           `mapstructure:"email_api"`
+	EmailAPIKey             string           `mapstructure:"email_api_key"`
+	SemesterClassName       string           `mapstructure:"semester_class_name"`
+	Secretaries             []string         `mapstructure:"secretaries"`
+	PreferredNames          []PreferredNames `mapstructure:"preferred_names"`
+	ExcludedTeachers        []string         `mapstructure:"excluded_teachers"`
+	TechDepartmentEmails    []string         `mapstructure:"tech_department_emails"`
+	NextauthSecret          string           `mapstructure:"nextauth_secret"`
+	AuthUrl                 string           `mapstructure:"auth_url"`
+	NextPublicPusherAppHost string           `mapstructure:"next_public_pusher_app_host"`
+	NextPublicPusherAppPort string           `mapstructure:"next_public_pusher_app_port"`
+	TurboToken              string           `mapstructure:"turbo_token"`
+	NextPublicApiUrl        string           `mapstructure:"next_public_api_url"`
+	NextPublicApiPort       string           `mapstructure:"next_public_api_port"`
 }
 
 type PreferredNames struct {
@@ -106,7 +116,7 @@ func WriteEnvFile(e *Env) error {
 	if err != nil {
 		return err
 	}
-	configPath := filepath.Join(cwd, "config.yaml")
+	configPath := filepath.Join(cwd, ".env")
 	viper.SetConfigFile(configPath)
 
 	// Set all keys in Viper
