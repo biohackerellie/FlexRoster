@@ -3,7 +3,7 @@ package mainMenu
 import (
 	"fmt"
 
-	"api/internal/config"
+	configs "api/internal/config"
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
@@ -26,15 +26,13 @@ type semesterModel struct {
 	textInput     textinput.Model
 	err           error
 	header        string
-	config        *config.Env
 	semesterTitle string
 	mainMenu      MenuModel
 }
 
 func SemesterClassName() semesterModel {
-	var config = configs.GetConfig()
 
-	semesterTitle := config.SemesterClassName
+	semesterTitle := Config.SemesterClassName
 	ti := textinput.New()
 	ti.Focus()
 	ti.CharLimit = 156
@@ -44,9 +42,8 @@ func SemesterClassName() semesterModel {
 		textInput:     ti,
 		err:           nil,
 		header:        titleStyle.Render("Semester Class Name"),
-		config:        config,
 		semesterTitle: semesterTitle,
-		mainMenu:      MainMenuModel(),
+		mainMenu:      MainMenuModel(Config),
 	}
 }
 
@@ -74,8 +71,8 @@ func (m *semesterModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, func() tea.Msg { return redrawMsg{} }
 			}
 		case tea.KeyEscape:
-			mainMenu := MainMenuModel()
-			return RootScreen().SwitchScreen(&mainMenu)
+			mainMenu := MainMenuModel(Config)
+			return RootScreen(Config).SwitchScreen(&mainMenu)
 		case tea.KeyCtrlC:
 			return m, tea.Quit
 		}
@@ -104,9 +101,9 @@ func (m *semesterModel) View() string {
 }
 
 func (m *semesterModel) New() error {
-	m.config.SemesterClassName = m.textInput.Value()
-	m.semesterTitle = m.config.SemesterClassName
-	err := configs.WriteConfig(m.config)
+	Config.SemesterClassName = m.textInput.Value()
+	m.semesterTitle = Config.SemesterClassName
+	err := configs.WriteConfig(Config)
 	if err != nil {
 		return err
 	}

@@ -1,7 +1,7 @@
 node_modules
 .pnp
 .pnp.js
-
+_outOD
 # testing
 coverage
 
@@ -9,7 +9,7 @@ coverage
 .next/
 out/
 next-env.d.ts
-
+_out/
 # nitro
 .nitro/
 .output/
@@ -31,6 +31,7 @@ yarn-error.log*
 
 # local env files
 .env
+env.yaml
 .env*.demo
 .env*.production
 .env*.local

@@ -3,7 +3,7 @@ package mainMenu
 import (
 	"fmt"
 
-	"api/configs"
+	configs "api/internal/config"
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
@@ -25,7 +25,6 @@ var inputStyle = lipgloss.NewStyle().Foreground(hotPink)
 type AddNamesForm struct {
 	inputs  []textinput.Model
 	focused int
-	config  *configs.FlexConfig
 }
 
 func AddNamesModel() AddNamesForm {
@@ -41,11 +40,9 @@ func AddNamesModel() AddNamesForm {
 	inputs[pn].Width = 30
 	inputs[pn].Prompt = ""
 
-	config := configs.GetConfig()
 	return AddNamesForm{
 		inputs:  inputs,
 		focused: 0,
-		config:  config,
 	}
 }
 
@@ -64,7 +61,7 @@ func (m *AddNamesForm) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "q":
-			return RootScreen().SwitchScreen(&namesMenu)
+			return RootScreen(Config).SwitchScreen(&namesMenu)
 		}
 		switch msg.Type {
 		case tea.KeyEnter:
@@ -134,8 +131,8 @@ func (m *AddNamesForm) Submit(pn, gn string) tea.Cmd {
 		}
 	}
 	go func() {
-		m.config.PreferredNames = append(m.config.PreferredNames, configs.PreferredNames{GivenName: gn, PreferredName: pn})
-		errChan <- configs.WriteConfig(m.config)
+		Config.PreferredNames = append(Config.PreferredNames, configs.PreferredNames{GivenName: gn, PreferredName: pn})
+		errChan <- configs.WriteConfig(Config)
 		close(errChan)
 	}()
 

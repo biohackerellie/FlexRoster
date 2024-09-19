@@ -1,6 +1,7 @@
 package mainMenu
 
 import (
+	"api/internal/config"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -10,9 +11,9 @@ type RootScreenModel struct {
 
 type forceRedrawMsg struct{}
 
-func RootScreen() RootScreenModel {
+func RootScreen(config *config.Env) RootScreenModel {
 
-	homeScreen := MainMenuModel()
+	homeScreen := MainMenuModel(config)
 
 	return RootScreenModel{model: &homeScreen}
 }

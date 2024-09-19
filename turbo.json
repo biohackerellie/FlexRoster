@@ -2,10 +2,13 @@
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env"],
 
-  "ui":"tui",
+  "ui": "tui",
   "globalEnv": [
-    "DIRECT_URL",
-    "DATABASE_URL",
+    "PGUSER",
+    "PGPASSWORD",
+    "PGDATABASE",
+    "PGHOST",
+    "PGPORT",
     "NEXT_PUBLIC_HOST",
     "NEXT_PUBLIC_PORT",
     "NEXT_PUBLIC_API_URL",

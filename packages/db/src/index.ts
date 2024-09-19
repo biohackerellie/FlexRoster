@@ -7,7 +7,13 @@ import * as main from "./schema/schema";
 export * from "drizzle-orm";
 export { pgTable, PgDatabase, type PgTableFn } from "drizzle-orm/pg-core";
 
-const connectionString = process.env.DATABASE_URL!;
+const host = process.env.PGHOST ?? "localhost";
+const port = process.env.PGPORT ?? 5432;
+const user = process.env.PGUSER ?? "postgres";
+const password = process.env.PGPASSWORD ?? "password";
+const database = process.env.PGDATABASE ?? "postgres";
+
+const connectionString = `postgresql://${user}:${password}@${host}:${port}/${database}`;
 
 const postgresSqlClient = postgres(connectionString);
 

@@ -107,7 +107,8 @@
   "vim.useCtrlKeys": false,
   "window.titleBarStyle": "native",
   "apc.electron": {
-    "frame": false
+    "frame": false,
+    "titleBarStyle": "hidden"
   },
   "apc.header": {
     "height": 40

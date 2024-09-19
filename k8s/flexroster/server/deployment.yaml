@@ -1,0 +1,170 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flexroster-server
+  labels:
+    app: flexroster-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flexroster-server
+      version: v01
+  template:
+    metadata:
+      labels:
+        app: flexroster-server
+        version: v01
+    spec:
+      containers:
+        - name: server
+          image: ghcr.io/biohackerellie/flexserver:main
+          env:
+            - name: AUTH_URL
+              valueFrom:
+                secretKeyRef:
+                  key: AUTH_URL
+                  name: env
+            - name: AZURE_AD_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: AZURE_AD_CLIENT_ID
+                  name: env
+            - name: AZURE_AD_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: AZURE_AD_CLIENT_SECRET
+                  name: env
+            - name: AZURE_AD_TENANT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: AZURE_AD_TENANT_ID
+                  name: env
+            - name: AZURE_HELPDESK_GROUP
+              valueFrom:
+                secretKeyRef:
+                  key: AZURE_HELPDESK_GROUP
+                  name: env
+            - name: AZURE_OTHERUSERS_GROUP
+              valueFrom:
+                secretKeyRef:
+                  key: AZURE_OTHERUSERS_GROUP
+                  name: env
+            - name: AZURE_STUDENT_GROUP
+              valueFrom:
+                secretKeyRef:
+                  key: AZURE_STUDENT_GROUP
+                  name: env
+            - name: AZURE_TEACHER_GROUP
+              valueFrom:
+                secretKeyRef:
+                  key: AZURE_TEACHER_GROUP
+                  name: env
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_URL
+                  name: env
+            - name: DIRECT_URL
+              valueFrom:
+                secretKeyRef:
+                  key: DIRECT_URL
+                  name: env
+            - name: EMAIL_API
+              valueFrom:
+                secretKeyRef:
+                  key: EMAIL_API
+                  name: env
+            - name: EMAIL_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: EMAIL_API_KEY
+                  name: env
+            - name: NEXTAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: NEXTAUTH_SECRET
+                  name: env
+            - name: NEXT_PUBLIC_API_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: NEXT_PUBLIC_API_PORT
+                  name: env
+            - name: NEXT_PUBLIC_API_URL
+              valueFrom:
+                secretKeyRef:
+                  key: NEXT_PUBLIC_API_URL
+                  name: env
+            - name: NEXT_PUBLIC_PUSHER_APP_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: NEXT_PUBLIC_PUSHER_APP_HOST
+                  name: env
+            - name: NEXT_PUBLIC_PUSHER_APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: NEXT_PUBLIC_PUSHER_APP_KEY
+                  name: env
+            - name: NEXT_PUBLIC_PUSHER_APP_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: NEXT_PUBLIC_PUSHER_APP_PORT
+                  name: env
+            - name: ONEROSTER_APPNAME
+              valueFrom:
+                secretKeyRef:
+                  key: ONEROSTER_APPNAME
+                  name: env
+            - name: ONEROSTER_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: ONEROSTER_BASE_URL
+                  name: env
+            - name: ONEROSTER_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: ONEROSTER_CLIENT_ID
+                  name: env
+            - name: ONEROSTER_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: ONEROSTER_CLIENT_SECRET
+                  name: env
+            - name: PUSHER_APP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: PUSHER_APP_SECRET
+                  name: env
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: REDIS_HOST
+                  name: env
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: REDIS_PORT
+                  name: env
+            - name: SERVER_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: SERVER_HOST
+                  name: env
+            - name: SERVER_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: SERVER_PORT
+                  name: env
+            - name: TURBO_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: TURBO_TOKEN
+                  name: env
+            - name: XSRF_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: XSRF_TOKEN
+                  name: env
+          ports:
+            - containerPort: 3030
+              protocol: TCP

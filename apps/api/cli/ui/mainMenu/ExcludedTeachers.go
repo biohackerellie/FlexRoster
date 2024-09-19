@@ -1,7 +1,7 @@
 package mainMenu
 
 import (
-	"api/configs"
+	configs "api/internal/config"
 
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
@@ -11,7 +11,6 @@ import (
 
 type ExcludesModel struct {
 	list      list.Model
-	config    *configs.FlexConfig
 	keys      *ListKeyMap
 	textInput textinput.Model
 	textFocus bool
@@ -20,9 +19,8 @@ type ExcludesModel struct {
 func ExcludedTeachers() ExcludesModel {
 	var (
 		listKeys = newListKeyMap()
-		config   = configs.GetConfig()
 	)
-	teachers := config.ExcludedTeachers
+	teachers := Config.ExcludedTeachers
 	items := make([]list.Item, len(teachers))
 	for i := range teachers {
 		items[i] = item{title: teachers[i]}
@@ -46,9 +44,8 @@ func ExcludedTeachers() ExcludesModel {
 	ti.Placeholder = "Add a Exclusion"
 	ti.Blur()
 	return ExcludesModel{
-		list:   secretaryList,
-		config: config,
-		keys:   listKeys,
+		list: secretaryList,
+		keys: listKeys,
 
 		textInput: ti,
 		textFocus: false,
@@ -109,8 +106,8 @@ func (m *ExcludesModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.textInput.Focus()
 				return m, nil
 			case key.Matches(msg, m.keys.back):
-				homeScreen := MainMenuModel()
-				return RootScreen().SwitchScreen(&homeScreen)
+				homeScreen := MainMenuModel(Config)
+				return RootScreen(Config).SwitchScreen(&homeScreen)
 			}
 		}
 	}
@@ -144,21 +141,21 @@ func (m *ExcludesModel) New() item {
 		title: m.textInput.Value(),
 	}
 
-	m.config.ExcludedTeachers = append(m.config.ExcludedTeachers, i.title)
-	err := configs.WriteConfig(m.config)
+	Config.ExcludedTeachers = append(Config.ExcludedTeachers, i.title)
+	err := configs.WriteConfig(Config)
 	if err != nil {
 		return item{title: err.Error()}
 	}
 	return i
 }
 func (m *ExcludesModel) Delete(index int, i item) tea.Cmd {
-	for j, s := range m.config.ExcludedTeachers {
+	for j, s := range Config.ExcludedTeachers {
 		if s == i.title {
-			m.config.ExcludedTeachers = append(m.config.ExcludedTeachers[:j], m.config.ExcludedTeachers[j+1:]...)
+			Config.ExcludedTeachers = append(Config.ExcludedTeachers[:j], Config.ExcludedTeachers[j+1:]...)
 			break
 		}
 	}
-	err := configs.WriteConfig(m.config)
+	err := configs.WriteConfig(Config)
 	if err != nil {
 		return func() tea.Msg { return err }
 	}

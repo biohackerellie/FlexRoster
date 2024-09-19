@@ -8,6 +8,7 @@ import (
 	"api/internal/scripts"
 	"context"
 	"flag"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -81,7 +82,8 @@ func initRedis(config *config.Env, log *logger.Logger) *redis.Client {
 
 // Helper to initialize Postgres
 func initPostgres(config *config.Env, log *logger.Logger) *pgxpool.Pool {
-	dbconfig, err := pgxpool.ParseConfig(config.DSN)
+	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", config.PgHost, config.PgPort, config.PgUser, config.PgPassword, config.PgDatabase)
+	dbconfig, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
 		log.Fatal("error parsing db config", "err", err)
 	}

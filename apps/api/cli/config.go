@@ -9,6 +9,7 @@ import (
 
 func init() {
 	rootCmd.AddCommand(configCmd)
+
 }
 
 var configCmd = &cobra.Command{
@@ -18,7 +19,7 @@ var configCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 
-		tprogram := tea.NewProgram(mainMenu.RootScreen(), tea.WithAltScreen())
+		tprogram := tea.NewProgram(mainMenu.RootScreen(Config), tea.WithAltScreen())
 		if _, err := tprogram.Run(); err != nil {
 			cobra.CheckErr(err)
 		}
