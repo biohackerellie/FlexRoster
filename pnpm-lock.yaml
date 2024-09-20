@@ -87,11 +87,11 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1)
       '@next/bundle-analyzer':
-        specifier: ^14.2.12
-        version: 14.2.12
+        specifier: ^14.2.13
+        version: 14.2.13
       '@next/mdx':
-        specifier: ^14.2.12
-        version: 14.2.12(@mdx-js/loader@3.0.1(webpack@5.93.0))(@mdx-js/react@3.0.1(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1))
+        specifier: ^14.2.13
+        version: 14.2.13(@mdx-js/loader@3.0.1(webpack@5.93.0))(@mdx-js/react@3.0.1(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1))
       '@t3-oss/env-nextjs':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.5.3)(zod@3.23.8)
@@ -1718,8 +1718,8 @@ packages:
     resolution: {integrity: sha512-C5wRPw9waqL2jk3jEDeJv+f7ScuO3N0a39HVdyFLkwKxHH4Sya4ZbzZsu2JLi6eEqe7RuHipHL6mC7B2OfYZZw==}
     engines: {node: '>= 10'}
 
-  '@next/bundle-analyzer@14.2.12':
-    resolution: {integrity: sha512-X0ipzQcl3LoNErGnQKOI1dC1hu+FzltaogDuZAhkchuFi/1G+WnFJUVK5VBqXmXzRJPhpTxMfI4ZdTJjAl9Tmw==}
+  '@next/bundle-analyzer@14.2.13':
+    resolution: {integrity: sha512-CQOVKmfenD9HsG4AmyXG2ElMvtGKAT9TlS2JLgpL/EORi4WX+QMiQ8Ri6b+A7HRT+AiUGjsYnocIOET59i6Jfw==}
 
   '@next/env@15.0.0-rc.0':
     resolution: {integrity: sha512-6W0ndQvHR9sXcqcKeR/inD2UTRCs9+VkSK3lfaGmEuZs7EjwwXMO2BPYjz9oBrtfPL3xuTjtXsHKSsalYQ5l1Q==}
@@ -1727,8 +1727,8 @@ packages:
   '@next/eslint-plugin-next@14.2.12':
     resolution: {integrity: sha512-cPrKbXtK8NTThOOFNxRGGTw+5s02Ek8z8ri/hZqeKs6uP8LOTGqFyBy6hpCXt7TvLzzriWiiwRyD4h0XYmPEEg==}
 
-  '@next/mdx@14.2.12':
-    resolution: {integrity: sha512-9EBEbraXmkIZAgFjCFr7CQJzspbbOg+IvKEXScE0x496ohXn/Gs5EysuUKO2U2jRnv13rPbR5NFOgNqvsG7+Pw==}
+  '@next/mdx@14.2.13':
+    resolution: {integrity: sha512-UrNXnCMcChqLJDb8kdoWjw3Hyt1E+xGh8n/4U3ro/kkQjiXJ/3k4+Es+L6oxY+zafg1n+6xpK5whROTNAsKAxA==}
     peerDependencies:
       '@mdx-js/loader': '>=0.15.0'
       '@mdx-js/react': '>=0.15.0'
@@ -7964,7 +7964,7 @@ snapshots:
       '@napi-rs/simple-git-win32-arm64-msvc': 0.1.16
       '@napi-rs/simple-git-win32-x64-msvc': 0.1.16
 
-  '@next/bundle-analyzer@14.2.12':
+  '@next/bundle-analyzer@14.2.13':
     dependencies:
       webpack-bundle-analyzer: 4.10.1
     transitivePeerDependencies:
@@ -7977,7 +7977,7 @@ snapshots:
     dependencies:
       glob: 10.3.10
 
-  '@next/mdx@14.2.12(@mdx-js/loader@3.0.1(webpack@5.93.0))(@mdx-js/react@3.0.1(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1))':
+  '@next/mdx@14.2.13(@mdx-js/loader@3.0.1(webpack@5.93.0))(@mdx-js/react@3.0.1(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1))':
     dependencies:
       source-map: 0.7.4
     optionalDependencies:
