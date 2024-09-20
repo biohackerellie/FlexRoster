@@ -13,7 +13,16 @@ FlexRoster is a comprehensive full-stack application designed to manage flex sch
 - **Dockerized PostgreSQL and Redis**: Robust database management with Drizzle ORM and efficient caching/logging with Redis.
 - **Eden and Socketi**: Facilitating real-time communication and data exchange across services.
 - **OneRoster API Integration**: Ensures up-to-date class rosters and seamless data synchronization.
-- **GO Cli**: Included CLI tool for easy setup and configuration.
+- **GO Cli and Automation**: Included CLI tool for easy setup and configuration, as well as automation scripts for syncing flexroster.
+
+## TODO
+
+- [ ] Create choco package for Windows
+- [ ] ReWrite Server in Go
+- [ ] Add Kubernetes Support
+- [ ] Mobile App
+- [ ] Support sqlite3
+- [ ] Support for multiple cloud providers
 
 ## Getting Started
 
@@ -21,40 +30,50 @@ FlexRoster is a comprehensive full-stack application designed to manage flex sch
 
 - OneRoster API credentials from Infinite Campus
 - Azure AD application with SAML integration
-- Docker - `https://docs.docker.com/get-docker/`
-- Nodejs - `https://nodejs.org/en/`
-- Pnpm - `https://pnpm.io/installation`
-- Turborepo - `https://turbo.build/repo/docs`
-- If you wish to compile the CLI from source, you will need Go installed - `https://golang.org/doc/install`
+- Cloud vps or on prem server with Docker
 
-### Installation
+### Configuration
 
-1. Clone the repository
-2. Copy `.env.example` and `.env.config.example` to `.env` and `.env.config` respectively, and fill in the required values. _`.env` is for the backend and `.env.config` is for the CLI._
-
-3. Run the deploy.sh script to deploy the stack to docker. This will handle building the front end, back end, redis, postgres, and socketi services and deploying the containers to the server.
+Install the CLI Tool **not required but recommended** by going to the [releases page](https://github.com/biohackerellie/FlexRoster/releases) and downloading the latest release for your platform. with curl or wget:
 
 ```bash
-sudo ./deploy.sh
+curl -OL https://github.com/biohackerellie/FlexRoster/releases/download/<latest-release>/flexroster_<latest-release>_<platform>.tar.gz
 ```
 
+There are 2 binaries with this release, `flex` and `flexscript`. `flex` is the main CLI tool and `flexscript` is a script that can be used to automate the syncing of the OneRoster API.
 
-4. Download the Cli tar from github releases and extract it to your local machine. _Make sure to replace the version number with the latest release._
+On Windows, until the choco package is created, you will need to run both of these through powershell.
+
+```powershell
+# Run the CLI tool
+.\flex.exe -h
+# Run a script
+.\flexscript.exe -h
+```
+
+On linux or macos, you can just extract the binaries to /usr/local/bin or /usr/bin and run them from the terminal.
 
 ```bash
-curl -OL https://github.com/biohackerellie/FlexRoster/releases/download/ve5f9bbd..1/FlexRoster_e5f9bbd..1_linux_amd64.tar.gz && sudo tar  -C /usr/local/bin -xzf FlexRoster_1.6.01.5.4e5f9bbd..1_linux_amd64.tar.gz
+# Extract the binaries
+tar -xvf flexroster_<latest-release>_<platform>.tar.gz
+# Move the binaries to the bin directory
+sudo mv flex flexscript /usr/local/bin
+# Run the CLI tool
+flex -h
+# Run a script
+flexscript -h
+```
+
+#### Config File
+
+The config file is mandatory for the cli, scriptrunner and main application. The `config.yaml` file's default location for windows and poisx systems is in the user's config directory at $HOME/.config/flexroster/config.yaml but both the cli and flexscript take a -config flag to specify a different location. To get a config file you can either copy the exampleConfig.yaml file from the repo and modify it, or just run flex init to generate a new one.
+
+#### Env File
+
+tbd
+
+### Deployment
 
 ```
 
-5. You need to add 2 lines to your profile at `.bashrc/.zshrc` or globally at `/etc/profile` to allow the CLI to be run from anywhere.
-
-```bash
-export PATH=$PATH:/usr/local/bin # Likely already in your profile
-export FLEXROOT=/path/to/your/flexroster/repo
 ```
-
-6. Party! You're all set up! 🎉
-
-## Usage
-
-You can now run the cli tool to adjust any settings you need to. The env.config file contains all of the fields likely to change during production such as admin users, semester dates, and the school name. The CLI tool will allow you to adjust these settings as needed. just run `flex` to see the available commands.

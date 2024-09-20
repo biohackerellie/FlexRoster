@@ -59,11 +59,7 @@ if ! gum confirm "Tag this commit as $NEW_TAG?"; then
   TAG=false
 fi
 
-if [ "$TAG" = true ]; then
-  CURRENT_VERSION=$(grep -oP 'https://github.com/biohackerellie/FlexRoster/releases/download/v\K[0-9.]+' README.md)
-  sed -i "s|v${CURRENT_VERSION}/FlexRoster_${CURRENT_VERSION}|${NEW_TAG}/FlexRoster_${NEW_TAG:1}|g" README.md
-  sed -i "s|xzf FlexRoster_${CURRENT_VERSION}|xzf FlexRoster_${NEW_TAG:1}|g" README.md
-fi
+
 
 git add -A
 git commit -m "$SUMMARY" -m "$DESCRIPTION"
