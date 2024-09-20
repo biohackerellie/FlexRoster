@@ -15,7 +15,7 @@ builds:
     goarch:
       - amd64
     ldflags: -s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}
-    no_unique_dist_dir: true
+    no_unique_dist_dir: false
 
   - main: ./cmd/cli/main.go
     id: "cli"
@@ -28,4 +28,4 @@ builds:
     goarch:
       - amd64
     ldflags: -s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}
-    no_unique_dist_dir: true
+    no_unique_dist_dir: false
