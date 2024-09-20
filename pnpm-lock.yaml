@@ -311,8 +311,8 @@ importers:
         specifier: ^20.16.5
         version: 20.16.5
       bun-types:
-        specifier: ^1.1.28
-        version: 1.1.28
+        specifier: ^1.1.29
+        version: 1.1.29
       dotenv-cli:
         specifier: ^7.4.2
         version: 7.4.2
@@ -379,7 +379,7 @@ importers:
         version: 0.11.1(typescript@5.5.3)(zod@3.23.8)
       drizzle-orm:
         specifier: ^0.33.0
-        version: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.28)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1)
+        version: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.29)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1)
       postgres:
         specifier: ^3.4.4
         version: 3.4.4
@@ -540,7 +540,7 @@ importers:
     dependencies:
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.28)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8)
+        version: 0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.29)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8)
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -616,14 +616,14 @@ importers:
         specifier: ^9.6.1
         version: 9.6.1
       bun-types:
-        specifier: ^1.1.28
-        version: 1.1.28
+        specifier: ^1.1.29
+        version: 1.1.29
       eslint:
         specifier: 'catalog:'
         version: 9.7.0
       eslint-import-resolver-typescript-bun:
         specifier: ^0.0.104
-        version: 0.0.104(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(bun-types@1.1.28)(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0))(eslint@9.7.0)
+        version: 0.0.104(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(bun-types@1.1.29)(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0))(eslint@9.7.0)
       prettier:
         specifier: 'catalog:'
         version: 3.3.3
@@ -695,8 +695,8 @@ importers:
   tooling/tsconfig:
     dependencies:
       bun-types:
-        specifier: ^1.1.28
-        version: 1.1.28
+        specifier: ^1.1.29
+        version: 1.1.29
 
 packages:
 
@@ -3017,8 +3017,8 @@ packages:
   builtins@5.1.0:
     resolution: {integrity: sha512-SW9lzGTLvWTP1AY8xeAMZimqDrIaSdLQUcVr9DMef51niJ022Ri87SwRRKYm4A6iHfkPaiVUu/Duw2Wc4J7kKg==}
 
-  bun-types@1.1.28:
-    resolution: {integrity: sha512-XiWHzHZIxkgssHSUwJVrkUDHvwhHzE9mrFUMXZ3BKqNiGzL0n/fB/XUQZibcHjg0SvW/Tt5WUNeKmiM9njuy/w==}
+  bun-types@1.1.29:
+    resolution: {integrity: sha512-En3/TzSPMPyl5UlUB1MHzHpcrZDakTm7mS203eLoX1fBoEa3PW+aSS8GAqVJ7Is/m34Z5ogL+ECniLY0uDaCPw==}
 
   bundle-name@4.1.0:
     resolution: {integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==}
@@ -9373,7 +9373,7 @@ snapshots:
     dependencies:
       semver: 7.6.3
 
-  bun-types@1.1.28:
+  bun-types@1.1.29:
     dependencies:
       '@types/node': 20.12.13
       '@types/ws': 8.5.10
@@ -10013,19 +10013,19 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.28)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1):
+  drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.29)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
       '@types/pg': 8.11.10
       '@types/react': 18.3.3
-      bun-types: 1.1.28
+      bun-types: 1.1.29
       pg: 8.13.0
       postgres: 3.4.4
       react: 18.3.1
 
-  drizzle-zod@0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.28)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8):
+  drizzle-zod@0.5.1(drizzle-orm@0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.29)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8):
     dependencies:
-      drizzle-orm: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.28)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1)
+      drizzle-orm: 0.33.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.3)(bun-types@1.1.29)(pg@8.13.0)(postgres@3.4.4)(react@18.3.1)
       zod: 3.23.8
 
   duplexer@0.1.2: {}
@@ -10280,9 +10280,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript-bun@0.0.104(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(bun-types@1.1.28)(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0))(eslint@9.7.0):
+  eslint-import-resolver-typescript-bun@0.0.104(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(bun-types@1.1.29)(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0))(eslint@9.7.0):
     dependencies:
-      bun-types: 1.1.28
+      bun-types: 1.1.29
       debug: 4.3.6
       eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.5.0(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0))(eslint@9.7.0)
     transitivePeerDependencies:
