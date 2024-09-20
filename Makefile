@@ -45,10 +45,12 @@ seed:
 	./bin/scripts/main -seed
 
 logs:
-	./bin/scripts/main -logs
+	$(GO_API_ROOT)/bin/scripts/flexscript -logs 
 
 nightly:
 	cd $(GO_API_ROOT) && ./bin/scripts/main -nightly -config $(FLEXROOT)/config.yaml
 
 sqlc:
 	cd $(GO_API_ROOT) && sqlc generate
+config:
+	$(GO_API_ROOT)/bin/scripts/flexscript --init-config

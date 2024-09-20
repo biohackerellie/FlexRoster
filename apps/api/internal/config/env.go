@@ -57,32 +57,22 @@ type PreferredNames struct {
 var envPath = "./config.yaml"
 
 func loadEnv(path string) (env *Env, err error) {
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
 	viper.SetConfigFile(path)
+
 	viper.AutomaticEnv()
 	err = viper.ReadInConfig()
 	if err != nil {
 		fmt.Println("Error reading config file")
+		return nil, err
 	}
 	err = viper.Unmarshal(&env)
-	return
-}
-
-func GetEnv(path string) *Env {
-	cwd, err := os.Getwd()
 	if err != nil {
-		fmt.Errorf("Error getting current working directory")
+		fmt.Println("Error unmarshalling config file")
+		return nil, err
 	}
-	configPath := filepath.Join(cwd, "config.yaml")
-	if path != "" {
-		envPath = path
-	} else {
-		envPath = configPath
-	}
-	env, err := loadEnv(envPath)
-	if err != nil {
-		fmt.Println("Error loading env")
-	}
-	return env
+	return env, nil
 }
 
 func WriteConfig(e *Env) error {
@@ -109,7 +99,32 @@ func WriteConfig(e *Env) error {
 	}
 	return nil
 }
+func LoadConfig(path string) (*Env, error) {
+	paths := []string{
+		path,
+		filepath.Join(".", "config.yaml"),
+		filepath.Join(os.Getenv("HOME"), ".config", "flexroster", "config.yaml"),
+		"/etc/flexroster/config.yaml",
+		"/apps/flexroster/config.yaml",
+	}
+	for _, p := range paths {
+		if p != "" && fileExists(p) {
+			return loadEnv(p)
+		}
+	}
+	return nil, fmt.Errorf("configuration file not found")
+}
 
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	return false
+}
 func WriteEnvFile(e *Env) error {
 	viper.SetConfigType("env")
 	cwd, err := os.Getwd()
@@ -141,4 +156,53 @@ func WriteEnvFile(e *Env) error {
 		fmt.Println("Error writing .env file:", err)
 	}
 	return nil
+}
+
+func GenerateSampleConfig() error {
+	sampleConfig := `azure_ad_client_id: 00000000-0000-0000-0000-000000000000
+azure_ad_client_secret: your-azure-ad-client-secret
+azure_ad_tenant_id: 00000000-0000-0000-0000-000000000000
+azure_helpdesk_group: 00000000-0000-0000-0000-000000000000
+azure_otherusers_group: 00000000-0000-0000-0000-000000000000
+azure_student_group: 00000000-0000-0000-0000-000000000000
+azure_teacher_group: 00000000-0000-0000-0000-000000000000
+pgport: "5432"
+pguser: postgres
+pgpassword: postgres
+pgdatabase: postgres
+pghost: localhost
+email_api: https://api.example.com/email
+email_api_key: your-email-api-key
+oneroster_appname: example_appname
+oneroster_base_url: https://example.com/api/oneroster/v1p2/ims/oneroster
+oneroster_client_id: your-oneroster-client-id
+oneroster_client_secret: your-oneroster-client-secret
+redis_host: sample.redis.host
+redis_port: "6379"
+semester_class_name: Sample-Semester
+server_host: http://sample.server.host
+server_port: "3030"
+source_id: 00000000-0000-0000-0000-000000000000
+tech_department_emails:
+  - example_email@example.com
+xsrf_token: your-xsrf-token
+excluded_teachers:
+  - Teacher One
+  - Teacher Two
+preferred_names:
+  - givenname: Firstname Lastname
+    preferredname: Preferred Name
+  - givenname: Another Name
+    preferredname: Preferred Name
+secretaries:
+  - secretary1@example.com
+  - secretary2@example.com
+  - secretary3@example.com
+`
+	cwd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+	configPath := filepath.Join(cwd, "config.yaml")
+	return os.WriteFile(configPath, []byte(sampleConfig), 0644)
 }

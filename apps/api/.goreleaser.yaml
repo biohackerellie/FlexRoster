@@ -29,3 +29,36 @@ builds:
       - amd64
     ldflags: -s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}
     no_unique_dist_dir: false
+signs:
+  - artifacts: checksum
+    cmd: gpg
+    args:
+      - "--batch"
+      - "-u"
+      - "{{ .Env.GPG_FINGERPRINT }}"
+      - "--output"
+      - "${signature}"
+      - "--detach-sign"
+      - "${artifact}"
+# winget:
+#   name: "FlexRoster"
+#   publisher: "Ellie Kerns"
+#   short_description: "Self hosted school scheduling software"
+#   license: "GNU GPL v3"
+#   publisher_url: https://epklabs.com
+#   publisher_support_url: "https://github.com/biohackerellie/FlexRoster/issues"
+#   package_identifier: "biohackerellie.flexroster"
+
+#   commit_author:
+#     name: "Ellie Kerns"
+#     email: "epkerns@gmail.com"
+#   homepage: "https://epklabs.com"
+#   copyright: "Ellie Kerns"
+#   release_notes: "{{.Changelog}}"
+#   tags:
+#     - golang
+#     - school
+#     - scheduling
+#     - software
+#     - cli
+#     - flexroster

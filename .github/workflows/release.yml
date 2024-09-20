@@ -16,6 +16,12 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -34,3 +40,4 @@ jobs:
           workdir: "./apps/api/"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}

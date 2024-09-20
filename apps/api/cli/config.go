@@ -14,7 +14,7 @@ func init() {
 
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Edit flexroster configuration" + "\n" + mainMenu.Logo + "\n",
+	Short: "Edit flexroster configuration",
 	Long:  "Edit various configuration options for flexroster such as user exclusions, semester name, and more",
 
 	Run: func(cmd *cobra.Command, args []string) {

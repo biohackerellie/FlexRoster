@@ -15,7 +15,7 @@ var (
 	rootCmd = &cobra.Command{
 		Use:   "flex",
 		Short: "Cli tool for configuring and managing FlexRoster",
-		Long:  `Its kinda mid`,
+		Long:  `Cli tool for configuring and managing FlexRoster`,
 	}
 	Config *env.Env
 )
@@ -30,18 +30,13 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/config.yaml)")
-	rootCmd.MarkFlagRequired("config")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "cfg", "", "path to config file (default is $HOME/.config/flexroster/config.yaml)")
 }
 
 func initConfig() {
-	if cfgFile != "" {
-		Config = env.GetEnv(cfgFile)
-	} else {
-		home, err := os.UserHomeDir()
+	var err error
+	Config, err = env.LoadConfig(cfgFile)
+	if err != nil {
 		cobra.CheckErr(err)
-
-		Config = env.GetEnv(home + "/config.yaml")
 	}
-
 }

@@ -21,14 +21,27 @@ import (
 func main() {
 	// Parse flags
 	configPathFlag := flag.String("config", "", "path to config file")
+	initConfigFlag := flag.Bool("init-config", false, "initialize config file")
 	seedFlag := flag.Bool("seed", false, "seed the database")
 	logFlag := flag.Bool("logs", false, "process logs")
 	nightlyFlag := flag.Bool("nightly", false, "run nightly script")
 	flag.Parse()
-	// Initialize logger, config, cache,  and database
-	log := logger.New()
-	config := config.GetEnv(*configPathFlag)
 
+	log := logger.New()
+	if *initConfigFlag {
+		err := config.GenerateSampleConfig()
+		if err != nil {
+			log.Fatal("error generating sample config", "err", err)
+		}
+		log.Info("Sample config generated successfully. \n Enter your values in the config file and run the script with the -config flag and the path to the config file.")
+		os.Exit(0)
+	}
+
+	// Initialize logger, config, cache,  and database
+	config, err := config.LoadConfig(*configPathFlag)
+	if err != nil {
+		log.Fatal("error loading config. Use '--init-config' to generate a sample config file", "err", err)
+	}
 	cache := initRedis(config, log)
 	defer cache.Close()
 
