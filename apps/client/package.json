@@ -50,7 +50,7 @@
     "pusher": "^5.2.0",
     "pusher-js": "^8.3.0",
     "react": "catalog:react19",
-    "react-day-picker": "^9.1.1",
+    "react-day-picker": "^9.1.2",
     "react-dom": "catalog:react19",
     "react-hook-form": "^7.53.0",
     "react-textarea-autosize": "^8.5.3",
