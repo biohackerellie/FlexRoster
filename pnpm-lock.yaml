@@ -165,8 +165,8 @@ importers:
         specifier: catalog:react19
         version: 19.0.0-rc-fb9a90fa48-20240614
       react-day-picker:
-        specifier: ^9.1.1
-        version: 9.1.1(react@19.0.0-rc-fb9a90fa48-20240614)
+        specifier: ^9.1.2
+        version: 9.1.2(react@19.0.0-rc-fb9a90fa48-20240614)
       react-dom:
         specifier: catalog:react19
         version: 19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614)
@@ -487,8 +487,8 @@ importers:
         specifier: catalog:react19
         version: 19.0.0-rc-fb9a90fa48-20240614
       react-day-picker:
-        specifier: ^9.1.1
-        version: 9.1.1(react@19.0.0-rc-fb9a90fa48-20240614)
+        specifier: ^9.1.2
+        version: 9.1.2(react@19.0.0-rc-fb9a90fa48-20240614)
       react-hook-form:
         specifier: ^7.53.0
         version: 7.53.0(react@19.0.0-rc-fb9a90fa48-20240614)
@@ -896,8 +896,8 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@date-fns/tz@1.0.2':
-    resolution: {integrity: sha512-iKxj0kXMy7Qe6vjK+flz33cpy2j0dnTKT5i54p3fFlB411J47aSs6HBg7LOO5X9LjDi2iNlctD9rFn738ySOGQ==}
+  '@date-fns/tz@1.1.0':
+    resolution: {integrity: sha512-ebywM7KeJY5cm13Aq037FmjjghyOAMxccqQn0BIpHkvdAZe+gb7V18Sz2usKECguMcSrvy49TR1gR7Y9naGseQ==}
 
   '@discoveryjs/json-ext@0.5.7':
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
@@ -5882,8 +5882,8 @@ packages:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
     hasBin: true
 
-  react-day-picker@9.1.1:
-    resolution: {integrity: sha512-z+xPpd5N42kIqt27XEIyawJgKEya2l5GJMTpZ9FIclqdu40BFfKR4rjQlnXz05h2Gxh0s2F72gL/JCYWuteCIg==}
+  react-day-picker@9.1.2:
+    resolution: {integrity: sha512-r3MEbmcnfem3v9M+ScnbmjNNh4wiE803sjJb4Gf2eHtPan2or4/6Ya5kbAKyAndxznAyTU97VukYAbAfM2fV6g==}
     peerDependencies:
       react: '>=16.8.0'
 
@@ -7324,7 +7324,7 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@date-fns/tz@1.0.2': {}
+  '@date-fns/tz@1.1.0': {}
 
   '@discoveryjs/json-ext@0.5.7': {}
 
@@ -12848,9 +12848,9 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  react-day-picker@9.1.1(react@19.0.0-rc-fb9a90fa48-20240614):
+  react-day-picker@9.1.2(react@19.0.0-rc-fb9a90fa48-20240614):
     dependencies:
-      '@date-fns/tz': 1.0.2
+      '@date-fns/tz': 1.1.0
       date-fns: 4.1.0
       react: 19.0.0-rc-fb9a90fa48-20240614
 
