@@ -7,7 +7,7 @@ require (
 	github.com/charmbracelet/bubbletea v1.1.1
 	github.com/charmbracelet/lipgloss v0.13.0
 	github.com/charmbracelet/log v0.4.0
-	github.com/go-chi/chi v1.5.5
+	github.com/go-chi/chi/v5 v5.1.0
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/go-chi/render v1.0.3
 	github.com/jackc/pgx/v5 v5.7.0
