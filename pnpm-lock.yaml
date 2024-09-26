@@ -335,8 +335,8 @@ importers:
         specifier: ^0.35.2
         version: 0.35.2
       '@auth/drizzle-adapter':
-        specifier: ^1.5.0
-        version: 1.5.0
+        specifier: ^1.5.2
+        version: 1.5.2
       '@local/db':
         specifier: workspace:*
         version: link:../db
@@ -740,8 +740,8 @@ packages:
       nodemailer:
         optional: true
 
-  '@auth/drizzle-adapter@1.5.0':
-    resolution: {integrity: sha512-JLeooOEoCulPjoLJa2IBKX8RSgSfkhmyaAeO8Xr37y+fitsEvJNqe0SsaRw3D8nXDasppSaop4uUT3ViXP+OZw==}
+  '@auth/drizzle-adapter@1.5.2':
+    resolution: {integrity: sha512-euc74EyFDugdD2hzHlsZHxJ5MaTW/BHZIkrODa1BZ96VjSUAthKQmb5mX7e+Rj6Eb9PfO2OhSnPyxyXNhFkfjw==}
 
   '@babel/code-frame@7.24.6':
     resolution: {integrity: sha512-ZJhac6FkEd1yhG2AHOmfcXG4ceoLltoCVJjN5XsWN9BifBQr+cHJbWi0h68HZuSORq+3WtJ2z0hwF2NG1b5kcA==}
@@ -7116,9 +7116,9 @@ snapshots:
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
 
-  '@auth/drizzle-adapter@1.5.0':
+  '@auth/drizzle-adapter@1.5.2':
     dependencies:
-      '@auth/core': 0.35.0
+      '@auth/core': 0.35.2
     transitivePeerDependencies:
       - '@simplewebauthn/browser'
       - '@simplewebauthn/server'
