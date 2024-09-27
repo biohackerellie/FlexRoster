@@ -126,8 +126,8 @@ importers:
         specifier: ^2.10.0
         version: 2.10.0(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1)
       lucide-react:
-        specifier: ^0.445.0
-        version: 0.445.0(react@19.0.0-rc-fb9a90fa48-20240614)
+        specifier: ^0.446.0
+        version: 0.446.0(react@19.0.0-rc-fb9a90fa48-20240614)
       mini-svg-data-uri:
         specifier: ^1.4.4
         version: 1.4.4
@@ -478,8 +478,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       lucide-react:
-        specifier: ^0.445.0
-        version: 0.445.0(react@19.0.0-rc-fb9a90fa48-20240614)
+        specifier: ^0.446.0
+        version: 0.446.0(react@19.0.0-rc-fb9a90fa48-20240614)
       next-themes:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
@@ -4952,8 +4952,8 @@ packages:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
 
-  lucide-react@0.445.0:
-    resolution: {integrity: sha512-YrLf3aAHvmd4dZ8ot+mMdNFrFpJD7YRwQ2pUcBhgqbmxtrMP4xDzIorcj+8y+6kpuXBF4JB0NOCTUWIYetJjgA==}
+  lucide-react@0.446.0:
+    resolution: {integrity: sha512-BU7gy8MfBMqvEdDPH79VhOXSEgyG8TSPOKWaExWGCQVqnGH7wGgDngPbofu+KdtVjPQBWbEmnfMTq90CTiiDRg==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc
 
@@ -11552,7 +11552,7 @@ snapshots:
 
   lru-cache@7.18.3: {}
 
-  lucide-react@0.445.0(react@19.0.0-rc-fb9a90fa48-20240614):
+  lucide-react@0.446.0(react@19.0.0-rc-fb9a90fa48-20240614):
     dependencies:
       react: 19.0.0-rc-fb9a90fa48-20240614
 
