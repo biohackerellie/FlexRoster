@@ -90,17 +90,9 @@ export const allClassrooms = db
   .from(schema.classrooms)
   .prepare("allClassrooms");
 
-const customCount = (column?: AnyColumn) => {
-  if (column) {
-    return sql<number>`cast(count(${column}) as integer)`;
-  } else {
-    return sql<number>`cast(count(*) as integer)`;
-  }
-};
-
 export const countRosterByClassroomId = db
   .select({
-    count: customCount(schema.students.classroomId),
+    count: sql<number>`cast(count(${schema.students.id}) as integer)`,
   })
   .from(schema.students)
   .where(eq(schema.students.classroomId, sql.placeholder("classroomId")))
@@ -119,6 +111,7 @@ export async function classroomsWithRosterCount() {
 
     classrooms.push({ ...room, count });
   }
+  console.log(classrooms);
   return classrooms;
 }
 
