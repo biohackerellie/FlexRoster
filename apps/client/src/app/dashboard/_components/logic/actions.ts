@@ -18,7 +18,7 @@ import { convertUTCDateToLocalDate, toPusherKey } from "@/lib/utils";
 
 export async function Attendance(
   studentId: string,
-  status: "arrived" | "default",
+  status: "arrived" | "default" | "transferredN",
 ) {
   const { data: res, error } = await client.api.rosters.attendance.post({
     studentId: studentId,
@@ -55,10 +55,9 @@ export async function RequestApproval(
 
   if (error) {
     console.error(error);
-    throw new Error("something went wrong 👌", { cause: error.value });
   }
   if (!res) {
-    throw new Error("No data found");
+    console.error("No data found");
   }
 
   revalidateTag("roster");

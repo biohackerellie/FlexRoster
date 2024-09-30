@@ -33,11 +33,11 @@ function ApprovalMenu({
       toast.promise(
         RequestApproval(requestId, status, studentId, teacherId, newTeacherId),
         {
-          loading: "Creating comment...",
+          loading: "Setting request status...",
           success: () => {
             setOpen(false);
             router.refresh();
-            return "Comment created successfully";
+            return "Request status updated";
           },
           error: (error) => {
             setOpen(false);
