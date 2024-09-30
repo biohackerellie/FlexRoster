@@ -110,7 +110,7 @@ export async function getTeacherRoster(userId: string) {
 
 export async function setAttendance(
   studentId: string,
-  status: "arrived" | "default",
+  status: "arrived" | "default" | "transferredN",
 ) {
   try {
     const studentRaw = await userRosterQuery.execute({ id: studentId });
@@ -134,6 +134,29 @@ export async function setAttendance(
           })
           .from(schema.requests)
           .where(eq(schema.requests.studentId, student.user.id));
+        return updatedRequest!;
+      });
+    } else if (status === "transferredN") {
+      await db.transaction(async (tx) => {
+        await tx
+          .update(schema.students)
+          .set({
+            status: "transferredN",
+          })
+          .where(eq(schema.students.id, student.students.id));
+        await tx
+          .update(schema.requests)
+          .set({ status: "approved" })
+          .where(eq(schema.requests.studentId, studentId));
+
+        const [updatedRequest] = await tx
+          .select({
+            timestamp: schema.requests.timestamp,
+            newTeacher: schema.requests.newTeacher,
+            currentTeacher: schema.requests.currentTeacher,
+          })
+          .from(schema.requests)
+          .where(eq(schema.requests.studentId, studentId));
         return updatedRequest!;
       });
     } else {

@@ -2,7 +2,6 @@ packages:
   - "packages/*"
   - "apps/*"
   - "tooling/*"
-  - "cli"
 
 catalog:
   eslint: ^9.7.0

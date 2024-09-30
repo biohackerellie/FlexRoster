@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun --env-file=../../.env.local --env-file=../../.env.config run --watch src/index.ts",
+    "dev": "bun --env-file=../../.env.local run --watch src/index.ts",
     "clean": "rm -rf .turbo node_modules dist",
     "clean:outs": "rm -rf dist",
     "start": "bun run dist/index.js",

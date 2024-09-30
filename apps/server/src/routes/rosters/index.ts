@@ -30,7 +30,11 @@ export const rosterRoutes = new Elysia({ prefix: "/rosters" })
     {
       body: t.Object({
         studentId: t.String(),
-        status: t.Union([t.Literal("arrived"), t.Literal("default")]),
+        status: t.Union([
+          t.Literal("arrived"),
+          t.Literal("default"),
+          t.Literal("transferredN"),
+        ]),
       }),
     },
   );

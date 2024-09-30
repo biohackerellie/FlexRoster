@@ -18,7 +18,7 @@ import { convertUTCDateToLocalDate, toPusherKey } from "@/lib/utils";
 
 export async function Attendance(
   studentId: string,
-  status: "arrived" | "default",
+  status: "arrived" | "default" | "transferredN",
 ) {
   const { data: res, error } = await client.api.rosters.attendance.post({
     studentId: studentId,

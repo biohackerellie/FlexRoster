@@ -16,7 +16,7 @@
     "clean:outs": "rm -rf dist",
     "drizup": "drizzle-kit up --config src/drizzle.config.ts",
     "push": "pnpm with-env drizzle-kit push --config src/drizzle.config.ts",
-    "studio": "pnpm with-env drizzle-kit studio    --config src/drizzle.config.ts",
+    "studio": "pnpm with-env-prod drizzle-kit studio    --config src/drizzle.config.ts",
     "gen": "pnpm drizzle-kit generate --config src/drizzle.config.ts",
     "introspect": "pnpm with-env drizzle-kit introspect:pg --config src/drizzle.config.ts",
     "migrate": "pnpm with-env tsx src/migrate.ts",
@@ -24,8 +24,8 @@
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "with-env": "dotenv -e ../../.env --",
-    "with-env-prod": "dotenv -e ../../.env.production --"
+    "with-env": "dotenv -e ../../.env.local --",
+    "with-env-prod": "dotenv -e ../../.env --"
   },
   "dependencies": {
     "@auth/core": "^0.35.3",

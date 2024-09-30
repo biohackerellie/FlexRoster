@@ -84,7 +84,6 @@ CREATE TABLE IF NOT EXISTS "session" (
 	"expires" timestamp NOT NULL
 );
 --> statement-breakpoint
-
 CREATE TABLE IF NOT EXISTS "students" (
 	"studentEmail" text NOT NULL,
 	"studentName" text NOT NULL,

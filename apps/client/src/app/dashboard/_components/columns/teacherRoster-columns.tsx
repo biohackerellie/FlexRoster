@@ -45,7 +45,10 @@ export function columns(): ColumnDef<TeacherTable>[] {
                 <TooltipTrigger className="cursor-pointer" asChild>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Badge variant="destructive" className="animate-pulse">
+                      <Badge
+                        variant="destructive"
+                        className="animate-pulse cursor-pointer"
+                      >
                         transfer
                       </Badge>
                     </PopoverTrigger>
@@ -85,7 +88,54 @@ export function columns(): ColumnDef<TeacherTable>[] {
             </div>
           );
         } else if (status.value === "transferredA") {
-          return <Badge variant="success">Transferred</Badge>;
+          return (
+            <div className="text-md max-w-[80px] overflow-ellipsis leading-none">
+              <Tooltip>
+                <TooltipTrigger className="cursor-pointer" asChild>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Badge
+                        variant="success"
+                        className="animate-pulse cursor-pointer"
+                      >
+                        transferred
+                      </Badge>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-80">
+                      <div className="grid gap-4">
+                        <div className="grid gap-4">
+                          <div className="grid grid-cols-3 items-center gap-4 gap-y-2 border-b">
+                            <p className="col-span-2 text-sm font-medium leading-none text-muted-foreground">
+                              Mark not arrived:
+                            </p>
+                            <Button
+                              variant="outline"
+                              onClick={() => setAttendance(id, "transferredN")}
+                              className="pb-2"
+                            >
+                              Not Arrived
+                            </Button>
+                          </div>
+                          <div className="grid grid-cols-3 items-center gap-4">
+                            <p className="col-span-2 text-sm font-medium leading-none text-muted-foreground">
+                              Reset student to default classroom:
+                            </p>
+                            <Button
+                              variant="outline"
+                              onClick={() => setAttendance(id, "default")}
+                            >
+                              Default
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </TooltipTrigger>
+                <TooltipContent>Click when student arrives</TooltipContent>
+              </Tooltip>
+            </div>
+          );
         } else return <div> </div>;
       },
       filterFn: (row, id, value) => {
@@ -113,12 +163,10 @@ export function columns(): ColumnDef<TeacherTable>[] {
           );
         } else {
           return (
-            <div className="text-md max-w-[30px] overflow-ellipsis leading-none">
-              <Button variant="link" asChild>
-                <Link href={chatId}>
-                  <MessageSquare size={20} strokeWidth={1.5} />
-                </Link>
-              </Button>
+            <div className="text-md max-w-[30px] cursor-pointer overflow-ellipsis leading-none">
+              <Link href={chatId}>
+                <MessageSquare size={20} strokeWidth={1.5} />
+              </Link>
             </div>
           );
         }
@@ -138,7 +186,7 @@ export function columns(): ColumnDef<TeacherTable>[] {
 
 const setAttendance = async (
   studentId: string,
-  status: "arrived" | "default",
+  status: "arrived" | "default" | "transferredN",
 ) => {
   try {
     const response = await Attendance(studentId, status);

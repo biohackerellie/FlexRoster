@@ -107,7 +107,7 @@ export async function newRequest({
         await tx.insert(schema.requests).values(validatedRequest);
         log = {
           type: "request",
-          action: `${newTeacherData?.name} transfered  ${student?.user?.name} from ${currentTeacherName} at ${timestamp}`,
+          action: `${newTeacherData?.name} transferred  ${student?.user?.name} from ${currentTeacherName} at ${timestamp}`,
           user: newTeacher!,
         };
       });
