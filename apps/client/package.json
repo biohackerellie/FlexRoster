@@ -74,7 +74,7 @@
     "autoprefixer": "^10.4.20",
     "dotenv-cli": "^7.4.2",
     "eslint": "catalog:",
-    "jiti": "^1.21.6",
+    "jiti": "^2.0.0",
     "postcss": "^8.4.47",
     "prettier": "catalog:",
     "tailwindcss": "^3.4.13",
