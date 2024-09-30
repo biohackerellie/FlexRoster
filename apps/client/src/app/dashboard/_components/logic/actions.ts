@@ -55,10 +55,9 @@ export async function RequestApproval(
 
   if (error) {
     console.error(error);
-    throw new Error("something went wrong 👌", { cause: error.value });
   }
   if (!res) {
-    throw new Error("No data found");
+    console.error("No data found");
   }
 
   revalidateTag("roster");
