@@ -31,7 +31,6 @@ export default function StudentDetails({ dataPromise }: StudentDetailsProps) {
   const classroom = data.student.classrooms!;
   const studentId = data.student.user?.id;
   const router = useRouter();
-  console.log(requests);
   let status = "";
 
   switch (student.status) {

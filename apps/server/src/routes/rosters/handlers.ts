@@ -69,7 +69,6 @@ export async function getTeacherRoster(userId: string) {
       available = availability[0]!.available;
     }
     const dbData = await rosterByTeacherId.execute({ userId: userId });
-    logger.info("dbData", dbData);
     if (dbData?.length) {
       const result = dbData.map((student) => {
         return {

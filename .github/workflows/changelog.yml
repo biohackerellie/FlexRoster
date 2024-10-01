@@ -1,0 +1,19 @@
+name: Changelog CI
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  changelog:
+    if: github.actor == 'biohackerellie'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run Changelog CI
+        uses: saadmk11/changelog-ci@v1.1.2
+        with:
+          committer_username: "biohackerellie"
+          committer_email: "epkerns@gmail.com"

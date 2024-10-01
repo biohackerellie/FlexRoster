@@ -19,7 +19,6 @@ interface TableProps {
 export default function AllRosterTable({ dataPromise }: TableProps) {
   "use no memo";
   const data = React.use(dataPromise);
-
   const tableColumns = React.useMemo(() => columns(), []);
   const filterFields: DataTableFilterField<SecretaryTable>[] = [
     {

@@ -40,7 +40,6 @@ export default {
   pages: {
     signIn: "/login",
   },
-  debug: true,
   callbacks: {
     async redirect({ url, baseUrl }) {
       if (url.startsWith("/")) return `${baseUrl}${url}`;

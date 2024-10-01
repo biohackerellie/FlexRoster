@@ -6,5 +6,6 @@
     "declarationMap": true,
     "noEmit": false,
     "emitDeclarationOnly": true
+    
   }
 }

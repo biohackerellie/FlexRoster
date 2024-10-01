@@ -1,3 +1,4 @@
+import { logger } from "@bogeychan/elysia-logger";
 import { cors } from "@elysiajs/cors";
 import swagger from "@elysiajs/swagger";
 import { Elysia } from "elysia";
@@ -12,6 +13,16 @@ import {
 } from "./routes";
 
 const app = new Elysia()
+  .use(
+    logger({
+      transport: {
+        target: "pino-pretty",
+        options: {
+          colorize: true,
+        },
+      },
+    }),
+  )
   .onError({ as: "global" }, ({ code, error, set }) => {
     switch (code) {
       case "NOT_FOUND":
