@@ -12,6 +12,7 @@ import { DataTableColumnHeader } from "@local/ui/data-table-column-header";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
 import { statusOptions } from "@/lib/constants";
+import StatusBadge from "../statusBadge";
 
 export function columns(): ColumnDef<AllStudents>[] {
   return [
@@ -30,26 +31,14 @@ export function columns(): ColumnDef<AllStudents>[] {
         const status = statusOptions.find(
           (status) => status.value === row.original.status,
         );
-        if (!status) return null;
 
-        if (status.value === "default") {
-          return <Badge variant="outline">Default</Badge>;
-        } else if (status.value === "transferredN") {
-          return (
-            <div className="text-md max-w-[80px] overflow-ellipsis leading-none">
-              <Tooltip>
-                <TooltipTrigger className="cursor-pointer" asChild>
-                  <Badge variant="destructive" className="animate-pulse">
-                    transfer
-                  </Badge>
-                </TooltipTrigger>
-                <TooltipContent>Click when student arrives</TooltipContent>
-              </Tooltip>
-            </div>
-          );
-        } else if (status.value === "transferredA") {
-          return <Badge variant="success">Transferred</Badge>;
-        } else return <div> </div>;
+        if (!status) return null;
+        let studentStatus = status.value;
+        const studentId: string = (row.original.studentId as string) ?? "";
+        if (studentId === "") {
+          studentStatus = "default";
+        }
+        return StatusBadge(studentStatus, studentId);
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
