@@ -41,7 +41,7 @@ export const statusOptions = [
     label: "Transfer, arrived",
     value: "transferredA",
   },
-];
+] as const;
 
 export const studentStatusOptions = [
   {

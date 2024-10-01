@@ -5,17 +5,13 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { MessageSquare } from "lucide-react";
 import { Link } from "next-view-transitions";
 
-import { Badge } from "@local/ui/badge";
-import { Button } from "@local/ui/button";
 import { DataTableColumnHeader } from "@local/ui/data-table-column-header";
-import { Popover, PopoverContent, PopoverTrigger } from "@local/ui/popover";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
 import { statusOptions } from "@/lib/constants";
-import { Attendance } from "../logic/actions";
+import StatusBadge from "../statusBadge";
 
 export function columns(): ColumnDef<TeacherTable>[] {
-  "use memo";
   return [
     {
       accessorKey: "studentName",
@@ -35,108 +31,7 @@ export function columns(): ColumnDef<TeacherTable>[] {
         );
         if (!status) return null;
         const id: string = row.getValue("studentId");
-        console.log(id);
-        if (status.value === "default") {
-          return <Badge variant="outline">Default</Badge>;
-        } else if (status.value === "transferredN") {
-          return (
-            <div className="text-md max-w-[80px] overflow-ellipsis leading-none">
-              <Tooltip>
-                <TooltipTrigger className="cursor-pointer" asChild>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Badge
-                        variant="destructive"
-                        className="animate-pulse cursor-pointer"
-                      >
-                        transfer
-                      </Badge>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-80">
-                      <div className="grid gap-4">
-                        <div className="grid gap-4">
-                          <div className="grid grid-cols-3 items-center gap-4 gap-y-2 border-b">
-                            <p className="col-span-2 text-sm font-medium leading-none text-muted-foreground">
-                              Mark as arrived:
-                            </p>
-                            <Button
-                              variant="outline"
-                              onClick={() => setAttendance(id, "arrived")}
-                              className="pb-2"
-                            >
-                              Arrived
-                            </Button>
-                          </div>
-                          <div className="grid grid-cols-3 items-center gap-4">
-                            <p className="col-span-2 text-sm font-medium leading-none text-muted-foreground">
-                              Reset student to default classroom:
-                            </p>
-                            <Button
-                              variant="outline"
-                              onClick={() => setAttendance(id, "default")}
-                            >
-                              Default
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </TooltipTrigger>
-                <TooltipContent>Click when student arrives</TooltipContent>
-              </Tooltip>
-            </div>
-          );
-        } else if (status.value === "transferredA") {
-          return (
-            <div className="text-md max-w-[80px] overflow-ellipsis leading-none">
-              <Tooltip>
-                <TooltipTrigger className="cursor-pointer" asChild>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Badge
-                        variant="success"
-                        className="animate-pulse cursor-pointer"
-                      >
-                        transferred
-                      </Badge>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-80">
-                      <div className="grid gap-4">
-                        <div className="grid gap-4">
-                          <div className="grid grid-cols-3 items-center gap-4 gap-y-2 border-b">
-                            <p className="col-span-2 text-sm font-medium leading-none text-muted-foreground">
-                              Mark not arrived:
-                            </p>
-                            <Button
-                              variant="outline"
-                              onClick={() => setAttendance(id, "transferredN")}
-                              className="pb-2"
-                            >
-                              Not Arrived
-                            </Button>
-                          </div>
-                          <div className="grid grid-cols-3 items-center gap-4">
-                            <p className="col-span-2 text-sm font-medium leading-none text-muted-foreground">
-                              Reset student to default classroom:
-                            </p>
-                            <Button
-                              variant="outline"
-                              onClick={() => setAttendance(id, "default")}
-                            >
-                              Default
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </TooltipTrigger>
-                <TooltipContent>Click when student arrives</TooltipContent>
-              </Tooltip>
-            </div>
-          );
-        } else return <div> </div>;
+        return StatusBadge(status.value, id);
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
@@ -183,15 +78,3 @@ export function columns(): ColumnDef<TeacherTable>[] {
     },
   ];
 }
-
-const setAttendance = async (
-  studentId: string,
-  status: "arrived" | "default" | "transferredN",
-) => {
-  try {
-    const response = await Attendance(studentId, status);
-    return response;
-  } catch (e) {
-    console.error(e);
-  }
-};
