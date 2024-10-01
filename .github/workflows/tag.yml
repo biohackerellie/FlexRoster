@@ -1,7 +1,8 @@
 name: Auto.Tag
 
 on:
-  - push
+  pull_request:
+    types: [opened]
 
 jobs:
   tag:
