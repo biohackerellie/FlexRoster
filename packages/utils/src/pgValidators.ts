@@ -66,6 +66,7 @@ export const AllStudentValidator = z.object({
   studentName: z.string(),
   status: studentStatusSchema,
   teacherName: z.string(),
+  studentId: z.string().nullable(),
 });
 
 export const allStudentsArrayValidator = z.array(AllStudentValidator);

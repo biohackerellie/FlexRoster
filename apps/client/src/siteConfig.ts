@@ -65,6 +65,11 @@ export const siteConfig = {
           href: "/help/faq",
           items: [],
         },
+        {
+          title: "Updates",
+          href: "/help/updates",
+          items: [],
+        },
       ],
     },
     {

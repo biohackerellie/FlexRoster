@@ -17,12 +17,14 @@ export const allStudentsMap = db
     studentName: schema.students.studentName,
     status: schema.students.status,
     teacherName: schema.classrooms.teacherName,
+    studentId: schema.users.id ?? null,
   })
   .from(schema.students)
   .innerJoin(
     schema.classrooms,
     eq(schema.students.classroomId, schema.classrooms.id),
   )
+  .leftJoin(schema.users, eq(schema.students.studentEmail, schema.users.email))
   .prepare("allStudentsMap");
 
 export const rosterByIDQuery = db

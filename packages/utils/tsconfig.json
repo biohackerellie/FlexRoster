@@ -4,6 +4,13 @@
     "outDir": "dist",
     "tsBuildInfoFile": ".turbo/.cache/tsbuildinfo.json"
   },
-  "include": ["*.ts", "src", "logger.ts", "nameHelpers.ts", "src/logger.ts"],
+  "include": [
+    "*.ts",
+    "src",
+    "logger.ts",
+    "nameHelpers.ts",
+    "src/logger.ts",
+    "src/pgValidators.ts"
+  ],
   "exclude": ["node_modules"]
 }

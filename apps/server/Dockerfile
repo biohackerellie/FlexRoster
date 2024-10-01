@@ -34,7 +34,7 @@ FROM gcr.io/distroless/base
 WORKDIR /app
 COPY --from=installer /root/.bun/bin/bun bun
 COPY --from=installer /app/apps/server/dist/index.js index.js
-
+COPY --from=installer /app/apps/server/dist/index.js.map index.js.map
 ENV NODE_ENV production
 CMD ["./bun" ,"run", "./index.js"]
 EXPOSE 3030

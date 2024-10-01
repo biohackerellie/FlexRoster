@@ -24,28 +24,15 @@ import {
   userRosterQuery,
 } from "~/lib/sql";
 import { chatHrefConstructor, getHashKey } from "~/lib/utils";
-import { getAvailability } from "../classes/handlers";
 
 export async function getRosters() {
   try {
     let data: AllStudents[] = [];
-    // const cacheKey = getHashKey("ALlStudents");
-    // const cachedData = await getKV(cacheKey);
-    // if (cachedData) {
-    //   const cacheArray = JSON.parse(cachedData);
-
-    //   if (cacheArray?.length) {
-    //     const validated = allStudentsArrayValidator.parse(cacheArray);
-    //     data = validated;
-    //   }
-    // } else {
     const dbData = await allStudentsMap.execute({});
     if (dbData?.length) {
       const parsedData = allStudentsArrayValidator.parse(dbData);
-      // await setKV(cacheKey, JSON.stringify(parsedData), 120);
       data = parsedData;
     }
-    /* } */
     if (!data) throw new NotFoundError("No rosters found");
     return data;
   } catch (e) {
@@ -82,7 +69,6 @@ export async function getTeacherRoster(userId: string) {
       available = availability[0]!.available;
     }
     const dbData = await rosterByTeacherId.execute({ userId: userId });
-    logger.info("dbData", dbData);
     if (dbData?.length) {
       const result = dbData.map((student) => {
         return {

@@ -31,7 +31,6 @@ export const metadata: Metadata = {
 export default async function ChatPage({ params }: PageProps) {
   const { chatId } = params;
   const { chat, initialMessages } = await allData(chatId);
-  console.log("chat", chat);
   const { chatPartner, userId } = chat!;
 
   return (

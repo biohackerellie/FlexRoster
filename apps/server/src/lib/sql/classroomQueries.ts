@@ -4,6 +4,7 @@
 
 import type { AnyColumn } from "@local/db";
 import { and, db, eq, gte, schema, sql } from "@local/db";
+import { logger } from "@local/utils";
 
 import { convertUTCDateToLocalDate } from "../utils";
 
@@ -12,11 +13,14 @@ today.setHours(0, 0, 0, 0);
 
 export const todaysAvailability = db
   .select({
-    available: schema.availability.available,
+    available: sql<boolean>`BOOL_OR(${schema.availability.available})`.as(
+      "available",
+    ),
     id: schema.availability.classroomId,
   })
   .from(schema.availability)
   .where(eq(schema.availability.date, today))
+  .groupBy(schema.availability.classroomId)
   .as("todaysAvailability");
 
 export const availabilityQuery = db
@@ -30,7 +34,7 @@ export const classroomsQuery = db // get all classrooms and associated teacher
     roomNumber: schema.classrooms.roomNumber,
     teacherName: schema.classrooms.teacherName,
     teacherId: schema.classrooms.teacherId,
-    available: sql<boolean>`${todaysAvailability.available ?? false}`,
+    available: sql<boolean>`COALESCE(${todaysAvailability.available}, FALSE)`,
     comment: schema.classrooms.comment,
   })
   .from(schema.classrooms)
@@ -101,7 +105,6 @@ export const countRosterByClassroomId = db
 export async function classroomsWithRosterCount() {
   const classrooms = [];
   const rawClassrooms = await classroomsQuery.execute();
-
   for (const room of rawClassrooms) {
     const countData = await countRosterByClassroomId.execute({
       classroomId: room.id,
@@ -111,7 +114,7 @@ export async function classroomsWithRosterCount() {
 
     classrooms.push({ ...room, count });
   }
-  console.log(classrooms);
+  logger.debug("total", classrooms.length);
   return classrooms;
 }
 
