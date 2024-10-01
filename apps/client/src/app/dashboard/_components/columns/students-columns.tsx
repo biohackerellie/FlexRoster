@@ -34,8 +34,9 @@ export function columns(): ColumnDef<AllStudents>[] {
 
         if (!status) return null;
         let studentStatus = status.value;
-        const studentId: string = (row.original.studentId as string) ?? "";
-        if (studentId === "") {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const studentId = row.original.studentId ?? "";
+        if (studentId === "" || studentId === null) {
           studentStatus = "default";
         }
         return StatusBadge(studentStatus, studentId);
