@@ -51,6 +51,7 @@ export default async function TeacherDashboardPage({
           >
             <TeacherRosterTable
               dataPromise={getDefaultRoster(teacherId, search)}
+              teacherId="teacherId"
               authorized={isTeacher}
             />
           </React.Suspense>

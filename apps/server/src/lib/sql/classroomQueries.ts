@@ -123,3 +123,28 @@ export const ClassroomScheduleQuery = db
   .from(schema.availability)
   .where(eq(schema.availability.classroomId, sql.placeholder("classroomId")))
   .prepare("ClassroomScheduleQuery");
+
+// export const DoesClassroomExist = db
+//   .select({
+//     exists: sql<boolean>`exists(${schema.classrooms.id})`.as("exists"),
+//   })
+//   .from(schema.classrooms)
+//   .where(eq(schema.classrooms.teacherId, sql.placeholder("id")))
+//   .prepare("DoesClassroomExist");
+
+export async function DoesClassroomExist(userId: string) {
+  let exists = false;
+  await db
+    .select({
+      exists: sql<number>`1`.as("exists"),
+    })
+    .from(schema.classrooms)
+    .where(eq(schema.classrooms.teacherId, userId))
+    .execute()
+    .then((data) => {
+      if (data.length > 0) {
+        exists = true;
+      }
+    });
+  return exists;
+}

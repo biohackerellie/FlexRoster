@@ -17,6 +17,7 @@ import {
 // } from "~/lib/redis";
 import {
   allStudentsMap,
+  DoesClassroomExist,
   rosterByClassroomId,
   rosterByTeacherId,
   teacherAvailableTodayQuery,
@@ -56,7 +57,7 @@ export async function getRostersById(id: string) {
 
 export async function getTeacherRoster(userId: string) {
   try {
-    let data: TeacherRoster[] = [];
+    let data: TeacherRoster[] | null = [];
 
     const today: Date | string = new Date();
     today.setHours(0, 0, 0, 0);
@@ -68,23 +69,28 @@ export async function getTeacherRoster(userId: string) {
     if (availability && availability.length > 0) {
       available = availability[0]!.available;
     }
-    const dbData = await rosterByTeacherId.execute({ userId: userId });
-    if (dbData?.length) {
-      const result = dbData.map((student) => {
-        return {
-          ...student,
+    const exists = await DoesClassroomExist(userId);
+    if (!exists) {
+      data = null;
+    } else {
+      const dbData = await rosterByTeacherId.execute({ userId: userId });
+      if (dbData?.length) {
+        const result = dbData.map((student) => {
+          return {
+            ...student,
 
-          available: available,
-          teacherId: userId,
-          chatId: student.studentId
-            ? `/dashboard/chat/${chatHrefConstructor(userId, student.studentId)}`
-            : null,
-        };
-      });
-      const parsedData = teacherRosterArrayValidator.parse(result);
-      data = parsedData;
+            available: available,
+            teacherId: userId,
+            chatId: student.studentId
+              ? `/dashboard/chat/${chatHrefConstructor(userId, student.studentId)}`
+              : null,
+          };
+        });
+        const parsedData = teacherRosterArrayValidator.parse(result);
+        data = parsedData;
+      }
     }
-    if (!data) throw new NotFoundError("No rosters found");
+
     return data;
   } catch (e) {
     if (e instanceof Error) {

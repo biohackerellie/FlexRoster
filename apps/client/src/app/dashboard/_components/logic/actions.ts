@@ -6,6 +6,7 @@ import {
   revalidatePath,
   revalidateTag,
 } from "next/cache";
+import { z } from "zod";
 
 import type { CreateCommentSchema, DatePickerSchema } from "@local/utils";
 import { auth } from "@local/auth";
@@ -246,5 +247,51 @@ export async function RequestRoom(
       data: null,
       error: getErrorMessage(err),
     };
+  }
+}
+
+const classroomFormSchema = z.object({
+  teacherName: z
+    .string({
+      invalid_type_error: "This field is required",
+    })
+    .min(1),
+  roomNumber: z
+    .string({
+      invalid_type_error: "This field is required",
+    })
+    .min(1),
+});
+
+export async function createClassroom(userId: string, formData: FormData) {
+  const validatedFields = classroomFormSchema.safeParse({
+    teacherName: formData.get("teacherName"),
+    roomNumber: formData.get("roomNumber"),
+  });
+
+  if (!validatedFields.success) {
+    console.error(validatedFields.error.flatten().fieldErrors);
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Please fill out all fields",
+    };
+  }
+  const res = await client.api.classes.all.post({
+    teacherId: userId,
+    teacherName: validatedFields.data.teacherName,
+    roomNumber: validatedFields.data.roomNumber,
+  });
+  console.log(res);
+  if (res.error) {
+    console.error(res.error);
+    return {
+      errors: null,
+      message: res.error.value as string,
+    };
+  } else {
+    revalidatePath(
+      `/dashboard/staff/${validatedFields.data.teacherId}`,
+      "page",
+    );
   }
 }
