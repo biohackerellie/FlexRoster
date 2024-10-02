@@ -12,7 +12,7 @@ require (
 	github.com/go-chi/render v1.0.3
 	github.com/jackc/pgx/v5 v5.7.0
 	github.com/redis/go-redis/v9 v9.6.1
-	github.com/redis/rueidis v1.0.46
+	github.com/redis/rueidis v1.0.47
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.9.0
