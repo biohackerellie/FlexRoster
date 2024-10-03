@@ -31,7 +31,7 @@ const fontMono = JetBrains_Mono({
 });
 export const metadata: Metadata = {
   title: "FLEX | Home",
-  description: "Be gay, do crime",
+  description: "Flexible scheduling for Infinite Campus Rosters",
   applicationName: "FlexRoster",
   creator: "Ellie Kerns",
 };
