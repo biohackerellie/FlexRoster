@@ -1,9 +1,10 @@
 name: Auto.Tag
 
 on:
+  workflow_dispatch:
   pull_request:
     types: [opened]
-
+  push:
 jobs:
   tag:
     if: github.actor == 'biohackerellie'
