@@ -11,6 +11,7 @@ import { DataTableToolbar } from "@local/ui/data-table-toolbar";
 import type { getDefaultRoster } from "../logic/queries";
 import { useDataTable } from "@/hooks/useDataTable";
 import { statusOptions } from "@/lib/constants";
+import { ClassroomContext } from "../../staff/[id]/context";
 import { columns } from "../columns/teacherRoster-columns";
 import EditClassroomForm from "../editClassroomForm";
 import { ToolbarActions } from "../toolbarActions";
@@ -18,24 +19,23 @@ import { ToolbarActions } from "../toolbarActions";
 interface TableProps {
   teacherId: string;
   dataPromise: ReturnType<typeof getDefaultRoster>;
-  authorized: boolean;
 }
 
 export default function TeacherRosterTable({
   dataPromise,
-  authorized,
+
   teacherId,
 }: TableProps) {
   "use no memo";
   const tableColumns = React.useMemo(() => columns(), []);
-
+  const classroom = React.use(ClassroomContext) ?? null;
   const data = React.use(dataPromise);
-  if (data === null) {
+  if (classroom === null) {
     return <EditClassroomForm userId={teacherId} />;
   } else {
-    const comment = data[0]?.comment ?? null;
-    const status = data[0]?.available!;
-    const classroomId = data[0]?.classroomId ?? "";
+    const comment = classroom.comment;
+    const status = classroom.available;
+    const classroomId = classroom.classroomId;
     const filterFields: DataTableFilterField<TeacherTable>[] = [
       {
         label: "Name",
@@ -60,7 +60,7 @@ export default function TeacherRosterTable({
     return (
       <div className="w-full space-y-2.5 overflow-auto">
         <DataTableToolbar table={table} filterFields={filterFields}>
-          {authorized && (
+          {classroom.authorized && (
             <ToolbarActions
               teacherId={teacherId}
               comment={comment}

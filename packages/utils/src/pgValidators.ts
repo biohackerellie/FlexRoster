@@ -93,13 +93,9 @@ export const TeacherRosterValidator = z.object({
   studentName: z.string(),
   status: studentStatusSchema,
   studentId: z.string().nullable(),
-  roomNumber: z.string(),
-  teacherName: z.string(),
   classroomId: z.string().optional(),
-  available: z.boolean().optional(),
-  comment: z.string().nullable(),
+  defaultClassroomId: z.string().optional(),
   chatId: z.string().nullable(),
-  teacherId: z.string(),
 });
 
 export const teacherRosterArrayValidator = z.array(TeacherRosterValidator);

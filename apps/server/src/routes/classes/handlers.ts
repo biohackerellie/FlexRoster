@@ -73,7 +73,8 @@ export async function getClasses(id: string) {
 
 export async function getClassById(id: string) {
   try {
-    const result = await roomByIdQuery.execute({ id });
+    logger.debug("getting class by id", id);
+    const result = await roomByIdQuery.execute({ id: id });
     return result[0];
   } catch (e) {
     throw new NotFoundError("No class found with that ID");
@@ -194,13 +195,20 @@ export async function createClassroom(
   teacherName: string,
 ) {
   try {
-    await db.insert(schema.classrooms).values({
+    logger.debug(
+      "creating classroom with: ",
+      teacherId,
+      roomNumber,
+      teacherName,
+    );
+
+    const test = await db.insert(schema.classrooms).values({
       teacherId: teacherId,
       roomNumber: roomNumber,
       teacherName: teacherName,
       id: nanoid(),
     });
-
+    logger.debug("test", test);
     return new Response("Classroom created", { status: 200 });
   } catch (e) {
     if (e instanceof Error) {

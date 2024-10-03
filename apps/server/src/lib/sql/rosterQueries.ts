@@ -40,16 +40,10 @@ export const rosterByTeacherId = db
     studentName: schema.students.studentName,
     status: schema.students.status,
     studentId: schema.users.id,
-    roomNumber: schema.classrooms.roomNumber,
-    teacherName: schema.classrooms.teacherName,
-    classroomId: schema.classrooms.id,
-    comment: schema.classrooms.comment,
+    classroomId: schema.students.classroomId,
+    defaultClassroomId: schema.students.defaultClassroomId,
   })
   .from(schema.students)
-  .innerJoin(
-    schema.classrooms,
-    eq(schema.students.classroomId, schema.classrooms.id),
-  )
   .leftJoin(schema.users, eq(schema.students.studentEmail, schema.users.email))
   .where(eq(schema.classrooms.teacherId, sql.placeholder("userId")))
   .prepare("rosterByTeacherId");

@@ -2,7 +2,6 @@ import type { SearchParams } from "@/hooks/types";
 import * as React from "react";
 import { Loader2 } from "lucide-react";
 
-import { auth } from "@local/auth";
 import {
   Card,
   CardContent,
@@ -16,7 +15,7 @@ import { searchParamsValidator } from "@local/utils";
 import { getDefaultRoster } from "../../_components/logic/queries";
 import TeacherRosterTable from "../../_components/tables/teacherTable";
 
-export default async function TeacherDashboardPage({
+export default function TeacherDashboardPage({
   params,
   searchParams,
 }: {
@@ -24,16 +23,7 @@ export default async function TeacherDashboardPage({
   searchParams: SearchParams;
 }) {
   "use memo";
-  const session = await auth();
   const teacherId = params.id;
-  let isTeacher = false;
-  if (session) {
-    const userId = session?.user?.id;
-    if (userId === teacherId) {
-      isTeacher = true;
-    }
-  }
-
   const search = searchParamsValidator.parse(searchParams);
   return (
     <div>
@@ -51,8 +41,7 @@ export default async function TeacherDashboardPage({
           >
             <TeacherRosterTable
               dataPromise={getDefaultRoster(teacherId, search)}
-              teacherId="teacherId"
-              authorized={isTeacher}
+              teacherId={teacherId}
             />
           </React.Suspense>
         </CardContent>

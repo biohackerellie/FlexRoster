@@ -72,7 +72,7 @@ export async function getDefaultRoster(
     return [];
   }
   if (!data) {
-    return null;
+    return [];
   }
 
   if (!search) {

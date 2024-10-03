@@ -71,14 +71,14 @@ export const roomByIdQuery = db // get classroom by userId
   .select({
     id: schema.classrooms.id,
     roomNumber: schema.classrooms.roomNumber,
-    teacherName: schema.users.name,
-    teacherId: schema.users.id,
-    available: sql<boolean>`${schema.availability.available ?? false}`,
+    teacherName: schema.classrooms.teacherName,
+    teacherId: schema.classrooms.teacherId,
+    comment: schema.classrooms.comment,
+    available: sql<boolean>`COALESCE(${todaysAvailability.available}, FALSE)`,
   })
   .from(schema.classrooms)
-  .innerJoin(schema.users, eq(schema.classrooms.teacherId, schema.users.id))
   .leftJoin(todaysAvailability, eq(schema.classrooms.id, todaysAvailability.id))
-  .where(eq(schema.classrooms.id, sql.placeholder("id")))
+  .where(eq(schema.classrooms.teacherId, sql.placeholder("id")))
   .prepare("roomById");
 
 export const getClassroomIdByTeacher = db // returns classroomId by teacherId

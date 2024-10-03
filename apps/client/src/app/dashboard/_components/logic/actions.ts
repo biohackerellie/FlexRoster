@@ -147,6 +147,7 @@ export async function setTodayAvailability(
   availability: boolean,
 ) {
   try {
+    logger.debug("data recieved", classroomId, teacherId, availability);
     const today = convertUTCDateToLocalDate(new Date());
     today.setHours(0, 0, 0, 0);
     if (availability === true) {
@@ -289,9 +290,6 @@ export async function createClassroom(userId: string, formData: FormData) {
       message: res.error.value as string,
     };
   } else {
-    revalidatePath(
-      `/dashboard/staff/${validatedFields.data.teacherId}`,
-      "page",
-    );
+    revalidatePath(`/dashboard/staff/${userId}`, "page");
   }
 }

@@ -26,9 +26,9 @@ export default function EditClassroomForm({ userId }: EditClassroomFormProps) {
       <CardContent>
         <form action={createWithArgs}>
           <div className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="name">You Name</Label>
+                <Label htmlFor="name">Teacher Name</Label>
                 <Input
                   id="teacherName"
                   name="teacherName"
@@ -36,15 +36,13 @@ export default function EditClassroomForm({ userId }: EditClassroomFormProps) {
                   required
                 />
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="room">Room Number</Label>
-                <Input
-                  id="roomNumber"
-                  name="roomNumber"
-                  placeholder="Example: '129' or 'Library'"
-                  required
-                />
-              </div>
+              <Label htmlFor="room">Room Number</Label>
+              <Input
+                id="roomNumber"
+                name="roomNumber"
+                placeholder="Example: '129' or 'Library'"
+                required
+              />
               <Button type="submit" className="w-full">
                 Create Classroom
               </Button>
