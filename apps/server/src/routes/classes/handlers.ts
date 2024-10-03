@@ -73,7 +73,6 @@ export async function getClasses(id: string) {
 
 export async function getClassById(id: string) {
   try {
-    logger.debug("getting class by id", id);
     const result = await roomByIdQuery.execute({ id: id });
     return result[0];
   } catch (e) {
