@@ -55,7 +55,7 @@ type Sets struct {
 	fetchedSet   map[string]struct{}
 }
 
-func (s *Scripts) CreateClassSets(availableClasses, dbClasses, campusClasses []*service.Classroom) (map[string]struct{}, map[string]struct{}, map[string]struct{}) {
+func (s *Scripts) CreateClassSets(availableClasses, dbClasses, campusClasses []*service.Classroom) (map[string]struct{}, map[string]struct{}) {
 	var wg sync.WaitGroup
 	results := make(chan Sets)
 	wg.Add(3)
@@ -84,7 +84,6 @@ func (s *Scripts) CreateClassSets(availableClasses, dbClasses, campusClasses []*
 	var (
 		availableIds map[string]struct{}
 		existingIds  map[string]struct{}
-		fetchedIds   map[string]struct{}
 	)
 
 	for res := range results {
@@ -94,11 +93,8 @@ func (s *Scripts) CreateClassSets(availableClasses, dbClasses, campusClasses []*
 		if res.existingSet != nil {
 			existingIds = res.existingSet
 		}
-		if res.fetchedSet != nil {
-			fetchedIds = res.fetchedSet
-		}
 	}
-	return availableIds, existingIds, fetchedIds
+	return availableIds, existingIds
 }
 
 func RunInMutex(sem chan struct{}, mu *sync.Mutex, f func() error) error {

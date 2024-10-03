@@ -3,6 +3,9 @@ name: Changelog CI
 on:
   pull_request:
     types: [opened]
+  push:
+    branches:
+      - main
 
 jobs:
   changelog:

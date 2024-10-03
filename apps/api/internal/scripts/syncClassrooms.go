@@ -146,15 +146,15 @@ func (s *Scripts) UpdateExistingClasses(ctx context.Context, dbClasses []*servic
 		return class.Available == true
 	})
 
-	availableIds, existingIds, fetchedIds := s.CreateClassSets(availableClasses, dbClasses, campusClasses)
-	classesToDelete := arrays.EZFilter(dbClasses, func(class *service.Classroom) bool {
-		_, ok := fetchedIds[class.Id]
-		return !ok
-	})
+	availableIds, existingIds := s.CreateClassSets(availableClasses, dbClasses, campusClasses)
+	// classesToDelete := arrays.EZFilter(dbClasses, func(class *service.Classroom) bool {
+	// 	_, ok := fetchedIds[class.Id]
+	// 	return !ok
+	// })
 
-	classesToDeleteIds := arrays.EZMap(classesToDelete, func(class *service.Classroom) string {
-		return class.Id
-	})
+	// classesToDeleteIds := arrays.EZMap(classesToDelete, func(class *service.Classroom) string {
+	// 	return class.Id
+	// })
 
 	classesToUpdate := arrays.EZFilter(campusClasses, func(class *service.Classroom) bool {
 		return arrays.EZSome(dbClasses, func(dbClass *service.Classroom) bool {
@@ -173,14 +173,14 @@ func (s *Scripts) UpdateExistingClasses(ctx context.Context, dbClasses []*servic
 	concurrencyLimit := 10
 	sem := make(chan struct{}, concurrencyLimit)
 	g, ctx := errgroup.WithContext(ctx)
-	if len(classesToDelete) > 0 {
-		sem <- struct{}{}
-		g.Go(func() error {
-			return RunInMutex(sem, &mu, func() error {
-				return s.classroomRepo.DeleteClassroomTx(ctx, classesToDeleteIds)
-			})
-		})
-	}
+	// if len(classesToDelete) > 0 {
+	// 	sem <- struct{}{}
+	// 	g.Go(func() error {
+	// 		return RunInMutex(sem, &mu, func() error {
+	// 			return s.classroomRepo.DeleteClassroomTx(ctx, classesToDeleteIds)
+	// 		})
+	// 	})
+	// }
 	if len(classesToUpdate) > 0 {
 		sem <- struct{}{}
 		g.Go(func() error {
