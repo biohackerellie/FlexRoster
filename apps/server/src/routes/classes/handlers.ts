@@ -73,73 +73,13 @@ export async function getClasses(id: string) {
 
 export async function getClassById(id: string) {
   try {
-    const result = await roomByIdQuery.execute({ id });
+    logger.debug("getting class by id", id);
+    const result = await roomByIdQuery.execute({ id: id });
     return result[0];
   } catch (e) {
     throw new NotFoundError("No class found with that ID");
   }
 }
-
-/**
- * Reset a single class roster by classroomID
- * @param id - classroomID
- * @returns void
- */
-
-// export async function resetOneClass(userId: string) {
-//   try {
-//     const cacheKey = getHashKey(`TeacherRoster-${userId}`);
-//     const classroomId = await getClassroomIdByTeacher.execute({
-//       teacherId: userId,
-//     });
-//     if (!classroomId || classroomId.length === 0) {
-//       console.info("No classroom found for this teacher");
-//       return;
-//     }
-//     const id = classroomId[0]?.classroomId!;
-//     const studentsToDelete = await rosterByIDQuery.execute({ id: id });
-//     if (studentsToDelete.length === 0) {
-//       console.info("No students to delete");
-//       return;
-//     }
-//     const token = await icAuth();
-//     const defaultRoster: insertClassRoster[] = [];
-
-//     const data = await fetcher<RosterResponse>(
-//       icStudentQuery(id, process.env.ONEROSTER_APPNAME),
-//       {
-//         method: "GET",
-//         headers: {
-//           accept: "application/json",
-//           "X-XSRF-TOKEN": process.env.XSRF_TOKEN,
-//           Authorization: `Bearer ${token}`,
-//         },
-//       },
-//     );
-
-//     const mappedStudents = data.users.map((s) => {
-//       const fullName = `${s.givenName} ${s.familyName}`;
-//       return {
-//         studentEmail: s.email,
-//         studentName: fullName,
-//         classroomId: id,
-//       };
-//     });
-//     for (const s of mappedStudents) {
-//       defaultRoster.push(s);
-//     }
-//     await clearKV(cacheKey);
-//     await db.transaction(async (tx) => {
-//       await tx
-//         .delete(schema.students)
-//         .where(eq(schema.students.classroomId, id));
-//       await tx.insert(schema.students).values(defaultRoster);
-//     });
-//   } catch (e) {
-//     console.error(e instanceof Error ? e.message : e);
-//     throw e;
-//   }
-// }
 
 export async function createComment(id: string, comment: string) {
   try {
@@ -241,6 +181,35 @@ export async function deleteAvailability(id: string, date: Date) {
         ),
       );
     return new Response("Availability deleted", { status: 200 });
+  } catch (e) {
+    if (e instanceof Error) {
+      logger.error(e.message);
+    }
+    throw e;
+  }
+}
+
+export async function createClassroom(
+  teacherId: string,
+  roomNumber: string,
+  teacherName: string,
+) {
+  try {
+    logger.debug(
+      "creating classroom with: ",
+      teacherId,
+      roomNumber,
+      teacherName,
+    );
+
+    const test = await db.insert(schema.classrooms).values({
+      teacherId: teacherId,
+      roomNumber: roomNumber,
+      teacherName: teacherName,
+      id: nanoid(),
+    });
+    logger.debug("test", test);
+    return new Response("Classroom created", { status: 200 });
   } catch (e) {
     if (e instanceof Error) {
       logger.error(e.message);

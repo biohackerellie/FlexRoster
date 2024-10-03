@@ -15,6 +15,10 @@
   "rangeStrategy": "bump",
   "automerge": true,
   "npm": {
-    "fileMatch": ["(^|/)package\\.json$", "(^|/)package\\.json\\.hbs$"]
+    "fileMatch": [
+      "(^|/)package\\.json$",
+      "(^|/)package\\.json\\.hbs$",
+      "pnpm-workspace\\.yaml$"
+    ]
   }
 }

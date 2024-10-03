@@ -17,6 +17,7 @@ import {
 // } from "~/lib/redis";
 import {
   allStudentsMap,
+  DoesClassroomExist,
   rosterByClassroomId,
   rosterByTeacherId,
   teacherAvailableTodayQuery,
@@ -61,21 +62,11 @@ export async function getTeacherRoster(userId: string) {
     const today: Date | string = new Date();
     today.setHours(0, 0, 0, 0);
 
-    let available = false;
-    const availability = await teacherAvailableTodayQuery.execute({
-      teacherId: userId,
-    });
-    if (availability && availability.length > 0) {
-      available = availability[0]!.available;
-    }
     const dbData = await rosterByTeacherId.execute({ userId: userId });
     if (dbData?.length) {
       const result = dbData.map((student) => {
         return {
           ...student,
-
-          available: available,
-          teacherId: userId,
           chatId: student.studentId
             ? `/dashboard/chat/${chatHrefConstructor(userId, student.studentId)}`
             : null,
@@ -84,7 +75,6 @@ export async function getTeacherRoster(userId: string) {
       const parsedData = teacherRosterArrayValidator.parse(result);
       data = parsedData;
     }
-    if (!data) throw new NotFoundError("No rosters found");
     return data;
   } catch (e) {
     if (e instanceof Error) {

@@ -2,6 +2,7 @@ import { Elysia, t } from "elysia";
 
 import { classroomsWithRosterCount } from "~/lib/sql";
 import {
+  createClassroom,
   createComment,
   deleteAvailability,
   deleteComment,
@@ -20,6 +21,18 @@ export const classRoutes = new Elysia({ prefix: "/classes" })
       return { error: "No classes found" };
     }
   })
+  .post(
+    "/all",
+    ({ body: { teacherId, roomNumber, teacherName } }) =>
+      createClassroom(teacherId, roomNumber, teacherName),
+    {
+      body: t.Object({
+        teacherId: t.String(),
+        roomNumber: t.String(),
+        teacherName: t.String(),
+      }),
+    },
+  )
   .get("/all/:id", ({ params: { id } }) => getClasses(id), {
     params: t.Object({
       id: t.String(),
