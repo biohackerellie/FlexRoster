@@ -35,7 +35,7 @@ export async function Attendance(
   }
 
   revalidateTag("roster");
-  revalidatePath("/dashboard/teacher", "layout");
+  revalidatePath(`/dashboard`, "layout");
 }
 
 export async function RequestApproval(
@@ -61,9 +61,9 @@ export async function RequestApproval(
     console.error("No data found");
   }
 
-  revalidateTag("roster");
-  revalidateTag("requests");
   revalidatePath("/dashboard", "layout");
+  revalidatePath(`/dashboard/staff/${teacherId}`, "layout");
+  revalidatePath(`/dashboard/staff/${newTeacherId}`, "layout");
 }
 
 export async function createComment(
@@ -152,13 +152,12 @@ export async function setTodayAvailability(
     today.setHours(0, 0, 0, 0);
     if (availability === true) {
       const dates = [today];
-      const res = await client.api.classes.availability.post({
+      await client.api.classes.availability.post({
         classroomId: classroomId,
         teacherId: teacherId,
         dates: dates,
       });
       revalidatePath("/");
-      logger.debug(res);
       return {
         data: null,
         error: null,

@@ -29,12 +29,14 @@ interface useDataTableProps<TData, TValue> {
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
   filterFields?: DataTableFilterField<TData>[];
+  defaultSortBy?: string;
 }
 
 export function useDataTable<TData, TValue>({
   data,
   columns,
   filterFields = [],
+  defaultSortBy,
 }: useDataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
@@ -93,7 +95,16 @@ export function useDataTable<TData, TValue>({
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] =
     React.useState<ColumnFiltersState>(initialColumnFilters);
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>(
+    defaultSortBy
+      ? [
+          {
+            id: defaultSortBy,
+            desc: false,
+          },
+        ]
+      : [],
+  );
 
   const debouncedSearchableColumnFilters = JSON.parse(
     useDebounce(
@@ -159,8 +170,9 @@ export function useDataTable<TData, TValue>({
     columns,
     initialState: {
       pagination: {
-        pageSize: 8,
+        pageSize: 30,
       },
+      sorting,
     },
     state: {
       columnVisibility,

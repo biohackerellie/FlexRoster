@@ -16,7 +16,6 @@ import {
   userRequestQuery,
   userRosterQuery,
 } from "~/lib/sql";
-import { NoRequestForUError } from "~/lib/utils/Errors";
 // import { getHashKey } from "~/lib/utils";
 import sendEmail from "~/lib/utils/sendEmail";
 
@@ -42,31 +41,35 @@ export async function newRequest({
       dateRequested,
     );
 
-    let requests: Request[] = [];
+    // const requests: Request[] = [];
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     let status: RequestStatus = "pending";
     if (teacherRequest) {
       status = "approved";
     }
-    requests = await userRequestQuery.execute({ userId: studentId });
-    if (requests.length > 0) {
-      for (const r of requests) {
-        if (r.dateRequested === dateRequested!) {
-          if (r.status !== "denied") {
-            throw new NoRequestForUError(
-              "You already have a request for that date 🤡",
-            );
-          }
-        }
-      }
-    }
+    // requests = await userRequestQuery.execute({ userId: studentId });
+    // if (requests.length > 0) {
+    //   for (const r of requests) {
+    //     if (r.dateRequested === dateRequested!) {
+    //       if (r.status !== "denied") {
+    //         throw new NoRequestForUError(
+    //           "You already have a request for that date 🤡",
+    //         );
+    //       }
+    //     }
+    //   }
+    // }
     const studentRaw = await userRosterQuery.execute({ id: studentId });
     if (studentRaw.length === 0) {
       throw new NotFoundError("No student found with that ID");
     }
     const student = studentRaw[0];
-    const currentTeacher = student?.classrooms?.teacherId ?? " ";
+    const [currentTeacherRaw] = await userQuery.execute({
+      id: student?.classrooms?.teacherId,
+    });
+
+    const currentTeacher = currentTeacherRaw?.id ?? " ";
     const currentTeacherName = student?.classrooms?.teacherName ?? " ";
     const newTeacherRaw = await userQuery.execute({ id: newTeacher });
     if (newTeacherRaw.length === 0) {
@@ -75,6 +78,7 @@ export async function newRequest({
     const newTeacherData = newTeacherRaw[0];
     let log: Logs;
     const timestamp = Date.now().toString();
+    const readable = new Date(timestamp).toLocaleString();
 
     const requestData: insertRequest = {
       status: status,
@@ -90,11 +94,16 @@ export async function newRequest({
       id: Math.floor(Math.random() * 1000000),
     };
     const validatedRequest = requestValidator.parse(requestData);
-    logger.debug("made it this far");
+    let emailData = {
+      to: "",
+      subject: "Transfer Request",
+      message: `<h1>Transfer Request</h1> <p>Your request to transfer to a new teacher has been ${status}</p>`,
+    };
     if (teacherRequest && validatedRequest.dateRequested === today) {
       const newClassroomId = await getClassroomIdByTeacher.execute({
         teacherId: newTeacher,
       });
+
       await db.transaction(async (tx) => {
         await tx
           .update(schema.students)
@@ -105,12 +114,17 @@ export async function newRequest({
           .where(eq(schema.students.studentEmail, student?.user.email ?? ""));
 
         await tx.insert(schema.requests).values(validatedRequest);
-        log = {
-          type: "request",
-          action: `${newTeacherData?.name} transferred  ${student?.user?.name} from ${currentTeacherName} at ${timestamp}`,
-          user: newTeacher!,
-        };
       });
+      log = {
+        type: "request",
+        action: `${newTeacherData?.name} transferred  ${student?.user?.name} from ${currentTeacherName} at ${readable}`,
+        user: newTeacherData?.name ?? "",
+      };
+      emailData = {
+        to: currentTeacher ?? "",
+        subject: "New Transfer Request",
+        message: `<h1>Transfer Request</h1> <p>${newTeacherData?.name} has requested to transfer ${student?.user?.name} to their class on ${dateRequested}</p>`,
+      };
     } else {
       await db.insert(schema.requests).values(validatedRequest);
       log = {
@@ -118,13 +132,14 @@ export async function newRequest({
         action: `${student?.user?.name} requested to transfer to ${newTeacherData?.name} from ${currentTeacherName} at ${timestamp}`,
         user: studentId!,
       };
+      emailData = {
+        to: newTeacherData?.email ?? "",
+        subject: "New Transfer Request",
+        message: `<h1>Transfer Request</h1> <p>${student?.user.name} has requested to transfer to your class on ${dateRequested}</p>`,
+      };
     }
     await newLog(log!);
-    const emailData = {
-      to: newTeacherData?.email ?? "",
-      subject: "New Transfer Request",
-      message: `<h1>Transfer Request</h1> <p>${student?.user.name} has requested to transfer to your class on ${dateRequested}</p>`,
-    };
+
     await sendEmail(emailData);
   } catch (e) {
     if (e instanceof Error) {
@@ -204,7 +219,10 @@ export async function requestApproval(
 
     const [student] = await userRosterQuery.execute({ id: studentId });
     if (!student) throw new NotFoundError("No student found with that ID");
-
+    const teacherEmail = await db.query.users.findFirst({
+      where: eq(schema.users.id, teacherId),
+      columns: { email: true },
+    });
     // get new teacher's roster
     const newClassroomId = await getClassroomIdByTeacher.execute({
       teacherId: newTeacherId,
@@ -213,7 +231,7 @@ export async function requestApproval(
       throw new NotFoundError("No classroom found with that teacherId");
 
     // update request status
-    await db.transaction(async (tx) => {
+    const request = await db.transaction(async (tx) => {
       if (status === "approved") {
         // if approved update student's classroomId in db
         await tx
@@ -229,10 +247,14 @@ export async function requestApproval(
         .update(schema.requests)
         .set({ status: status })
         .where(eq(schema.requests.id, parseInt(requestId)));
-      await tx
-        .select({ timestamp: schema.requests.timestamp })
+      const [req] = await tx
+        .select({
+          timestamp: schema.requests.timestamp,
+          dateRequested: schema.requests.dateRequested,
+        })
         .from(schema.requests)
         .where(eq(schema.requests.id, parseInt(requestId)));
+      return req;
     });
 
     const log: Logs = {
@@ -245,6 +267,14 @@ export async function requestApproval(
       subject: "Transfer Request",
       message: `<h1>Transfer Request</h1> <p>Your request to transfer to a new teacher has been ${status}</p>`,
     };
+    if (status === "approved") {
+      const teacherEmailData = {
+        to: teacherEmail?.email ?? "",
+        subject: "Transfer Request",
+        message: `<h1>Transfer Request</h1> <p>${student.user.name}'s request to transfer to a new teacher has been ${status} for ${request?.dateRequested}</p>`,
+      };
+      await sendEmail(teacherEmailData);
+    }
     await sendEmail(emailData);
     await newLog(log);
     return new Response("OK", { status: 200 });
