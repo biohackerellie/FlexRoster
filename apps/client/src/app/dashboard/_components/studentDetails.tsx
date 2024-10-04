@@ -17,7 +17,6 @@ import { Separator } from "@local/ui/separator";
 
 import type { getData } from "./logic/queries";
 import { DatePickerForm } from "@/app/dashboard/_components/datePicker";
-import { convertUTCDateToLocalDate } from "@/lib/utils";
 
 interface StudentDetailsProps {
   dataPromise: ReturnType<typeof getData>;
