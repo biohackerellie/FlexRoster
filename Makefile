@@ -22,12 +22,12 @@ migrate-generate:
 	atlas schema diff  \
 		--from "file://internal/db/migrations" \
 		--to ${DIRECT_URL} \
-  	--dev-url ${DIRECT_URL} 
+  	--dev-url ${DIRECT_URL}
 
 migrate-inspect:
 	cd $(GO_API_ROOT) && \
 	atlas migrate hash \
-		--dir "file://internal/db/migrations" 
+		--dir "file://internal/db/migrations"
 
 
 build-scripts:
@@ -45,10 +45,10 @@ seed:
 	./bin/scripts/main -seed
 
 logs:
-	$(GO_API_ROOT)/bin/scripts/flexscript -logs 
+	$(GO_API_ROOT)/bin/scripts/flexscript -logs
 
 nightly:
-	cd $(GO_API_ROOT) && ./bin/scripts/main -nightly -config $(FLEXROOT)/config.yaml
+	cd $(GO_API_ROOT) && ./bin/scripts/flexscript -nightly -config $(FLEXROOT)/config.yaml
 
 sqlc:
 	cd $(GO_API_ROOT) && sqlc generate

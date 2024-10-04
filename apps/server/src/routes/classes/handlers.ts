@@ -73,8 +73,8 @@ export async function getClasses(id: string) {
 
 export async function getClassById(id: string) {
   try {
-    const result = await roomByIdQuery.execute({ id: id });
-    return result[0];
+    const [result] = await roomByIdQuery.execute({ id: id });
+    return result;
   } catch (e) {
     throw new NotFoundError("No class found with that ID");
   }
