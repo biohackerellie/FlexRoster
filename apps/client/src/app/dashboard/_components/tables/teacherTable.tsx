@@ -30,43 +30,44 @@ export default function TeacherRosterTable({
   const tableColumns = React.useMemo(() => columns(), []);
   const classroom = React.use(ClassroomContext) ?? null;
   const data = React.use(dataPromise);
+
+  const comment = classroom?.comment;
+  const status = classroom?.available;
+  const classroomId = classroom?.classroomId;
+  const filterFields: DataTableFilterField<TeacherTable>[] = [
+    {
+      label: "Name",
+      value: "studentName",
+      placeholder: "Search by name",
+    },
+    {
+      label: "Status",
+      value: "status",
+      options: statusOptions.map((status) => ({
+        label: status?.label.toUpperCase(),
+        value: status?.value,
+        withCount: false,
+      })),
+    },
+  ];
+  const { table } = useDataTable({
+    data,
+    columns: tableColumns,
+    filterFields,
+  });
   if (classroom === null) {
     return <EditClassroomForm userId={teacherId} />;
   } else {
-    const comment = classroom.comment;
-    const status = classroom.available;
-    const classroomId = classroom.classroomId;
-    const filterFields: DataTableFilterField<TeacherTable>[] = [
-      {
-        label: "Name",
-        value: "studentName",
-        placeholder: "Search by name",
-      },
-      {
-        label: "Status",
-        value: "status",
-        options: statusOptions.map((status) => ({
-          label: status?.label.toUpperCase(),
-          value: status?.value,
-          withCount: false,
-        })),
-      },
-    ];
-    const { table } = useDataTable({
-      data,
-      columns: tableColumns,
-      filterFields,
-    });
     return (
       <div className="w-full space-y-2.5 overflow-auto">
         <DataTableToolbar table={table} filterFields={filterFields}>
           {classroom.authorized && (
             <ToolbarActions
               teacherId={teacherId}
-              comment={comment}
+              comment={comment ?? null}
               table={table}
-              currentStatus={status}
-              classroomId={classroomId}
+              currentStatus={status ?? false}
+              classroomId={classroomId ?? ""}
             />
           )}
         </DataTableToolbar>
