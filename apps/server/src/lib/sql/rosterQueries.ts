@@ -1,5 +1,5 @@
 import type { PgSelect } from "@local/db";
-import { and, db, eq, InferSelectModel, schema, sql } from "@local/db";
+import { and, db, eq, InferSelectModel, or, schema, sql } from "@local/db";
 
 import { todaysAvailability } from "./classroomQueries";
 
@@ -36,6 +36,7 @@ export const rosterByIDQuery = db
 
 export const rosterByTeacherId = db
   .select({
+    rosterId: schema.students.id,
     studentEmail: schema.students.studentEmail,
     studentName: schema.students.studentName,
     status: schema.students.status,
@@ -46,7 +47,10 @@ export const rosterByTeacherId = db
   .from(schema.students)
   .innerJoin(
     schema.classrooms,
-    eq(schema.students.classroomId, schema.classrooms.id),
+    or(
+      eq(schema.students.classroomId, schema.classrooms.id),
+      eq(schema.students.defaultClassroomId, schema.classrooms.id),
+    ),
   )
   .leftJoin(schema.users, eq(schema.students.studentEmail, schema.users.email))
 

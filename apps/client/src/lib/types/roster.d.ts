@@ -65,11 +65,14 @@ export interface StudentTable {
 }
 
 export interface TeacherTable {
+  firstName: string;
+  lastName: string;
   studentName: string;
   studentEmail: string;
   status: "transferredA" | "transferredN" | "default";
   studentId: string | null;
   chatId: string | null;
+  rosterId: string | number;
 }
 
 export interface SecretaryTable {

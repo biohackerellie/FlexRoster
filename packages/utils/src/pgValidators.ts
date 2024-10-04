@@ -96,6 +96,7 @@ export const TeacherRosterValidator = z.object({
   classroomId: z.string().optional(),
   defaultClassroomId: z.string().optional(),
   chatId: z.string().nullable(),
+  rosterId: z.union([z.string(), z.number()]),
 });
 
 export const teacherRosterArrayValidator = z.array(TeacherRosterValidator);

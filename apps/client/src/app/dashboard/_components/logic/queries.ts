@@ -75,11 +75,14 @@ export async function getDefaultRoster(
     return [];
   }
 
+  let result = data.map((student) => ({
+    ...student,
+    firstName: student.studentName.split(" ")[0]!,
+    lastName: student.studentName.split(" ")[1]!,
+  }));
   if (!search) {
-    return data;
+    return result;
   }
-
-  let result = data;
 
   if (search.studentName) {
     const searchLower = search.studentName.toLowerCase();

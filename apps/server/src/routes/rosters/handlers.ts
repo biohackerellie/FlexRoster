@@ -58,12 +58,10 @@ export async function getRostersById(id: string) {
 export async function getTeacherRoster(userId: string) {
   try {
     let data: TeacherRoster[] = [];
-    logger.debug("teacher", userId);
     const today: Date | string = new Date();
     today.setHours(0, 0, 0, 0);
 
     const dbData = await rosterByTeacherId.execute({ userId: userId });
-    logger.debug("dbData: ", JSON.stringify(dbData));
     if (dbData?.length > 0) {
       const result = dbData.map((student) => {
         return {
@@ -160,6 +158,7 @@ export async function setAttendance(
         return updatedRequest!;
       });
     }
+
     return new Response("OK", { status: 200 });
   } catch (e) {
     console.error(e);

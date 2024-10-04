@@ -5,6 +5,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { MessageSquare } from "lucide-react";
 import { Link } from "next-view-transitions";
 
+import { Button } from "@local/ui/button";
 import { DataTableColumnHeader } from "@local/ui/data-table-column-header";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
@@ -16,7 +17,21 @@ export function columns(): ColumnDef<TeacherTable>[] {
     {
       accessorKey: "studentName",
       header: ({ column }) => {
+        column.toggleVisibility(false);
         return <DataTableColumnHeader column={column} title="Student Name" />;
+      },
+    },
+
+    {
+      accessorKey: "lastName",
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Last Name" />;
+      },
+    },
+    {
+      accessorKey: "firstName",
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="First Name" />;
       },
     },
     {
@@ -72,9 +87,21 @@ export function columns(): ColumnDef<TeacherTable>[] {
     {
       accessorKey: "studentId",
       header: ({ column }) => {
-        column.toggleVisibility(false);
-        return <></>;
+        return <DataTableColumnHeader column={column} title="Details" />;
       },
+      cell: ({ row }) => {
+        const studentId = row.original.rosterId;
+        return (
+          <Link href={`/dashboard/staff/students/${studentId}`}>
+            <div className="text-md max-w-[30px] cursor-pointer overflow-ellipsis leading-none">
+              <Button disabled={studentId === null} variant="outline">
+                Details
+              </Button>
+            </div>
+          </Link>
+        );
+      },
+      enableSorting: false,
     },
   ];
 }

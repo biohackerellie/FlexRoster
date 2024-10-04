@@ -54,6 +54,7 @@ export default function TeacherRosterTable({
     data,
     columns: tableColumns,
     filterFields,
+    defaultSortBy: "lastName",
   });
   if (classroom === null) {
     return <EditClassroomForm userId={teacherId} />;
