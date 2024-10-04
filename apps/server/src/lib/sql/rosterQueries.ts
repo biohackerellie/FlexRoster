@@ -46,7 +46,7 @@ export const rosterByTeacherId = db
   .from(schema.students)
   .innerJoin(
     schema.classrooms,
-    eq(sql.placeholder("userId"), schema.classrooms.id),
+    eq(schema.students.classroomId, schema.classrooms.id),
   )
   .leftJoin(schema.users, eq(schema.students.studentEmail, schema.users.email))
 
