@@ -31,7 +31,7 @@
     "@local/db": "workspace:*",
     "@sinclair/typebox": "^0.33.14",
     "@t3-oss/env-core": "^0.11.1",
-    "elysia": "^1.1.17",
+    "elysia": "^1.1.18",
     "execa": "^9.4.0",
     "ioredis": "^5.4.1",
     "logestic": "^1.2.3",
