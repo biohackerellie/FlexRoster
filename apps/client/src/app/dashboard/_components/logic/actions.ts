@@ -106,33 +106,41 @@ export async function deleteComment(id: string) {
   }
 }
 
+export async function getClassAvailability(id: string) {
+  const { data, error } = await client.api.classes
+    .availability({ id: id })
+    .get();
+  if (error) {
+    return {
+      data: [],
+    };
+  } else {
+    const datesArray = data.map((date) => new Date(date.date));
+    console.log(datesArray);
+    return {
+      data: datesArray,
+    };
+  }
+}
+
 export async function setAvailability(
-  range: DateRange,
+  range: Date[],
   classroomId: string,
   teacherId: string,
 ) {
   try {
     //calculate all of the dates in the date range from date.from to date.to
-    const dates: Date[] = [];
-    if (!range.to) {
-      dates.push(convertUTCDateToLocalDate(range.from!));
-    } else {
-      for (
-        let date = range.from!;
-        date <= range.to;
-        date.setDate(date.getDate() + 1)
-      ) {
-        dates.push(convertUTCDateToLocalDate(date));
-      }
-    }
-    if (dates.length > 0) {
-      await client.api.classes.availability.post({
-        classroomId: classroomId,
-        teacherId: teacherId,
-        dates: dates,
-      });
-      revalidatePath("/");
-    }
+    const dates = range.map((date) => {
+      const newDate = new Date(date);
+      newDate.setHours(0, 0, 0, 0);
+      return convertUTCDateToLocalDate(newDate);
+    });
+    await client.api.classes.availability.post({
+      classroomId: classroomId,
+      teacherId: teacherId,
+      dates: dates,
+    });
+    revalidatePath(`/dashboard/staff/${teacherId}`, "layout");
   } catch (err) {
     return {
       data: null,
