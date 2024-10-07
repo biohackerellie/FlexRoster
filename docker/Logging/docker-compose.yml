@@ -87,7 +87,7 @@ services:
       - net
 
   node-exporter:
-    image: prom/node-exporter:v1.5.0
+    image: prom/node-exporter:v1.8.2
     command:
       - "--path.sysfs=/host/sys"
       - "--path.procfs=/host/proc"
