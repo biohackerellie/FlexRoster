@@ -36,7 +36,7 @@
     "babel-plugin-react-compiler": "0.0.0-experimental-487cb0e-20240529",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
-    "elysia": "^1.1.18",
+    "elysia": "^1.1.19",
     "framer-motion": "^11.9.0",
     "geist": "^1.3.1",
     "jotai": "^2.10.0",
