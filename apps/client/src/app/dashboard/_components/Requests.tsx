@@ -19,11 +19,15 @@ function ApprovalMenu({
   studentId,
   teacherId,
   newTeacherId,
+  enabled,
+  status,
 }: {
   requestId: string | number;
   studentId: string;
   teacherId: string;
   newTeacherId: string;
+  enabled: boolean;
+  status: string;
 }) {
   const router = useRouter();
   const [isPending, startCreateTransition] = React.useTransition();
@@ -51,8 +55,11 @@ function ApprovalMenu({
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger className="animate-pulse hover:cursor-pointer">
-        Pending
+      <DropdownMenuTrigger
+        disabled={enabled}
+        className="animate-pulse hover:cursor-pointer"
+      >
+        {status}
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem onClick={() => onSubmit("approved")}>

@@ -120,17 +120,23 @@ export async function setAvailability(
       .select()
       .from(schema.availability)
       .where(eq(schema.availability.teacherId, teacherId));
-    let existingDatesSet: Date[] = [];
+    let existingDatesSet: Set<Date> | null = null;
     if (existingAvailability.length > 0) {
-      existingDatesSet = existingAvailability.map((a) =>
-        convertUTCDateToLocalDate(a.date),
-      );
+      existingDatesSet = new Set(existingAvailability.map((date) => date.date));
     }
 
     logger.debug("existing dates", existingDatesSet);
     const availability: Availability[] = [];
+    const newDatesSet = new Set(dates);
+    for (const date of existingAvailability ?? []) {
+      if (!newDatesSet.has(date.date)) {
+        await db
+          .delete(schema.availability)
+          .where(eq(schema.availability.id, date.id));
+      }
+    }
     for (const date of dates) {
-      if (!existingDatesSet.includes(date)) {
+      if (!existingDatesSet?.has(date)) {
         availability.push({
           id: nanoid(),
           teacherId: teacherId,
@@ -140,7 +146,6 @@ export async function setAvailability(
         });
       }
     }
-    logger.debug("availability", availability);
     const parsed = availabilityArrayValidator.parse(availability);
     await db.insert(schema.availability).values(parsed);
     return new Response("Availability set", { status: 200 });

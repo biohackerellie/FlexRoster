@@ -2,11 +2,13 @@
 
 import type { TeacherTable } from "@/lib/types";
 import type { Table } from "@tanstack/react-table";
+import { CalendarIcon } from "lucide-react";
+import { Link } from "next-view-transitions";
 
-import { AvailabilityDialog } from "./availabilityDialog";
+import { Button } from "@local/ui/button";
+
 import { CreateCommentDialog } from "./createDialog";
 import { DeleteCommentDialog } from "./deleteDialog";
-import { TeacherDatePickerForm } from "./TeacherDatePicker";
 
 interface ToolbarActionsProps {
   teacherId: string;
@@ -37,14 +39,20 @@ export function ToolbarActions({
       ) : (
         <CreateCommentDialog teacherId={teacherId} />
       )}
-      <div>
+      {/* <div>
         <AvailabilityDialog
           classroomId={classroomId}
           teacherId={teacherId}
           currentStatus={currentStatus}
         />
-      </div>
-      <TeacherDatePickerForm classroomId={classroomId} teacherId={teacherId} />
+      </div> */}
+      <Button variant="outline" size="sm" asChild>
+        <Link href={`/dashboard/staff/${teacherId}/availability`}>
+          <CalendarIcon />
+          View Availability
+        </Link>
+      </Button>
+      {/* <TeacherDatePickerForm classroomId={classroomId} teacherId={teacherId} /> */}
     </div>
   );
 }

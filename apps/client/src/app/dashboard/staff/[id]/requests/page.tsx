@@ -102,11 +102,17 @@ async function getRequests(teacherId: string) {
   }
   return data;
 }
+function isBeforeToday(date: Date) {
+  const today = new Date();
+  today.setUTCHours(23);
+  today.setDate(today.getDate() - 1);
+  return date < today;
+}
+
 function RequestComponent(request: Request) {
   const daate = new Date(request.dateRequested);
   daate.setUTCHours(23);
   const zonedDate = daate.toLocaleDateString();
-
   return (
     <div className="justify-between p-2">
       <div>
@@ -121,6 +127,8 @@ function RequestComponent(request: Request) {
               studentId={request.studentId}
               teacherId={request.currentTeacher}
               newTeacherId={request.newTeacher}
+              enabled={isBeforeToday(daate)}
+              status={request.status}
             />
           </div>
         </div>

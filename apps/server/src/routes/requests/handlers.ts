@@ -99,20 +99,22 @@ export async function newRequest({
       subject: "Transfer Request",
       message: `<h1>Transfer Request</h1> <p>Your request to transfer to a new teacher has been ${status}</p>`,
     };
-    if (teacherRequest && validatedRequest.dateRequested === today) {
+    if (teacherRequest) {
       const newClassroomId = await getClassroomIdByTeacher.execute({
         teacherId: newTeacher,
       });
-
       await db.transaction(async (tx) => {
-        await tx
-          .update(schema.students)
-          .set({
-            classroomId: newClassroomId[0]?.classroomId,
-            status: "transferredN",
-          })
-          .where(eq(schema.students.studentEmail, student?.user.email ?? ""));
-
+        if (
+          validatedRequest.dateRequested.toISOString() === today.toISOString()
+        ) {
+          await tx
+            .update(schema.students)
+            .set({
+              classroomId: newClassroomId[0]?.classroomId,
+              status: "transferredN",
+            })
+            .where(eq(schema.students.studentEmail, student?.user.email ?? ""));
+        }
         await tx.insert(schema.requests).values(validatedRequest);
       });
       log = {
@@ -121,9 +123,9 @@ export async function newRequest({
         user: newTeacherData?.name ?? "",
       };
       emailData = {
-        to: currentTeacher ?? "",
+        to: currentTeacherRaw?.email ?? "",
         subject: "New Transfer Request",
-        message: `<h1>Transfer Request</h1> <p>${newTeacherData?.name} has requested to transfer ${student?.user?.name} to their class on ${dateRequested}</p>`,
+        message: `<h1>Transfer Request</h1> <p>${newTeacherData?.name} has requested to transfer ${student?.user?.name} to their class on ${validatedRequest.dateRequested.toISOString().split("T")[0]}</p>`,
       };
     } else {
       await db.insert(schema.requests).values(validatedRequest);
@@ -135,7 +137,7 @@ export async function newRequest({
       emailData = {
         to: newTeacherData?.email ?? "",
         subject: "New Transfer Request",
-        message: `<h1>Transfer Request</h1> <p>${student?.user.name} has requested to transfer to your class on ${dateRequested}</p>`,
+        message: `<h1>Transfer Request</h1> <p>${student?.user.name} has requested to transfer to your class on ${validatedRequest.dateRequested.toISOString().split("T")[0]}</p>`,
       };
     }
     await newLog(log!);
@@ -157,10 +159,17 @@ export async function getTeacherRequests(userId: string) {
     if (requests.length === 0) {
       return { incomingRequests: [], outgoingRequests: [] };
     }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    today.setDate(today.getDate() - 1);
     const incomingRequests: Request[] = [];
     const outgoingRequests: Request[] = [];
-    const pendingRequests = requests.filter((r) => r.status === "pending");
-
+    const pendingRequests = requests.filter(
+      (r) =>
+        r.status !== "denied" &&
+        r.dateRequested.toISOString() >= today.toISOString(),
+    );
+    logger.debug("requests", JSON.stringify(pendingRequests));
     for (const request of pendingRequests) {
       if (request.newTeacher === userId) {
         incomingRequests.push(request);

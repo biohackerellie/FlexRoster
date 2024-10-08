@@ -29,6 +29,7 @@
   "workbench.editor.limit.enabled": true,
   "workbench.editor.limit.value": 8,
   "workbench.editor.pinnedTabSizing": "shrink",
+  "workbench.editor.wrapTabs": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "eslint.rules.customizations": [{ "rule": "*", "severity": "warn" }],
@@ -47,7 +48,7 @@
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ],
-  "tailwindCSS.experimental.configFile": "./front-end/tailwind.config.ts",
+  "tailwindCSS.experimental.configFile": "./tooling/tailwind/web.ts",
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.linkedEditing": true,
   "editor.mouseWheelZoom": true,

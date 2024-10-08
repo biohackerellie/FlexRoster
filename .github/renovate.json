@@ -7,7 +7,11 @@
 
   "packageRules": [
     {
-      "matchPackagePatterns": ["^@local/", "babel-plugin-react-compiler"],
+      "matchPackagePatterns": ["^@local/"],
+      "enabled": false
+    },
+    {
+      "matchPackageNames": ["babel-plugin-react-compiler", "react-day-picker"],
       "enabled": false
     }
   ],
