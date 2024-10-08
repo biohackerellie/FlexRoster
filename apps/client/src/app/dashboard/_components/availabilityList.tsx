@@ -2,13 +2,12 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { format, setHours } from "date-fns";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 import { toast } from "sonner";
 
 import { cn } from "@local/ui";
-import { buttonVariants } from "@local/ui/button";
+import { Button, buttonVariants } from "@local/ui/button";
 import { CalendarLarge } from "@local/ui/calendar-large";
 import {
   Card,
@@ -18,10 +17,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@local/ui/card";
-import { ScrollArea } from "@local/ui/scroll-area";
 import { Separator } from "@local/ui/separator";
 
-import type { getClassAvailability } from "./logic/actions";
+import { getErrorMessage } from "@/lib/errorHandler";
 import { ClassroomContext } from "../staff/[id]/context";
 import { setAvailability } from "./logic/actions";
 
@@ -65,7 +63,7 @@ export default function AvailabilityComponent({ initialDates }: CalendarProps) {
             return "Updated!";
           },
           error: (error) => {
-            return error;
+            return getErrorMessage(error);
           },
         },
       );
@@ -101,7 +99,7 @@ export default function AvailabilityComponent({ initialDates }: CalendarProps) {
         </CardDescription>
       </CardHeader>
       <Separator className="my-4" />
-      <div className="justify-center">
+      <div className="flex justify-center align-middle">
         <DayPicker
           showOutsideDays={true}
           className="p-3"
@@ -130,8 +128,8 @@ export default function AvailabilityComponent({ initialDates }: CalendarProps) {
             ),
             day_range_end: "day-range-end",
             day_selected:
-              "bg-primary-muted text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-            day_today: "bg-accent text-accent-foreground",
+              "bg-primary-muted text-black dark:text-white hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+            day_today: " text-accent-foreground",
             day_outside:
               "day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30",
             day_disabled: "text-muted-foreground opacity-50",
@@ -144,6 +142,7 @@ export default function AvailabilityComponent({ initialDates }: CalendarProps) {
             IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
           }}
           mode="multiple"
+          disabled={(date) => date < new Date()}
           selected={selectedDates}
           onDayClick={handleDayClick}
           modifiers={{
@@ -159,6 +158,18 @@ export default function AvailabilityComponent({ initialDates }: CalendarProps) {
           //   },
           // }}
         />
+      </div>
+      <Separator className="my-4" />
+      <div className="flex justify-end">
+        <CardFooter>
+          <Button
+            variant={"outline"}
+            disabled={isPending || !classroom}
+            onClick={() => saveAvailability(selectedDates)}
+          >
+            Save
+          </Button>
+        </CardFooter>
       </div>
     </CardContent>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use server";
 
 import type { DateRange } from "react-day-picker";
@@ -115,8 +116,11 @@ export async function getClassAvailability(id: string) {
       data: [],
     };
   } else {
-    const datesArray = data.map((date) => new Date(date.date));
-    console.log(datesArray);
+    const datesArray = data.map((date) => {
+      const newDate = new Date(date.date);
+      newDate.setUTCHours(23);
+      return newDate;
+    });
     return {
       data: datesArray,
     };
@@ -289,7 +293,6 @@ export async function createClassroom(userId: string, formData: FormData) {
     teacherName: validatedFields.data.teacherName,
     roomNumber: validatedFields.data.roomNumber,
   });
-  console.log(res);
   if (res.error) {
     console.error(res.error);
     return {

@@ -7,10 +7,7 @@ import { ScrollArea } from "@local/ui/scroll-area";
 import { Shell } from "@local/ui/shell";
 
 import AvailabilityComponent from "@/app/dashboard/_components/availabilityList";
-import {
-  getClassAvailability,
-  setAvailability,
-} from "@/app/dashboard/_components/logic/actions";
+import { getClassAvailability } from "@/app/dashboard/_components/logic/actions";
 
 export default async function AvailabilityPage({
   params,
