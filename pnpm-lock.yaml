@@ -511,7 +511,7 @@ importers:
         specifier: catalog:react19
         version: 19.0.0-rc-fb9a90fa48-20240614
       react-big-calendar:
-        specifier: ^1.13.2
+        specifier: ^1.15.0
         version: 1.15.0(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       react-day-picker:
         specifier: ^8.9.1
