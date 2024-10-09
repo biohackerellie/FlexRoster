@@ -52,7 +52,7 @@ export async function sendToInbox(chatId: string, message: Message) {
  * @returns {Array<messageAlerts>}
  */
 
-interface Alerts {
+export interface Alerts {
   messageAlerts: messageAlerts[];
   count: number;
 }
