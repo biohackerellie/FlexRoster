@@ -57,7 +57,7 @@ export async function getRostersById(id: string) {
   }
 }
 
-interface TeacherData {
+export interface TeacherData {
   teacherRoster: TeacherRoster[];
   chatCount: number;
   requestCount: number;
