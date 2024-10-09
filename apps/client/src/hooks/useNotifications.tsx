@@ -14,19 +14,19 @@ interface ExtendedMessage extends Message {
   senderName: string;
 }
 
-function useChatNotifications(userId: string) {
+function useChatNotifications(userId: string, initialCount: number) {
   const router = useRouter();
   const pathname = usePathname();
-  let count = 0;
+  const [count, setCount] = React.useState(initialCount);
   React.useEffect(() => {
     pusherClient.subscribe(toPusherKey(`user:${userId}:chats`));
 
     const chatHandler = (message: ExtendedMessage) => {
+      setCount((prev) => prev + 1);
       const shouldNotify =
         pathname !==
         `/dashboard/chat/${chatHrefConstructor(userId, message.senderId)}`;
       if (!shouldNotify) return;
-      count++;
       toast(`New message from ${message.senderName}`, {
         action: {
           label: "View",
@@ -44,7 +44,8 @@ function useChatNotifications(userId: string) {
       pusherClient.unsubscribe(toPusherKey(`user:${userId}:chats`));
       pusherClient.unbind("new-message", chatHandler);
     };
-  }, [pathname, userId, router]);
+  }, [pathname, userId, count, router]);
+  return count;
 }
 function useRequestNotifications(userId: string) {
   const router = useRouter();

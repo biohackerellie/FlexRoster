@@ -13,7 +13,6 @@ import { Link } from "next-view-transitions";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
-import { useChatNotifications } from "@/hooks";
 import ThemeToggle from "./toggleTheme";
 
 interface NavProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -43,16 +42,6 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
       name: "All Students",
       href: `/dashboard/staff/students`,
       icon: <Search className="h-5 w-5" />,
-    },
-    {
-      name: "Requests",
-      href: `/dashboard/staff/${userId}/requests`,
-      icon: <LineChart className="h-5 w-5" />,
-    },
-    {
-      name: "Messages",
-      href: `/dashboard/staff/${userId}/messages`,
-      icon: <MessageCircle className="h-5 w-5" />,
     },
   ];
 
@@ -93,11 +82,6 @@ export function Navbar({ className, userId, role, ...props }: NavProps) {
       links = studentLinks;
       break;
   }
-
-  if (userId) {
-    useChatNotifications(userId!);
-  }
-
   return (
     <>
       <nav className="flex items-center gap-4 px-2 sm:py-5">

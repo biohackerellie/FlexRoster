@@ -8,6 +8,7 @@ import {
   teacherRosterArrayValidator,
 } from "@local/utils";
 
+import { getAlerts } from "~/lib/redis";
 // import {
 //   getKV,
 //   getRequestKV,
@@ -21,6 +22,7 @@ import {
   rosterByClassroomId,
   rosterByTeacherId,
   teacherAvailableTodayQuery,
+  teacherPendingRequestCount,
   userQuery,
   userRosterQuery,
 } from "~/lib/sql";
@@ -55,12 +57,28 @@ export async function getRostersById(id: string) {
   }
 }
 
+interface TeacherData {
+  teacherRoster: TeacherRoster[];
+  chatCount: number;
+  requestCount: number;
+}
 export async function getTeacherRoster(userId: string) {
   try {
-    let data: TeacherRoster[] = [];
+    const data: TeacherData = {
+      teacherRoster: [],
+      chatCount: 0,
+      requestCount: 0,
+    };
     const today: Date | string = new Date();
     today.setHours(0, 0, 0, 0);
-
+    const chatData = await getAlerts(userId);
+    if (chatData) {
+      data.chatCount = chatData.count;
+    }
+    const [requestData] = await teacherPendingRequestCount.execute({
+      teacherId: userId,
+    });
+    if (requestData) data.requestCount = requestData.count;
     const dbData = await rosterByTeacherId.execute({ userId: userId });
     if (dbData?.length > 0) {
       const result = dbData.map((student) => {
@@ -71,9 +89,11 @@ export async function getTeacherRoster(userId: string) {
             : null,
         };
       });
+
       const parsedData = teacherRosterArrayValidator.parse(result);
-      data = parsedData;
+      data.teacherRoster = parsedData;
     }
+
     return data;
   } catch (e) {
     if (e instanceof Error) {

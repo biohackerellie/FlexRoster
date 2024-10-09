@@ -8,7 +8,7 @@ import * as React from "react";
 import { DataTable } from "@local/ui/data-table-students";
 import { DataTableToolbar } from "@local/ui/data-table-toolbar";
 
-import type { getDefaultRoster } from "../logic/queries";
+import type { getDefaultRoster, getMessages } from "../logic/queries";
 import { useDataTable } from "@/hooks/useDataTable";
 import { statusOptions } from "@/lib/constants";
 import { ClassroomContext } from "../../staff/[id]/context";
@@ -29,11 +29,12 @@ export default function TeacherRosterTable({
   "use no memo";
   const tableColumns = React.useMemo(() => columns(), []);
   const classroom = React.use(ClassroomContext) ?? null;
-  const data = React.use(dataPromise);
-
+  const AllData = React.use(dataPromise);
+  const data = AllData?.result ?? [];
+  const messageCount = AllData?.chatCount ?? 0;
+  const requestCount = AllData?.requestCount ?? 0;
   const comment = classroom?.comment;
-  const status = classroom?.available;
-  const classroomId = classroom?.classroomId;
+
   const filterFields: DataTableFilterField<TeacherTable>[] = [
     {
       label: "Name",
@@ -64,11 +65,11 @@ export default function TeacherRosterTable({
         <DataTableToolbar table={table} filterFields={filterFields}>
           {classroom.authorized && (
             <ToolbarActions
+              messageCount={messageCount}
+              requestCount={requestCount}
               teacherId={teacherId}
               comment={comment ?? null}
               table={table}
-              currentStatus={status ?? false}
-              classroomId={classroomId ?? ""}
             />
           )}
         </DataTableToolbar>

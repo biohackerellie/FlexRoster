@@ -4,9 +4,9 @@ import React from "react";
 import { Link } from "next-view-transitions";
 
 import type { messageAlerts } from "@local/utils/";
+import { Badge } from "@local/ui/badge";
 import { Button } from "@local/ui/button";
 
-import { useChatNotifications } from "@/hooks";
 import { chatHrefConstructor } from "@/lib/utils";
 
 interface ComponentProps {
@@ -15,7 +15,6 @@ interface ComponentProps {
 }
 
 export default function AlertComponent({ messages, userId }: ComponentProps) {
-  useChatNotifications(userId);
   if (!messages || messages.length === 0) {
     return (
       <div className="flex h-full max-h-[calc(100vh-6rem)] w-fit flex-1 flex-col content-center items-center justify-center align-middle">

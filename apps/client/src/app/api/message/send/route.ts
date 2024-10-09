@@ -74,7 +74,7 @@ export async function POST(req: Request) {
 const profanityFilterSchema = z.object({
   isProfanity: z.boolean(),
   score: z.number(),
-  flaggedFor: z.string(),
+  flaggedFor: z.string().optional(),
 });
 
 async function profanityFilter(
@@ -82,6 +82,7 @@ async function profanityFilter(
   messageFrom: string,
   messageTo: string,
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const res = await fetch("https://vector.profanity.dev", {
     method: "POST",
     headers: {
@@ -89,7 +90,6 @@ async function profanityFilter(
     },
     body: JSON.stringify({ message }),
   }).then((res) => res.json());
-
   const result = profanityFilterSchema.parse(res);
   if (result.isProfanity) {
     const email = {

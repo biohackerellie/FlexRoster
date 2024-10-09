@@ -1,4 +1,4 @@
-import { db, desc, eq, gte, or, schema, sql } from "@local/db";
+import { and, count, db, desc, eq, gte, or, schema, sql } from "@local/db";
 
 export const userRequestQuery = db
   .select()
@@ -36,3 +36,14 @@ export const allStudentRequests = db
   .where(eq(schema.requests.studentId, sql.placeholder("studentId")))
   .orderBy(desc(schema.requests.dateRequested))
   .prepare("allStudentRequests");
+
+export const teacherPendingRequestCount = db
+  .select({ count: count() })
+  .from(schema.requests)
+  .where(
+    and(
+      eq(schema.requests.newTeacher, sql.placeholder("teacherId")),
+      eq(schema.requests.status, "pending"),
+    ),
+  )
+  .prepare("teacherPendingRequestCount");

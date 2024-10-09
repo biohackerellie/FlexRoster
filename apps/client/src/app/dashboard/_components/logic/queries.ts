@@ -69,19 +69,21 @@ export async function getDefaultRoster(
 
   if (error) {
     logger.error(error);
-    return [];
+    return null;
   }
   if (!data) {
-    return [];
+    return null;
   }
-
-  let result = data.map((student) => ({
+  const teacher = data.teacherRoster;
+  const requestCount = data.requestCount;
+  const chatCount = data.chatCount;
+  let result = teacher.map((student) => ({
     ...student,
     firstName: student.studentName.split(" ")[0]!,
     lastName: student.studentName.split(" ")[1]!,
   }));
   if (!search) {
-    return result;
+    return { result, requestCount, chatCount };
   }
 
   if (search.studentName) {
@@ -95,7 +97,7 @@ export async function getDefaultRoster(
     const statusArray = search.status.split(".");
     result = result.filter((student) => statusArray.includes(student.status));
   }
-  return result;
+  return { result, requestCount, chatCount };
 }
 
 export async function getRosters(search: TableSearchParams) {
@@ -162,6 +164,15 @@ export async function getStudentRequests(userId: string) {
   }
   if (!data) {
     return [];
+  }
+  return data;
+}
+export async function getMessages(teacherId: string) {
+  const { data, error } = await client.api.inbox
+    .alerts({ userId: teacherId })
+    .get();
+  if (error) {
+    logger.error(error);
   }
   return data;
 }

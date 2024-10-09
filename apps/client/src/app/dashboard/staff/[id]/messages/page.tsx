@@ -3,8 +3,8 @@ import { Loader2 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@local/ui/card";
 
-import { client } from "@/lib/eden";
 import AlertComponent from "../../../_components/AlertComponent";
+import { getMessages } from "../../../_components/logic/queries";
 
 export default async function MessagesPage({
   params,
@@ -12,7 +12,8 @@ export default async function MessagesPage({
   params: { id: string };
 }) {
   const teacherId = params.id;
-  const messages = await getMessages(teacherId);
+  const data = await getMessages(teacherId);
+  const messages = data?.messageAlerts ?? [];
   return (
     <Card>
       <CardHeader>
@@ -25,18 +26,4 @@ export default async function MessagesPage({
       </CardContent>
     </Card>
   );
-}
-
-async function getMessages(teacherId: string) {
-  const { data, error } = await client.api.inbox
-    .alerts({ userId: teacherId })
-    .get();
-  if (error) {
-    console.error(error);
-    return [];
-  }
-  if (!data) {
-    return [];
-  }
-  return data;
 }

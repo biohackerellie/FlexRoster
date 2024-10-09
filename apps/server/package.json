@@ -24,20 +24,15 @@
     "with-env": "bun --env-file=../../.env --"
   },
   "dependencies": {
-    "@clack/core": "^0.3.4",
-    "@clack/prompts": "^0.7.0",
     "@elysiajs/cors": "^1.1.1",
     "@elysiajs/swagger": "^1.1.5",
     "@local/db": "workspace:*",
     "@sinclair/typebox": "^0.33.15",
-    "@t3-oss/env-core": "^0.11.1",
     "effect": "^3.9.1",
     "elysia": "^1.1.19",
-    "execa": "^9.4.0",
     "ioredis": "^5.4.1",
     "logestic": "^1.2.3",
     "nanoid": "^5.0.7",
-    "pino-pretty": "^11.2.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {

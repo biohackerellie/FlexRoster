@@ -51,14 +51,22 @@ export async function sendToInbox(chatId: string, message: Message) {
  * get entire inbox for user by userId searching partial chatIds and returning the chatId + other user's name
  * @returns {Array<messageAlerts>}
  */
-export async function getAlerts(userId: string): Promise<messageAlerts[]> {
+
+interface Alerts {
+  messageAlerts: messageAlerts[];
+  count: number;
+}
+export async function getAlerts(userId: string): Promise<Alerts> {
   const client = createClient();
   try {
     const chatIds = await client.keys(`chat:${userId}--*`);
     const moreChatIds = await client.keys(`chat:*--${userId}`);
     const allChatIds = [...chatIds, ...moreChatIds];
 
-    const results = [];
+    const results: Alerts = {
+      messageAlerts: [],
+      count: 0,
+    };
     for (const chatId of allChatIds) {
       //remove the chatId prefix
       const appendChatId = chatId.replace("chat:", "");
@@ -67,7 +75,7 @@ export async function getAlerts(userId: string): Promise<messageAlerts[]> {
       const chatPartnerId = appendChatId
         .split("--")
         .find((id) => id !== userId);
-
+      // const chatPartnerId = appendChatId.split("--")[1];
       if (!chatPartnerId) {
         continue;
       }
@@ -75,13 +83,13 @@ export async function getAlerts(userId: string): Promise<messageAlerts[]> {
       const chatPartner = await userQuery.execute({ id: chatPartnerId });
 
       const chatPartnerName = chatPartner[0]?.name!;
-      results.push({
+      results.messageAlerts.push({
         chatPartnerId: chatPartnerId,
         chatPartnerName: chatPartnerName,
       });
     }
     await client.quit();
-
+    results.count = results.messageAlerts.length;
     return results;
   } catch (e) {
     console.error(e);
