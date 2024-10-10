@@ -211,16 +211,11 @@ func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) er
 
 const deleteAvailability = `-- name: DeleteAvailability :exec
 DELETE FROM "availability"
-WHERE "teacherId" = $1 AND "date" = $2
+WHERE "id" = $1
 `
 
-type DeleteAvailabilityParams struct {
-	TeacherId *string     `db:"teacherId" json:"teacherId"`
-	Date      pgtype.Date `db:"date" json:"date"`
-}
-
-func (q *Queries) DeleteAvailability(ctx context.Context, arg DeleteAvailabilityParams) error {
-	_, err := q.db.Exec(ctx, deleteAvailability, arg.TeacherId, arg.Date)
+func (q *Queries) DeleteAvailability(ctx context.Context, id string) error {
+	_, err := q.db.Exec(ctx, deleteAvailability, id)
 	return err
 }
 

@@ -12,6 +12,7 @@ import (
 
 	str "api/internal/lib/strings"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -198,14 +199,8 @@ func (s *ClassroomDBService) DeleteComment(ctx context.Context, teacherId string
 	return err
 }
 
-func (s *ClassroomDBService) DeleteAvailability(ctx context.Context, teacherId string, date time.Time) error {
-	DATE := pgtype.Date{}
-	DATE.Time = date
-	args := DeleteAvailabilityParams{
-		TeacherId: &teacherId,
-		Date:      DATE,
-	}
-	err := s.q.DeleteAvailability(ctx, args)
+func (s *ClassroomDBService) DeleteAvailability(ctx context.Context, id string) error {
+	err := s.q.DeleteAvailability(ctx, id)
 	return err
 }
 
@@ -249,6 +244,20 @@ func (s *ClassroomDBService) mapClassroom(r ClassroomQueryRow, ch chan<- *classr
 		AvailableDates: dates,
 	}
 	ch <- mappedResponse
+}
+
+func (s *ClassroomDBService) NewClassroom(ctx context.Context, teacherId string, roomNumber string, teacherName string) error {
+	flex := true
+	flexPtr := &flex
+	id := uuid.New().String()
+	err := s.q.NewClassroom(ctx, NewClassroomParams{
+		ID:          id,
+		RoomNumber:  roomNumber,
+		TeacherName: teacherName,
+		TeacherId:   &teacherId,
+		IsFlex:      flexPtr,
+	})
+	return err
 }
 
 func (s *ClassroomDBService) NewClassroomTx(ctx context.Context, classrooms []*classroom.Classroom) error {

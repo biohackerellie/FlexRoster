@@ -1,12 +1,13 @@
 package db
 
 import (
+	"context"
+
 	config "api/internal/config"
 	errors "api/internal/lib/errors"
 	"api/internal/lib/logger"
 	str "api/internal/lib/strings"
 	student "api/internal/service"
-	"context"
 )
 
 type StudentDBService struct {
@@ -109,7 +110,6 @@ func (s *StudentDBService) RosterByTeacherId(ctx context.Context, teacherId *str
 			RoomNumber:   r.RoomNumber,
 			TeacherName:  r.TeacherName,
 			ClassroomId:  r.ClassroomId,
-			Comment:      str.SafeStringPtr(r.Comment),
 		}
 		response[i] = mappedRes
 	}

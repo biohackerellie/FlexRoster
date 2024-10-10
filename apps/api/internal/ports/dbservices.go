@@ -20,8 +20,9 @@ type ClassroomDBService interface {
 	ClassroomSchedule(ctx context.Context, classroomid string) ([]*service.Availability, error)
 	CreateComment(ctx context.Context, teacherId string, comment string) error
 	DeleteComment(ctx context.Context, teacherId string) error
-	DeleteAvailability(ctx context.Context, teacherId string, date time.Time) error
+	DeleteAvailability(ctx context.Context, id string) error
 	CreateAvailability(ctx context.Context, args []*service.Availability) error
+	NewClassroom(ctx context.Context, teacherId string, roomNumber string, teacherName string) error
 	NewClassroomTx(ctx context.Context, classrooms []*service.Classroom) error
 	UpdateClassroomTx(ctx context.Context, classrooms []*service.Classroom) error
 	DeleteClassroomTx(ctx context.Context, classrooms []string) error

@@ -80,7 +80,7 @@ VALUES($1, $2, $3, $4, $5);
 
 -- name: DeleteAvailability :exec
 DELETE FROM "availability"
-WHERE "teacherId" = $1 AND "date" = $2;
+WHERE "id" = $1;
 
 
 -- name: UpdateClassroom :exec

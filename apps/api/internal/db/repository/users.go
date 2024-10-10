@@ -1,13 +1,14 @@
 package db
 
 import (
+	"context"
+
 	config "api/internal/config"
 	errors "api/internal/lib/errors"
 	"api/internal/lib/logger"
 	str "api/internal/lib/strings"
 	"api/internal/service"
 	user "api/internal/service"
-	"context"
 )
 
 type UsersDBService struct {
@@ -109,7 +110,6 @@ func (s *UsersDBService) GetStudent(ctx context.Context, id string) (*user.Stude
 		StudentId:    res.User.ID,
 		RoomNumber:   res.Classroom.RoomNumber,
 		TeacherName:  res.Classroom.TeacherName,
-		Comment:      *res.Classroom.Comment,
 		TeacherId:    *res.Classroom.TeacherId,
 	}, nil
 }
