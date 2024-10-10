@@ -21,6 +21,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/template.tsx"
-  ],
+, "../../tmp/availabilityDialog.tsx"  ],
   "exclude": ["node_modules"]
 }

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { format, setHours } from "date-fns";
+import { format } from "date-fns";
 import { X } from "lucide-react";
 
 import {

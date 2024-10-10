@@ -12,6 +12,7 @@ import { toPusherKey } from "@/lib/utils";
 
 export async function POST(req: Request) {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { chatId, text }: { chatId: string; text: string } = await req.json();
 
     if (!chatId) throw new Error("ChatId is required");

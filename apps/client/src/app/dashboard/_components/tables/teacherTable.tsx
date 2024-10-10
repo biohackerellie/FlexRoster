@@ -8,7 +8,7 @@ import * as React from "react";
 import { DataTable } from "@local/ui/data-table-students";
 import { DataTableToolbar } from "@local/ui/data-table-toolbar";
 
-import type { getDefaultRoster, getMessages } from "../logic/queries";
+import type { getDefaultRoster } from "../logic/queries";
 import { useDataTable } from "@/hooks/useDataTable";
 import { statusOptions } from "@/lib/constants";
 import { ClassroomContext } from "../../staff/[id]/context";

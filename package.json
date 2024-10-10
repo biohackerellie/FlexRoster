@@ -27,7 +27,7 @@
     "format": "turbo format --continue -- --cache --cache-location .turbo/.cache/.prettiercache",
     "format:fix": "turbo format --continue -- --write --cache --cache-location .turbo/.cache/.prettiercache",
     "lint": "turbo lint --continue -- --cache --cache-location .turbo/.cache/.eslintcache",
-    "lint:fix": "turbo lint --continue -- --fix --quiet --cache --cache-location .turbo/.cache/.eslintcache",
+    "lint:fix": "turbo lint --continue -- --fix  --cache --cache-location .turbo/.cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
     "lint:ws:fix": "pnpm dlx sherif@latest --fix",
     "postinstall": "pnpm lint:ws",

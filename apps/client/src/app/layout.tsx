@@ -5,7 +5,6 @@ import { ViewTransitions } from "next-view-transitions";
 
 import { cn } from "@local/ui";
 
-import { Footer } from "@/components/footer";
 import { ThemeWrapper } from "@/components/theme-wrapper";
 import { Header } from "../components/header";
 
@@ -57,7 +56,11 @@ export default function RootLayout({
             fontMono.variable,
           )}
         >
-          <ThemeProvider attribute="class" enableSystem={false}>
+          <ThemeProvider
+            attribute="class"
+            enableSystem={false}
+            defaultTheme="dark"
+          >
             <ThemeWrapper>
               <Header />
               <div className="flex-1">{children}</div>

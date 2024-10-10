@@ -5,7 +5,6 @@ import type { Table } from "@tanstack/react-table";
 import { CalendarIcon } from "lucide-react";
 import { Link } from "next-view-transitions";
 
-import type { messageAlerts } from "@local/utils";
 import { Button } from "@local/ui/button";
 
 import { useChatNotifications } from "@/hooks";
