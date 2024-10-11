@@ -21,6 +21,11 @@ func StringToPGText(s string) pgtype.Text {
 	return pgText
 }
 
+// validates dates and returns pgtype.Date
+func DateToPGDate(d time.Time) pgtype.Date {
+	return pgtype.Date{Time: d, Valid: true}
+}
+
 // Random Key Generator
 
 const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -40,7 +45,6 @@ func GenRandomKeyString(length int) string {
 
 // for passing in dates from our database, which are formatted like "2021-10-01"
 func IsDateToday(date time.Time) bool {
-
 	today := time.Now().Format("2006-01-02")
 	comp := date.Format("2006-01-02")
 	return comp == today

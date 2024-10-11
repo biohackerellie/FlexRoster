@@ -14,7 +14,8 @@ sql:
         emit_pointers_for_null_types: true
         emit_db_tags: true
         overrides: 
-
+          # - db_type: "date"
+          #   go_type: "time.Time"
           - column: "availability_view.content"
             go_type:
               import: "sql"

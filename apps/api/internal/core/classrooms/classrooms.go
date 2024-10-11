@@ -44,8 +44,8 @@ func (a *Adapter) GetClasses(ctx context.Context, id string) ([]*service.Classro
 	return returnData, nil
 }
 
-func (a *Adapter) GetSpecificClassroom(ctx context.Context, id string) (*service.Classroom, error) {
-	d, err := a.classroomRepo.GetRoomByTeacherId(ctx, id)
+func (a *Adapter) GetSpecificClassroom(ctx context.Context, teacherId string) (*service.Classroom, error) {
+	d, err := a.classroomRepo.GetRoomByTeacherId(ctx, teacherId)
 	if err != nil {
 		a.log.Error("Error getting specific classroom: ", "err", err)
 		return nil, err
@@ -73,42 +73,50 @@ func (a *Adapter) GetAvailability(ctx context.Context, id string) ([]*service.Av
 }
 
 func (a *Adapter) SetAvailability(ctx context.Context, teacherId string, classroomId string, dates []time.Time) error {
-	a.log.Debug("Passed in dates: ", "data", dates)
 	ExistingDates := make([]*service.Availability, 0)
 	existing, err := a.classroomRepo.ClassroomSchedule(ctx, classroomId)
-	existingSet := arrays.EZSet(existing, func(dates *service.Availability) time.Time {
-		return dates.Date
-	})
-	newDatesSet := arrays.EZSet(dates, func(dates time.Time) time.Time {
-		return dates
-	})
-
 	if err != nil {
-		a.log.Warn("Error getting service.schedule: ", err)
+		a.log.Error("Error getting service.schedule: ", err)
 	} else {
 		for _, date := range existing {
 			ExistingDates = append(ExistingDates, date)
 		}
 	}
+
+	existingSet := arrays.EZSet(existing, func(dates *service.Availability) time.Time {
+		return dates.Date
+	})
+	a.log.Info("Existing dates: ", "data", existingSet)
+	newDatesSet := arrays.EZSet(dates, func(dates time.Time) time.Time {
+		return dates
+	})
+	a.log.Info("New dates set: ", "data", newDatesSet)
+
 	availability := make([]*service.Availability, 0)
 	for _, date := range ExistingDates {
 		if _, ok := newDatesSet[date.Date]; !ok {
-			a.classroomRepo.DeleteAvailability(ctx, date.Id)
+			err = a.classroomRepo.DeleteAvailability(ctx, date.Id)
+			if err != nil {
+				a.log.Error("Error deleting availability: ", "err", err)
+				return err
+			}
 		}
 	}
 	for _, date := range dates {
 		if _, ok := existingSet[date]; !ok {
+			a.log.Info("Appending availability: ", "data", date)
 			availability = append(availability, &service.Availability{
 				TeacherId:   teacherId,
 				ClassroomId: classroomId,
-				Date:        date,
 				Id:          helpers.GenRandomKeyString(10),
+				Date:        date,
 				Available:   true,
 			})
 		}
 	}
 	if len(availability) > 0 {
-		err = a.classroomRepo.CreateAvailability(context.Background(), availability)
+		a.log.Info("Availability: ", "data", availability)
+		err = a.classroomRepo.CreateAvailability(ctx, availability)
 		if err != nil {
 			a.log.Error("Error creating availability: ", "err", err)
 		}

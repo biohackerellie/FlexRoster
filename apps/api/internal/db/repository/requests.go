@@ -103,7 +103,7 @@ func (s *RequestDBService) NewRequest(ctx context.Context, r *service.Request) e
 		Status:             RequestStatus(r.Status),
 		StudentName:        r.StudentName,
 		StudentId:          r.StudentID,
-		DateRequested:      pgtype.Date{Time: r.DateRequested},
+		DateRequested:      pgtype.Date{Time: r.DateRequested, Valid: true},
 		CurrentTeacher:     r.CurrentTeacher,
 		CurrentTeacherName: r.CurrentTeacherName,
 		NewTeacher:         r.NewTeacher,

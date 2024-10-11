@@ -4,8 +4,8 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = []
-  bin = "./tmp/main"
-  cmd = "go build -o ./tmp/main cmd/main.go"
+  bin = "./bin/api/api"
+  cmd = "go build -o ./bin/api/api ./cmd/api/main.go"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
   exclude_file = []
@@ -42,7 +42,7 @@ tmp_dir = "tmp"
   clean_on_exit = false
 
 [proxy]
-  app_port = 3030
+  app_port = 3060
   enabled = false
   proxy_port = 0
 

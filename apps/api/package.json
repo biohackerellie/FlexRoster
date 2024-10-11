@@ -14,7 +14,7 @@
   "scripts": {
 
     "start": "./bin/main",
-    "test": "go test ./... -v"
-
+    "test": "go test ./... -v",
+    "dev": "air -c .air.toml -- -config ../../config.yaml"
   }
 }

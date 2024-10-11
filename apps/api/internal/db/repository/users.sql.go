@@ -161,7 +161,7 @@ const userRosterQuery = `-- name: UserRosterQuery :one
 SELECT u.id, u.name, u.email, u."emailVerified", u.image, u.role, s."studentEmail", s."studentName", s."classroomId", s.status, s."defaultClassroomId", s.id, c.id, c."roomNumber", c."teacherName", c."teacherId", c.comment, c."isFlex" 
 FROM "user" u
 JOIN "students" s ON s."studentEmail" = u."email"
-JOIN "classrooms" c ON c."id" = s."classroomId"
+JOIN "classrooms" c ON c."id" = s."defaultClassroomId"
 WHERE "user"."id" = $1
 `
 

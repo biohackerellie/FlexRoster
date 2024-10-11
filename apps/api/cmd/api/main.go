@@ -1,4 +1,4 @@
-package api
+package main
 
 import (
 	"context"
@@ -18,7 +18,6 @@ import (
 
 	// "api/internal/core/requests"
 	repository "api/internal/db/repository"
-	rclient "api/internal/redis"
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
@@ -54,12 +53,13 @@ func main() {
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.URLFormat)
 	router.Use(render.SetContentType(render.ContentTypeJSON))
-
-	classroomRepo := repository.NewClassroomDBService(db).WithLogs(log)
-	classroomService := classrooms.NewAdapter(classroomRepo).WithLogger(log)
 	// requetsRepo := repository.NewRequestDBService(db).WithLogs(log)
 	// requestService := requests.NewAdapter(requetsRepo).WithLogger(log)
-	rpcClassroomHandler := service.NewClassroomServiceServer(&classroomService)
+
+	classroomRepo := repository.NewClassroomDBService(db).WithLogs(log)
+
+	classroomService := classrooms.NewAdapter(classroomRepo).WithLogger(log)
+	rpcClassroomHandler := service.NewClassroomServiceServer(classroomService)
 	router.Handle("/*", rpcClassroomHandler)
 	address := "localhost" + ":" + config.ServerPort
 	server := newServer(address, router, log)

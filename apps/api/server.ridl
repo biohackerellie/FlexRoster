@@ -192,30 +192,9 @@ struct TeacherWithRoster
 
 
 struct StudentWithUser
-  - studentEmail: string
-    + json = StudentEmail
-  - studentName: string
-    + json = StudentName
-  - status: Status
-    + json = Status
-  - studentId: string
-    + json = StudentId
-  - roomNumber: string
-    + json = RoomNumber
-  - teacherName: string
-    + json = TeacherName
-  - classroomId: string
-    + json = ClassroomId
-  - defaultClassroomId: string
-    + json = DefaultClassroomId
-  - teacherId: string
-    + json = TeacherId
-  - chatId: string
-    + json = chatId
-    + go.tag.json = chatId,omitempty
-  - availableDates: []timestamp
-    + json = availableDates
-    + go.tag.json = availableDates,omitempty
+  - user: User
+  - student: Student
+  - classroom: Classroom
 
 struct StudentRequests
   - student: Student
@@ -269,13 +248,13 @@ struct TeacherData
 
 service ClassroomService
   - GetClasses(id: string) => (classrooms: []ClassroomWithChatID)
-  - GetSpecificClassroom(id: string) => (classroom: Classroom)
+  - GetSpecificClassroom(teacherId: string) => (classroom: Classroom)
   - NewComment(id: string, comment: string)
   - DeleteComment(id: string)
   - SetAvailability(teacherId: string, classroomId: string, dates: []timestamp)
   - RoomsWithCount() => (classrooms: []ClassroomWithCount)
   - GetAvailability(id: string) => (availability: []Availability)
-  - DeleteAvailability(id: string, date: timestamp)
+  - DeleteAvailability(id: string)
   - CreateClassroom(teacherId: string, roomNumber: string, teacherName: string)
 
 service ChatService

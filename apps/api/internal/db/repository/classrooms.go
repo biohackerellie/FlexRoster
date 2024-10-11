@@ -7,13 +7,12 @@ import (
 
 	errors "api/internal/lib/errors"
 
+	helpers "api/internal/lib/helpers"
 	"api/internal/lib/logger"
+	str "api/internal/lib/strings"
 	classroom "api/internal/service"
 
-	str "api/internal/lib/strings"
-
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type ClassroomDBService struct {
@@ -129,17 +128,20 @@ func (s *ClassroomDBService) TeacherAvailableToday(ctx context.Context, teacherI
 	return available, nil
 }
 
-func (s *ClassroomDBService) GetRoomByTeacherId(ctx context.Context, id string) (*classroom.Classroom, error) {
-	res, err := s.q.RoomByIdQuery(ctx, id)
+func (s *ClassroomDBService) GetRoomByTeacherId(ctx context.Context, teacherId string) (*classroom.Classroom, error) {
+	res, err := s.q.RoomByIdQuery(ctx, &teacherId)
 	if err != nil {
 		return nil, err
 	}
+	isFlex := true
 	return &classroom.Classroom{
 		Id:          res.ID,
 		RoomNumber:  res.RoomNumber,
-		TeacherName: *res.TeacherName,
-		TeacherId:   res.TeacherId,
+		TeacherName: res.TeacherName,
+		TeacherId:   *res.TeacherId,
+		Comment:     str.SafeStringPtr(res.Comment),
 		Available:   res.Available,
+		IsFlex:      str.SafeBoolPointer(&isFlex),
 	}, nil
 }
 
@@ -205,18 +207,22 @@ func (s *ClassroomDBService) DeleteAvailability(ctx context.Context, id string) 
 }
 
 func (s *ClassroomDBService) CreateAvailability(ctx context.Context, args []*classroom.Availability) error {
-	var availability []CreateAvailabilityParams
 	for _, arg := range args {
-		availability = append(availability, CreateAvailabilityParams{
+		date := helpers.DateToPGDate(arg.Date)
+		s.logger.Info("CreateAvailability", "date", date)
+		err := s.q.CreateAvailability(ctx, CreateAvailabilityParams{
 			ID:          arg.Id,
 			TeacherId:   &arg.TeacherId,
 			ClassroomId: arg.ClassroomId,
-			Date:        pgtype.Date{Time: arg.Date},
+			Date:        date,
 			Available:   arg.Available,
 		})
+		if err != nil {
+			return err
+		}
+
 	}
-	_, err := s.q.CreateAvailability(ctx, availability)
-	return err
+	return nil
 }
 
 func (s *ClassroomDBService) mapClassroom(r ClassroomQueryRow, ch chan<- *classroom.ClassroomWithAvailable) {
