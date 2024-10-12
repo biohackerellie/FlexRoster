@@ -27,7 +27,7 @@
     "@elysiajs/cors": "^1.1.1",
     "@elysiajs/swagger": "^1.1.5",
     "@local/db": "workspace:*",
-    "@sinclair/typebox": "^0.33.15",
+    "@sinclair/typebox": "^0.33.16",
     "effect": "^3.9.1",
     "elysia": "^1.1.20",
     "ioredis": "^5.4.1",
