@@ -32,7 +32,6 @@ func (s *Scripts) Nightly(ctx context.Context) error {
 	if err := s.RemoveDuplicates(ctx); err != nil {
 		return err
 	}
-	s.log.Info("clearing redis cache")
 	today := time.Now().Weekday()
 	if today == time.Sunday {
 		s.log.Info("Today is Sunday, clearing all cache")
