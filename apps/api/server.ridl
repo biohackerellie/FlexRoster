@@ -81,6 +81,7 @@ enum RequestStatus: string
   - approved
   - denied
   - arrived
+  - cancelled
 
 enum Status: string
   - transferredA
@@ -144,6 +145,10 @@ struct AllStudentMap
     + json = TeacherName
   - rosterId: int32
     + json = RosterId
+  - studentId: string
+    + json = StudentId
+  - defaultClassroomId: string
+    + json = DefaultClassroomId
 
 struct StudentWithClassroom
   - student: Student
@@ -178,7 +183,32 @@ struct Teacher
 
 
 
-
+struct RosterByTeacherIdRow 
+  - StudentEmail: string
+    + json = studentEmail
+    + go.tag.json = studentEmail
+  - StudentName: string
+    + json = studentName
+    + go.tag.json = studentName
+  - Status: Status
+  - StudentId: string
+    + json = studentId
+    + go.tag.json = studentId
+  - RoomNumber: string
+    + json = roomNumber
+    + go.tag.json = roomNumber
+  - TeacherName: string
+    + json = teacherName
+    + go.tag.json = teacherName
+  - ClassroomId: string
+    + json = classroomId
+    + go.tag.json = classroomId
+  - DefaultClassroomId: string
+    + json = defaultClassroomId
+    + go.tag.json = defaultClassroomId
+  - Comment: string
+    + json = comment
+    + go.tag.json = comment
 
 struct TeacherWithRoster
   - user: User
@@ -187,24 +217,9 @@ struct TeacherWithRoster
 
 
 struct StudentWithUser
-  - studentEmail: string
-    + json = StudentEmail
-  - studentName: string
-    + json = StudentName
-  - status: Status
-    + json = Status
-  - studentId: string
-    + json = StudentId
-  - roomNumber: string
-    + json = RoomNumber
-  - teacherName: string
-    + json = TeacherName
-  - classroomId: string
-    + json = ClassroomId
-  - comment: string
-    + json = Comment
-  - teacherId: string
-    + json = TeacherId
+  - user: User
+  - student: Student
+  - classroom: Classroom
 
 struct StudentRequests
   - student: Student
@@ -219,23 +234,65 @@ struct StudentDetails
   - Student: StudentWithUser
   - Requests: []Request
 
+
+struct Message
+  - ID: string
+    + json = id
+    + go.tag.json = id
+  - SenderId: string
+    + json = senderId
+    + go.tag.json = senderId
+  - Text: string
+    + json = text
+    + go.tag.json = text
+  - Timestamp: timestamp
+
+struct MessageAlerts
+  - chatPartnerId: string
+    + json = chatPartnerId
+    + go.tag.json = chatPartnerId
+  - chatPartnerName: string
+    + json = chatPartnerName
+    + go.tag.json = chatPartnerName
+
+struct Alerts
+  - MessageAlerts: []MessageAlerts
+  - Count: int32
+    + json = count
+    + go.tag.json = count 
+
+struct TeacherData 
+  - TeacherRoster: []StudentWithUser
+  - ChatCount: int32
+    + json = chatCount
+    + go.tag.json = chatCount
+  - RequestCount: int32
+    + json = requestCount
+    + go.tag.json = requestCount
+
+
 service ClassroomService
   - GetClasses(id: string) => (classrooms: []ClassroomWithChatID)
-  - GetSpecificClassroom(id: string) => (classroom: Classroom)
+  - GetSpecificClassroom(teacherId: string) => (classroom: Classroom)
   - NewComment(id: string, comment: string)
   - DeleteComment(id: string)
   - SetAvailability(teacherId: string, classroomId: string, dates: []timestamp)
   - RoomsWithCount() => (classrooms: []ClassroomWithCount)
   - GetAvailability(id: string) => (availability: []Availability)
-  - DeleteAvailability(id: string, date: timestamp)
+  - DeleteAvailability(id: string)
+  - CreateClassroom(teacherId: string, roomNumber: string, teacherName: string)
 
-
+service ChatService
+  - GetAlerts(userId: string) => (alerts: Alerts)
+  - GetInbox(chatId: string) => (messages: []Message)
+  - Profanity(to: string, message: string, subject: string)
+  - SendMessage(chatId: string, message: Message) 
 
 service RequestService
   - GetRequests(userId: string) => (requests: []Request)
   - GetAllRequests() => (requests: []Request)
-  - NewRequest(studentName: string, teacherRequest: bool, studentID: string, requestStatus: RequestStatus, dateRequested: timestamp, newTeacher: string, newTeacherName: string, currentTeacher: string, currentTeacherName: string)
-  - UpdateRequest(id: int32, status: RequestStatus)
+  - NewRequest(studentId: string, newTeacher: string, dateRequested: timestamp, teacherRequesst: bool)
+  - UpdateRequest(requestId: string,studentId: string, teacherId: string, newTeacherId: string, status: RequestStatus)
   - GetTeacherRequests(teacherId: string) => (requests: TeacherRequests)
 
 
@@ -243,7 +300,7 @@ service StudentService
   - AllStudentsMap() => (students: []AllStudentMap)
   - RosterByClassroomId(classroomId: string) => (students: []StudentWithClassroom)
   - RosterById(id: int32) => (students: []Student)
-  - RosterByTeacherId(teacherId: string) => (students: []StudentWithUser)
+  - RosterByTeacherId(teacherId: string) => (students: []RosterByTeacherIdRow)
   - GetAllStudents() => (students: []Student)
   - UpdateStudentStatus(status: Status, studentEmail: string)
 

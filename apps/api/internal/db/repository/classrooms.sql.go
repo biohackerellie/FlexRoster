@@ -186,12 +186,28 @@ func (q *Queries) CountRosterByClassroomId(ctx context.Context, classroomid stri
 	return count, err
 }
 
+const createAvailability = `-- name: CreateAvailability :exec
+INSERT INTO "availability" ("id", "teacherId", "classroomId", "date", "available")
+VALUES($1, $2, $3, $4, $5)
+`
+
 type CreateAvailabilityParams struct {
 	ID          string      `db:"id" json:"id"`
 	TeacherId   *string     `db:"teacherId" json:"teacherId"`
 	ClassroomId string      `db:"classroomId" json:"classroomId"`
 	Date        pgtype.Date `db:"date" json:"date"`
 	Available   bool        `db:"available" json:"available"`
+}
+
+func (q *Queries) CreateAvailability(ctx context.Context, arg CreateAvailabilityParams) error {
+	_, err := q.db.Exec(ctx, createAvailability,
+		arg.ID,
+		arg.TeacherId,
+		arg.ClassroomId,
+		arg.Date,
+		arg.Available,
+	)
+	return err
 }
 
 const createComment = `-- name: CreateComment :exec
@@ -211,16 +227,11 @@ func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) er
 
 const deleteAvailability = `-- name: DeleteAvailability :exec
 DELETE FROM "availability"
-WHERE "teacherId" = $1 AND "date" = $2
+WHERE "id" = $1
 `
 
-type DeleteAvailabilityParams struct {
-	TeacherId *string     `db:"teacherId" json:"teacherId"`
-	Date      pgtype.Date `db:"date" json:"date"`
-}
-
-func (q *Queries) DeleteAvailability(ctx context.Context, arg DeleteAvailabilityParams) error {
-	_, err := q.db.Exec(ctx, deleteAvailability, arg.TeacherId, arg.Date)
+func (q *Queries) DeleteAvailability(ctx context.Context, id string) error {
+	_, err := q.db.Exec(ctx, deleteAvailability, id)
 	return err
 }
 
@@ -301,31 +312,33 @@ const roomByIdQuery = `-- name: RoomByIdQuery :one
 SELECT
   c."id",
   c."roomNumber",
-  u."name" as "teacherName",
-  u."id" as "teacherId",
+  c."teacherName",
+  c."teacherId",
+  c."comment",
   COALESCE(a."available", FALSE) AS "available"
 FROM "classrooms" c
-JOIN "user" u ON c."teacherId" = u."id"
 LEFT JOIN "availability" a ON c."id" = a."classroomId" AND a."date" = CURRENT_DATE
-WHERE c."id" = $1
+WHERE c."teacherId" = $1
 `
 
 type RoomByIdQueryRow struct {
 	ID          string  `db:"id" json:"id"`
 	RoomNumber  string  `db:"roomNumber" json:"roomNumber"`
-	TeacherName *string `db:"teacherName" json:"teacherName"`
-	TeacherId   string  `db:"teacherId" json:"teacherId"`
+	TeacherName string  `db:"teacherName" json:"teacherName"`
+	TeacherId   *string `db:"teacherId" json:"teacherId"`
+	Comment     *string `db:"comment" json:"comment"`
 	Available   bool    `db:"available" json:"available"`
 }
 
-func (q *Queries) RoomByIdQuery(ctx context.Context, id string) (RoomByIdQueryRow, error) {
-	row := q.db.QueryRow(ctx, roomByIdQuery, id)
+func (q *Queries) RoomByIdQuery(ctx context.Context, teacherid *string) (RoomByIdQueryRow, error) {
+	row := q.db.QueryRow(ctx, roomByIdQuery, teacherid)
 	var i RoomByIdQueryRow
 	err := row.Scan(
 		&i.ID,
 		&i.RoomNumber,
 		&i.TeacherName,
 		&i.TeacherId,
+		&i.Comment,
 		&i.Available,
 	)
 	return i, err

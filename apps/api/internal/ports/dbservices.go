@@ -15,13 +15,14 @@ type ClassroomDBService interface {
 	GetAvailability(ctx context.Context) ([]*service.Availability, error)
 	TeacherAvailableToday(ctx context.Context, teacherId string) (bool, error)
 	GetTeacherAvailability(ctx context.Context, teacherId string) ([]*service.Availability, error)
-	GetRoomByTeacherId(ctx context.Context, id string) (*service.Classroom, error)
+	GetRoomByTeacherId(ctx context.Context, teacherId string) (*service.Classroom, error)
 	RoomsWithRosterCount(ctx context.Context) ([]*service.ClassroomWithCount, error)
 	ClassroomSchedule(ctx context.Context, classroomid string) ([]*service.Availability, error)
 	CreateComment(ctx context.Context, teacherId string, comment string) error
 	DeleteComment(ctx context.Context, teacherId string) error
-	DeleteAvailability(ctx context.Context, teacherId string, date time.Time) error
+	DeleteAvailability(ctx context.Context, id string) error
 	CreateAvailability(ctx context.Context, args []*service.Availability) error
+	NewClassroom(ctx context.Context, teacherId string, roomNumber string, teacherName string) error
 	NewClassroomTx(ctx context.Context, classrooms []*service.Classroom) error
 	UpdateClassroomTx(ctx context.Context, classrooms []*service.Classroom) error
 	DeleteClassroomTx(ctx context.Context, classrooms []string) error
@@ -45,7 +46,7 @@ type StudentDBService interface {
 	AllStudentsMap(ctx context.Context) ([]*service.AllStudentMap, error)
 	RosterByClassroomId(ctx context.Context, classroomId string) ([]*service.StudentWithClassroom, error)
 	RosterById(ctx context.Context, id int32) ([]*service.Student, error)
-	RosterByTeacherId(ctx context.Context, teacherId *string) ([]*service.StudentWithUser, error)
+	RosterByTeacherId(ctx context.Context, teacherId *string) ([]*service.RosterByTeacherIdRow, error)
 	GetAllStudents(ctx context.Context) ([]*service.Student, error)
 	UpdateStudentStatus(ctx context.Context, status *service.Status, studentEmail string) error
 	UpdateStudentRoster(ctx context.Context, classroomId string, status *service.Status, studentEmail string) error
@@ -74,4 +75,5 @@ type RClient interface {
 	XAck(stream string, consumer string, ids ...string) error
 	ZRange(key string) ([]string, error)
 	ZAdd(key string, members ...redis.Z) error
+	FlushAll() error
 }

@@ -21,7 +21,7 @@ func New() *Logger {
 		ReportCaller:    false,
 		ReportTimestamp: true,
 		TimeFormat:      time.Kitchen,
-		Prefix:          "💩",
+		Prefix:          "😃",
 	})
 
 	logger.SetStyles(styles)
@@ -38,7 +38,7 @@ func New() *Logger {
 func Styles() *log.Styles {
 	styles := log.DefaultStyles()
 	styles.Levels[log.ErrorLevel] = lipgloss.NewStyle().
-		SetString("OH SHIT!!!").
+		SetString("Error").
 		Padding(0, 1, 0, 1).
 		Background(lipgloss.Color("204")).
 		Foreground(lipgloss.Color("0"))
@@ -55,6 +55,11 @@ func Styles() *log.Styles {
 	styles.Values["info"] = lipgloss.NewStyle().Bold(true)
 	styles.Keys["layer"] = lipgloss.NewStyle().Foreground(lipgloss.Color("147"))
 	styles.Values["layer"] = lipgloss.NewStyle().Bold(true)
+	styles.Levels[log.WarnLevel] = lipgloss.NewStyle().
+		SetString("Warning").
+		Padding(0, 1, 0, 1).
+		Background(lipgloss.Color("188")).
+		Foreground(lipgloss.Color("202"))
 	return styles
 }
 
@@ -73,7 +78,7 @@ func (l *Logger) Error(msg interface{}, fields ...interface{}) {
 }
 
 func (l *Logger) Warn(msg interface{}, fields ...interface{}) {
-	l.logger.Info(msg, fields...)
+	l.logger.Warn(msg, fields...)
 }
 
 func (l *Logger) Debug(msg interface{}, fields ...interface{}) {

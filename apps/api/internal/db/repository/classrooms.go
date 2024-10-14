@@ -7,12 +7,12 @@ import (
 
 	errors "api/internal/lib/errors"
 
+	helpers "api/internal/lib/helpers"
 	"api/internal/lib/logger"
+	str "api/internal/lib/strings"
 	classroom "api/internal/service"
 
-	str "api/internal/lib/strings"
-
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/google/uuid"
 )
 
 type ClassroomDBService struct {
@@ -128,17 +128,20 @@ func (s *ClassroomDBService) TeacherAvailableToday(ctx context.Context, teacherI
 	return available, nil
 }
 
-func (s *ClassroomDBService) GetRoomByTeacherId(ctx context.Context, id string) (*classroom.Classroom, error) {
-	res, err := s.q.RoomByIdQuery(ctx, id)
+func (s *ClassroomDBService) GetRoomByTeacherId(ctx context.Context, teacherId string) (*classroom.Classroom, error) {
+	res, err := s.q.RoomByIdQuery(ctx, &teacherId)
 	if err != nil {
 		return nil, err
 	}
+	isFlex := true
 	return &classroom.Classroom{
 		Id:          res.ID,
 		RoomNumber:  res.RoomNumber,
-		TeacherName: *res.TeacherName,
-		TeacherId:   res.TeacherId,
+		TeacherName: res.TeacherName,
+		TeacherId:   *res.TeacherId,
+		Comment:     str.SafeStringPtr(res.Comment),
 		Available:   res.Available,
+		IsFlex:      str.SafeBoolPointer(&isFlex),
 	}, nil
 }
 
@@ -198,30 +201,28 @@ func (s *ClassroomDBService) DeleteComment(ctx context.Context, teacherId string
 	return err
 }
 
-func (s *ClassroomDBService) DeleteAvailability(ctx context.Context, teacherId string, date time.Time) error {
-	DATE := pgtype.Date{}
-	DATE.Time = date
-	args := DeleteAvailabilityParams{
-		TeacherId: &teacherId,
-		Date:      DATE,
-	}
-	err := s.q.DeleteAvailability(ctx, args)
+func (s *ClassroomDBService) DeleteAvailability(ctx context.Context, id string) error {
+	err := s.q.DeleteAvailability(ctx, id)
 	return err
 }
 
 func (s *ClassroomDBService) CreateAvailability(ctx context.Context, args []*classroom.Availability) error {
-	var availability []CreateAvailabilityParams
 	for _, arg := range args {
-		availability = append(availability, CreateAvailabilityParams{
+		date := helpers.DateToPGDate(arg.Date)
+		s.logger.Info("CreateAvailability", "date", date)
+		err := s.q.CreateAvailability(ctx, CreateAvailabilityParams{
 			ID:          arg.Id,
 			TeacherId:   &arg.TeacherId,
 			ClassroomId: arg.ClassroomId,
-			Date:        pgtype.Date{Time: arg.Date},
+			Date:        date,
 			Available:   arg.Available,
 		})
+		if err != nil {
+			return err
+		}
+
 	}
-	_, err := s.q.CreateAvailability(ctx, availability)
-	return err
+	return nil
 }
 
 func (s *ClassroomDBService) mapClassroom(r ClassroomQueryRow, ch chan<- *classroom.ClassroomWithAvailable) {
@@ -249,6 +250,20 @@ func (s *ClassroomDBService) mapClassroom(r ClassroomQueryRow, ch chan<- *classr
 		AvailableDates: dates,
 	}
 	ch <- mappedResponse
+}
+
+func (s *ClassroomDBService) NewClassroom(ctx context.Context, teacherId string, roomNumber string, teacherName string) error {
+	flex := true
+	flexPtr := &flex
+	id := uuid.New().String()
+	err := s.q.NewClassroom(ctx, NewClassroomParams{
+		ID:          id,
+		RoomNumber:  roomNumber,
+		TeacherName: teacherName,
+		TeacherId:   &teacherId,
+		IsFlex:      flexPtr,
+	})
+	return err
 }
 
 func (s *ClassroomDBService) NewClassroomTx(ctx context.Context, classrooms []*classroom.Classroom) error {

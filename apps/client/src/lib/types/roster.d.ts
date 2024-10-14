@@ -73,6 +73,8 @@ export interface TeacherTable {
   studentId: string | null;
   chatId: string | null;
   rosterId: string | number;
+  classroomId?: string;
+  defaultClassroomId?: string;
 }
 
 export interface SecretaryTable {

@@ -43,7 +43,7 @@ func (q *Queries) AllLogsQuery(ctx context.Context) ([]AllLogsQueryRow, error) {
 }
 
 const createLog = `-- name: CreateLog :exec
-INSERT INTO "logs" ("id", "user", "type", "action")VALUES ($1, $2, $3, $4)
+INSERT INTO "logs" ("id", "user", "type", "action")VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING
 `
 
 type CreateLogParams struct {

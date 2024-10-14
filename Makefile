@@ -7,7 +7,7 @@ generate:
 	cd $(GO_API_ROOT) &&	webrpc-gen -schema=server.ridl -target=golang -pkg=service -server -client -out=./internal/service/proto.gen.go
 
 generate-ts:
-	webrpc-gen -schema=server.ridl -target=typescript -client -out=../client/src/lib/generated/api.gen.ts
+	cd $(GO_API_ROOT) && webrpc-gen -schema=server.ridl -target=typescript -client -out=../client/src/lib/generated/api.gen.ts
 
 migrate-apply:
 	cd $(GO_API_ROOT) && \

@@ -2,20 +2,14 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
-import {
-  CalendarIcon,
-  MessageSquareIcon,
-  MessageSquareOffIcon,
-} from "lucide-react";
+import { MessageSquareIcon, MessageSquareOffIcon } from "lucide-react";
 import { Link } from "next-view-transitions";
 
 import type { StudentClasses } from "@local/utils";
-import { Badge } from "@local/ui/badge";
 import { Button } from "@local/ui/button";
 import { DataTableColumnHeader } from "@local/ui/data-table-column-header";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
-import { studentStatusOptions } from "@/lib/constants";
 import { DatePickerForm } from "../datePicker";
 
 export function columns(): ColumnDef<StudentClasses>[] {

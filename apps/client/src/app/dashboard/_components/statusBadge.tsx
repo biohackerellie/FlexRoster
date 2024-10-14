@@ -8,7 +8,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
 import { Attendance } from "./logic/actions";
 
-const StatusBadge = (status: StudentStatus, id: string) => {
+interface StatusBadgeProps {
+  status: StudentStatus;
+  id: string;
+}
+const StatusBadge: React.FC<StatusBadgeProps> = ({ status, id }) => {
   switch (status) {
     case "default":
       return <Badge variant="outline">Default</Badge>;

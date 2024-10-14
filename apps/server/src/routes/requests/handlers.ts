@@ -232,6 +232,10 @@ export async function requestApproval(
       where: eq(schema.users.id, teacherId),
       columns: { email: true },
     });
+    const newTeacherName = await db.query.users.findFirst({
+      where: eq(schema.users.id, newTeacherId),
+      columns: { name: true },
+    });
     // get new teacher's roster
     const newClassroomId = await getClassroomIdByTeacher.execute({
       teacherId: newTeacherId,
@@ -274,13 +278,13 @@ export async function requestApproval(
     const emailData = {
       to: student.user.email,
       subject: "Transfer Request",
-      message: `<h1>Transfer Request</h1> <p>Your request to transfer to a new teacher has been ${status}</p>`,
+      message: `<h1>Transfer Request</h1> <p>Your request to transfer to ${newTeacherName} has been ${status}</p>`,
     };
     if (status === "approved") {
       const teacherEmailData = {
         to: teacherEmail?.email ?? "",
         subject: "Transfer Request",
-        message: `<h1>Transfer Request</h1> <p>${student.user.name}'s request to transfer to a new teacher has been ${status} for ${request?.dateRequested}</p>`,
+        message: `<h1>Transfer Request</h1> <p>${student.user.name}'s request to transfer to ${newTeacherName} has been ${status} for ${request?.dateRequested}</p>`,
       };
       await sendEmail(teacherEmailData);
     }

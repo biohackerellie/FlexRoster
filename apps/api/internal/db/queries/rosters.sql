@@ -10,7 +10,7 @@ JOIN "classrooms" ON "students"."classroomId" = "classrooms"."id";
 SELECT * FROM "students" WHERE "id" = $1;
 
 -- name: RosterByTeacherId :many
-SELECT "students"."studentEmail", "students"."studentName","students"."status", "user"."id" AS "studentId", "classrooms"."roomNumber", "classrooms"."teacherName", "classrooms"."id" AS "classroomId", "classrooms"."comment"
+SELECT "students"."studentEmail", "students"."studentName","students"."status","students"."defaultClassroomId","user"."id" AS "studentId", "classrooms"."roomNumber", "classrooms"."teacherName", "classrooms"."id" AS "classroomId", "classrooms"."comment"
 FROM "students"
 JOIN "classrooms" ON "students"."classroomId" = "classrooms"."id"
 LEFT JOIN "user" ON "students"."studentEmail" = "user"."email"

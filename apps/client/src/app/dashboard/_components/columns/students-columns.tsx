@@ -2,14 +2,11 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
-import { Loader2 } from "lucide-react";
 import { Link } from "next-view-transitions";
 
 import type { AllStudents } from "@local/utils";
-import { Badge } from "@local/ui/badge";
 import { Button } from "@local/ui/button";
 import { DataTableColumnHeader } from "@local/ui/data-table-column-header";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@local/ui/tooltip";
 
 import { statusOptions } from "@/lib/constants";
 import StatusBadge from "../statusBadge";
@@ -34,12 +31,11 @@ export function columns(): ColumnDef<AllStudents>[] {
 
         if (!status) return null;
         let studentStatus = status.value;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const studentId = row.original.studentId ?? "";
         if (studentId === "" || studentId === null) {
           studentStatus = "default";
         }
-        return StatusBadge(studentStatus, studentId);
+        return <StatusBadge status={studentStatus} id={studentId} />;
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));

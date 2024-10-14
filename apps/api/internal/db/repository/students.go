@@ -1,12 +1,13 @@
 package db
 
 import (
+	"context"
+
 	config "api/internal/config"
 	errors "api/internal/lib/errors"
 	"api/internal/lib/logger"
 	str "api/internal/lib/strings"
 	student "api/internal/service"
-	"context"
 )
 
 type StudentDBService struct {
@@ -94,22 +95,23 @@ func (s *StudentDBService) RosterById(ctx context.Context, id int32) ([]*student
 	return response, nil
 }
 
-func (s *StudentDBService) RosterByTeacherId(ctx context.Context, teacherId *string) ([]*student.StudentWithUser, error) {
+func (s *StudentDBService) RosterByTeacherId(ctx context.Context, teacherId *string) ([]*student.RosterByTeacherIdRow, error) {
 	res, err := s.q.RosterByTeacherId(ctx, teacherId)
 	if err != nil {
 		return nil, err
 	}
-	response := make([]*student.StudentWithUser, len(res))
+	response := make([]*student.RosterByTeacherIdRow, len(res))
 	for i, r := range res {
-		mappedRes := &student.StudentWithUser{
-			StudentEmail: r.StudentEmail,
-			StudentName:  r.StudentName,
-			Status:       student.Status(r.Status),
-			StudentId:    str.SafeStringPtr(r.StudentId),
-			RoomNumber:   r.RoomNumber,
-			TeacherName:  r.TeacherName,
-			ClassroomId:  r.ClassroomId,
-			Comment:      str.SafeStringPtr(r.Comment),
+		mappedRes := &student.RosterByTeacherIdRow{
+			StudentEmail:       r.StudentEmail,
+			StudentName:        r.StudentName,
+			Status:             student.Status(r.Status),
+			ClassroomId:        r.ClassroomId,
+			DefaultClassroomId: r.DefaultClassroomId,
+			StudentId:          str.SafeStringPtr(r.StudentId),
+			RoomNumber:         r.RoomNumber,
+			TeacherName:        r.TeacherName,
+			Comment:            str.SafeStringPtr(r.Comment),
 		}
 		response[i] = mappedRes
 	}

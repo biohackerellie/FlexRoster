@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use server";
 
-import type { DateRange } from "react-day-picker";
 import {
   unstable_noStore as noStore,
   revalidatePath,
@@ -153,47 +151,47 @@ export async function setAvailability(
   }
 }
 
-export async function setTodayAvailability(
-  classroomId: string,
-  teacherId: string,
-  availability: boolean,
-) {
-  try {
-    logger.debug("data recieved", classroomId, teacherId, availability);
-    const today = convertUTCDateToLocalDate(new Date());
-    today.setHours(0, 0, 0, 0);
-    if (availability === true) {
-      const dates = [today];
-      await client.api.classes.availability.post({
-        classroomId: classroomId,
-        teacherId: teacherId,
-        dates: dates,
-      });
-      revalidatePath("/");
-      return {
-        data: null,
-        error: null,
-      };
-    } else {
-      await client.api.classes.availability.delete({
-        id: teacherId,
-        date: today,
-      });
-      logger.debug("deleting", today);
-      revalidatePath("/");
-      return {
-        data: null,
-        error: null,
-      };
-    }
-  } catch (err) {
-    logger.error("something went wrong", err);
-    return {
-      data: null,
-      error: getErrorMessage(err),
-    };
-  }
-}
+// export async function setTodayAvailability(
+//   classroomId: string,
+//   teacherId: string,
+//   availability: boolean,
+// ) {
+//   try {
+//     logger.debug("data recieved", classroomId, teacherId, availability);
+//     const today = convertUTCDateToLocalDate(new Date());
+//     today.setHours(0, 0, 0, 0);
+//     if (availability === true) {
+//       const dates = [today];
+//       await client.api.classes.availability.post({
+//         classroomId: classroomId,
+//         teacherId: teacherId,
+//         dates: dates,
+//       });
+//       revalidatePath("/");
+//       return {
+//         data: null,
+//         error: null,
+//       };
+//     } else {
+//       await client.api.classes.availability.delete({
+//         id: teacherId,
+//         date: today,
+//       });
+//       logger.debug("deleting", today);
+//       revalidatePath("/");
+//       return {
+//         data: null,
+//         error: null,
+//       };
+//     }
+//   } catch (err) {
+//     logger.error("something went wrong", err);
+//     return {
+//       data: null,
+//       error: getErrorMessage(err),
+//     };
+//   }
+// }
 
 export async function getAvailability(id: string) {
   const today = convertUTCDateToLocalDate(new Date());

@@ -16,4 +16,5 @@ type ClassroomService interface {
 	RoomsWithCount() ([]*classroom.ClassroomWithCount, error)
 	GetAvailability(ctx context.Context, id string) ([]*classroom.Availability, error)
 	DeleteAvailability(ctx context.Context, id string, date time.Time) error
+	CreateClassroom(ctx context.Context, teacherID string, name string, description string, capacity int) error
 }

@@ -89,7 +89,6 @@ export async function getTeacherRoster(userId: string) {
             : null,
         };
       });
-
       const parsedData = teacherRosterArrayValidator.parse(result);
       data.teacherRoster = parsedData;
     }

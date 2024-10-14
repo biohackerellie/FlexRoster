@@ -1,6 +1,7 @@
 package arrays
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -179,4 +180,24 @@ func TestEZFind(t *testing.T) {
 	assert.Equal(index, len(input)-1)
 	assert.NotEmpty(res)
 	assert.Equal(res.V, 3)
+}
+
+func TestEZConcat(t *testing.T) {
+	// given
+
+	V := make([]string, 3)
+	R := make([]string, 3)
+	for x := 0; x < 3; x++ {
+		V[x] = fmt.Sprintf("%d", x)
+		R[x] = fmt.Sprintf("%d", x)
+	}
+	assert := assert.New(t)
+
+	// when
+	res := EZConcat(V, R)
+
+	// assert
+
+	assert.Len(res, 6)
+	assert.Contains(res, "0", "1", "2")
 }

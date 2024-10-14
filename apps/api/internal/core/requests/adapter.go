@@ -1,9 +1,9 @@
 package requests
 
 import (
+	"api/internal/config"
 	"api/internal/lib/logger"
 	"api/internal/ports"
-	"api/internal/redis"
 )
 
 type Adapter struct {
@@ -11,15 +11,15 @@ type Adapter struct {
 	students ports.StudentDBService
 	users    ports.UserDBService
 	log      *logger.Logger
-	cache    *redis.RClient
+	config   *config.Env
 }
 
-func NewAdapter(requests ports.RequestDBService, users ports.UserDBService, students ports.StudentDBService) *Adapter {
+func NewAdapter(requests ports.RequestDBService, users ports.UserDBService, students ports.StudentDBService, config *config.Env) *Adapter {
 	return &Adapter{
 		requests: requests,
 		students: students,
 		users:    users,
-		cache:    redis.NewRedis(),
+		config:   config,
 	}
 }
 

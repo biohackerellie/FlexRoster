@@ -1,13 +1,14 @@
 package db
 
 import (
+	"context"
+
 	config "api/internal/config"
 	errors "api/internal/lib/errors"
 	"api/internal/lib/logger"
 	str "api/internal/lib/strings"
 	"api/internal/service"
 	user "api/internal/service"
-	"context"
 )
 
 type UsersDBService struct {
@@ -79,11 +80,12 @@ func (s *UsersDBService) GetTeacherWithRoster(ctx context.Context, id string) (*
 			Role:  res.User.Role,
 		},
 		Student: &user.Student{
-			StudentEmail: res.Student.StudentEmail,
-			StudentName:  res.Student.StudentName,
-			ClassroomId:  res.Student.ClassroomId,
-			Status:       user.Status(res.Student.Status),
-			Id:           res.Student.ID,
+			StudentEmail:       res.Student.StudentEmail,
+			StudentName:        res.Student.StudentName,
+			ClassroomId:        res.Student.ClassroomId,
+			DefaultClassroomId: res.Student.DefaultClassroomId,
+			Status:             user.Status(res.Student.Status),
+			Id:                 res.Student.ID,
 		},
 		Classroom: &user.Classroom{
 			Id:          res.Classroom.ID,
@@ -102,15 +104,28 @@ func (s *UsersDBService) GetStudent(ctx context.Context, id string) (*user.Stude
 		return nil, err
 	}
 	return &user.StudentWithUser{
-		StudentEmail: res.Student.StudentEmail,
-		StudentName:  res.Student.StudentName,
-		ClassroomId:  res.Classroom.ID,
-		Status:       user.Status(res.Student.Status),
-		StudentId:    res.User.ID,
-		RoomNumber:   res.Classroom.RoomNumber,
-		TeacherName:  res.Classroom.TeacherName,
-		Comment:      *res.Classroom.Comment,
-		TeacherId:    *res.Classroom.TeacherId,
+		User: &user.User{
+			Id:    res.User.ID,
+			Name:  *res.User.Name,
+			Email: res.User.Email,
+			Role:  res.User.Role,
+		},
+		Student: &user.Student{
+			StudentEmail:       res.Student.StudentEmail,
+			StudentName:        res.Student.StudentName,
+			ClassroomId:        res.Student.ClassroomId,
+			DefaultClassroomId: res.Student.DefaultClassroomId,
+			Status:             user.Status(res.Student.Status),
+			Id:                 res.Student.ID,
+		},
+		Classroom: &user.Classroom{
+			Id:          res.Classroom.ID,
+			RoomNumber:  res.Classroom.RoomNumber,
+			TeacherName: res.Classroom.TeacherName,
+			TeacherId:   *res.Classroom.TeacherId,
+			Comment:     *res.Classroom.Comment,
+			IsFlex:      *res.Classroom.IsFlex,
+		},
 	}, nil
 }
 
