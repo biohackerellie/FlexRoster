@@ -4,19 +4,6 @@ before:
   hooks:
     - go mod tidy
 builds:
-  - main: ./cmd/scriptRunner/main.go
-    id: "scriptRunner"
-    binary: flexscript
-    env:
-      - CGO_ENABLED=0
-    goos:
-      - linux
-      - windows
-    goarch:
-      - amd64
-    ldflags: -s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}
-    no_unique_dist_dir: false
-
   - main: ./cmd/cli/main.go
     id: "cli"
     binary: flex

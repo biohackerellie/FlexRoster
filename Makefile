@@ -40,7 +40,7 @@ build-cli:
 	cd $(GO_API_ROOT) &&  CGO_ENABLED=0 go build -o ./bin/flex ./cmd/cli/main.go
 
 cli:
-	./apps/api/bin/flex --config $(FLEXROOT)/config.yaml config
+	./apps/api/bin/flex --cfg $(FLEXROOT)/config.yaml script --n
 seed:
 	./bin/scripts/main -seed
 
