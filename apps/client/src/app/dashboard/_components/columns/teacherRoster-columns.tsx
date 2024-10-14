@@ -46,7 +46,24 @@ export function columns(): ColumnDef<TeacherTable>[] {
         );
         if (!status) return null;
         const id: string = row.getValue("studentId");
-        return StatusBadge(status.value, id);
+        let isFromTeachersRoster = true;
+        const classroomId = row.original.classroomId;
+        const defaultClassroomId = row.original.defaultClassroomId;
+        if (classroomId !== defaultClassroomId) {
+          isFromTeachersRoster = false;
+        }
+        return (
+          <>
+            <StatusBadge status={status.value} id={id} />
+            {status.value !== "default" && (
+              <p className="text-sm font-thin italic text-muted-foreground">
+                {isFromTeachersRoster
+                  ? "From Your Roster"
+                  : "Not From Your Roster"}
+              </p>
+            )}
+          </>
+        );
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));

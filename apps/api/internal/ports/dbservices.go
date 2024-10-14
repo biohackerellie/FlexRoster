@@ -75,4 +75,5 @@ type RClient interface {
 	XAck(stream string, consumer string, ids ...string) error
 	ZRange(key string) ([]string, error)
 	ZAdd(key string, members ...redis.Z) error
+	FlushAll() error
 }

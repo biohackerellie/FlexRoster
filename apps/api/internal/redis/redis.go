@@ -45,6 +45,7 @@ func (r *RClient) ZRange(key string) ([]string, error) {
 func (r *RClient) ZAdd(key string, members ...redis.Z) error {
 	return r.Redis.ZAdd(r.ctx, key, members...).Err()
 }
+
 func (r *RClient) ReadStream(args *redis.XReadGroupArgs) ([]redis.XStream, error) {
 	return r.Redis.XReadGroup(r.ctx, &redis.XReadGroupArgs{
 		Group:    args.Group,
@@ -68,4 +69,8 @@ func (r *RClient) XRange(stream, start, stop string) ([]redis.XMessage, error) {
 
 func (r *RClient) XAck(stream string, consumer string, ids ...string) error {
 	return r.Redis.XAck(r.ctx, stream, consumer, ids...).Err()
+}
+
+func (r *RClient) FlushAll() error {
+	return r.Redis.FlushAll(r.ctx).Err()
 }

@@ -15,6 +15,6 @@
 
     "start": "./bin/main",
     "test": "go test ./... -v",
-    "dev": "air -c .air.toml -- -config ../../config.yaml"
+    "devv": "air -c .air.toml -- -config ../../config.yaml"
   }
 }

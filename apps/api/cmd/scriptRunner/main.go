@@ -1,11 +1,6 @@
 package main
 
 import (
-	"api/internal/config"
-	repository "api/internal/db/repository"
-	"api/internal/lib/logger"
-	rclient "api/internal/redis"
-	"api/internal/scripts"
 	"context"
 	"flag"
 	"fmt"
@@ -13,6 +8,12 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"api/internal/config"
+	repository "api/internal/db/repository"
+	"api/internal/lib/logger"
+	rclient "api/internal/redis"
+	"api/internal/scripts"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
@@ -83,7 +84,6 @@ func initRedis(config *config.Env, log *logger.Logger) *redis.Client {
 	redisHost := config.RedisHost + ":" + config.RedisPort
 	log.Info("Connecting to Redis", "host", redisHost)
 	cache := redis.NewClient(&redis.Options{Addr: redisHost})
-
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cancel()
 	if err := cache.Ping(ctx).Err(); err != nil {
