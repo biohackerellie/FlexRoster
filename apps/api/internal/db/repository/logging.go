@@ -1,11 +1,12 @@
 package db
 
 import (
-	errors "api/internal/lib/errors"
+	"context"
+
+	// errors "api/internal/lib/errors"
 	"api/internal/lib/logger"
 	str "api/internal/lib/strings"
 	"api/internal/service"
-	"context"
 )
 
 type LoggingDBService struct {
@@ -65,16 +66,16 @@ func (s *LoggingDBService) AddLog(ctx context.Context, id int, user *string, log
 }
 
 func (s *LoggingDBService) AddLogs(ctx context.Context, logs []*service.Logs) error {
-	tx, err := s.db.Begin(ctx)
-	if err != nil {
-		return err
-	}
-	defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
-	qtx := s.q.WithTx(tx)
+	// tx, err := s.db.Begin(ctx)
+	// if err != nil {
+	// 	return err
+	// }
+	// defer errors.ExecuteAndIgnoreErrorF(tx.Rollback, ctx)
+	// qtx := s.q.WithTx(tx)
 	for _, log := range logs {
 		user := &log.User
 		safeUser := str.SafeStringPtr(user)
-		err := qtx.CreateLog(ctx, CreateLogParams{
+		err := s.q.CreateLog(ctx, CreateLogParams{
 			ID:     str.IntToString(log.Id),
 			User:   &safeUser,
 			Type:   enumToString(log.Type),
@@ -85,7 +86,7 @@ func (s *LoggingDBService) AddLogs(ctx context.Context, logs []*service.Logs) er
 		}
 
 	}
-	return tx.Commit(ctx)
+	return nil
 }
 
 func enumToString(value service.LogType) string {

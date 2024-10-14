@@ -183,7 +183,32 @@ struct Teacher
 
 
 
-
+struct RosterByTeacherIdRow 
+  - StudentEmail: string
+    + json = studentEmail
+    + go.tag.json = studentEmail
+  - StudentName: string
+    + json = studentName
+    + go.tag.json = studentName
+  - Status: Status
+  - StudentId: string
+    + json = studentId
+    + go.tag.json = studentId
+  - RoomNumber: string
+    + json = roomNumber
+    + go.tag.json = roomNumber
+  - TeacherName: string
+    + json = teacherName
+    + go.tag.json = teacherName
+  - ClassroomId: string
+    + json = classroomId
+    + go.tag.json = classroomId
+  - DefaultClassroomId: string
+    + json = defaultClassroomId
+    + go.tag.json = defaultClassroomId
+  - Comment: string
+    + json = comment
+    + go.tag.json = comment
 
 struct TeacherWithRoster
   - user: User
@@ -275,7 +300,7 @@ service StudentService
   - AllStudentsMap() => (students: []AllStudentMap)
   - RosterByClassroomId(classroomId: string) => (students: []StudentWithClassroom)
   - RosterById(id: int32) => (students: []Student)
-  - RosterByTeacherId(teacherId: string) => (students: []StudentWithUser)
+  - RosterByTeacherId(teacherId: string) => (students: []RosterByTeacherIdRow)
   - GetAllStudents() => (students: []Student)
   - UpdateStudentStatus(status: Status, studentEmail: string)
 

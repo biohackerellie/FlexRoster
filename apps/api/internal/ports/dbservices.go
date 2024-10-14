@@ -46,7 +46,7 @@ type StudentDBService interface {
 	AllStudentsMap(ctx context.Context) ([]*service.AllStudentMap, error)
 	RosterByClassroomId(ctx context.Context, classroomId string) ([]*service.StudentWithClassroom, error)
 	RosterById(ctx context.Context, id int32) ([]*service.Student, error)
-	RosterByTeacherId(ctx context.Context, teacherId *string) ([]*service.StudentWithUser, error)
+	RosterByTeacherId(ctx context.Context, teacherId *string) ([]*service.RosterByTeacherIdRow, error)
 	GetAllStudents(ctx context.Context) ([]*service.Student, error)
 	UpdateStudentStatus(ctx context.Context, status *service.Status, studentEmail string) error
 	UpdateStudentRoster(ctx context.Context, classroomId string, status *service.Status, studentEmail string) error

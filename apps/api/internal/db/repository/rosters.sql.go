@@ -245,7 +245,7 @@ func (q *Queries) RosterById(ctx context.Context, id int32) ([]Student, error) {
 }
 
 const rosterByTeacherId = `-- name: RosterByTeacherId :many
-SELECT "students"."studentEmail", "students"."studentName","students"."status", "user"."id" AS "studentId", "classrooms"."roomNumber", "classrooms"."teacherName", "classrooms"."id" AS "classroomId", "classrooms"."comment"
+SELECT "students"."studentEmail", "students"."studentName","students"."status","students"."defaultClassroomId","user"."id" AS "studentId", "classrooms"."roomNumber", "classrooms"."teacherName", "classrooms"."id" AS "classroomId", "classrooms"."comment"
 FROM "students"
 JOIN "classrooms" ON "students"."classroomId" = "classrooms"."id"
 LEFT JOIN "user" ON "students"."studentEmail" = "user"."email"
@@ -253,14 +253,15 @@ WHERE "classrooms"."teacherId" = $1
 `
 
 type RosterByTeacherIdRow struct {
-	StudentEmail string  `db:"studentEmail" json:"studentEmail"`
-	StudentName  string  `db:"studentName" json:"studentName"`
-	Status       Status  `db:"status" json:"status"`
-	StudentId    *string `db:"studentId" json:"studentId"`
-	RoomNumber   string  `db:"roomNumber" json:"roomNumber"`
-	TeacherName  string  `db:"teacherName" json:"teacherName"`
-	ClassroomId  string  `db:"classroomId" json:"classroomId"`
-	Comment      *string `db:"comment" json:"comment"`
+	StudentEmail       string  `db:"studentEmail" json:"studentEmail"`
+	StudentName        string  `db:"studentName" json:"studentName"`
+	Status             Status  `db:"status" json:"status"`
+	DefaultClassroomId string  `db:"defaultClassroomId" json:"defaultClassroomId"`
+	StudentId          *string `db:"studentId" json:"studentId"`
+	RoomNumber         string  `db:"roomNumber" json:"roomNumber"`
+	TeacherName        string  `db:"teacherName" json:"teacherName"`
+	ClassroomId        string  `db:"classroomId" json:"classroomId"`
+	Comment            *string `db:"comment" json:"comment"`
 }
 
 func (q *Queries) RosterByTeacherId(ctx context.Context, teacherid *string) ([]RosterByTeacherIdRow, error) {
@@ -276,6 +277,7 @@ func (q *Queries) RosterByTeacherId(ctx context.Context, teacherid *string) ([]R
 			&i.StudentEmail,
 			&i.StudentName,
 			&i.Status,
+			&i.DefaultClassroomId,
 			&i.StudentId,
 			&i.RoomNumber,
 			&i.TeacherName,
