@@ -30,7 +30,10 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: stable
-
+      - name: Copy Readme and license file into working dir
+        run: |
+          cp README.md LICENSE ./apps/api/
+        shell: bash
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
@@ -38,6 +41,7 @@ jobs:
           version: ${{ env.GITHUB_REF_NAME }}
           args: release --clean
           workdir: "./apps/api/"
+            
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
