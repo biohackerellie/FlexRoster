@@ -40,9 +40,8 @@ Install the CLI Tool **not required but recommended** by going to the [releases 
 curl -OL https://github.com/biohackerellie/FlexRoster/releases/download/<latest-release>/flexroster_<latest-release>_<platform>.tar.gz
 ```
 
-There are 2 binaries with this release, `flex` and `flexscript`. `flex` is the main CLI tool and `flexscript` is a script that can be used to automate the syncing of the OneRoster API.
 
-On Windows, until the choco package is created, you will need to run both of these through powershell.
+On Windows, until the choco package is created, you will need to manually call the exe from powershell like this:
 
 ```powershell
 # Run the CLI tool
@@ -51,13 +50,13 @@ On Windows, until the choco package is created, you will need to run both of the
 .\flexscript.exe -h
 ```
 
-On linux or macos, you can just extract the binaries to /usr/local/bin or /usr/bin and run them from the terminal.
+On linux or macos, you can just extract the binary to /usr/local/bin or /usr/bin and run them from the terminal.
 
 ```bash
-# Extract the binaries
+# Extract the binary
 tar -xvf flexroster_<latest-release>_<platform>.tar.gz
-# Move the binaries to the bin directory
-sudo mv flex flexscript /usr/local/bin
+# Move the binary to the bin directory
+sudo mv flex /usr/local/bin
 # Run the CLI tool
 flex -h
 # Run a script

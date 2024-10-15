@@ -6,16 +6,38 @@ before:
 builds:
   - main: ./cmd/cli/main.go
     id: "cli"
-    binary: flex
+    binary: flexroster
     env:
       - CGO_ENABLED=0
     goos:
       - linux
+      - darwin
       - windows
     goarch:
       - amd64
+      - arm64
+      - "386"
+      - "arm"
+    goarm:
+    - "6"
+    - "7"
+    ignore:
+      - goos: windows
+        goarch: arm64
+      - goos: windows
+        goarch: arm
+
     ldflags: -s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}
     no_unique_dist_dir: false
+
+archives:
+  - format_overrides:
+      - goos: windows
+        format: zip
+    wrap_in_directory: true
+    files:
+      - README*
+      - LICENSE*
 signs:
   - artifacts: checksum
     cmd: gpg

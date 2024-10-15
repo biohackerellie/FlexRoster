@@ -37,7 +37,7 @@ build-windows:
 	cd $(GO_API_ROOT) &&  CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ./bin/flex.exe ./cmd/scriptRunner/main.go
 
 build-cli:
-	cd $(GO_API_ROOT) &&  CGO_ENABLED=0 go build -o ./bin/flex ./cmd/cli/main.go
+	cd $(GO_API_ROOT) &&  CGO_ENABLED=0 go build -o ./bin/flexroster ./cmd/cli/main.go
 
 cli:
 	./apps/api/bin/flex --cfg $(FLEXROOT)/config.yaml script --n
