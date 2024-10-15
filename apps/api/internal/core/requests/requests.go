@@ -23,7 +23,7 @@ func (a *Adapter) GetRequests(ctx context.Context, userId string) ([]*service.Re
 	return requests, nil
 }
 
-func (a *Adapter) GetAllRequests(ctx context.Context) ([]*service.Request, error) {
+func (a *Adapter) GetAllRequests(ctx context.Context) ([]*service.RequestWithNewClassroom, error) {
 	var requests []*service.RequestWithNewClassroom
 	requests, err := a.requests.GetAllRequests(ctx)
 	if err != nil {

@@ -16,11 +16,6 @@ builds:
     goarch:
       - amd64
       - arm64
-      - "386"
-      - "arm"
-    goarm:
-    - "6"
-    - "7"
     ignore:
       - goos: windows
         goarch: arm64
@@ -35,9 +30,6 @@ archives:
       - goos: windows
         format: zip
     wrap_in_directory: true
-    files:
-      - README*
-      - LICENSE*
 signs:
   - artifacts: checksum
     cmd: gpg
@@ -49,6 +41,31 @@ signs:
       - "${signature}"
       - "--detach-sign"
       - "${artifact}"
+
+brews:
+  - repository:
+      owner: biohackerellie
+      name: homebrew-tap
+      token: "{{ .Env.GITHUB_TOKEN }}"
+    commit_author:
+      name: biohackerellie
+      email: epkerns@gmail.com
+    homepage: "https://github.com/biohackerellie/FlexRoster"
+    description: "A cli tool to manage your FlexRoster instance"
+    install: |-
+      bin.install "flexroster"
+
+checksum: 
+  name_template: "checksums.txt"
+
+source:
+  enabled: true
+
+sboms:
+  - artifacts: archive
+  - id: source
+    artifacts: source
+
 # winget:
 #   name: "FlexRoster"
 #   publisher: "Ellie Kerns"
@@ -72,13 +89,3 @@ signs:
 #     - cli
 #     - flexroster
 
-checksum: 
-  name_template: "checksums.txt"
-
-source:
-  enabled: true
-
-sboms:
-  - artifacts: archive
-  - id: source
-    artifacts: source

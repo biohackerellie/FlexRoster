@@ -4,8 +4,10 @@ Copyright © 2024 Ellie Kerns ellie@epklabs.com
 package cli
 
 import (
-	env "api/internal/config"
+	"fmt"
 	"os"
+
+	env "api/internal/config"
 
 	"github.com/spf13/cobra"
 )
@@ -35,6 +37,9 @@ func init() {
 
 func initConfig() {
 	var err error
+	if cfgFile == "" {
+		fmt.Println("No config file provided, run flexroster init to generate a sample config file")
+	}
 	Config, err = env.LoadConfig(cfgFile)
 	if err != nil {
 		cobra.CheckErr(err)
