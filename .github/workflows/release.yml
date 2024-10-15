@@ -30,10 +30,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: stable
-      - name: Copy Readme and license file into working dir
-        run: |
-          cp README.md LICENSE ./apps/api/
-        shell: bash
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
