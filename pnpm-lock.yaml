@@ -114,8 +114,8 @@ importers:
         specifier: ^11.11.9
         version: 11.11.9(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       jotai:
-        specifier: ^2.10.0
-        version: 2.10.0(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1)
+        specifier: ^2.10.1
+        version: 2.10.1(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1)
       lucide-react:
         specifier: ^0.452.0
         version: 0.452.0(react@19.0.0-rc-fb9a90fa48-20240614)
@@ -4135,8 +4135,8 @@ packages:
   jose@5.9.3:
     resolution: {integrity: sha512-egLIoYSpcd+QUF+UHgobt5YzI2Pkw/H39ou9suW687MY6PmCwPmkNV/4TNjn1p2tX5xO3j0d0sq5hiYE24bSlg==}
 
-  jotai@2.10.0:
-    resolution: {integrity: sha512-8W4u0aRlOIwGlLQ0sqfl/c6+eExl5D8lZgAUolirZLktyaj4WnxO/8a0HEPmtriQAB6X5LMhXzZVmw02X0P0qQ==}
+  jotai@2.10.1:
+    resolution: {integrity: sha512-4FycO+BOTl2auLyF2Chvi6KTDqdsdDDtpaL/WHQMs8f3KS1E3loiUShQzAzFA/sMU5cJ0hz/RT1xum9YbG/zaA==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
       '@types/react': '>=17.0.0'
@@ -9584,7 +9584,7 @@ snapshots:
 
   jose@5.9.3: {}
 
-  jotai@2.10.0(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1):
+  jotai@2.10.1(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1):
     optionalDependencies:
       '@types/react': types-react@19.0.0-rc.1
       react: 19.0.0-rc-fb9a90fa48-20240614
