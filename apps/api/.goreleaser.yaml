@@ -63,6 +63,9 @@ brews:
       bin.install "flexroster"
     post_install: |
       etc.install "config.yaml" => "flexroster/config.yaml"
+    test: |
+      system "#{bin}/flexroster version"
+
 
 checksum: 
   name_template: "checksums.txt"
