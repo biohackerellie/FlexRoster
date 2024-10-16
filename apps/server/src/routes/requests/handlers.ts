@@ -232,10 +232,11 @@ export async function requestApproval(
       where: eq(schema.users.id, teacherId),
       columns: { email: true },
     });
-    const newTeacherName = await db.query.users.findFirst({
+    const newTeacherNameRaw = await db.query.users.findFirst({
       where: eq(schema.users.id, newTeacherId),
       columns: { name: true },
     });
+    const newTeacherName = newTeacherNameRaw?.name ?? "A new teacher";
     // get new teacher's roster
     const newClassroomId = await getClassroomIdByTeacher.execute({
       teacherId: newTeacherId,
