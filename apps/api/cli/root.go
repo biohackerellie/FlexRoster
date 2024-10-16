@@ -32,7 +32,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "cfg", "", "path to config file (default is $HOME/.config/flexroster/config.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "cfg", "/etc/flexroster/config.yaml", "path to config file (default is /etc/flexroster/config.yaml)")
 }
 
 func initConfig() {

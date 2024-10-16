@@ -3,6 +3,10 @@ version: 2
 before:
   hooks:
     - go mod tidy
+prepare:
+  - |
+    #!/bin/bash
+    cp ./exampleConfig.yaml ./config.yaml
 builds:
   - main: ./cmd/cli/main.go
     id: "cli"
@@ -30,6 +34,8 @@ archives:
       - goos: windows
         format: zip
     wrap_in_directory: true
+    files:
+      - config.yaml
 signs:
   - artifacts: checksum
     cmd: gpg
@@ -53,8 +59,13 @@ brews:
       email: epkerns@gmail.com
     homepage: "https://github.com/biohackerellie/FlexRoster"
     description: "A cli tool to manage your FlexRoster instance"
-    install: |-
+    install: |
       bin.install "flexroster"
+    post_install: |
+      etc.install "config.yaml" => "flexroster/config.yaml"
+    test: |
+      system "#{bin}/flexroster version"
+
 
 checksum: 
   name_template: "checksums.txt"

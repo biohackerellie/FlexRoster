@@ -139,6 +139,3 @@ func waitForShutdown() <-chan os.Signal {
 
 	return sig
 }
-
-func initAllVars() {
-}
