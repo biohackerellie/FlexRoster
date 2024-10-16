@@ -99,11 +99,18 @@ func WriteConfig(e *Env) error {
 	}
 	return nil
 }
+
 func LoadConfig(path string) (*Env, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		home = "."
+	}
+	brewPath := filepath.Join(os.Getenv("HOMEBREW_PREFIX"), "etc", "flexroster", "config.yaml")
 	paths := []string{
 		path,
+		brewPath,
 		filepath.Join(".", "config.yaml"),
-		filepath.Join(os.Getenv("HOME"), ".config", "flexroster", "config.yaml"),
+		filepath.Join(home, ".config", "flexroster", "config.yaml"),
 		"/etc/flexroster/config.yaml",
 		"/apps/flexroster/config.yaml",
 	}
@@ -125,6 +132,7 @@ func fileExists(path string) bool {
 	}
 	return false
 }
+
 func WriteEnvFile(e *Env) error {
 	viper.SetConfigType("env")
 	cwd, err := os.Getwd()
@@ -204,5 +212,5 @@ secretaries:
 		return err
 	}
 	configPath := filepath.Join(cwd, "config.yaml")
-	return os.WriteFile(configPath, []byte(sampleConfig), 0644)
+	return os.WriteFile(configPath, []byte(sampleConfig), 0o644)
 }
