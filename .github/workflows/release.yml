@@ -34,7 +34,7 @@ jobs:
           go-version: stable
           cache: true
           check-latest: true
-      - uses: anchore/sbom-action/download-syft@v0.17.3
+      - uses: anchore/sbom-action/download-syft@v0.17.4
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
