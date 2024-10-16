@@ -12,7 +12,10 @@ export const metadata: Metadata = {
   title: "FLEX | Details",
 };
 
-export default function DetailsPage({ params }: { params: { id: string } }) {
+export default async function DetailsPage(props: {
+  params: Promise<{ id: string }>;
+}) {
+  const params = await props.params;
   const rosterId = params.id;
 
   return (

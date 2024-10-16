@@ -13,11 +13,10 @@ import { logger } from "@local/utils";
 import { client } from "@/lib/eden";
 import ApprovalMenu from "../../../_components/Requests";
 
-export default async function RequestsPage({
-  params,
-}: {
-  params: { id: string };
+export default async function RequestsPage(props: {
+  params: Promise<{ id: string }>;
 }) {
+  const params = await props.params;
   const teacherId = params.id;
 
   const requests = await getRequests(teacherId);

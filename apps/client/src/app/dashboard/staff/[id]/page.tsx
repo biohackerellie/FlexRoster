@@ -15,14 +15,13 @@ import { searchParamsValidator } from "@local/utils";
 import { getDefaultRoster } from "../../_components/logic/queries";
 import TeacherRosterTable from "../../_components/tables/teacherTable";
 
-export default function TeacherDashboardPage({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams: SearchParams;
+export default async function TeacherDashboardPage(props: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<SearchParams>;
 }) {
   "use memo";
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const teacherId = params.id;
   const search = searchParamsValidator.parse(searchParams);
   return (

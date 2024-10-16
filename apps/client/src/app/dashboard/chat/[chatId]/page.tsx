@@ -19,16 +19,17 @@ import { ChatInput, Messages } from "@/components/chat";
 import { client } from "@/lib/eden";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     chatId: string;
-  };
+  }>;
 }
 
 export const metadata: Metadata = {
   title: "FLEX | Chat",
 };
 
-export default async function ChatPage({ params }: PageProps) {
+export default async function ChatPage(props: PageProps) {
+  const params = await props.params;
   const { chatId } = params;
   const { chat, initialMessages } = await allData(chatId);
   const { chatPartner, userId } = chat!;

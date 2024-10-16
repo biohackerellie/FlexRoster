@@ -6,11 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@local/ui/card";
 import AlertComponent from "../../../_components/AlertComponent";
 import { getMessages } from "../../../_components/logic/queries";
 
-export default async function MessagesPage({
-  params,
-}: {
-  params: { id: string };
+export default async function MessagesPage(props: {
+  params: Promise<{ id: string }>;
 }) {
+  const params = await props.params;
   const teacherId = params.id;
   const data = await getMessages(teacherId);
   const messages = data?.messageAlerts ?? [];

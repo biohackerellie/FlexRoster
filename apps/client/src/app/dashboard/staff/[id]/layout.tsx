@@ -3,13 +3,14 @@ import { auth } from "@local/auth";
 import { client } from "@/lib/eden";
 import { ClassroomProvider } from "./context";
 
-export default async function ClassroomLayout({
-  params,
-  children,
-}: {
-  params: { id: string };
+export default async function ClassroomLayout(props: {
+  params: Promise<{ id: string }>;
   children: React.ReactNode;
 }) {
+  const params = await props.params;
+
+  const { children } = props;
+
   let classroom = undefined;
   const session = await auth();
   const teacherId = params.id;

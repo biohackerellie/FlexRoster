@@ -216,6 +216,14 @@ export async function getRequests(userId: string) {
  * Function for approving or denying a request
  */
 
+function isSameDate(date1: Date, date2: Date) {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+}
+
 export async function requestApproval(
   requestId: string,
   studentId: string,
@@ -232,6 +240,11 @@ export async function requestApproval(
       where: eq(schema.users.id, teacherId),
       columns: { email: true },
     });
+    const requestData = await db.query.requests.findFirst({
+      where: eq(schema.requests.id, parseInt(requestId)),
+      columns: { dateRequested: true },
+    });
+
     const newTeacherNameRaw = await db.query.users.findFirst({
       where: eq(schema.users.id, newTeacherId),
       columns: { name: true },
@@ -243,10 +256,11 @@ export async function requestApproval(
     });
     if (!newClassroomId)
       throw new NotFoundError("No classroom found with that teacherId");
-
+    const today = new Date();
+    const isToday = isSameDate(today, requestData?.dateRequested!);
     // update request status
     const request = await db.transaction(async (tx) => {
-      if (status === "approved") {
+      if (status === "approved" && isToday) {
         // if approved update student's classroomId in db
         await tx
           .update(schema.students)
