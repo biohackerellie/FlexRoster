@@ -58,8 +58,7 @@ brews:
     description: "A cli tool to manage your FlexRoster instance"
     install: |
       bin.install "flexroster"
-    post_install: |
-      etc.install "config.yaml" => "flexroster/config.yaml"
+      etc.install "config.yaml"
     test: |
       system "#{bin}/flexroster version"
 
