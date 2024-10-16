@@ -3,10 +3,7 @@ version: 2
 before:
   hooks:
     - go mod tidy
-prepare:
-  - |
-    #!/bin/bash
-    cp ./exampleConfig.yaml ./config.yaml
+    - cp ./exampleConfig.yaml ./config.yaml
 builds:
   - main: ./cmd/cli/main.go
     id: "cli"
