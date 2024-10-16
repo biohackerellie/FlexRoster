@@ -10,15 +10,17 @@ type Adapter struct {
 	requests ports.RequestDBService
 	students ports.StudentDBService
 	users    ports.UserDBService
+	dblogs   ports.LogsDBService
 	log      *logger.Logger
 	config   *config.Env
 }
 
-func NewAdapter(requests ports.RequestDBService, users ports.UserDBService, students ports.StudentDBService, config *config.Env) *Adapter {
+func NewAdapter(requests ports.RequestDBService, users ports.UserDBService, students ports.StudentDBService, dblogs ports.LogsDBService, config *config.Env) *Adapter {
 	return &Adapter{
 		requests: requests,
 		students: students,
 		users:    users,
+		dblogs:   dblogs,
 		config:   config,
 	}
 }

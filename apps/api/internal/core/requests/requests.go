@@ -100,6 +100,12 @@ func (a *Adapter) NewRequest(ctx context.Context, teacherRequest bool, studentID
 	}
 
 	wg2 := sync.WaitGroup{}
+	type emailData struct {
+		to      string
+		subject string
+		message string
+	}
+	var newLog *service.Logs
 	if teacherRequest {
 		errChan := make(chan error)
 		newClassroomId := newTeacherRaw.Classroom.Id
