@@ -43,7 +43,8 @@ signs:
       - "${artifact}"
 
 brews:
-  - repository:
+  - name: flexroster
+    repository:
       owner: biohackerellie
       name: homebrew-tap
       token: "{{ .Env.TAPSTOKEN }}"
