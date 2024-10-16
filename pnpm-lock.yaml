@@ -23,16 +23,16 @@ catalogs:
       version: 3.23.8
   react19:
     '@types/react':
-      specifier: npm:types-react@rc
+      specifier: npm:types-react@19.0.0-rc.1
       version: 19.0.0-rc.1
     '@types/react-dom':
-      specifier: npm:types-react-dom@rc
+      specifier: npm:types-react-dom@19.0.0-rc.1
       version: 19.0.0-rc.1
     react:
-      specifier: ^19.0.0-rc-fb9a90fa48-20240614
+      specifier: ^19.0.0-rc-cd22717c-20241013
       version: 19.0.0-rc-fb9a90fa48-20240614
     react-dom:
-      specifier: ^19.0.0-rc-fb9a90fa48-20240614
+      specifier: ^19.0.0-rc-cd22717c-20241013
       version: 19.0.0-rc-fb9a90fa48-20240614
 
 importers:

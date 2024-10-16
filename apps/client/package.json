@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "clean": "git clean -xdf .next .turbo node_modules",
-    "dev": "pnpm with-env-local next dev ",
+    "dev": "pnpm with-env-local next dev --turbo ",
     "build": "pnpm with-env next build",
     "start": "next start",
     "lint": "eslint",
@@ -71,10 +71,6 @@
     "prettier": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
-  },
-  "overrides": {
-    "@types/react": "catalog:react19",
-    "@types/react-dom": "catalog:react19"
   },
   "browser": {
     "fs": false,

@@ -9,11 +9,10 @@ import { Shell } from "@local/ui/shell";
 import AvailabilityComponent from "@/app/dashboard/_components/availabilityList";
 import { getClassAvailability } from "@/app/dashboard/_components/logic/actions";
 
-export default async function AvailabilityPage({
-  params,
-}: {
-  params: { id: string };
+export default async function AvailabilityPage(props: {
+  params: Promise<{ id: string }>;
 }) {
+  const params = await props.params;
   const id = params.id;
   const dates = await getClassAvailability(id);
   return (

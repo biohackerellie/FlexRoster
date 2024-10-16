@@ -8,11 +8,10 @@ import { searchParamsValidator } from "@local/utils";
 import { getRosters } from "../_components/logic/queries";
 import AllRosterTable from "../_components/tables/AllRosterTable";
 
-export default function StaffPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
+export default async function StaffPage(props: {
+  searchParams: Promise<SearchParams>;
 }) {
+  const searchParams = await props.searchParams;
   const search = searchParamsValidator.parse(searchParams);
 
   return (

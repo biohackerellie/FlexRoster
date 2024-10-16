@@ -22,11 +22,10 @@ export const metadata: Metadata = {
   title: "FLEX | All Students",
 };
 
-export default function AllStudentsPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
+export default async function AllStudentsPage(props: {
+  searchParams: Promise<SearchParams>;
 }) {
+  const searchParams = await props.searchParams;
   const search = searchParamsValidator.parse(searchParams);
   const roster = getTableData(search);
   return (

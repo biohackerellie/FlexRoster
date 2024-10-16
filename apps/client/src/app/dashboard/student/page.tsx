@@ -14,11 +14,10 @@ import {
 import { StudentRequestsComponent } from "../_components/Students-Requests";
 import StudentClassesTable from "../_components/tables/studentClassesTable";
 
-export default async function StudentDashboard({
-  searchParams,
-}: {
-  searchParams: SearchParams;
+export default async function StudentDashboard(props: {
+  searchParams: Promise<SearchParams>;
 }) {
+  const searchParams = await props.searchParams;
   const session = await auth();
   if (!session) {
     return notFound();
