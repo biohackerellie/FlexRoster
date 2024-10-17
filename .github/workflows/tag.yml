@@ -19,4 +19,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           with-v: "true"
-          release-branch: "release"
+         # release-branch: "release"
