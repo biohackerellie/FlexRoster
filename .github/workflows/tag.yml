@@ -21,8 +21,8 @@ jobs:
       # 2. Set up Git for committing tags
       - name: Set up Git
         run: |
-          git config user.name "biohackerellie"
-          git config user.email "epkerns@gmail.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
       # 3. Determine Current Branch
       - name: Determine Current Branch
@@ -117,10 +117,10 @@ jobs:
           echo "next_tag=$NEXT_TAG" >> $GITHUB_ENV
           echo "::set-output name=next_tag::$NEXT_TAG"
 
-      # 7. Create and Push Tag
+      # 7. Create and Push Tag using ad-m/github-push-action
       - name: Create and Push Tag
-        run: |
-          NEXT_TAG=${{ env.next_tag }}
-          echo "Creating tag $NEXT_TAG"
-          git tag $NEXT_TAG
-          git push origin $NEXT_TAG
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tags: true
+          tag: ${{ env.next_tag }}
