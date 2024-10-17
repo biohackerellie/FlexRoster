@@ -1,0 +1,41 @@
+
+name: Weekly Patch Release
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch: 
+
+permissions:
+  contents: write 
+
+jobs:
+  merge-to-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout canary branch
+        uses: actions/checkout@v4
+        with:
+          ref: canary
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "biohackerellie"
+          git config user.email "epkerns@gmail.com"
+
+      - name: Pull latest canary
+        run: git pull origin canary
+
+      - name: Merge canary into release
+        run: |
+          git checkout release
+          git pull origin release
+          git merge canary --no-ff -m "Weekly patch release on $(date +'%Y-%m-%d')"
+        
+      - name: Push changes to release branch
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: release
