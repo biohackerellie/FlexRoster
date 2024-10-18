@@ -1,3 +1,4 @@
+
 name: Custom Auto Tag
 
 on:
@@ -5,7 +6,8 @@ on:
     branches:
       - develop
       - canary
-
+permissions:
+  contents: write
 jobs:
   auto-tag:
     runs-on: ubuntu-latest
@@ -116,8 +118,6 @@ jobs:
           echo "NEXT_TAG=$NEXT_TAG" >> $GITHUB_ENV
 
       - name: Push Git Tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git tag $NEXT_TAG
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git $NEXT_TAG
+          git push origin $NEXT_TAG
