@@ -302,7 +302,7 @@ importers:
   packages/auth:
     dependencies:
       '@auth/core':
-        specifier: ^0.37.0
+        specifier: ^0.37.1
         version: 0.37.1
       '@auth/drizzle-adapter':
         specifier: ^1.7.0
@@ -342,7 +342,7 @@ importers:
   packages/db:
     dependencies:
       '@auth/core':
-        specifier: ^0.37.0
+        specifier: ^0.37.1
         version: 0.37.1
       '@t3-oss/env-nextjs':
         specifier: ^0.11.1
