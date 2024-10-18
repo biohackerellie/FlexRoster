@@ -1,11 +1,10 @@
 name: Custom Auto Tag
 
 on:
+  pull_request:
+    branches: ['canary']
   push:
-    branches:
-      - develop
-      - canary
-      - release
+    branches: ['release']
 
 jobs:
   auto-tag:
@@ -116,11 +115,8 @@ jobs:
 
           echo "next_tag=$NEXT_TAG" >> $GITHUB_ENV
           echo "::set-output name=next_tag::$NEXT_TAG"
+    - uses: phish108/autotag-action@v1.1.55
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN}}
+        tag: ${{ env.next_tag }}
 
-      # 7. Create and Push Tag using ad-m/github-push-action
-      - name: Create and Push Tag
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tags: true
-          tag: ${{ env.next_tag }}
