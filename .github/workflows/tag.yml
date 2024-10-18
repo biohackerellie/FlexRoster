@@ -3,8 +3,10 @@ name: Auto.Tag
 on:
   workflow_dispatch:
   pull_request:
-    types: [opened]
+    types:
+      - opened
   push:
+
 jobs:
   tag:
     runs-on: ubuntu-latest
@@ -114,6 +116,5 @@ jobs:
           echo "::set-output name=next_tag::$NEXT_TAG"
     - uses: phish108/autotag-action@v1.1.55
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN}}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ env.next_tag }}
-
