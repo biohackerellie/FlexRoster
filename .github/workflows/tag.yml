@@ -6,10 +6,11 @@ on:
   push:
     branches: ['release']
 
+permissions:
+  contents: write
 jobs:
-  auto-tag:
+  tag:    
     runs-on: ubuntu-latest
-
     steps:
       # 1. Checkout Repository with full history to access all tags
       - name: Checkout Repository
