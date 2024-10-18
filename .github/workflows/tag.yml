@@ -1,20 +1,14 @@
-name: Custom Auto Tag
+name: Auto.Tag
 
 on:
+  workflow_dispatch:
   pull_request:
-    branches: 
-      - canary
+    types: [opened]
   push:
-    branches: 
-      - release
-
-permissions:
-  contents: write
 jobs:
-  tag:    
+  tag:
     runs-on: ubuntu-latest
     steps:
-      # 1. Checkout Repository with full history to access all tags
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
