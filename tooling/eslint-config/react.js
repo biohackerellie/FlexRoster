@@ -17,7 +17,7 @@ export default [
       ...reactHooksPlugin.configs.recommended.rules,
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "off",
-      "react-compiler/react-compiler": "error",
+      "react-compiler/react-compiler": "warn",
     },
     languageOptions: {
       globals: {
