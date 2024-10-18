@@ -14,17 +14,6 @@ env:
   CLIENT_IMAGE_NAME: biohackerellie/flexclient
   SERVER_IMAGE_NAME: biohackerellie/flexserver
 jobs:
-  tag:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: 
-        - 22
-    steps: 
-    - uses: phish108/autotag-action@v1.1.55
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN}}
-        branch: release
   goreleaser-api:
     permissions:
       contents: write
