@@ -3,9 +3,12 @@ name: Release
 
 on:
   workflow_dispatch:
-  push:
-    branches: 
-      - release
+
+  workflow_run:
+    workflows: ["Custom Auto Tag"]
+    types:
+      - completed
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -15,6 +18,7 @@ env:
   SERVER_IMAGE_NAME: biohackerellie/flexserver
 jobs:
   goreleaser-api:
+    if: ${{ github.ref == 'refs/heads/release' }}
     permissions:
       contents: write
       id-token: write
@@ -51,6 +55,7 @@ jobs:
           TAPSTOKEN: ${{secrets.TAPSTOKEN}}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
   build-and-push-client:
+    if: ${{ github.ref == 'refs/heads/release' }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -96,6 +101,7 @@ jobs:
           push-to-registry: true
 
   build-and-push-server:
+    if: ${{ github.ref == 'refs/heads/release' }}
     runs-on: ubuntu-latest
 
     permissions:
