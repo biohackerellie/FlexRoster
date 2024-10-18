@@ -5,6 +5,9 @@ on:
   pull_request:
     types: [opened]
   push:
+    branches: 
+      - canary
+      - release
 jobs:
   tag:
     permissions: write-all
@@ -18,3 +21,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           with-v: "true"
+          release-branch: release
