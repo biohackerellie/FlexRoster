@@ -45,5 +45,5 @@ jobs:
           curl -X POST \
           -H "Authorization: token ${{ secrets.TAPSTOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/username/repository/actions/workflows/tag-workflow.yml/dispatches \
+          https://api.github.com/repos/biohackerellie/FlexRoster/actions/workflows/tag.yml/dispatches \
           -d '{"ref": "release"}'
