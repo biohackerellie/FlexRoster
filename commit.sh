@@ -67,16 +67,16 @@ git commit -m "$SUMMARY" -m "$DESCRIPTION"
 git push origin HEAD
 
 
-if gum confirm "Merge dev into main and tag the commit in main?"; then
-  git checkout main
+if gum confirm "Merge dev into canary and tag the commit in canary?"; then
+  git checkout canary
   git pull --rebase
   git merge develop
   MERGE_COMMIT=$(git rev-parse HEAD) # Get the merge commit hash
   if [ "$TAG" = true ]; then
-    git tag -a "$NEW_TAG" "$MERGE_COMMIT" -m "Tagging $NEW_TAG in main"
-    git push origin main --tags
+    git tag -a "$NEW_TAG" "$MERGE_COMMIT" -m "Tagging $NEW_TAG in canary"
+    git push origin canary --tags
   else
-    git push origin main
+    git push origin canary
   fi
   git checkout develop
 fi

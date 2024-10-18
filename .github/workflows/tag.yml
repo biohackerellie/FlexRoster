@@ -7,7 +7,6 @@ on:
   push:
 jobs:
   tag:
-    if: github.actor == 'biohackerellie'
     permissions: write-all
     runs-on: ubuntu-latest
     strategy:

@@ -1,5 +1,5 @@
 import type { DefaultSession, NextAuthConfig } from "next-auth";
-import azureAd from "next-auth/providers/azure-ad";
+import azureAd from "next-auth/providers/microsoft-entra-id";
 
 declare module "next-auth" {
   interface Session {
@@ -23,7 +23,7 @@ export default {
     azureAd({
       clientId: process.env.AZURE_AD_CLIENT_ID!,
       clientSecret: process.env.AZURE_AD_CLIENT_SECRET!,
-      tenantId: process.env.AZURE_AD_TENANT_ID!,
+      issuer: process.env.AZURE_AD_TENANT_ID!,
       profile(profile) {
         return {
           id: profile.oid,
