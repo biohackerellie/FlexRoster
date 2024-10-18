@@ -2,9 +2,11 @@ name: Custom Auto Tag
 
 on:
   pull_request:
-    branches: ['canary']
+    branches: 
+      - canary
   push:
-    branches: ['release']
+    branches: 
+      - release
 
 permissions:
   contents: write
