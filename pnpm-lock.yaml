@@ -281,7 +281,7 @@ importers:
         specifier: 22.7.6
         version: 22.7.6
       bun-types:
-        specifier: ^1.1.30
+        specifier: ^1.1.31
         version: 1.1.31
       dotenv-cli:
         specifier: ^7.4.2
@@ -595,7 +595,7 @@ importers:
         specifier: ^9.6.1
         version: 9.6.1
       bun-types:
-        specifier: ^1.1.30
+        specifier: ^1.1.31
         version: 1.1.31
       eslint:
         specifier: 'catalog:'
@@ -674,7 +674,7 @@ importers:
   tooling/tsconfig:
     dependencies:
       bun-types:
-        specifier: ^1.1.30
+        specifier: ^1.1.31
         version: 1.1.31
 
 packages:
