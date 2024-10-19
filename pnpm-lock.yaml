@@ -305,7 +305,7 @@ importers:
         specifier: ^0.37.1
         version: 0.37.1
       '@auth/drizzle-adapter':
-        specifier: ^1.7.0
+        specifier: ^1.7.1
         version: 1.7.1
       '@local/db':
         specifier: workspace:*
