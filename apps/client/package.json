@@ -46,7 +46,7 @@
     "react": "catalog:react19",
     "react-day-picker": "^8.9.1",
     "react-dom": "catalog:react19",
-    "react-hook-form": "^7.53.0",
+    "react-hook-form": "^7.53.1",
     "react-wrap-balancer": "^1.1.1",
     "rehype-pretty-code": "^0.14.0",
     "remark-toc": "^9.0.0",
