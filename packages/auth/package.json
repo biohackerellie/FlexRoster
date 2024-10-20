@@ -16,7 +16,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@auth/core": "^0.37.1",
+    "@auth/core": "^0.37.2",
     "@auth/drizzle-adapter": "^1.7.1",
     "@local/db": "workspace:*",
     "@local/tsconfig": "workspace:*",
