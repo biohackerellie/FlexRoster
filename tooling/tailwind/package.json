@@ -23,7 +23,7 @@
     "@local/eslint-config": "workspace:*",
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
-    "@types/node": "22.7.6",
+    "@types/node": "22.7.7",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"

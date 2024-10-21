@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@eslint/compat": "^1.2.0",
+    "@eslint/compat": "^1.2.1",
     "@next/eslint-plugin-next": "^14.2.15",
     "@typescript-eslint/eslint-plugin": "^8.10.0",
     "@typescript-eslint/parser": "^8.10.0",
@@ -29,7 +29,7 @@
     "@local/prettier-config": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@types/eslint": "^9.6.1",
-    "bun-types": "^1.1.30",
+    "bun-types": "^1.1.31",
     "eslint": "catalog:",
     "eslint-import-resolver-typescript-bun": "^0.0.104",
     "prettier": "catalog:",

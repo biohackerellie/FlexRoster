@@ -16,8 +16,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@auth/core": "^0.37.0",
-    "@auth/drizzle-adapter": "^1.7.0",
+    "@auth/core": "^0.37.2",
+    "@auth/drizzle-adapter": "^1.7.2",
     "@local/db": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@t3-oss/env-nextjs": "^0.11.1",
@@ -28,7 +28,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "22.7.6",
+    "@types/node": "22.7.7",
     "typescript": "catalog:"
   }
 }

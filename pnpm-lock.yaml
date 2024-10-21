@@ -47,7 +47,7 @@ importers:
         version: 0.6.1
       '@turbo/gen':
         specifier: ^2.1.3
-        version: 2.1.3(@types/node@22.7.6)(typescript@5.6.3)
+        version: 2.1.3(@types/node@22.7.7)(typescript@5.6.3)
       prettier:
         specifier: 'catalog:'
         version: 3.3.3
@@ -67,7 +67,7 @@ importers:
         version: 1.1.3(elysia@1.1.22(@sinclair/typebox@0.33.17)(openapi-types@12.1.3)(typescript@5.6.3))
       '@hookform/resolvers':
         specifier: ^3.9.0
-        version: 3.9.0(react-hook-form@7.53.0(react@19.0.0-rc-fb9a90fa48-20240614))
+        version: 3.9.0(react-hook-form@7.53.1(react@19.0.0-rc-fb9a90fa48-20240614))
       '@local/auth':
         specifier: workspace:*
         version: link:../../packages/auth
@@ -129,8 +129,8 @@ importers:
         specifier: 15.0.0-rc.1
         version: 15.0.0-rc.1(babel-plugin-react-compiler@19.0.0-beta-9ee70a1-20241017)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       next-auth:
-        specifier: 5.0.0-beta.22
-        version: 5.0.0-beta.22(next@15.0.0-rc.1(babel-plugin-react-compiler@19.0.0-beta-9ee70a1-20241017)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
+        specifier: 5.0.0-beta.25
+        version: 5.0.0-beta.25(next@15.0.0-rc.1(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       next-themes:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
@@ -153,8 +153,8 @@ importers:
         specifier: catalog:react19
         version: 19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614)
       react-hook-form:
-        specifier: ^7.53.0
-        version: 7.53.0(react@19.0.0-rc-fb9a90fa48-20240614)
+        specifier: ^7.53.1
+        version: 7.53.1(react@19.0.0-rc-fb9a90fa48-20240614)
       react-wrap-balancer:
         specifier: ^1.1.1
         version: 1.1.1(react@19.0.0-rc-fb9a90fa48-20240614)
@@ -187,8 +187,8 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/tsconfig
       '@types/node':
-        specifier: 22.7.6
-        version: 22.7.6
+        specifier: 22.7.7
+        version: 22.7.7
       '@types/react':
         specifier: catalog:react19
         version: types-react@19.0.0-rc.1
@@ -209,7 +209,7 @@ importers:
         version: 2.3.3
       knip:
         specifier: ^5.33.3
-        version: 5.33.3(@types/node@22.7.6)(typescript@5.6.3)
+        version: 5.33.3(@types/node@22.7.7)(typescript@5.6.3)
       postcss:
         specifier: ^8.4.47
         version: 8.4.47
@@ -218,7 +218,7 @@ importers:
         version: 3.3.3
       tailwindcss:
         specifier: 'catalog:'
-        version: 3.4.14(ts-node@10.9.2(@types/node@22.7.6)(typescript@5.6.3))
+        version: 3.4.14(ts-node@10.9.2(@types/node@22.7.7)(typescript@5.6.3))
       typescript:
         specifier: 'catalog:'
         version: 5.6.3
@@ -278,10 +278,10 @@ importers:
         specifier: ^1.1.6
         version: 1.1.6
       '@types/node':
-        specifier: 22.7.6
-        version: 22.7.6
+        specifier: 22.7.7
+        version: 22.7.7
       bun-types:
-        specifier: ^1.1.30
+        specifier: ^1.1.31
         version: 1.1.31
       dotenv-cli:
         specifier: ^7.4.2
@@ -302,11 +302,11 @@ importers:
   packages/auth:
     dependencies:
       '@auth/core':
-        specifier: ^0.37.0
-        version: 0.37.1
+        specifier: ^0.37.2
+        version: 0.37.2
       '@auth/drizzle-adapter':
-        specifier: ^1.7.0
-        version: 1.7.1
+        specifier: ^1.7.2
+        version: 1.7.2
       '@local/db':
         specifier: workspace:*
         version: link:../db
@@ -321,7 +321,7 @@ importers:
         version: 15.0.0-rc.1(babel-plugin-react-compiler@19.0.0-beta-9ee70a1-20241017)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       next-auth:
         specifier: beta
-        version: 5.0.0-beta.23(next@15.0.0-rc.1(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
+        version: 5.0.0-beta.25(next@15.0.0-rc.1(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       react:
         specifier: catalog:react19
         version: 19.0.0-rc-fb9a90fa48-20240614
@@ -333,8 +333,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@types/node':
-        specifier: 22.7.6
-        version: 22.7.6
+        specifier: 22.7.7
+        version: 22.7.7
       typescript:
         specifier: 'catalog:'
         version: 5.6.3
@@ -342,8 +342,8 @@ importers:
   packages/db:
     dependencies:
       '@auth/core':
-        specifier: ^0.37.0
-        version: 0.37.1
+        specifier: ^0.37.2
+        version: 0.37.2
       '@t3-oss/env-nextjs':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
@@ -367,8 +367,8 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/tsconfig
       '@types/node':
-        specifier: 22.7.6
-        version: 22.7.6
+        specifier: 22.7.7
+        version: 22.7.7
       '@types/pg':
         specifier: ^8.11.10
         version: 8.11.10
@@ -398,7 +398,7 @@ importers:
     dependencies:
       '@hookform/resolvers':
         specifier: ^3.9.0
-        version: 3.9.0(react-hook-form@7.53.0(react@19.0.0-rc-fb9a90fa48-20240614))
+        version: 3.9.0(react-hook-form@7.53.1(react@19.0.0-rc-fb9a90fa48-20240614))
       '@radix-ui/react-alert-dialog':
         specifier: ^1.1.2
         version: 1.1.2(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1)
@@ -463,8 +463,8 @@ importers:
         specifier: ^8.9.1
         version: 8.10.1(date-fns@4.1.0)(react@19.0.0-rc-fb9a90fa48-20240614)
       react-hook-form:
-        specifier: ^7.53.0
-        version: 7.53.0(react@19.0.0-rc-fb9a90fa48-20240614)
+        specifier: ^7.53.1
+        version: 7.53.1(react@19.0.0-rc-fb9a90fa48-20240614)
       sonner:
         specifier: ^1.5.0
         version: 1.5.0(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
@@ -473,7 +473,7 @@ importers:
         version: 2.5.4
       tailwindcss-animate:
         specifier: ^1.0.7
-        version: 1.0.7(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.7.6)(typescript@5.6.3)))
+        version: 1.0.7(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.7.7)(typescript@5.6.3)))
       vaul:
         specifier: ^1.1.0
         version: 1.1.0(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)(types-react@19.0.0-rc.1)
@@ -504,7 +504,7 @@ importers:
         version: 3.3.3
       tailwindcss:
         specifier: 'catalog:'
-        version: 3.4.14(ts-node@10.9.2(@types/node@22.7.6)(typescript@5.6.3))
+        version: 3.4.14(ts-node@10.9.2(@types/node@22.7.7)(typescript@5.6.3))
       typescript:
         specifier: 'catalog:'
         version: 5.6.3
@@ -552,8 +552,8 @@ importers:
   tooling/eslint-config:
     dependencies:
       '@eslint/compat':
-        specifier: ^1.2.0
-        version: 1.2.0(eslint@9.12.0(jiti@2.3.3))
+        specifier: ^1.2.1
+        version: 1.2.1(eslint@9.12.0(jiti@2.3.3))
       '@next/eslint-plugin-next':
         specifier: ^14.2.15
         version: 14.2.15
@@ -595,7 +595,7 @@ importers:
         specifier: ^9.6.1
         version: 9.6.1
       bun-types:
-        specifier: ^1.1.30
+        specifier: ^1.1.31
         version: 1.1.31
       eslint:
         specifier: 'catalog:'
@@ -644,10 +644,10 @@ importers:
         version: 8.4.47
       tailwindcss:
         specifier: 'catalog:'
-        version: 3.4.14(ts-node@10.9.2(@types/node@22.7.6)(typescript@5.6.3))
+        version: 3.4.14(ts-node@10.9.2(@types/node@22.7.7)(typescript@5.6.3))
       tailwindcss-animate:
         specifier: ^1.0.7
-        version: 1.0.7(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.7.6)(typescript@5.6.3)))
+        version: 1.0.7(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.7.7)(typescript@5.6.3)))
     devDependencies:
       '@local/eslint-config':
         specifier: workspace:*
@@ -659,8 +659,8 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/node':
-        specifier: 22.7.6
-        version: 22.7.6
+        specifier: 22.7.7
+        version: 22.7.7
       eslint:
         specifier: 'catalog:'
         version: 9.12.0(jiti@2.3.3)
@@ -674,7 +674,7 @@ importers:
   tooling/tsconfig:
     dependencies:
       bun-types:
-        specifier: ^1.1.30
+        specifier: ^1.1.31
         version: 1.1.31
 
 packages:
@@ -686,20 +686,6 @@ packages:
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
-
-  '@auth/core@0.35.3':
-    resolution: {integrity: sha512-g6qfiqU4OtyvIEZ8J7UoIwAxEnNnLJV0/f/DW41U+4G5nhBlaCrnKhawJIJpU0D3uavXLeDT3B0BkjtiimvMDA==}
-    peerDependencies:
-      '@simplewebauthn/browser': ^9.0.1
-      '@simplewebauthn/server': ^9.0.2
-      nodemailer: ^6.8.0
-    peerDependenciesMeta:
-      '@simplewebauthn/browser':
-        optional: true
-      '@simplewebauthn/server':
-        optional: true
-      nodemailer:
-        optional: true
 
   '@auth/core@0.37.1':
     resolution: {integrity: sha512-85PosPEZXHKZhEaAH5DVCig2N1Cu5PC8CbWX03Dw9g1JISLHyrRT0RZRcaWlgmz+0Ua4N52sFRX+g9WARQaUlA==}
@@ -715,8 +701,22 @@ packages:
       nodemailer:
         optional: true
 
-  '@auth/drizzle-adapter@1.7.1':
-    resolution: {integrity: sha512-WJSh39zEtynJw6GVS8MCnB2qXw1q7IkMbG2GiHx4jiQWDpHXE+idGSeBuZXS+J8tQnLexQa6v8hnz+wmalM74w==}
+  '@auth/core@0.37.2':
+    resolution: {integrity: sha512-kUvzyvkcd6h1vpeMAojK2y7+PAV5H+0Cc9+ZlKYDFhDY31AlvsB+GW5vNO4qE3Y07KeQgvNO9U0QUx/fN62kBw==}
+    peerDependencies:
+      '@simplewebauthn/browser': ^9.0.1
+      '@simplewebauthn/server': ^9.0.2
+      nodemailer: ^6.8.0
+    peerDependenciesMeta:
+      '@simplewebauthn/browser':
+        optional: true
+      '@simplewebauthn/server':
+        optional: true
+      nodemailer:
+        optional: true
+
+  '@auth/drizzle-adapter@1.7.2':
+    resolution: {integrity: sha512-PrXsbzcOGkw9A/lHr44SIOw0FBdXm9Me5xzmLCC54anPTiMmOq2FnJLjnPPnZZ/IKVOfTkSNOn9w9jtQgl2mCw==}
 
   '@babel/code-frame@7.25.7':
     resolution: {integrity: sha512-0xZJFNE5XMpENsgfHYTw8FbX4kv53mFLn2i3XPoq69LyhYSCBJtitaHx9QnsVTrsogI4Z3+HtEfZ2/GFPOtf5g==}
@@ -1296,8 +1296,8 @@ packages:
     resolution: {integrity: sha512-m4DVN9ZqskZoLU5GlWZadwDnYo3vAEydiUayB9widCl9ffWx2IvPnp6n3on5rJmziJSw9Bv+Z3ChDVdMwXCY8Q==}
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
 
-  '@eslint/compat@1.2.0':
-    resolution: {integrity: sha512-CkPWddN7J9JPrQedEr2X7AjK9y1jaMJtxZ4A/+jTMFA2+n5BWhcKHW/EbJyARqg2zzQfgtWUtVmG3hrG6+nGpg==}
+  '@eslint/compat@1.2.1':
+    resolution: {integrity: sha512-JbHG2TWuCeNzh87fXo+/46Z1LEo9DBA9T188d0fZgGxAD+cNyS6sx9fdiyxjGPBMyQVRlCutTByZ6a5+YMkF7g==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^9.10.0
@@ -2367,8 +2367,8 @@ packages:
   '@types/node@20.12.14':
     resolution: {integrity: sha512-scnD59RpYD91xngrQQLGkE+6UrHUPzeKZWhhjBSa3HSkwjbQc38+q3RoIVEwxQGRw3M+j5hpNAM+lgV3cVormg==}
 
-  '@types/node@22.7.6':
-    resolution: {integrity: sha512-/d7Rnj0/ExXDMcioS78/kf1lMzYk4BZV8MZGTBKzTGZ6/406ukkbYlIsZmMPhcR5KlkunDHQLrtAVmSq7r+mSw==}
+  '@types/node@22.7.7':
+    resolution: {integrity: sha512-SRxCrrg9CL/y54aiMCG3edPKdprgMVGDXjA3gB8UmmBW5TcXzRUYAh8EWzTnSJFAd1rgImPELza+A3bJ+qxz8Q==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -4362,24 +4362,8 @@ packages:
     resolution: {integrity: sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==}
     engines: {node: '>= 0.4.0'}
 
-  next-auth@5.0.0-beta.22:
-    resolution: {integrity: sha512-QGBo9HGOjmnJBHGXvtFztl0tM5tL0porDlk74HVoCCzXd986ApOlIW3EmiCuho7YzEopgkFiwwmcXpoCrHAtYw==}
-    peerDependencies:
-      '@simplewebauthn/browser': ^9.0.1
-      '@simplewebauthn/server': ^9.0.2
-      next: ^14.0.0-0 || ^15.0.0-0
-      nodemailer: ^6.6.5
-      react: ^18.2.0 || ^19.0.0-0
-    peerDependenciesMeta:
-      '@simplewebauthn/browser':
-        optional: true
-      '@simplewebauthn/server':
-        optional: true
-      nodemailer:
-        optional: true
-
-  next-auth@5.0.0-beta.23:
-    resolution: {integrity: sha512-LhGiXT1l67gnzqIKN181Tr2D0WbkiUREh7pFjWOFkxWuIwd90QCCMfv/858trvixlfYqRarnfbdLXwiw51sGaA==}
+  next-auth@5.0.0-beta.25:
+    resolution: {integrity: sha512-2dJJw1sHQl2qxCrRk+KTQbeH+izFbGFPuJj5eGgBZFYyiYYtvlrBeUw1E/OJJxTRjuxbSYGnCTkUIRsIIW0bog==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
@@ -4462,9 +4446,6 @@ packages:
   npm-run-path@4.0.1:
     resolution: {integrity: sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==}
     engines: {node: '>=8'}
-
-  oauth4webapi@2.17.0:
-    resolution: {integrity: sha512-lbC0Z7uzAFNFyzEYRIC+pkSVvDHJTbEW+dYlSBAlCYDe6RxUkJ26bClhk8ocBZip1wfI9uKTe0fm4Ib4RHn6uQ==}
 
   oauth4webapi@3.1.1:
     resolution: {integrity: sha512-0h4FZjsntbKQ5IHGM9mFT7uOwQCRdcTG7YhC0xXlWIcCch24wUa6Vggaipa3Sw6Ab7nEnmO4rctROmyuHBfP7Q==}
@@ -4911,8 +4892,8 @@ packages:
     peerDependencies:
       react: 19.0.0-rc-fb9a90fa48-20240614
 
-  react-hook-form@7.53.0:
-    resolution: {integrity: sha512-M1n3HhqCww6S2hxLxciEXy2oISPnAzxY7gvwVPrtlczTM/1dDadXgUxDpHMrMTblDOcm/AXtXxHwZ3jpg1mqKQ==}
+  react-hook-form@7.53.1:
+    resolution: {integrity: sha512-6aiQeBda4zjcuaugWvim9WsGqisoUk+etmFEsSUMm451/Ic8L/UAb7sRtMj3V+Hdzm6mMjU1VhiSzYUZeBm0Vg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -5786,16 +5767,6 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@auth/core@0.35.3':
-    dependencies:
-      '@panva/hkdf': 1.2.1
-      '@types/cookie': 0.6.0
-      cookie: 0.6.0
-      jose: 5.9.4
-      oauth4webapi: 2.17.0
-      preact: 10.11.3
-      preact-render-to-string: 5.2.3(preact@10.11.3)
-
   '@auth/core@0.37.1':
     dependencies:
       '@panva/hkdf': 1.2.1
@@ -5806,9 +5777,19 @@ snapshots:
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
 
-  '@auth/drizzle-adapter@1.7.1':
+  '@auth/core@0.37.2':
     dependencies:
-      '@auth/core': 0.37.1
+      '@panva/hkdf': 1.2.1
+      '@types/cookie': 0.6.0
+      cookie: 0.7.1
+      jose: 5.9.4
+      oauth4webapi: 3.1.1
+      preact: 10.11.3
+      preact-render-to-string: 5.2.3(preact@10.11.3)
+
+  '@auth/drizzle-adapter@1.7.2':
+    dependencies:
+      '@auth/core': 0.37.2
     transitivePeerDependencies:
       - '@simplewebauthn/browser'
       - '@simplewebauthn/server'
@@ -6247,7 +6228,7 @@ snapshots:
 
   '@eslint-community/regexpp@4.11.1': {}
 
-  '@eslint/compat@1.2.0(eslint@9.12.0(jiti@2.3.3))':
+  '@eslint/compat@1.2.1(eslint@9.12.0(jiti@2.3.3))':
     optionalDependencies:
       eslint: 9.12.0(jiti@2.3.3)
 
@@ -6300,9 +6281,9 @@ snapshots:
 
   '@floating-ui/utils@0.2.8': {}
 
-  '@hookform/resolvers@3.9.0(react-hook-form@7.53.0(react@19.0.0-rc-fb9a90fa48-20240614))':
+  '@hookform/resolvers@3.9.0(react-hook-form@7.53.1(react@19.0.0-rc-fb9a90fa48-20240614))':
     dependencies:
-      react-hook-form: 7.53.0(react@19.0.0-rc-fb9a90fa48-20240614)
+      react-hook-form: 7.53.1(react@19.0.0-rc-fb9a90fa48-20240614)
 
   '@humanfs/core@0.19.0': {}
 
@@ -7169,7 +7150,7 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
-  '@turbo/gen@2.1.3(@types/node@22.7.6)(typescript@5.6.3)':
+  '@turbo/gen@2.1.3(@types/node@22.7.7)(typescript@5.6.3)':
     dependencies:
       '@turbo/workspaces': 2.1.3
       commander: 10.0.1
@@ -7179,7 +7160,7 @@ snapshots:
       node-plop: 0.26.3
       picocolors: 1.0.1
       proxy-agent: 6.4.0
-      ts-node: 10.9.2(@types/node@22.7.6)(typescript@5.6.3)
+      ts-node: 10.9.2(@types/node@22.7.7)(typescript@5.6.3)
       update-check: 1.5.4
       validate-npm-package-name: 5.0.1
     transitivePeerDependencies:
@@ -7232,12 +7213,12 @@ snapshots:
   '@types/fs-extra@11.0.4':
     dependencies:
       '@types/jsonfile': 6.1.4
-      '@types/node': 22.7.6
+      '@types/node': 22.7.7
 
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 22.7.6
+      '@types/node': 22.7.7
 
   '@types/gradient-string@1.1.6':
     dependencies:
@@ -7269,7 +7250,7 @@ snapshots:
 
   '@types/jsonfile@6.1.4':
     dependencies:
-      '@types/node': 22.7.6
+      '@types/node': 22.7.7
 
   '@types/mdast@4.0.4':
     dependencies:
@@ -7285,14 +7266,14 @@ snapshots:
 
   '@types/node-fetch@2.6.11':
     dependencies:
-      '@types/node': 22.7.6
+      '@types/node': 22.7.7
       form-data: 4.0.1
 
   '@types/node@20.12.14':
     dependencies:
       undici-types: 5.26.5
 
-  '@types/node@22.7.6':
+  '@types/node@22.7.7':
     dependencies:
       undici-types: 6.19.8
 
@@ -7300,7 +7281,7 @@ snapshots:
 
   '@types/pg@8.11.10':
     dependencies:
-      '@types/node': 22.7.6
+      '@types/node': 22.7.7
       pg-protocol: 1.7.0
       pg-types: 4.0.2
 
@@ -7319,7 +7300,7 @@ snapshots:
 
   '@types/through@0.0.33':
     dependencies:
-      '@types/node': 22.7.6
+      '@types/node': 22.7.7
 
   '@types/tinycolor2@1.4.6': {}
 
@@ -7333,7 +7314,7 @@ snapshots:
 
   '@types/ws@8.5.12':
     dependencies:
-      '@types/node': 22.7.6
+      '@types/node': 22.7.7
 
   '@types/yargs-parser@21.0.3': {}
 
@@ -9273,11 +9254,11 @@ snapshots:
 
   kind-of@6.0.3: {}
 
-  knip@5.33.3(@types/node@22.7.6)(typescript@5.6.3):
+  knip@5.33.3(@types/node@22.7.7)(typescript@5.6.3):
     dependencies:
       '@nodelib/fs.walk': 1.2.8
       '@snyk/github-codeowners': 1.1.0
-      '@types/node': 22.7.6
+      '@types/node': 22.7.7
       easy-table: 1.2.0
       enhanced-resolve: 5.17.1
       fast-glob: 3.3.2
@@ -9782,15 +9763,9 @@ snapshots:
 
   netmask@2.0.2: {}
 
-  next-auth@5.0.0-beta.22(next@15.0.0-rc.1(babel-plugin-react-compiler@19.0.0-beta-9ee70a1-20241017)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614):
+  next-auth@5.0.0-beta.25(next@15.0.0-rc.1(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614):
     dependencies:
-      '@auth/core': 0.35.3
-      next: 15.0.0-rc.1(babel-plugin-react-compiler@19.0.0-beta-9ee70a1-20241017)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
-      react: 19.0.0-rc-fb9a90fa48-20240614
-
-  next-auth@5.0.0-beta.23(next@15.0.0-rc.1(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614):
-    dependencies:
-      '@auth/core': 0.37.1
+      '@auth/core': 0.37.2
       next: 15.0.0-rc.1(babel-plugin-react-compiler@19.0.0-beta-9ee70a1-20241017)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       react: 19.0.0-rc-fb9a90fa48-20240614
 
@@ -9869,8 +9844,6 @@ snapshots:
   npm-run-path@4.0.1:
     dependencies:
       path-key: 3.1.1
-
-  oauth4webapi@2.17.0: {}
 
   oauth4webapi@3.1.1: {}
 
@@ -10138,13 +10111,13 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.4.47
 
-  postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.9.2(@types/node@22.7.6)(typescript@5.6.3)):
+  postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.9.2(@types/node@22.7.7)(typescript@5.6.3)):
     dependencies:
       lilconfig: 3.1.2
       yaml: 2.6.0
     optionalDependencies:
       postcss: 8.4.47
-      ts-node: 10.9.2(@types/node@22.7.6)(typescript@5.6.3)
+      ts-node: 10.9.2(@types/node@22.7.7)(typescript@5.6.3)
 
   postcss-nested@6.2.0(postcss@8.4.47):
     dependencies:
@@ -10306,7 +10279,7 @@ snapshots:
       react: 19.0.0-rc-fb9a90fa48-20240614
       scheduler: 0.25.0-rc-fb9a90fa48-20240614
 
-  react-hook-form@7.53.0(react@19.0.0-rc-fb9a90fa48-20240614):
+  react-hook-form@7.53.1(react@19.0.0-rc-fb9a90fa48-20240614):
     dependencies:
       react: 19.0.0-rc-fb9a90fa48-20240614
 
@@ -10865,11 +10838,11 @@ snapshots:
 
   tailwind-merge@2.5.4: {}
 
-  tailwindcss-animate@1.0.7(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.7.6)(typescript@5.6.3))):
+  tailwindcss-animate@1.0.7(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.7.7)(typescript@5.6.3))):
     dependencies:
-      tailwindcss: 3.4.14(ts-node@10.9.2(@types/node@22.7.6)(typescript@5.6.3))
+      tailwindcss: 3.4.14(ts-node@10.9.2(@types/node@22.7.7)(typescript@5.6.3))
 
-  tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.7.6)(typescript@5.6.3)):
+  tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.7.7)(typescript@5.6.3)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -10888,7 +10861,7 @@ snapshots:
       postcss: 8.4.47
       postcss-import: 15.1.0(postcss@8.4.47)
       postcss-js: 4.0.1(postcss@8.4.47)
-      postcss-load-config: 4.0.2(postcss@8.4.47)(ts-node@10.9.2(@types/node@22.7.6)(typescript@5.6.3))
+      postcss-load-config: 4.0.2(postcss@8.4.47)(ts-node@10.9.2(@types/node@22.7.7)(typescript@5.6.3))
       postcss-nested: 6.2.0(postcss@8.4.47)
       postcss-selector-parser: 6.1.2
       resolve: 1.22.8
@@ -10948,14 +10921,14 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  ts-node@10.9.2(@types/node@22.7.6)(typescript@5.6.3):
+  ts-node@10.9.2(@types/node@22.7.7)(typescript@5.6.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 22.7.6
+      '@types/node': 22.7.7
       acorn: 8.13.0
       acorn-walk: 8.3.4
       arg: 4.1.3
