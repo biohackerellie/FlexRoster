@@ -92,3 +92,5 @@ if gum confirm "Release to production?"; then
   else
     git push origin release
   fi
+  git checkout develop
+fi
