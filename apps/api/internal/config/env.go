@@ -33,8 +33,12 @@ type Env struct {
 	AzureTeacherGroup       string           `mapstructure:"azure_teacher_group"`
 	AzureHelpdeskGroup      string           `mapstructure:"azure_helpdesk_group"`
 	AzureOtherUsersGroup    string           `mapstructure:"azure_otherusers_group"`
+	EmailService            bool             `mapstructure:"email_service"`
 	EmailAPI                string           `mapstructure:"email_api"`
 	EmailAPIKey             string           `mapstructure:"email_api_key"`
+	EmailSMTPHost           string           `mapstructure:"email_smtp_host"`
+	EmailUser               string           `mapstructure:"email_user"`
+	EmailPassword           string           `mapstructure:"email_password"`
 	SemesterClassName       string           `mapstructure:"semester_class_name"`
 	Secretaries             []string         `mapstructure:"secretaries"`
 	PreferredNames          []PreferredNames `mapstructure:"preferred_names"`

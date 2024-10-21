@@ -31,7 +31,7 @@ type ClassroomDBService interface {
 
 type LogsDBService interface {
 	GetAllLogs(ctx context.Context) ([]*service.Logs, error)
-	AddLog(ctx context.Context, id int, user *string, logType string, action string) error
+	AddLog(ctx context.Context, log *service.Logs) error
 	AddLogs(ctx context.Context, logs []*service.Logs) error
 }
 
@@ -40,6 +40,7 @@ type RequestDBService interface {
 	GetAllRequests(ctx context.Context) ([]*service.RequestWithNewClassroom, error)
 	NewRequest(ctx context.Context, request *service.Request) error
 	UpdateRequest(ctx context.Context, id int32, status service.RequestStatus) error
+	GetRequestDate(ctx context.Context, id int32) (time.Time, error)
 }
 
 type StudentDBService interface {
