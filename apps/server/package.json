@@ -29,7 +29,7 @@
     "@local/db": "workspace:*",
     "@sinclair/typebox": "^0.33.17",
     "effect": "^3.9.2",
-    "elysia": "^1.1.22",
+    "elysia": "^1.1.23",
     "ioredis": "^5.4.1",
     "logestic": "^1.2.4",
     "nanoid": "^5.0.7",
