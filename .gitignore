@@ -37,6 +37,7 @@ env.yaml
 .env*.local
 .env.config
 config.yaml
+config.yml
 # vercel
 .vercel
 
