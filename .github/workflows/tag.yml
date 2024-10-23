@@ -17,39 +17,21 @@ jobs:
     steps: 
     - uses: actions/checkout@v4
       with:
-        ref: canary
-      
+        fetch-depth: 0
+    - name: Set up Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
 
-jobs:
-  auto-tag:
-    runs-on: ubuntu-latest
 
-    steps:
-      # 1. Checkout Repository with full history to access all tags
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    - name: Determine Current Branch
+      id: current_branch
+      run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
 
-      # 2. Set up Git for committing tags
-      - name: Set up Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      # 3. Determine Current Branch
-      - name: Determine Current Branch
-        id: current_branch
-        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
-
-      # 4. Parse Commit Messages for Version Bump
-      - name: Determine Version Bump
-        id: version_bump
-        run: |
-          # Initialize bump type as patch
-          BUMP_TYPE="patch"
-
-          # Iterate through commit messages in the push
+    - name: Determine Version Bump
+      id: version_bump
+      run: |
+        BUMP_TYPE="patch"
           for COMMIT in $(git log origin/${{ env.branch }}..HEAD --pretty=format:"%s"); do
             if [[ "$COMMIT" == *":major"* ]]; then
               BUMP_TYPE="major"
@@ -67,12 +49,10 @@ jobs:
 
           echo "bump_type=$BUMP_TYPE" >> $GITHUB_ENV
           echo "::set-output name=bump_type::$BUMP_TYPE"
-
-      # 5. Get Latest Tag
-      - name: Get Latest Tag
-        id: get_latest_tag
-        run: |
-          BRANCH=${{ env.branch }}
+    - name: Get Latest Tag
+      id: get_latest_tag
+      run: |
+        BRANCH=${{ env.branch }}
           if [ "$BRANCH" == "release" ]; then
             # Get the latest release tag matching vX.Y.Z
             TAG=$(git tag --list 'v*' --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
@@ -82,12 +62,10 @@ jobs:
           fi
           echo "latest_tag=$TAG" >> $GITHUB_ENV
           echo "::set-output name=latest_tag::$TAG"
-
-      # 6. Calculate Next Tag
-      - name: Calculate Next Tag
-        id: next_tag
-        run: |
-          BRANCH=${{ env.branch }}
+    - name: Calculate Next Tag
+      id: next_tag
+      run: |
+        BRANCH=${{ env.branch }}
           BUMP_TYPE=${{ env.bump_type }}
           CURRENT_TAG=${{ env.latest_tag }}
 
@@ -128,6 +106,7 @@ jobs:
           fi
 
           echo "NEXT_TAG=$NEXT_TAG" >> $GITHUB_ENV
+
     - uses: phish108/autotag-action@v1.1.55
       env:
         github-token: ${{ secrets.GITHUB_TOKEN}}
