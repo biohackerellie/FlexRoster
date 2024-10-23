@@ -108,7 +108,7 @@ jobs:
           echo "NEXT_TAG=$NEXT_TAG" >> $GITHUB_ENV
 
     - uses: phish108/autotag-action@v1.1.55
-      env:
+      with:
         github-token: ${{ secrets.GITHUB_TOKEN}}
         with-v: "true"
         branch: canary
