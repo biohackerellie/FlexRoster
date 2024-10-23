@@ -123,9 +123,7 @@ importers:
         specifier: ^5.0.7
         version: 5.0.7
       next:
-
         specifier: ^15.0.1
-
         version: 15.0.1(babel-plugin-react-compiler@19.0.0-beta-9ee70a1-20241017)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       next-auth:
         specifier: 5.0.0-beta.25
@@ -240,8 +238,8 @@ importers:
         specifier: ^0.33.17
         version: 0.33.17
       effect:
-        specifier: ^3.9.2
-        version: 3.9.2
+        specifier: ^3.10.1
+        version: 3.10.1
       elysia:
         specifier: ^1.1.23
         version: 1.1.23(@sinclair/typebox@0.33.17)(openapi-types@12.1.3)(typescript@5.6.3)
@@ -322,9 +320,7 @@ importers:
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
       next:
-
         specifier: ^15.0.1
-
         version: 15.0.1(babel-plugin-react-compiler@19.0.0-beta-9ee70a1-20241017)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       next-auth:
         specifier: beta
@@ -357,7 +353,6 @@ importers:
       drizzle-orm:
         specifier: ^0.35.3
         version: 0.35.3(@libsql/client-wasm@0.14.0)(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4)
-
       postgres:
         specifier: ^3.4.4
         version: 3.4.4
@@ -524,9 +519,7 @@ importers:
     dependencies:
       drizzle-zod:
         specifier: ^0.5.1
-
         version: 0.5.1(drizzle-orm@0.35.3(@libsql/client-wasm@0.14.0)(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4))(zod@3.23.8)
-
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -3142,8 +3135,8 @@ packages:
   easy-table@1.2.0:
     resolution: {integrity: sha512-OFzVOv03YpvtcWGe5AayU5G2hgybsg3iqA6drU8UaoZyB9jLGMTrz9+asnLp/E+6qPh88yEI1gvyZFZ41dmgww==}
 
-  effect@3.9.2:
-    resolution: {integrity: sha512-1sx/v1HTWHTodXfzWxAFg+SCF+ACgpJVruaAMIh/NmDVvrUsf0x9PzpXvkgJUbQ1fMdmKYK//FqxeHSQ+Zxv/Q==}
+  effect@3.10.1:
+    resolution: {integrity: sha512-Ny0I3WvGykUnlgmQVkNVbkXHE/pPTWVwmnYfpVZYyLlpe53LVyWViY9+a/7iS/Rqml0xUwJoXx5HK6ksK09Y2Q==}
 
   electron-to-chromium@1.5.41:
     resolution: {integrity: sha512-dfdv/2xNjX0P8Vzme4cfzHqnPm5xsZXwsolTYr0eyW18IUmNyG08vL+fttvinTfhKfIKdRoqkDIC9e9iWQCNYQ==}
@@ -3419,6 +3412,10 @@ packages:
   external-editor@3.1.0:
     resolution: {integrity: sha512-hMQ4CX1p1izmuLYyZqLMO/qGNw10wSv9QDCPfzXfyFrOaCSSoRfqE1Kf1s5an66J5JZC62NewG+mK49jOCtQew==}
     engines: {node: '>=4'}
+
+  fast-check@3.22.0:
+    resolution: {integrity: sha512-8HKz3qXqnHYp/VCNn2qfjHdAdcI8zcSqOyX64GOMukp7SL2bfzfeDKjSd+UyECtejccaZv3LcvZTm9YDD22iCQ==}
+    engines: {node: '>=8.0.0'}
 
   fast-decode-uri-component@1.0.1:
     resolution: {integrity: sha512-WKgKWg5eUxvRZGwW8FvfbaH7AXSh2cL+3j5fMGzUMCxWBJ3dV3a7Wz8y2f/uQ0e3B6WmodD3oS54jTQ9HVTIIg==}
@@ -4853,6 +4850,9 @@ packages:
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
+
+  pure-rand@6.1.0:
+    resolution: {integrity: sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==}
 
   pusher-js@8.3.0:
     resolution: {integrity: sha512-6GohP06WlVeomAQQe9qWh1IDzd3+InluWt+ZUOcecVK1SEQkg6a8uYVsvxSJm7cbccfmHhE0jDkmhKIhue8vmA==}
@@ -7990,11 +7990,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-
   drizzle-orm@0.35.3(@libsql/client-wasm@0.14.0)(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4):
     dependencies:
       '@libsql/client-wasm': 0.14.0
-
     optionalDependencies:
       '@types/pg': 8.11.10
       '@types/react': 18.3.11
@@ -8002,11 +8000,9 @@ snapshots:
       pg: 8.13.0
       postgres: 3.4.4
 
-
   drizzle-zod@0.5.1(drizzle-orm@0.35.3(@libsql/client-wasm@0.14.0)(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4))(zod@3.23.8):
     dependencies:
       drizzle-orm: 0.35.3(@libsql/client-wasm@0.14.0)(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4)
-
       zod: 3.23.8
 
   eastasianwidth@0.2.0: {}
@@ -8017,7 +8013,9 @@ snapshots:
     optionalDependencies:
       wcwidth: 1.0.1
 
-  effect@3.9.2: {}
+  effect@3.10.1:
+    dependencies:
+      fast-check: 3.22.0
 
   electron-to-chromium@1.5.41: {}
 
@@ -8533,6 +8531,10 @@ snapshots:
       chardet: 0.7.0
       iconv-lite: 0.4.24
       tmp: 0.0.33
+
+  fast-check@3.22.0:
+    dependencies:
+      pure-rand: 6.1.0
 
   fast-decode-uri-component@1.0.1: {}
 
@@ -10180,6 +10182,8 @@ snapshots:
   proxy-from-env@1.1.0: {}
 
   punycode@2.3.1: {}
+
+  pure-rand@6.1.0: {}
 
   pusher-js@8.3.0:
     dependencies:
