@@ -21,6 +21,7 @@
     "@local/db": "workspace:*",
     "@local/tsconfig": "workspace:*",
     "@t3-oss/env-nextjs": "^0.11.1",
+
     "next": "^15.0.1",
     "next-auth": "beta",
     "react": "catalog:react19",

@@ -14,13 +14,13 @@
   },
   "dependencies": {
     "@eslint/compat": "^1.2.1",
-    "@next/eslint-plugin-next": "^14.2.15",
+    "@next/eslint-plugin-next": "^14.2.16",
     "@typescript-eslint/eslint-plugin": "^8.10.0",
     "@typescript-eslint/parser": "^8.10.0",
     "eslint-config-turbo": "^2.2.3",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jsx-a11y": "^6.10.0",
-    "eslint-plugin-react": "^7.37.1",
+    "eslint-plugin-jsx-a11y": "^6.10.1",
+    "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-compiler": "19.0.0-beta-9ee70a1-20241017",
     "eslint-plugin-react-hooks": "^5.0.0",
     "typescript-eslint": "^8.10.0"
