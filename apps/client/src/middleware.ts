@@ -4,7 +4,6 @@ import NextAuth from "next-auth";
 
 import authConfig from "@local/auth/auth.config";
 
-// @ts-ignore - authjs has the worst types
 const { auth: middleware } = NextAuth(authConfig);
 
 export default middleware((req) => {
@@ -12,7 +11,9 @@ export default middleware((req) => {
   const token = req.auth;
 
   const path = req.nextUrl.pathname;
-
+  if (path === "/api/auth/signin") {
+    return NextResponse.redirect(new URL("/auth, request.url"));
+  }
   if (!token) {
     if (path.startsWith("/dashboard")) {
       return NextResponse.redirect(new URL("/login", req.url));
@@ -20,7 +21,6 @@ export default middleware((req) => {
 
     return NextResponse.next();
   }
-  // @ts-ignore - authjs has the worst types
   const role = token?.user?.roles ?? "student";
 
   switch (role) {

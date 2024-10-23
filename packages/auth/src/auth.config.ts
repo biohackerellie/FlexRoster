@@ -35,7 +35,7 @@ export default {
       allowDangerousEmailAccountLinking: true,
     }),
   ],
-
+  debug: process.env.NODE_ENV === "development",
   trustHost: true,
   pages: {
     signIn: "/login",

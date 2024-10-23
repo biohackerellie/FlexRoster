@@ -1,6 +1,6 @@
 {
   "name": "@local/auth",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -20,8 +20,10 @@
     "@auth/drizzle-adapter": "^1.7.2",
     "@local/db": "workspace:*",
     "@local/tsconfig": "workspace:*",
+    "@oslojs/crypto": "^1.0.1",
+    "@oslojs/encoding": "^1.1.0",
     "@t3-oss/env-nextjs": "^0.11.1",
-
+    "arctic": "^2.0.1",
     "next": "^15.0.1",
     "next-auth": "beta",
     "react": "catalog:react19",

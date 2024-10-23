@@ -1,10 +1,12 @@
+import Form from "next/form";
+
 import { signIn } from "@local/auth";
 import { Button } from "@local/ui/button";
 
 const LoginButton = () => {
   return (
     <div className="flex py-2">
-      <form
+      <Form
         action={async () => {
           "use server";
 
@@ -17,7 +19,7 @@ const LoginButton = () => {
         <Button type="submit" variant="outline" className="w-full">
           Sign in
         </Button>
-      </form>
+      </Form>
     </div>
   );
 };

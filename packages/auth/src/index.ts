@@ -1,69 +1,69 @@
-import type { DefaultSession, NextAuthConfig } from "next-auth";
-import { Adapter } from "@auth/core/adapters";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import NextAuth from "next-auth";
-import { decode, getToken } from "next-auth/jwt";
+import { db, eq, schema, type SelectUser } from "@local/db";
+import { encodeBase32, encodeHexLowerCase } from "@oslojs/encoding";
+import { sha256 } from "@oslojs/crypto/sha2";
+import { cookies } from "next/headers";
+import { cache } from "react";
 
-import { db, InferSelectModel, pgTable, PgTableFn, schema } from "@local/db";
-
-import authConfig from "./auth.config";
-
-export type { Session } from "next-auth";
-
-const { users, accounts, sessions, verificationTokens } = schema;
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: string;
-      roles: "student" | "teacher" | "admin" | "secretary";
-    } & DefaultSession["user"];
+export async function validateSessionToken(
+  token: string,
+): Promise<SessionValidationResult> {
+  const sessionToken = encodeHexLowerCase(
+    sha256(new TextEncoder().encode(token)),
+  );
+  const dbsession = await db.query.sessions.findFirst({
+    with: {
+      users: true,
+    },
+    where: eq(schema.sessions.sessionToken, sessionToken),
+  });
+  if (!dbsession) {
+    return { session: null, user: null };
   }
-  interface JWT {
-    id: string;
-    roles: "student" | "teacher" | "admin" | "secretary";
+  const session: Session = {
+    token: dbsession.sessionToken,
+    userId: dbsession.userId,
+    expiresAt: new Date(dbsession.expires),
+  };
+  const user: SelectUser = dbsession.users;
+
+  if (Date.now() >= session.expiresAt.getTime()) {
+    await db
+      .delete(schema.sessions)
+      .where(eq(schema.sessions.sessionToken, sessionToken));
+    return { session: null, user: null };
   }
+
+  if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
+    session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
+
+    await db
+      .update(schema.sessions)
+      .set({
+        expires: session.expiresAt,
+      })
+      .where(eq(schema.sessions.sessionToken, sessionToken));
+  }
+  return { session, user };
 }
 
-declare module "@auth/core/adapters" {
-  export interface AdapterUser extends InferSelectModel<typeof users> {
-    roles: "student" | "teacher" | "admin" | "secretary";
-  }
-}
-
-type TableFnParams = Parameters<PgTableFn>;
-
-function dumbAdapter(
-  name: TableFnParams[0],
-  columns: TableFnParams[1],
-  extraConfig: TableFnParams[2],
-) {
-  switch (name) {
-    case "user":
-      return users;
-    case "account":
-      return accounts;
-    case "session":
-      return sessions;
-    case "verificationToken":
-      return verificationTokens;
-    default:
-      return pgTable(name, columns, extraConfig);
-  }
-}
-export const adapter = DrizzleAdapter(db) as Adapter;
-
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth({
-  secret: process.env.NEXTAUTH_SECRET,
-  adapter: adapter,
-  session: {
-    strategy: "jwt",
+export const getCurrentSession = cache(
+  async (): Promise<SessionValidationResult> => {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("session")?.value ?? null;
+    if (token === null) {
+      return { session: null, user: null };
+    }
+    const result = await validateSessionToken(token);
+    return result;
   },
-  ...authConfig,
-});
+);
 
-export { decode, getToken, authConfig };
+export interface Session {
+  token: string;
+  expiresAt: Date;
+  userId: string;
+}
+
+type SessionValidationResult =
+  | { session: Session; user: SelectUser }
+  | { session: null; user: null };

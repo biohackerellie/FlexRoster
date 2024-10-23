@@ -174,6 +174,10 @@ export const userRelations = relations(users, ({ one, many }) => ({
   newTeacherRequests: many(requests, { relationName: "newTeacher" }),
   currentTeacherRequests: many(requests, { relationName: "currentTeacher" }),
   availability: many(availability),
+  sessions: one(sessions, {
+    fields: [users.id],
+    references: [sessions.userId],
+  }),
 }));
 export type SelectUser = typeof users.$inferSelect;
 export const accounts = pgTable(
@@ -229,7 +233,12 @@ export const sessions = pgTable("session", {
     .references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
 });
-
+export const sessionRelations = relations(sessions, ({ one }) => ({
+  users: one(users, {
+    fields: [sessions.userId],
+    references: [users.id],
+  }),
+}));
 export const verificationTokens = pgTable(
   "verificationToken",
   {

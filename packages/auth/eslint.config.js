@@ -6,5 +6,5 @@ export default [
     ignores: [],
   },
   ...baseConfig,
-	...restrictEnvAccess
+  ...restrictEnvAccess,
 ];
