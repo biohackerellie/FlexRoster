@@ -13,7 +13,19 @@ env:
   CLIENT_IMAGE_NAME: biohackerellie/flexclient
   SERVER_IMAGE_NAME: biohackerellie/flexserver
 jobs:
+  tag:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: 
+        - 22
+    steps: 
+    - uses: phish108/autotag-action@v1.1.55
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN}}
+        with-v: "true"
   goreleaser-api:
+    needs: tag
     if: ${{ github.ref == 'refs/heads/release' }}
     permissions:
       contents: write
@@ -51,6 +63,7 @@ jobs:
           TAPSTOKEN: ${{secrets.TAPSTOKEN}}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
   build-and-push-client:
+    needs: tag
     if: ${{ github.ref == 'refs/heads/release' }}
     runs-on: ubuntu-latest
 
@@ -97,6 +110,7 @@ jobs:
           push-to-registry: true
 
   build-and-push-server:
+    needs: tag
     runs-on: ubuntu-latest
 
     permissions:
