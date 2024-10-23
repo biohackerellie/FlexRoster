@@ -20,10 +20,15 @@ jobs:
         node-version: 
         - 22
     steps: 
-    - uses: phish108/autotag-action@v1.1.55
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN}}
-        with-v: "true"
+      - uses: actions/checkout@v4
+        with:
+          ref: release
+      - uses: phish108/autotag-action@v1.1.55
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN}}
+          with-v: "true"
+          branch: release
+          bump: release::patch
   goreleaser-api:
     needs: tag
     if: ${{ github.ref == 'refs/heads/release' }}

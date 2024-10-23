@@ -4,7 +4,7 @@ name: Custom Auto Tag
 on:
   workflow_dispatch:
   push:
-    branches: ["canary", "develop"]
+    branches: ["canary"]
 permissions:
   contents: write
 jobs:
@@ -15,7 +15,13 @@ jobs:
         node-version: 
         - 22
     steps: 
+    - uses: actions/checkout@v4
+      with:
+        ref: canary
+      
     - uses: phish108/autotag-action@v1.1.55
       with:
         github-token: ${{ secrets.GITHUB_TOKEN}}
         with-v: "true"
+        branch: canary
+
