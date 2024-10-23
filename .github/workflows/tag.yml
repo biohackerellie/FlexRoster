@@ -4,9 +4,10 @@ name: Custom Auto Tag
 on:
   workflow_dispatch:
   push:
-    branches: ["canary", "develop"]
+    branches: ["canary"]
 permissions:
   contents: write
+
 jobs:
   tag:
     runs-on: ubuntu-latest
@@ -15,7 +16,99 @@ jobs:
         node-version: 
         - 22
     steps: 
-    - uses: phish108/autotag-action@v1.1.55
+    - uses: actions/checkout@v4
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN}}
-        with-v: "true"
+        fetch-depth: 0
+    - name: Set up Git
+      run: |
+        git config user.name "biohackerellie"
+        git config user.email "ellie@epklabs.com"
+
+
+    - name: Determine Current Branch
+      id: current_branch
+      run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+
+    - name: Determine Version Bump
+      id: version_bump
+      run: |
+        BUMP_TYPE="patch"
+          for COMMIT in $(git log origin/${{ env.branch }}..HEAD --pretty=format:"%s"); do
+            if [[ "$COMMIT" == *":major"* ]]; then
+              BUMP_TYPE="major"
+              break
+            elif [[ "$COMMIT" == *":minor"* ]]; then
+              if [[ "$BUMP_TYPE" != "major" ]]; then
+                BUMP_TYPE="minor"
+              fi
+            elif [[ "$COMMIT" == *":patch"* ]]; then
+              if [[ "$BUMP_TYPE" != "major" && "$BUMP_TYPE" != "minor" ]]; then
+                BUMP_TYPE="patch"
+              fi
+            fi
+          done
+
+          echo "bump_type=$BUMP_TYPE" >> $GITHUB_ENV
+          echo "::set-output name=bump_type::$BUMP_TYPE"
+    - name: Get Latest Tag
+      id: get_latest_tag
+      run: |
+        BRANCH=${{ env.branch }}
+          if [ "$BRANCH" == "release" ]; then
+            # Get the latest release tag matching vX.Y.Z
+            TAG=$(git tag --list 'v*' --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+          else
+            # Get the latest tag for develop or canary matching vX.Y.Z-branch.N
+            TAG=$(git tag --list "v*-$BRANCH.*" --sort=-v:refname | head -n 1)
+          fi
+          echo "latest_tag=$TAG" >> $GITHUB_ENV
+          echo "::set-output name=latest_tag::$TAG"
+    - name: Calculate Next Tag
+      id: next_tag
+      run: |
+        BRANCH=${{ env.branch }}
+          BUMP_TYPE=${{ env.bump_type }}
+          CURRENT_TAG=${{ env.latest_tag }}
+
+          if [ -z "$CURRENT_TAG" ]; then
+            # No existing tags, start with v1.0.0 or v1.0.0-branch.1
+            if [ "$BRANCH" == "release" ]; then
+              NEXT_TAG="v1.0.0"
+            else
+              NEXT_TAG="v1.0.0-$BRANCH.1"
+            fi
+          else
+            if [ "$BRANCH" == "release" ]; then
+              # Extract X.Y.Z from the tag
+              VERSION=$(echo $CURRENT_TAG | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+)$/\1/')
+              MAJOR=$(echo $VERSION | cut -d. -f1)
+              MINOR=$(echo $VERSION | cut -d. -f2)
+              PATCH=$(echo $VERSION | cut -d. -f3)
+
+              if [ "$BUMP_TYPE" == "major" ]; then
+                MAJOR=$((MAJOR + 1))
+                MINOR=0
+                PATCH=0
+              elif [ "$BUMP_TYPE" == "minor" ]; then
+                MINOR=$((MINOR + 1))
+                PATCH=0
+              elif [ "$BUMP_TYPE" == "patch" ]; then
+                PATCH=$((PATCH + 1))
+              fi
+
+              NEXT_TAG="v$MAJOR.$MINOR.$PATCH"
+            else
+              # Extract X.Y.Z-branch.N from the tag
+              BASE_VERSION=$(echo $CURRENT_TAG | sed -E "s/^v([0-9]+\.[0-9]+\.[0-9]+)-$BRANCH\.[0-9]+$/\1/")
+              CURRENT_SUFFIX=$(echo $CURRENT_TAG | sed -E "s/^v$BASE_VERSION-$BRANCH\.([0-9]+)$/\1/")
+              NEXT_SUFFIX=$((CURRENT_SUFFIX + 1))
+              NEXT_TAG="v$BASE_VERSION-$BRANCH.$NEXT_SUFFIX"
+            fi
+          fi
+
+          echo "NEXT_TAG=$NEXT_TAG" >> $GITHUB_ENV
+    - name: Push action
+      run: |
+        MERGE_COMMIT=$(git rev-parse HEAD)
+        git tag -a "$NEXT_TAG" "$MERGE_COMMIT" -m "Tagging"
+        git push origin canary --tags
