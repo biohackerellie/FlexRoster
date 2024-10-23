@@ -4,7 +4,7 @@ name: Custom Auto Tag
 on:
   workflow_dispatch:
   push:
-    branches: ["canary"]
+    branches: ["canary", "develop"]
 permissions:
   contents: write
 jobs:
