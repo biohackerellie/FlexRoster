@@ -26,6 +26,11 @@ func DateToPGDate(d time.Time) pgtype.Date {
 	return pgtype.Date{Time: d, Valid: true}
 }
 
+// date comparison
+func IsSameDate(date1, date2 time.Time) bool {
+	return date1.Equal(date2)
+}
+
 // Random Key Generator
 
 const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

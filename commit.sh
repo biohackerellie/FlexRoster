@@ -80,3 +80,17 @@ if gum confirm "Merge dev into canary and tag the commit in canary?"; then
   fi
   git checkout develop
 fi
+
+if gum confirm "Release to production?"; then
+  git checkout release
+  git pull --rebase
+  git merge canary
+  MERGE_2_COMMIT=$(git rev-parse HEAD) # Get the merge commit hash
+  if [ "$TAG" = true ]; then
+    git tag -a "$NEW_TAG" "$MERGE_2_COMMIT" -m "Tagging $NEW_TAG in production"
+    git push origin release --tags
+  else
+    git push origin release
+  fi
+  git checkout develop
+fi

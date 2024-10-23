@@ -26,7 +26,7 @@
     "db:introspect": "pnpm -F db introspect",
     "format": "turbo format --continue -- --cache --cache-location .turbo/.cache/.prettiercache",
     "format:fix": "turbo format --continue -- --write --cache --cache-location .turbo/.cache/.prettiercache",
-    "lint": "turbo lint --continue -- --cache --cache-location .turbo/.cache/.eslintcache",
+    "lint": "turbo lint --continue -- --quiet --cache --cache-location .turbo/.cache/.eslintcache",
     "lint:fix": "turbo lint --continue -- --fix  --cache --cache-location .turbo/.cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
     "lint:ws:fix": "pnpm dlx sherif@latest --fix",
@@ -37,9 +37,9 @@
   "devDependencies": {
     "@local/prettier-config": "workspace:*",
     "@total-typescript/ts-reset": "^0.6.1",
-    "@turbo/gen": "^2.1.3",
+    "@turbo/gen": "^2.2.3",
     "prettier": "catalog:",
-    "turbo": "^2.1.3",
+    "turbo": "^2.2.3",
     "typescript": "catalog:"
   },
   "prettier": "@local/prettier-config",

@@ -1,70 +1,17 @@
-# .github/workflows/release.yml
-name: Release
-
+name: Docker
 on:
   workflow_dispatch:
-  push:
-    branches: ["release"] 
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 env:
   REGISTRY: ghcr.io
   CLIENT_IMAGE_NAME: biohackerellie/flexclient
   SERVER_IMAGE_NAME: biohackerellie/flexserver
 jobs:
-  tag:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: 
-        - 22
-    steps: 
-    - uses: phish108/autotag-action@v1.1.55
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN}}
-        with-v: "true"
-  goreleaser-api:
-    needs: tag
-    if: ${{ github.ref == 'refs/heads/release' }}
-    permissions:
-      contents: write
-      id-token: write
-      packages: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: Import GPG key
-        id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: stable
-          cache: true
-          check-latest: true
-      - uses: anchore/sbom-action/download-syft@v0.17.5
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v6
-        with:
-          distribution: goreleaser
-          version: ${{ env.GITHUB_REF_NAME }}
-          args: release --clean
-          workdir: "./apps/api/"
-            
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAPSTOKEN: ${{secrets.TAPSTOKEN}}
-          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
   build-and-push-client:
-    needs: tag
-    if: ${{ github.ref == 'refs/heads/release' }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -110,7 +57,6 @@ jobs:
           push-to-registry: true
 
   build-and-push-server:
-    needs: tag
     runs-on: ubuntu-latest
 
     permissions:
