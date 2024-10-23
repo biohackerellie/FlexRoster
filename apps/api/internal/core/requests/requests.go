@@ -1,17 +1,16 @@
 package requests
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
-	"math/rand/v2"
-	"net/http"
-	"sync"
 	"time"
 
-	stringHelpers "api/internal/lib/strings"
+	"api/internal/lib/arrays"
+	"api/internal/lib/emails"
+	"api/internal/lib/strings"
 	"api/internal/service"
+
+	"golang.org/x/sync/errgroup"
 )
 
 func (a *Adapter) GetRequests(ctx context.Context, userId string) ([]*service.Request, error) {
@@ -32,198 +31,206 @@ func (a *Adapter) GetAllRequests(ctx context.Context) ([]*service.RequestWithNew
 	return requests, nil
 }
 
-var today = time.Now().Day()
-
 func (a *Adapter) NewRequest(ctx context.Context, teacherRequest bool, studentID string, dateRequested time.Time, newTeacher string) error {
-	var newRequest *service.Request
-	var status service.RequestStatus
+	var (
+		newRequest     *service.Request
+		status         service.RequestStatus
+		emailData      *emails.EmailData
+		newLog         *service.Logs
+		currentTeacher *service.Teacher
+		newTeacherRaw  *service.Teacher
+		student        *service.StudentWithUser
+		today          = time.Now().Day()
+	)
 	if teacherRequest {
 		status = service.RequestStatus_approved
 	} else {
 		status = service.RequestStatus_pending
 	}
 
-	wg := sync.WaitGroup{}
+	g := new(errgroup.Group)
 
-	c2 := make(chan *service.Teacher)
-	c3 := make(chan *service.Teacher)
+	g.Go(func() error {
+		var err error
+		student, err = a.users.GetStudent(ctx, studentID)
+		if err != nil {
+			a.log.Error("Error getting student data", "err", err)
+			return err
+		}
 
-	student, err := a.users.GetStudent(ctx, studentID)
-	if err != nil {
-		a.log.Error("Error getting student data", "err", err)
+		currentTeacher, err = a.users.GetTeacher(ctx, student.Classroom.TeacherId)
+		if err != nil {
+			a.log.Error("Error getting current teacher data", "err", err)
+			return err
+		}
+		return nil
+	})
+
+	g.Go(func() error {
+		var err error
+		newTeacherRaw, err = a.users.GetTeacher(ctx, newTeacher)
+		if err != nil {
+			a.log.Error("Error getting new teacher data", "err", err)
+			return err
+		}
+		return nil
+	})
+
+	if err := g.Wait(); err != nil {
 		return err
 	}
-
-	// get new teacher data
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		teacher, err := a.users.GetTeacher(ctx, newTeacher)
-		if err != nil {
-			a.log.Error("Error getting teacher data", "err", err)
-			return
-		}
-		c2 <- teacher
-	}()
-	// get current teacher data
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		teacher, err := a.users.GetTeacher(ctx, student.Classroom.TeacherId)
-		if err != nil {
-			a.log.Error("Error getting teacher data", "err", err)
-			return
-		}
-		c3 <- teacher
-	}()
-	go func() {
-		wg.Wait()
-		close(c2)
-		close(c3)
-	}()
-
-	newTeacherRaw := <-c2
-	currentTeacher := <-c3
 	timestamp := time.Now()
 	newRequest = &service.Request{
 		Status:             status,
 		StudentName:        student.Student.StudentName,
-		StudentID:          student.Student.StudentName,
+		StudentID:          student.User.Id,
 		DateRequested:      dateRequested,
 		CurrentTeacher:     currentTeacher.User.Id,
 		CurrentTeacherName: student.Classroom.TeacherName,
 		Arrived:            false,
 		Timestamp:          timestamp.String(),
-		Id:                 rand.Int32N(1000000000),
+		Id:                 int32(timestamp.Unix()),
 		NewTeacher:         newTeacher,
 		NewTeacherName:     newTeacherRaw.User.Name,
 	}
 
-	wg2 := sync.WaitGroup{}
-	type emailData struct {
-		to      string
-		subject string
-		message string
-	}
-	var newLog *service.Logs
+	// Prepare email data and log based on request type
 	if teacherRequest {
-		errChan := make(chan error)
-		newClassroomId := newTeacherRaw.Classroom.Id
-		if dateRequested.Day() == today {
-			st := service.Status_transferredN
-			wg2.Add(1)
-			go func() {
-				defer wg2.Done()
-				err := a.students.UpdateStudentRoster(ctx, newClassroomId, &st, student.Student.StudentEmail)
-				if err != nil {
-					errChan <- err
-					return
-				}
-			}()
+		emailData = &emails.EmailData{
+			To:      currentTeacher.User.Email,
+			Subject: "New Transfer Request",
+			HTML:    fmt.Sprintf("<h1>Transfer Request</h1><p>%s has requested to transfer %s to their classroom on %s</p>", newTeacherRaw.User.Name, student.Student.StudentName, dateRequested.Format("2006-01-02")),
 		}
-		wg2.Add(1)
-		go func() {
-			defer wg2.Done()
-			err := a.requests.NewRequest(ctx, newRequest)
-			if err != nil {
-				errChan <- err
-				return
-			}
-		}()
-		to := currentTeacher.User.Email
-		subject := "New Transfer Request"
-		message := fmt.Sprintf("<h1>Transfer Request</h1><p>%s has requested to transfer %s to their classroom on %s</p>", newTeacherRaw.User.Name, student.Student.StudentName, dateRequested)
-		wg2.Add(1)
-		go func() {
-			defer wg2.Done()
-			err := a.SendEmail(to, subject, message)
-			if err != nil {
-				errChan <- err
-			}
-			return
-		}()
+		newLog = &service.Logs{
+			Type:   service.LogType_request,
+			Action: fmt.Sprintf("%s transferred %s from %s at %s", newTeacherRaw.User.Name, student.Student.StudentName, currentTeacher.User.Name, dateRequested.Format("2006-01-02")),
+			User:   newTeacherRaw.User.Id,
+		}
 	} else {
-		go a.requests.NewRequest(ctx, newRequest)
+		emailData = &emails.EmailData{
+			To:      newTeacherRaw.User.Email,
+			Subject: "New Subject Request",
+			HTML:    fmt.Sprintf("<h1>Transfer Request</h1><p>%s has requested to be assigned to your classroom on %s</p>", student.Student.StudentName, dateRequested.Format("2006-01-02")),
+		}
+
+		newLog = &service.Logs{
+			Type:   service.LogType_request,
+			Action: fmt.Sprintf("%s requested to be assigned to %s at %s", student.Student.StudentName, newTeacherRaw.User.Name, dateRequested.Format("2006-01-02")),
+			User:   student.User.Id,
+		}
+	}
+
+	g = new(errgroup.Group)
+	// Create new request
+	g.Go(func() error {
+		return a.requests.NewRequest(ctx, newRequest)
+	})
+
+	// Send email
+	g.Go(func() error {
+		return emails.Send(emailData, a.config)
+	})
+
+	// Add log entry
+	g.Go(func() error {
+		return a.dblogs.AddLog(ctx, newLog)
+	})
+
+	// If teacherRequest and dateRequested is today, handle roster update
+	if teacherRequest && dateRequested.Day() == today {
+		st := service.Status_transferredN
+		g.Go(func() error {
+			return a.students.UpdateStudentRoster(ctx, newTeacherRaw.Classroom.Id, &st, student.Student.StudentEmail)
+		})
+	}
+
+	// Wait for all dependent operations to complete
+	if err := g.Wait(); err != nil {
+		return err
 	}
 	return nil
 }
 
 func (a *Adapter) GetTeacherRequests(ctx context.Context, teacherId string) (*service.TeacherRequests, error) {
-	requests := make([]*service.Request, 0)
-	cacheKey := stringHelpers.CacheKey("requests", teacherId+":teacher")
-	cacheRequests, err := a.cache.Get(cacheKey)
-
 	incomingRequests := make([]*service.Request, 0)
 	outgoingRequests := make([]*service.Request, 0)
-	if err == nil {
-		a.log.Info("Cache hit for teacher requests")
-		err = json.Unmarshal([]byte(cacheRequests), &requests)
-		if err != nil {
-			a.log.Error("Error unmarshalling requests from cache")
-		}
-	} else {
-		requests, err = a.GetRequests(ctx, teacherId)
-		if err != nil {
-			a.log.Error("Error getting requests from db", "err", err)
-		}
+	requests, err := a.GetRequests(ctx, teacherId)
+	if err != nil {
+		a.log.Error("Error getting requests from db", "err", err)
+	}
 
-		if len(requests) < 0 {
-			return &service.TeacherRequests{
-				IncomingRequests: incomingRequests,
-				OutgoingRequests: outgoingRequests,
-			}, nil
-		}
-
-		for _, r := range requests {
-			if r.Status.Is(service.RequestStatus_pending) {
-				if r.CurrentTeacher == teacherId {
-					outgoingRequests = append(outgoingRequests, r)
-				} else if r.NewTeacher == teacherId {
-					incomingRequests = append(incomingRequests, r)
-				}
-			}
-		}
-		result := &service.TeacherRequests{
+	if len(requests) < 0 {
+		return &service.TeacherRequests{
 			IncomingRequests: incomingRequests,
 			OutgoingRequests: outgoingRequests,
-		}
-		stringResult, _ := json.Marshal(result)
-
-		err = a.cache.Set(cacheKey, stringResult, 10*time.Minute)
-		if err != nil {
-			a.log.Error("Error setting requests in cache", "err", err)
-		}
-
-		return result, nil
+		}, nil
 	}
-	return nil, nil
+	today := time.Now().Day()
+	pendingRequests := arrays.EZFilter(requests, func(r *service.Request) bool {
+		return !r.Status.Is(service.RequestStatus_denied) && r.DateRequested.Day() == today
+	})
+
+	for _, r := range pendingRequests {
+		if r.CurrentTeacher == teacherId {
+			outgoingRequests = append(outgoingRequests, r)
+		} else if r.NewTeacher == teacherId {
+			incomingRequests = append(incomingRequests, r)
+		}
+	}
+	result := &service.TeacherRequests{
+		IncomingRequests: incomingRequests,
+		OutgoingRequests: outgoingRequests,
+	}
+	return result, nil
 }
 
-func (a *Adapter) SendEmail(to string, subject string, message string) error {
-	emailApi := a.config.EmailAPI
-	body := map[string]string{
-		"to":      to,
-		"from":    "FLEXROSTER Update",
-		"subject": subject,
-		"html":    message,
-	}
-	bodyBytes, err := json.Marshal(body)
-	if err != nil {
-		return err
-	}
-	req, err := http.NewRequest("POST", emailApi, bytes.NewBuffer(bodyBytes))
-	if err != nil {
-		return err
-	}
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("x-api-key", a.config.EmailAPIKey)
+func (a *Adapter) UpdateRequest(requestId string, studentId string, teacherId string, newTeacherId string, status service.RequestStatus) error {
+	var (
+		student        *service.StudentWithUser
+		currentTeacher *service.Teacher
+		newTeacherRaw  *service.Teacher
+		request        time.Time
+		today          = time.Now().Day()
+	)
+	g := new(errgroup.Group)
+	ctx := context.Background()
+	g.Go(func() error {
+		var err error
+		student, err = a.users.GetStudent(ctx, studentId)
+		if err != nil {
+			a.log.Error("Error getting student data", "err", err)
+			return err
+		}
 
-	client := &http.Client{}
+		currentTeacher, err = a.users.GetTeacher(ctx, student.Classroom.TeacherId)
+		if err != nil {
+			a.log.Error("Error getting current teacher data", "err", err)
+			return err
+		}
+		return nil
+	})
 
-	resp, err := client.Do(req)
-	if err != nil {
+	g.Go(func() error {
+		var err error
+		newTeacherRaw, err = a.users.GetTeacher(ctx, newTeacherId)
+		if err != nil {
+			a.log.Error("Error getting new teacher data", "err", err)
+			return err
+		}
+		return nil
+	})
+
+	g.Go(func() error {
+		var err error
+		id, _ := strings.StrToInt(requestId)
+		request, err = a.requests.GetRequestDate(ctx, int32(id))
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+
+	if err := g.Wait(); err != nil {
 		return err
 	}
-	defer resp.Body.Close()
-	return nil
 }

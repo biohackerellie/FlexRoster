@@ -54,3 +54,6 @@ VALUES (
 UPDATE "requests"
 SET "status" = $2
 WHERE "id" = $1;
+
+-- name: GetRequestDateById :one
+SELECT "requests"."dateRequested" FROM "requests" WHERE "id" = $1;

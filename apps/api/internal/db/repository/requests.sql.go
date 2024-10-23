@@ -85,6 +85,17 @@ func (q *Queries) AllStudentRequests(ctx context.Context, studentid string) ([]R
 	return items, nil
 }
 
+const getRequestDateById = `-- name: GetRequestDateById :one
+SELECT "requests"."dateRequested" FROM "requests" WHERE "id" = $1
+`
+
+func (q *Queries) GetRequestDateById(ctx context.Context, id int32) (pgtype.Date, error) {
+	row := q.db.QueryRow(ctx, getRequestDateById, id)
+	var dateRequested pgtype.Date
+	err := row.Scan(&dateRequested)
+	return dateRequested, err
+}
+
 const newRequest = `-- name: NewRequest :exec
 INSERT INTO "requests" (
   "status",

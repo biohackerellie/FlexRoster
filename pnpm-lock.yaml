@@ -98,9 +98,6 @@ importers:
       axios:
         specifier: ^1.7.7
         version: 1.7.7
-      babel-plugin-react-compiler:
-        specifier: 19.0.0-beta-9ee70a1-20241017
-        version: 19.0.0-beta-9ee70a1-20241017
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -126,7 +123,9 @@ importers:
         specifier: ^5.0.7
         version: 5.0.7
       next:
-        specifier: 15.0.1
+
+        specifier: ^15.0.1
+
         version: 15.0.1(babel-plugin-react-compiler@19.0.0-beta-9ee70a1-20241017)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       next-auth:
         specifier: 5.0.0-beta.25
@@ -198,6 +197,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.47)
+      babel-plugin-react-compiler:
+        specifier: 19.0.0-beta-9ee70a1-20241017
+        version: 19.0.0-beta-9ee70a1-20241017
       dotenv-cli:
         specifier: ^7.4.2
         version: 7.4.2
@@ -268,6 +270,9 @@ importers:
       '@local/utils':
         specifier: workspace:*
         version: link:../../packages/utils
+      '@types/bun':
+        specifier: ^1.1.12
+        version: 1.1.12
       '@types/chalk-animation':
         specifier: ^1.6.3
         version: 1.6.3
@@ -317,7 +322,9 @@ importers:
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
       next:
-        specifier: 15.0.1
+
+        specifier: ^15.0.1
+
         version: 15.0.1(babel-plugin-react-compiler@19.0.0-beta-9ee70a1-20241017)(react-dom@19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614))(react@19.0.0-rc-fb9a90fa48-20240614)
       next-auth:
         specifier: beta
@@ -348,8 +355,9 @@ importers:
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
       drizzle-orm:
-        specifier: ^0.34.1
-        version: 0.34.1(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4)
+        specifier: ^0.35.3
+        version: 0.35.3(@libsql/client-wasm@0.14.0)(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4)
+
       postgres:
         specifier: ^3.4.4
         version: 3.4.4
@@ -516,7 +524,9 @@ importers:
     dependencies:
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.34.1(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4))(zod@3.23.8)
+
+        version: 0.5.1(drizzle-orm@0.35.3(@libsql/client-wasm@0.14.0)(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4))(zod@3.23.8)
+
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -1497,6 +1507,14 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
+  '@libsql/client-wasm@0.14.0':
+    resolution: {integrity: sha512-gB/jtz0xuwrqAHApBv9e9JSew2030Fhj2edyZ83InZ4yPj/Q2LTUlEhaspEYT0T0xsAGqPy38uGrmq/OGS+DdQ==}
+    bundledDependencies:
+      - '@libsql/libsql-wasm-experimental'
+
+  '@libsql/core@0.14.0':
+    resolution: {integrity: sha512-nhbuXf7GP3PSZgdCY2Ecj8vz187ptHlZQ0VRc751oB2C1W8jQUXKKklvt7t1LJiUTQBVJuadF628eUk+3cRi4Q==}
+
   '@mdx-js/loader@3.1.0':
     resolution: {integrity: sha512-xU/lwKdOyfXtQGqn3VnJjlDrmKXEvMi1mgYxVmukEUtVycIz1nh7oQ40bKTd4cA7rLStqu0740pnhGYxGoqsCg==}
     peerDependencies:
@@ -2278,6 +2296,9 @@ packages:
   '@types/acorn@4.0.6':
     resolution: {integrity: sha512-veQTnWP+1D/xbxVrPC3zHnCZRjSrKfhbMUlEA43iMZLu7EsnTtkJklIuwrCPbOi8YkvDQAiW05VQQFvvz9oieQ==}
 
+  '@types/bun@1.1.12':
+    resolution: {integrity: sha512-UkewJesRDP3+AW30Gc8hvxuIt+vHgYZXmVOKaXV8xnwAnMXTAs3XZDsa/jW+LSdAYhHslokSm72lq63FYYjZqA==}
+
   '@types/chalk-animation@1.6.3':
     resolution: {integrity: sha512-UdaYgzPvgOAJY+5cn3y1rQK5EpJDJOBivF5ftFxe5lNruU1/zTPkmh11iVvRd8tyzVwx92QQLaAWi1fpBAj7aw==}
 
@@ -3019,13 +3040,14 @@ packages:
     resolution: {integrity: sha512-cMq8omEKywjIy5KcqUo6LvEFxkl8/zYHsgYjFVXjmPWWtuW4blcz+YW9+oIhoaALgs2ebRjzXwsJgN9i6P49Dw==}
     hasBin: true
 
-  drizzle-orm@0.34.1:
-    resolution: {integrity: sha512-t+zCwyWWt8xTqtYV4doE/xYmT7hpv1L8pQ66zddEz+3VWyedBBtctjMAp22mAJPfyWurRQXUJ1nrTtqLq+DqNA==}
+  drizzle-orm@0.35.3:
+    resolution: {integrity: sha512-Uv6N+b36x4BaZlxc96e+ag7RnMapBLGhc4SSi2F7RDwqYJipWjaU/P68RUp1FbW9r+mxoDp8nMz2Eece8PJxfA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
       '@electric-sql/pglite': '>=0.1.1'
       '@libsql/client': '>=0.10.0'
+      '@libsql/client-wasm': '>=0.10.0'
       '@neondatabase/serverless': '>=0.1'
       '@op-engineering/op-sqlite': '>=2'
       '@opentelemetry/api': ^1.4.1
@@ -3956,6 +3978,9 @@ packages:
         optional: true
       react:
         optional: true
+
+  js-base64@3.7.7:
+    resolution: {integrity: sha512-7rCnleh0z2CkXhH67J8K1Ytz0b2Y+yxTPL+/KOJoa20hfnVQ/3/T6W/KflYI4bRHRagNeXeU2bkNGI3v1oS/lw==}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -6380,6 +6405,15 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
+  '@libsql/client-wasm@0.14.0':
+    dependencies:
+      '@libsql/core': 0.14.0
+      js-base64: 3.7.7
+
+  '@libsql/core@0.14.0':
+    dependencies:
+      js-base64: 3.7.7
+
   '@mdx-js/loader@3.1.0(acorn@8.13.0)':
     dependencies:
       '@mdx-js/mdx': 3.1.0(acorn@8.13.0)
@@ -7146,6 +7180,10 @@ snapshots:
   '@types/acorn@4.0.6':
     dependencies:
       '@types/estree': 1.0.6
+
+  '@types/bun@1.1.12':
+    dependencies:
+      bun-types: 1.1.32
 
   '@types/chalk-animation@1.6.3': {}
 
@@ -7952,7 +7990,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.34.1(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4):
+
+  drizzle-orm@0.35.3(@libsql/client-wasm@0.14.0)(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4):
+    dependencies:
+      '@libsql/client-wasm': 0.14.0
+
     optionalDependencies:
       '@types/pg': 8.11.10
       '@types/react': 18.3.11
@@ -7960,9 +8002,11 @@ snapshots:
       pg: 8.13.0
       postgres: 3.4.4
 
-  drizzle-zod@0.5.1(drizzle-orm@0.34.1(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4))(zod@3.23.8):
+
+  drizzle-zod@0.5.1(drizzle-orm@0.35.3(@libsql/client-wasm@0.14.0)(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4))(zod@3.23.8):
     dependencies:
-      drizzle-orm: 0.34.1(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4)
+      drizzle-orm: 0.35.3(@libsql/client-wasm@0.14.0)(@types/pg@8.11.10)(@types/react@18.3.11)(bun-types@1.1.32)(pg@8.13.0)(postgres@3.4.4)
+
       zod: 3.23.8
 
   eastasianwidth@0.2.0: {}
@@ -9126,6 +9170,8 @@ snapshots:
     optionalDependencies:
       '@types/react': types-react@19.0.0-rc.1
       react: 19.0.0-rc-fb9a90fa48-20240614
+
+  js-base64@3.7.7: {}
 
   js-tokens@4.0.0: {}
 

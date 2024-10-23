@@ -28,7 +28,6 @@
     "@next/mdx": "^14.2.16",
     "@tanstack/react-table": "^8.20.5",
     "axios": "^1.7.7",
-    "babel-plugin-react-compiler": "19.0.0-beta-9ee70a1-20241017",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "elysia": "^1.1.23",
@@ -37,7 +36,9 @@
     "lucide-react": "^0.453.0",
     "mini-svg-data-uri": "^1.4.4",
     "nanoid": "^5.0.7",
-    "next": "15.0.1",
+
+    "next": "^15.0.1",
+
     "next-auth": "5.0.0-beta.25",
     "next-themes": "^0.3.0",
     "next-view-transitions": "^0.3.2",
@@ -63,6 +64,7 @@
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
     "autoprefixer": "^10.4.20",
+    "babel-plugin-react-compiler": "19.0.0-beta-9ee70a1-20241017",
     "dotenv-cli": "^7.4.2",
     "eslint": "catalog:",
     "jiti": "^2.3.3",

@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"time"
 
 	config "api/internal/config"
 	"api/internal/lib/logger"
@@ -119,4 +120,12 @@ func (s *RequestDBService) UpdateRequest(ctx context.Context, id int32, status s
 		Status: RequestStatus(status),
 	})
 	return err
+}
+
+func (s *RequestDBService) GetRequestDate(ctx context.Context, id int32) (time.Time, error) {
+	res, err := s.q.GetRequestDateById(ctx, id)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return res.Time, nil
 }

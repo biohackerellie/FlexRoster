@@ -47,17 +47,14 @@ func (s *LoggingDBService) GetAllLogs(ctx context.Context) ([]*service.Logs, err
 	return data, nil
 }
 
-func (s *LoggingDBService) AddLog(ctx context.Context, id int, user *string, logType string, action string) error {
-	if user != nil {
-		s.logger.Info("Inserting log with user ID: ", "user", *user)
-	} else {
-		s.logger.Info("Inserting log with no user ID")
-	}
+func (s *LoggingDBService) AddLog(ctx context.Context, log *service.Logs) error {
+	user := &log.User
+	safeUser := str.SafeStringPtr(user)
 	err := s.q.CreateLog(ctx, CreateLogParams{
-		ID:     str.IntToString(id),
-		User:   user,
-		Type:   logType,
-		Action: action,
+		ID:     str.IntToString(log.Id),
+		User:   &safeUser,
+		Type:   enumToString(log.Type),
+		Action: log.Action,
 	})
 	if err != nil {
 		return err
