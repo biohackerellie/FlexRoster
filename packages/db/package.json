@@ -43,7 +43,7 @@
     "dotenv-cli": "^7.4.2",
     "drizzle-kit": "^0.26.2",
     "eslint": "catalog:",
-    "pg": "^8.13.0",
+    "pg": "^8.13.1",
     "prettier": "catalog:",
     "tsx": "^4.19.1",
     "typescript": "catalog:"
