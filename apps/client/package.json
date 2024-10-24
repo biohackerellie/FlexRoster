@@ -25,7 +25,7 @@
     "@local/utils": "workspace:*",
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
-    "@next/mdx": "^14.2.16",
+    "@next/mdx": "^15.0.1",
     "@tanstack/react-table": "^8.20.5",
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",
