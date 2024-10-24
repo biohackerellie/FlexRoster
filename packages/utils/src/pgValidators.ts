@@ -18,7 +18,7 @@ export const userArrayValidator = z.array(selectUserValidator);
 export const insertUserValidator = createInsertSchema(schema.users);
 
 export type User = z.infer<typeof selectUserValidator>;
-
+export type NewUser = typeof schema.users.$inferInsert;
 /**
  * Student Profiles
  */

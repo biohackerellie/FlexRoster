@@ -1,25 +1,15 @@
 import Form from "next/form";
-
-import { signIn } from "@local/auth";
+import { Link } from "next-view-transitions";
 import { Button } from "@local/ui/button";
 
 const LoginButton = () => {
   return (
     <div className="flex py-2">
-      <Form
-        action={async () => {
-          "use server";
-
-          await signIn("azure-ad", {
-            redirect: true,
-            redirectTo: "/dashboard",
-          });
-        }}
-      >
-        <Button type="submit" variant="outline" className="w-full">
+      <Button type="submit" variant="outline" className="w-full" asChild>
+        <Link href="/api/auth/login" className="w-full">
           Sign in
-        </Button>
-      </Form>
+        </Link>
+      </Button>
     </div>
   );
 };

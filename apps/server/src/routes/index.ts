@@ -4,3 +4,4 @@ export { logRoutes } from "./logs";
 export { rosterRoutes } from "./rosters";
 export { userRoutes } from "./users";
 export { requestRoutes } from "./requests";
+export { authRoutes } from "./auth";

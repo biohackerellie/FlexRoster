@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { studentStatusSchema } from "./pgValidators";
+import { User } from "./pgValidators";
 
 export const messageValidator = z.object({
   id: z.string().optional(),
@@ -81,5 +81,14 @@ interface PreferredNames {
   givenName: string;
   preferredName: string;
 }
+export interface Session {
+  token: string;
+  expiresAt: Date;
+  userId: string;
+  role: string;
+}
 
+export type SessionValidationResult =
+  | { session: Session; user: User }
+  | { session: null; user: null };
 export * from "./logger";

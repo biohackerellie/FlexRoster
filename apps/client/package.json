@@ -18,15 +18,16 @@
   "dependencies": {
     "@elysiajs/eden": "^1.1.3",
     "@hookform/resolvers": "^3.9.0",
-    "@local/auth": "workspace:*",
     "@local/db": "workspace:*",
     "@local/server": "workspace:*",
     "@local/ui": "workspace:*",
     "@local/utils": "workspace:*",
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
-    "@next/mdx": "^15.0.1",
+    "@next/mdx": "^14.2.6",
+    "@pilcrowjs/object-parser": "^0.0.4",
     "@tanstack/react-table": "^8.20.5",
+    "arctic": "^2.0.1",
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
@@ -36,9 +37,7 @@
     "lucide-react": "^0.453.0",
     "mini-svg-data-uri": "^1.4.4",
     "nanoid": "^5.0.7",
-
     "next": "^15.0.1",
-
     "next-auth": "5.0.0-beta.25",
     "next-themes": "^0.3.0",
     "next-view-transitions": "^0.3.2",

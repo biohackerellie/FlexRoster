@@ -10,6 +10,7 @@ import {
   requestRoutes,
   rosterRoutes,
   userRoutes,
+  authRoutes,
 } from "./routes";
 
 const app = new Elysia()
@@ -38,7 +39,8 @@ const app = new Elysia()
       .use(inboxRoutes)
       .use(userRoutes)
       .use(logRoutes)
-      .use(requestRoutes),
+      .use(requestRoutes)
+      .use(authRoutes),
   )
   .use(swagger())
   .use(

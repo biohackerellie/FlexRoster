@@ -11,7 +11,7 @@
       "enabled": false
     },
     {
-      "matchPackageNames": ["babel-plugin-react-compiler", "react-day-picker"],
+      "matchPackageNames": ["babel-plugin-react-compiler", "react-day-picker", "@next/mdx", "@next/eslint-plugin-next"],
       "enabled": false
     }
   ],

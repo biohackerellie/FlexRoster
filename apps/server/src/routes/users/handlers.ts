@@ -1,6 +1,6 @@
 import { NotFoundError } from "elysia";
 
-import type { Request, Student, User } from "@local/utils";
+import type { Request, Student, User, NewUser } from "@local/utils";
 import { db, eq, schema, sql } from "@local/db";
 import { logger } from "@local/utils";
 
@@ -61,4 +61,20 @@ export async function getStudentDetails(id: string) {
     }
     throw new NotFoundError("No student found with that ID");
   }
+}
+
+export async function newUser(
+  id: string,
+  email: string,
+  role: "student" | "teacher" | "admin" | "secretary" | undefined,
+  name: string,
+) {
+  const user: NewUser = {
+    id,
+    email,
+    role,
+    name,
+  };
+  await db.insert(schema.users).values(user);
+  return user;
 }

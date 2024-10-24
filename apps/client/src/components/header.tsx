@@ -1,13 +1,12 @@
 import { Link } from "next-view-transitions";
 
-import { auth } from "@local/auth";
-
+import { getSession } from "@/lib/auth/auth";
 import { siteConfig } from "@/siteConfig";
 import { MobileDropdown } from "../app/help/_components/mobileNav";
 import { Navbar } from "./navbar";
 
 export async function Header() {
-  const session = await auth();
+  const { session, user } = await getSession();
   let canRender = false;
   let userId;
   let roles;
@@ -15,8 +14,8 @@ export async function Header() {
     canRender = false;
   } else {
     canRender = true;
-    userId = session.user.id;
-    roles = session.user.roles;
+    userId = user.id;
+    roles = user.role;
   }
 
   return (

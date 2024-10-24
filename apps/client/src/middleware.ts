@@ -1,27 +1,24 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
-import NextAuth from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
 
-import authConfig from "@local/auth/auth.config";
+import { getSession } from "./lib/auth/auth";
 
-const { auth: middleware } = NextAuth(authConfig);
-
-export default middleware((req) => {
+export async function middleware(req: NextRequest) {
   const response = NextResponse.next();
-  const token = req.auth;
-
-  const path = req.nextUrl.pathname;
-  if (path === "/api/auth/signin") {
-    return NextResponse.redirect(new URL("/auth, request.url"));
+  const session = await getSession();
+  let token = null;
+  if (session.session) {
+    token = session;
   }
+  const path = req.nextUrl.pathname;
   if (!token) {
     if (path.startsWith("/dashboard")) {
-      return NextResponse.redirect(new URL("/login", req.url));
+      const url = new URL(req.url);
+      return NextResponse.redirect("/login");
     }
 
     return NextResponse.next();
   }
-  const role = token?.user?.roles ?? "student";
+  const role = token?.user?.role ?? "student";
 
   switch (role) {
     case "student":
@@ -71,7 +68,7 @@ export default middleware((req) => {
   }
 
   return response;
-});
+}
 
 export const config = {
   matcher: [

@@ -1,14 +1,13 @@
 import { Link } from "next-view-transitions";
 import Balancer from "react-wrap-balancer";
 
-import { auth } from "@local/auth";
 import { cn } from "@local/ui";
 import { buttonVariants } from "@local/ui/button";
-
+import { getSession } from "@/lib/auth/auth";
 import LoginButton from "@/components/signIn";
 
 export default async function Home() {
-  const session = await auth();
+  const { session, user } = await getSession();
 
   return (
     <main className="container flex min-h-[calc(100vh-4.0625rem)] flex-col items-center justify-center gap-6 overflow-hidden pb-8 pt-6 md:py-10">
